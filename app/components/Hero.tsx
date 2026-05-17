@@ -168,8 +168,8 @@ export default function Hero() {
             animate={{ opacity: 1 }}
             transition={{ duration: 1.6, delay: 1.9 }}
             style={{
-              fontSize: '0.44rem',
-              letterSpacing: '0.52em',
+              fontSize: '0.58rem',
+              letterSpacing: '0.46em',
               textTransform: 'uppercase',
               color: 'var(--text-3)',
             }}
