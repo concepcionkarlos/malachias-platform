@@ -30,7 +30,30 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${bebas.variable} ${inter.variable}`}>
-      <body className="bg-black text-[#e8e0d0] antialiased font-body">{children}</body>
+      <head>
+        {/* Apple Music embed */}
+        <link rel="preconnect" href="https://embed.music.apple.com" />
+        <link rel="dns-prefetch" href="https://embed.music.apple.com" />
+        {/* Social */}
+        <link rel="dns-prefetch" href="https://www.instagram.com" />
+        <link rel="dns-prefetch" href="https://www.facebook.com" />
+      </head>
+      <body className="bg-black text-[#e8ddd0] antialiased font-body">
+        {/* Global film grain — fixed, pointer-events-none, paint once */}
+        <div
+          aria-hidden="true"
+          className="grain scanlines"
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 9999,
+            pointerEvents: 'none',
+            opacity: 0.028,
+            willChange: 'auto',
+          }}
+        />
+        {children}
+      </body>
     </html>
   );
 }

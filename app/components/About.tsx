@@ -2,101 +2,105 @@
 
 import { motion } from 'framer-motion';
 
-const PILLARS = [
-  { icon: '✝', label: 'Faith',       text: 'Every lyric is a testimony. Every chord is worship. Scripture brought to the stage.' },
-  { icon: '⭐', label: 'Service',     text: 'Founded by an Army veteran who carried the warrior ethos from combat into music.' },
-  { icon: '⚔', label: 'Brotherhood', text: 'No soldier fights alone. No believer walks alone. A band of brothers in every sense.' },
-  { icon: '🔥', label: 'Purpose',    text: 'We play for the hurting, the seeking, and the faithful. Music as mission.' },
-];
-
 const fade = (delay = 0) => ({
-  initial: { opacity: 0, y: 24 },
+  initial: { opacity: 0, y: 22 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true },
-  transition: { duration: 0.8, delay, ease: [0.22, 1, 0.36, 1] as [number,number,number,number] },
+  transition: { duration: 0.85, delay, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] },
 });
 
 export default function About() {
   return (
-    <section id="about" className="bg-black section-pad">
-      <div className="max-w-6xl mx-auto px-6">
+    <section id="about" className="section-pad" style={{ background: '#050505' }}>
+      <div className="max-w-5xl mx-auto px-6">
 
-        {/* Header */}
-        <motion.div {...fade()} className="section-header">
-          <p className="label-xs mb-4">Our Story</p>
-          <h2 className="font-display text-[clamp(3rem,8vw,6rem)] tracking-[0.08em] text-white">
-            FORGED IN FAITH
+        {/* Section marker — left-aligned, not centered */}
+        <motion.div {...fade()} className="mb-12">
+          <p className="label-xs mb-3" style={{ color: 'var(--gold)', letterSpacing: '0.40em' }}>
+            Origin
+          </p>
+          <h2
+            className="font-display leading-[0.92] tracking-[0.06em] text-white"
+            style={{ fontSize: 'clamp(2.8rem, 7vw, 5rem)' }}
+          >
+            THE STORY
           </h2>
-          <hr className="gold-rule max-w-xs mx-auto mt-5" />
+          <div
+            className="mt-4"
+            style={{
+              width: '3rem',
+              height: '1px',
+              background: 'linear-gradient(to right, rgba(201,168,76,0.60), transparent)',
+            }}
+          />
         </motion.div>
 
-        {/* Story grid */}
-        <div className="grid lg:grid-cols-2 gap-16 items-start mb-20">
+        {/* Editorial two-column */}
+        <div className="grid lg:grid-cols-[5fr_3fr] gap-12 lg:gap-20 items-start">
 
-          {/* Text */}
-          <motion.div {...fade(0.1)}>
-            <p className="text-[#e8e0d0] text-lg leading-relaxed mb-5 font-display tracking-wider">
-              "My Messenger" — that is what the name Malachias means.
-            </p>
-            <p className="text-[#8a7f70] leading-relaxed mb-5 text-[0.95rem]">
-              Born from the battlefields of faith and service, Malachias was founded by an
-              Army veteran who returned home carrying wounds both seen and unseen. Music became
-              the vehicle for healing, proclamation, and unashamed worship.
-            </p>
-            <p className="text-[#8a7f70] leading-relaxed mb-5 text-[0.95rem]">
-              From military bases to church stages, from festival fields to veteran communities,
-              Malachias brings a sound that honors God, country, and the human spirit.
-              Loud, intentional, and unapologetic — rock music with a higher calling.
-            </p>
-            <p className="text-[#8a7f70] leading-relaxed text-[0.95rem]">
-              Every song is a dispatch from the front lines of faith. Every performance is a
-              declaration that hope is alive, grace is real, and the battle is already won.
-            </p>
+          {/* Left — narrative */}
+          <div className="space-y-5">
+            <motion.p {...fade(0.06)} className="tac-label" style={{ color: 'var(--gold-dim)', letterSpacing: '0.34em', fontSize: '0.58rem' }}>
+              Malachi&nbsp;3:1
+            </motion.p>
 
-            {/* Stats */}
-            <div className="grid grid-cols-3 gap-6 mt-10 pt-8 border-t border-white/[0.06]">
-              {[['100+','Shows'],['15+','States'],['∞','Faith']].map(([val, lbl]) => (
-                <div key={lbl} className="text-center">
-                  <div className="font-display text-3xl text-[#c9a84c] tracking-wider">{val}</div>
-                  <div className="label-xs mt-1" style={{ color: 'var(--text-2)' }}>{lbl}</div>
-                </div>
-              ))}
-            </div>
-          </motion.div>
+            <motion.blockquote {...fade(0.10)} className="left-bar font-display text-[1.25rem] tracking-wide leading-snug" style={{ color: 'var(--text-1)' }}>
+              "My messenger — that is what Malachias means."
+            </motion.blockquote>
 
-          {/* Photo placeholder */}
-          <motion.div {...fade(0.2)}>
-            <div
-              className="card aspect-[3/4] flex items-center justify-center relative overflow-hidden"
-              style={{ background: 'linear-gradient(160deg, #0f0a04 0%, #0a0a0a 60%, #04080f 100%)' }}
+            <motion.p {...fade(0.14)} className="leading-relaxed text-[0.93rem]" style={{ color: 'var(--text-2)' }}>
+              The name comes from Malachi 3:1. It seemed right.
+            </motion.p>
+
+            <motion.p {...fade(0.18)} className="leading-relaxed text-[0.93rem]" style={{ color: 'var(--text-2)' }}>
+              Malachias was started by a U.S. Army veteran who came back from deployment
+              changed, the way most veterans do. Music and faith were the two things that
+              still made sense in the aftermath — so he started a band.
+            </motion.p>
+
+            <motion.p {...fade(0.22)} className="leading-relaxed text-[0.93rem]" style={{ color: 'var(--text-2)' }}>
+              We play Christian rock. Loud, honest music that comes from real places.
+              Songs about doubt, struggle, redemption, and the kind of hope that
+              doesn&apos;t come easy.
+            </motion.p>
+
+            <motion.p {...fade(0.26)} className="leading-relaxed text-[0.93rem]" style={{ color: 'var(--text-2)' }}>
+              We&apos;re a small band, still growing. But every show we play is for the
+              people in the room who need to hear something true tonight.
+            </motion.p>
+          </div>
+
+          {/* Right — pull quote, no box or border */}
+          <motion.div {...fade(0.16)} className="lg:pt-16">
+            <p
+              className="font-display leading-[1.1] tracking-[0.04em]"
+              style={{
+                fontSize: 'clamp(1.8rem, 4vw, 2.6rem)',
+                color: 'rgba(237,229,216,0.10)',
+              }}
             >
-              <div className="text-center px-8">
-                <div className="font-display text-[4rem] text-[#c9a84c]/10 tracking-widest mb-2">M</div>
-                <p className="label-xs" style={{ color: 'var(--text-3)' }}>Band Photo</p>
-              </div>
-              {/* Corner accents */}
-              {['top-0 left-0 border-t border-l','top-0 right-0 border-t border-r',
-                'bottom-0 left-0 border-b border-l','bottom-0 right-0 border-b border-r']
-                .map((cls) => (
-                  <div key={cls} className={`absolute w-6 h-6 ${cls} border-[#c9a84c]/30`} />
-                ))}
-            </div>
+              We came back.
+              <br />
+              We found faith again.
+              <br />
+              We started a band.
+            </p>
+            <div
+              className="mt-8"
+              style={{
+                width: '1.5rem',
+                height: '1px',
+                background: 'rgba(201,168,76,0.22)',
+              }}
+            />
+            <p
+              className="mt-4 text-[0.66rem] tracking-[0.22em] uppercase italic"
+              style={{ color: 'rgba(120,100,70,0.42)' }}
+            >
+              Malachi 3:1
+            </p>
           </motion.div>
-        </div>
 
-        {/* Pillars */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {PILLARS.map((p, i) => (
-            <motion.div key={p.label} {...fade(i * 0.08)} className="card p-6 group">
-              <div
-                className="h-px w-0 group-hover:w-full mb-5 transition-all duration-500"
-                style={{ background: 'var(--gold)' }}
-              />
-              <span className="text-2xl block mb-3">{p.icon}</span>
-              <h3 className="font-display text-xl tracking-wider text-[#c9a84c] mb-2">{p.label}</h3>
-              <p className="text-[0.82rem] text-[#8a7f70] leading-relaxed">{p.text}</p>
-            </motion.div>
-          ))}
         </div>
 
       </div>
