@@ -6,10 +6,11 @@ import { Menu, X } from 'lucide-react';
 
 
 const NAV = [
-  { label: 'The Story',   href: '#about'      },
-  { label: 'The Sound',   href: '#music'      },
-  { label: 'The Mission', href: '#mission'    },
-  { label: 'Book Us',     href: '#booking'    },
+  { label: 'The Story',   href: '#about'   },
+  { label: 'The Sound',   href: '#music'   },
+  { label: 'The Field',   href: '#journal' },
+  { label: 'The Store',   href: '#merch'   },
+  { label: 'The Mission', href: '#mission' },
 ];
 
 const SOCIAL_ICONS = [
