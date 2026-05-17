@@ -116,22 +116,38 @@ export default function Hero() {
         style={{ y: textY, opacity: masterO, zIndex: 10 }}
         className="absolute inset-x-0 bottom-0 px-6 lg:px-16 pb-[13vh]"
       >
-        <div style={{ maxWidth: '28rem' }}>
+        <div style={{ maxWidth: '38rem' }}>
 
-          {/* Band name — the statement */}
-          <motion.h1
-            initial={{ opacity: 0, y: 22 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.3, delay: 0.9, ease: [0.16, 1, 0.3, 1] as [number,number,number,number] }}
-            className="font-display leading-[0.88] tracking-[0.04em]"
-            style={{
-              fontSize: 'clamp(4.8rem, 12vw, 9.5rem)',
-              color: '#ede5d8',
-              textShadow: '0 0 80px rgba(190,140,60,0.09), 0 10px 50px rgba(0,0,0,0.98)',
-            }}
+          {/* Emotional statement — brand name lives only in the navbar */}
+          <div
+            className="font-display leading-[0.92] tracking-[0.04em]"
+            style={{ textShadow: '0 0 80px rgba(190,140,60,0.08), 0 10px 50px rgba(0,0,0,0.98)' }}
           >
-            MALACHIAS
-          </motion.h1>
+            <motion.span
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1.1, delay: 0.85, ease: [0.16, 1, 0.3, 1] as [number,number,number,number] }}
+              style={{ display: 'block', fontSize: 'clamp(2.8rem, 6.5vw, 5rem)', color: 'rgba(237,229,216,0.60)' }}
+            >
+              WE PLAY
+            </motion.span>
+            <motion.span
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1.1, delay: 1.0, ease: [0.16, 1, 0.3, 1] as [number,number,number,number] }}
+              style={{ display: 'block', fontSize: 'clamp(2.8rem, 6.5vw, 5rem)', color: '#ede5d8' }}
+            >
+              FOR THE ONES
+            </motion.span>
+            <motion.span
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1.1, delay: 1.15, ease: [0.16, 1, 0.3, 1] as [number,number,number,number] }}
+              style={{ display: 'block', fontSize: 'clamp(2.8rem, 6.5vw, 5rem)', color: 'rgba(237,229,216,0.40)' }}
+            >
+              WHO NEED IT MOST.
+            </motion.span>
+          </div>
 
           {/* Gold rule */}
           <motion.div
