@@ -4,11 +4,14 @@ import { motion } from 'framer-motion';
 
 
 const NAV_LINKS = [
-  { label: 'The Story',   href: '#about'      },
-  { label: 'The Sound',   href: '#music'      },
-  { label: 'The Mission', href: '#mission'    },
-  { label: 'Book Us',     href: '#booking'    },
-  { label: 'Stay in Touch', href: '#newsletter' },
+  { label: 'The Story',    href: '#about'      },
+  { label: 'The Sound',    href: '#music'      },
+  { label: 'The Field',    href: '#journal'    },
+  { label: 'The Store',    href: '#merch'      },
+  { label: 'The Mission',  href: '#mission'    },
+  { label: 'Press & EPK',  href: '#press'      },
+  { label: 'Book Us',      href: '#booking'    },
+  { label: 'Stay in Touch',href: '#newsletter' },
 ];
 
 const CONTACTS = [
