@@ -11,7 +11,16 @@ const fade = (delay = 0) => ({
 
 export default function About() {
   return (
-    <section id="about" className="section-pad" style={{ background: '#050505' }}>
+    <section id="about" className="section-pad relative overflow-hidden" style={{ background: '#050505' }}>
+      {/* Subtle warm ambient — left side, where the story lives */}
+      <div aria-hidden="true" style={{
+        position: 'absolute',
+        top: '20%', left: '-5%',
+        width: '55vw', height: '60%',
+        background: 'radial-gradient(ellipse, rgba(80,34,6,0.08) 0%, transparent 68%)',
+        filter: 'blur(80px)',
+        pointerEvents: 'none',
+      }} />
       <div className="max-w-5xl mx-auto px-6">
 
         {/* Section marker — left-aligned, not centered */}
@@ -68,6 +77,22 @@ export default function About() {
               We&apos;re a small band, still growing. But every show we play is for the
               people in the room who need to hear something true tonight.
             </motion.p>
+
+            {/* Founder note */}
+            <motion.blockquote
+              {...fade(0.32)}
+              className="left-bar mt-8"
+              style={{ borderLeftColor: 'rgba(201,168,76,0.25)' }}
+            >
+              <p className="text-[0.82rem] leading-relaxed italic" style={{ color: 'var(--text-3)' }}>
+                &ldquo;I came home from deployment not knowing who I was anymore.
+                Music was the thing that cracked me open.
+                Faith was what came through.&rdquo;
+              </p>
+              <p className="text-[0.65rem] tracking-[0.18em] uppercase mt-2" style={{ color: 'rgba(201,168,76,0.35)' }}>
+                — The Founder
+              </p>
+            </motion.blockquote>
           </div>
 
           {/* Right — pull quote, no box or border */}
