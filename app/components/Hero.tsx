@@ -142,11 +142,23 @@ export default function Hero() {
             style={{ transformOrigin: 'left', maxWidth: '10rem' }}
           />
 
+          {/* Sub-statement */}
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1.2, delay: 1.20 }}
+            className="text-[0.78rem] leading-relaxed italic mb-6"
+            style={{ color: 'var(--text-2)', maxWidth: '22rem', letterSpacing: '0.02em' }}
+          >
+            Music forged in faith. Carried through fire.
+            For anyone still fighting their way back.
+          </motion.p>
+
           {/* CTAs */}
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 1.35 }}
+            transition={{ duration: 0.9, delay: 1.45 }}
             className="flex flex-col xs:flex-row items-start gap-3 mb-7"
           >
             <a
