@@ -1,26 +1,236 @@
 @import "tailwindcss";
 
+/* ─────────────────────────────────────────
+   DESIGN TOKENS
+───────────────────────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --gold:    #c9a84c;
+  --gold-lt: #f0d07a;
+  --crimson: #8b0000;
+  --steel:   #6b7280;
+  --smoke:   rgba(200, 190, 170, 0.07);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* ─────────────────────────────────────────
+   RESET & BASE
+───────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+html { scroll-behavior: smooth; }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: #000;
+  color: #e8e0d0;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
 }
+
+/* ─────────────────────────────────────────
+   SCROLLBAR
+───────────────────────────────────────── */
+::-webkit-scrollbar        { width: 3px; }
+::-webkit-scrollbar-track  { background: #000; }
+::-webkit-scrollbar-thumb  { background: #c9a84c; border-radius: 2px; }
+
+/* ─────────────────────────────────────────
+   AUTOFILL
+───────────────────────────────────────── */
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #0d0d0d inset !important;
+  -webkit-text-fill-color: #e8e0d0 !important;
+}
+
+/* ─────────────────────────────────────────
+   CINEMATIC KEYFRAMES
+───────────────────────────────────────── */
+
+/* Logo breathing pulse */
+@keyframes logoBreathe {
+  0%, 100% { transform: scale(1);     filter: drop-shadow(0 0 40px rgba(201,168,76,0.30)) drop-shadow(0 0 100px rgba(201,168,76,0.12)); }
+  50%       { transform: scale(1.018); filter: drop-shadow(0 0 70px rgba(201,168,76,0.50)) drop-shadow(0 0 140px rgba(201,168,76,0.22)); }
+}
+
+/* Halo ring pulse */
+@keyframes haloBreath {
+  0%, 100% { opacity: 0.35; transform: translate(-50%,-50%) scale(1); }
+  50%       { opacity: 0.60; transform: translate(-50%,-50%) scale(1.04); }
+}
+
+/* Outer ring slow spin */
+@keyframes ringRotate {
+  from { transform: translate(-50%,-50%) rotate(0deg);   }
+  to   { transform: translate(-50%,-50%) rotate(360deg); }
+}
+
+/* Stage light sweep */
+@keyframes lightSweep {
+  0%   { opacity: 0.08; transform: translateX(-50%) rotate(-8deg)  scaleX(1); }
+  50%  { opacity: 0.18; transform: translateX(-50%) rotate(0deg)   scaleX(1.1); }
+  100% { opacity: 0.08; transform: translateX(-50%) rotate(8deg)   scaleX(1); }
+}
+
+/* Smoke drift — rises up, drifts sideways, fades out */
+@keyframes smokeDrift0 {
+  0%   { transform: translateY(0)    translateX(0)    scale(1.0); opacity: 0.00; }
+  10%  { opacity: 0.18; }
+  80%  { opacity: 0.12; }
+  100% { transform: translateY(-220px) translateX(30px)  scale(1.6); opacity: 0.00; }
+}
+@keyframes smokeDrift1 {
+  0%   { transform: translateY(0)    translateX(0)   scale(1.0); opacity: 0.00; }
+  10%  { opacity: 0.14; }
+  80%  { opacity: 0.08; }
+  100% { transform: translateY(-200px) translateX(-40px) scale(1.5); opacity: 0.00; }
+}
+@keyframes smokeDrift2 {
+  0%   { transform: translateY(0)   translateX(0)   scale(1.0); opacity: 0.00; }
+  10%  { opacity: 0.22; }
+  75%  { opacity: 0.10; }
+  100% { transform: translateY(-260px) translateX(20px)  scale(1.7); opacity: 0.00; }
+}
+@keyframes smokeDrift3 {
+  0%   { transform: translateY(0)    translateX(0)   scale(1.0); opacity: 0.00; }
+  10%  { opacity: 0.16; }
+  80%  { opacity: 0.06; }
+  100% { transform: translateY(-180px) translateX(-20px) scale(1.4); opacity: 0.00; }
+}
+@keyframes smokeDrift4 {
+  0%   { transform: translateY(0)    translateX(0)   scale(1.0); opacity: 0.00; }
+  15%  { opacity: 0.20; }
+  85%  { opacity: 0.08; }
+  100% { transform: translateY(-300px) translateX(50px)  scale(1.8); opacity: 0.00; }
+}
+
+/* Film scan line move */
+@keyframes scanlineMove {
+  0%   { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+/* Gold shimmer text */
+@keyframes goldShimmer {
+  0%   { background-position: -300% center; }
+  100% { background-position:  300% center; }
+}
+
+/* Flicker — like a concert LED */
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  92%       { opacity: 1; }
+  93%       { opacity: 0.82; }
+  94%       { opacity: 1; }
+  96%       { opacity: 0.90; }
+  97%       { opacity: 1; }
+}
+
+/* Scroll chevron bounce */
+@keyframes chevronBounce {
+  0%, 100% { transform: translateY(0); opacity: 0.5; }
+  50%       { transform: translateY(8px); opacity: 1; }
+}
+
+/* Slow radial pulse for background glow */
+@keyframes radialPulse {
+  0%, 100% { opacity: 0.5; }
+  50%       { opacity: 0.85; }
+}
+
+/* CTA underline wipe */
+@keyframes lineWipe {
+  from { transform: scaleX(0); transform-origin: left; }
+  to   { transform: scaleX(1); transform-origin: left; }
+}
+
+/* Entrance fade-up */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Horizontal rule draw */
+@keyframes ruleDraw {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* Borderline glow */
+@keyframes borderGlow {
+  0%, 100% { box-shadow: 0 0 8px  rgba(201,168,76,0.20); }
+  50%       { box-shadow: 0 0 24px rgba(201,168,76,0.55), 0 0 50px rgba(201,168,76,0.18); }
+}
+
+/* Stage pulse (navbar, section accents) */
+@keyframes stagePulse {
+  0%, 100% { opacity: 0.35; }
+  50%       { opacity: 0.70; }
+}
+
+/* ─────────────────────────────────────────
+   UTILITY CLASSES
+───────────────────────────────────────── */
+.gold-shimmer-text {
+  background: linear-gradient(90deg,
+    #8b6914 0%, #c9a84c 25%, #f0d07a 50%, #c9a84c 75%, #8b6914 100%);
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: goldShimmer 4s linear infinite;
+}
+
+.logo-breathe {
+  animation: logoBreathe 5s ease-in-out infinite;
+  will-change: transform, filter;
+}
+
+.flicker-text { animation: flicker 8s linear infinite; }
+
+.cinematic-vignette {
+  background: radial-gradient(
+    ellipse 80% 80% at 50% 50%,
+    transparent 40%,
+    rgba(0,0,0,0.55) 75%,
+    rgba(0,0,0,0.90) 100%
+  );
+}
+
+.letterbox-bar {
+  background: #000;
+  position: fixed;
+  left: 0; right: 0;
+  z-index: 100;
+  height: 28px;
+}
+
+/* Film grain via SVG filter */
+.film-grain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+
+/* Section gold rule */
+.section-rule {
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%, rgba(201,168,76,0.15) 20%,
+    rgba(201,168,76,0.50) 50%,
+    rgba(201,168,76,0.15) 80%, transparent 100%);
+}
+
+/* ─────────────────────────────────────────
+   SMOKE HELPER CLASSES
+───────────────────────────────────────── */
+.smoke-0 { animation: smokeDrift0 9s  ease-out infinite; animation-delay: 0s;   }
+.smoke-1 { animation: smokeDrift1 11s ease-out infinite; animation-delay: 1.8s; }
+.smoke-2 { animation: smokeDrift2 8s  ease-out infinite; animation-delay: 3.5s; }
+.smoke-3 { animation: smokeDrift3 13s ease-out infinite; animation-delay: 0.7s; }
+.smoke-4 { animation: smokeDrift4 10s ease-out infinite; animation-delay: 5.2s; }
