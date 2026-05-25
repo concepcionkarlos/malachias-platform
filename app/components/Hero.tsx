@@ -207,6 +207,9 @@ export default function Hero() {
             <a href="#booking" className="btn btn-ghost">
               Book Us
             </a>
+            <a href="/epk" className="btn btn-ghost" style={{ opacity: 0.65 }}>
+              Press Kit
+            </a>
           </motion.div>
 
           {/* Scripture — restrained anchor */}

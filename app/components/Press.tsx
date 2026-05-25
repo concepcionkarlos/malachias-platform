@@ -86,9 +86,12 @@ export default function Press() {
               ))}
             </div>
 
-            <motion.div {...fade(0.22)}>
+            <motion.div {...fade(0.22)} className="flex flex-col xs:flex-row gap-3">
               <a href="#booking" className="btn btn-primary">
                 Submit a Booking Request
+              </a>
+              <a href="/epk" className="btn btn-ghost" target="_blank" rel="noopener noreferrer">
+                View Full EPK
               </a>
             </motion.div>
           </div>
