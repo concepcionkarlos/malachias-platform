@@ -1,6 +1,8 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import type { MediaItem } from '@/lib/data';
 
 const fade = (delay = 0) => ({
   initial: { opacity: 0, y: 22 },
@@ -65,7 +67,25 @@ const SOCIAL = [
   },
 ];
 
+function youtubeId(url: string): string | null {
+  const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|v\/))([a-zA-Z0-9_-]{11})/)
+  return m ? m[1] : null
+}
+
 export default function Music() {
+  const [videos, setVideos] = useState<MediaItem[]>([]);
+
+  useEffect(() => {
+    fetch('/api/public/content')
+      .then(r => r.json())
+      .then(d => {
+        if (Array.isArray(d.mediaItems)) {
+          setVideos(d.mediaItems.filter((m: MediaItem) => m.type === 'video'));
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   return (
     <section id="music" style={{ background: '#0a0a0a' }} className="section-pad">
       <div className="max-w-5xl mx-auto px-6">
@@ -109,6 +129,69 @@ export default function Music() {
             />
           </div>
         </motion.div>
+
+        {/* YouTube videos — only shown if the admin has added any */}
+        {videos.length > 0 && (
+          <motion.div {...fade(0.12)} className="mb-10">
+            <p className="text-[0.58rem] tracking-[0.30em] uppercase mb-4" style={{ color: 'var(--text-3)' }}>
+              Videos
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {videos.map(v => {
+                const ytId = youtubeId(v.url);
+                const thumb = v.poster ?? (ytId ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` : null);
+                const href = ytId ? `https://www.youtube.com/watch?v=${ytId}` : v.url;
+                return (
+                  <a
+                    key={v.id}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="tac-box group overflow-hidden"
+                    style={{ display: 'block', textDecoration: 'none' }}
+                  >
+                    <div style={{ position: 'relative', aspectRatio: '16/9', background: '#0a0a0a', overflow: 'hidden' }}>
+                      {thumb && (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={thumb}
+                          alt={v.caption}
+                          style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.75, transition: 'opacity 0.3s' }}
+                          onMouseEnter={e => ((e.currentTarget as HTMLImageElement).style.opacity = '0.90')}
+                          onMouseLeave={e => ((e.currentTarget as HTMLImageElement).style.opacity = '0.75')}
+                        />
+                      )}
+                      {/* Play button */}
+                      <div style={{
+                        position: 'absolute', inset: 0,
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      }}>
+                        <div style={{
+                          width: 48, height: 48, borderRadius: '50%',
+                          background: 'rgba(0,0,0,0.65)',
+                          border: '1px solid rgba(201,168,76,0.35)',
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          transition: 'border-color 0.25s, background 0.25s',
+                        }}
+                          className="group-hover:border-[rgba(201,168,76,0.70)]"
+                        >
+                          <svg viewBox="0 0 24 24" fill="currentColor" style={{ width: 18, height: 18, color: '#c9a84c', marginLeft: 2 }}>
+                            <path d="M8 5v14l11-7z" />
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                    {v.caption && (
+                      <p style={{ padding: '0.65rem 1rem 0.75rem', fontSize: '0.76rem', color: 'var(--text-3)', letterSpacing: '0.04em' }}>
+                        {v.caption}
+                      </p>
+                    )}
+                  </a>
+                );
+              })}
+            </div>
+          </motion.div>
+        )}
 
         {/* Streaming platforms */}
         <motion.div {...fade(0.14)} className="flex flex-wrap gap-3 mb-4">

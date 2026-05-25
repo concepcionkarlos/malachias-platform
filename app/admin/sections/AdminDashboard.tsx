@@ -5,6 +5,7 @@ import type { BookingRequest, BookingStatus } from '@/lib/data'
 
 interface ContentStore {
   bookingRequests: BookingRequest[]
+  subscribers?: { email: string; joinedAt: string }[]
   monthlyGoal?: { month: string; bookingTarget: number; revenueTarget: number }
 }
 
@@ -60,11 +61,14 @@ export default function AdminDashboard() {
   const goal = data.monthlyGoal
   const goalProgress = goal ? Math.min(100, Math.round((newThisMonth / goal.bookingTarget) * 100)) : null
 
+  const subscribers = data.subscribers?.length ?? 0
+
   const stats = [
     { label: 'TOTAL BOOKINGS', value: total },
-    { label: 'UPCOMING SHOWS', value: upcoming },
+    { label: 'UPCOMING EVENTS', value: upcoming },
     { label: 'NEW THIS MONTH', value: newThisMonth },
-    { label: 'PENDING REQUESTS', value: pending },
+    { label: 'PENDING', value: pending },
+    { label: 'SUBSCRIBERS', value: subscribers },
   ]
 
   return (

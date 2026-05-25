@@ -1,0 +1,21 @@
+import { NextRequest, NextResponse } from 'next/server'
+import { readContent, writeContent } from '@/lib/store'
+
+export async function POST(req: NextRequest) {
+  const { email } = await req.json()
+  if (!email || !email.includes('@')) {
+    return NextResponse.json({ error: 'Valid email required' }, { status: 400 })
+  }
+
+  const store = await readContent()
+  const subscribers = store.subscribers ?? []
+  const already = subscribers.some(s => s.email.toLowerCase() === email.toLowerCase())
+
+  if (!already) {
+    await writeContent({
+      subscribers: [...subscribers, { email: email.toLowerCase(), joinedAt: new Date().toISOString() }],
+    })
+  }
+
+  return NextResponse.json({ ok: true })
+}
