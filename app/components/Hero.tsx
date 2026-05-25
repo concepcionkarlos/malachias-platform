@@ -59,14 +59,14 @@ export default function Hero() {
         style={{ y: logoY, zIndex: 2 }}
         className="absolute inset-0 pointer-events-none"
       >
-        {/* Positioning wrapper — mobile: upper-right corner; desktop: center-right */}
+        {/* Positioning wrapper — mobile: centered upper half; desktop: center-right */}
         <div
           style={mobile ? {
             position: 'absolute',
-            top: '6%',
-            right: '-4%',
-            transform: 'none',
-            width: '52vw',
+            top: '14%',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: '82vw',
             aspectRatio: '1 / 1',
           } : {
             position: 'absolute',
@@ -85,19 +85,13 @@ export default function Hero() {
               position: 'relative',
               width: '100%',
               height: '100%',
-              opacity: mobile ? 0.32 : 0.44,
-              WebkitMaskImage: `radial-gradient(
-                ellipse 76% 76% at 52% 50%,
-                black 10%, rgba(0,0,0,.90) 34%,
-                rgba(0,0,0,.52) 54%, rgba(0,0,0,.16) 70%,
-                transparent 82%
-              )`,
-              maskImage: `radial-gradient(
-                ellipse 76% 76% at 52% 50%,
-                black 10%, rgba(0,0,0,.90) 34%,
-                rgba(0,0,0,.52) 54%, rgba(0,0,0,.16) 70%,
-                transparent 82%
-              )`,
+              opacity: mobile ? 0.52 : 0.44,
+              WebkitMaskImage: mobile
+                ? `radial-gradient(ellipse 80% 80% at 50% 46%, black 18%, rgba(0,0,0,.88) 42%, rgba(0,0,0,.40) 64%, transparent 80%)`
+                : `radial-gradient(ellipse 76% 76% at 52% 50%, black 10%, rgba(0,0,0,.90) 34%, rgba(0,0,0,.52) 54%, rgba(0,0,0,.16) 70%, transparent 82%)`,
+              maskImage: mobile
+                ? `radial-gradient(ellipse 80% 80% at 50% 46%, black 18%, rgba(0,0,0,.88) 42%, rgba(0,0,0,.40) 64%, transparent 80%)`
+                : `radial-gradient(ellipse 76% 76% at 52% 50%, black 10%, rgba(0,0,0,.90) 34%, rgba(0,0,0,.52) 54%, rgba(0,0,0,.16) 70%, transparent 82%)`,
             }}
           >
             <Image
@@ -118,10 +112,13 @@ export default function Hero() {
 
       {/* ─── Fog layers — protect text zone, merge edges ─────────────── */}
       <div aria-hidden="true" className="absolute inset-0 pointer-events-none" style={{ zIndex: 3 }}>
-        {/* Strong left guard — keeps text legible */}
+        {/* Left guard — full on desktop, light on mobile (badge is centered) */}
         <div style={{
-          position: 'absolute', top: 0, left: 0, bottom: 0, width: '52%',
-          background: 'linear-gradient(to right, rgba(2,2,2,0.97) 0%, rgba(2,2,2,0.80) 40%, rgba(2,2,2,0.40) 70%, transparent 100%)',
+          position: 'absolute', top: 0, left: 0, bottom: 0,
+          width: mobile ? '30%' : '52%',
+          background: mobile
+            ? 'linear-gradient(to right, rgba(2,2,2,0.70) 0%, transparent 100%)'
+            : 'linear-gradient(to right, rgba(2,2,2,0.97) 0%, rgba(2,2,2,0.80) 40%, rgba(2,2,2,0.40) 70%, transparent 100%)',
         }} />
         {/* Right edge fade */}
         <div style={{
@@ -133,10 +130,13 @@ export default function Hero() {
           position: 'absolute', top: 0, left: 0, right: 0, height: '28%',
           background: 'linear-gradient(to bottom, rgba(2,2,2,0.98) 0%, rgba(2,2,2,0.55) 50%, transparent 100%)',
         }} />
-        {/* Bottom fade */}
+        {/* Bottom fade — stronger on mobile to protect text */}
         <div style={{
-          position: 'absolute', bottom: 0, left: 0, right: 0, height: '35%',
-          background: 'linear-gradient(to top, rgba(2,2,2,0.88) 0%, transparent 100%)',
+          position: 'absolute', bottom: 0, left: 0, right: 0,
+          height: mobile ? '50%' : '35%',
+          background: mobile
+            ? 'linear-gradient(to top, rgba(2,2,2,0.98) 0%, rgba(2,2,2,0.85) 30%, rgba(2,2,2,0.40) 65%, transparent 100%)'
+            : 'linear-gradient(to top, rgba(2,2,2,0.88) 0%, transparent 100%)',
         }} />
       </div>
 
