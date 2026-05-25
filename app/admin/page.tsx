@@ -4,7 +4,7 @@ import { useSearchParams, useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
 import {
   LayoutDashboard, Calendar, Users, ShoppingBag, FileText, Image, Mail,
-  MapPin, Settings, Music, Newspaper, BarChart2, StickyNote, Inbox,
+  MapPin, Settings, Newspaper, BarChart2, StickyNote, Inbox,
   Menu, X, ExternalLink, LogOut, ChevronRight,
 } from 'lucide-react'
 import AdminLogin from './AdminLogin'
@@ -13,7 +13,6 @@ const SECTIONS = {
   dashboard:       { label: 'Dashboard',       icon: LayoutDashboard, group: 'Overview'    },
   bookings:        { label: 'Bookings',         icon: Calendar,        group: 'Operations'  },
   shows:           { label: 'Shows',            icon: MapPin,          group: 'Operations'  },
-  'song-requests': { label: 'Song Requests',    icon: Music,           group: 'Operations'  },
   'band-members':  { label: 'Band Members',     icon: Users,           group: 'Platform'    },
   merch:           { label: 'Merch',            icon: ShoppingBag,     group: 'Platform'    },
   media:           { label: 'Media',            icon: Image,           group: 'Platform'    },
@@ -35,7 +34,6 @@ const SectionComponents: Record<TabKey, React.ComponentType> = {
   dashboard:         dynamic(() => import('./sections/AdminDashboard')),
   bookings:          dynamic(() => import('./sections/AdminBookings')),
   shows:             dynamic(() => import('./sections/AdminShows')),
-  'song-requests':   dynamic(() => import('./sections/AdminSongRequests')),
   'band-members':    dynamic(() => import('./sections/AdminBandMembers')),
   merch:             dynamic(() => import('./sections/AdminMerch')),
   media:             dynamic(() => import('./sections/AdminMedia')),
@@ -74,8 +72,9 @@ const S = {
     padding: '0.5rem 1.25rem', fontSize: '0.78rem', letterSpacing: '0.03em',
     color: active ? '#c9a84c' : '#5c5044',
     borderLeft: active ? '2px solid rgba(201,168,76,0.60)' : '2px solid transparent',
+    borderTop: 'none', borderRight: 'none', borderBottom: 'none',
     background: active ? 'rgba(201,168,76,0.05)' : 'transparent',
-    cursor: 'pointer', width: '100%', border: 'none',
+    cursor: 'pointer', width: '100%',
     fontFamily: 'var(--font-body)', textAlign: 'left' as const,
     transition: 'color 0.15s',
   }),
@@ -138,19 +137,26 @@ function SidebarContent({ tab, setTab, onClose }: { tab: TabKey; setTab: (t: Tab
       <div style={{ padding: '1rem 1.25rem', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
         <a
           href="/"
-          target="_blank"
-          style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.72rem', color: '#342c24', textDecoration: 'none' }}
-          onMouseEnter={e => (e.currentTarget.style.color = '#5c5044')}
-          onMouseLeave={e => (e.currentTarget.style.color = '#342c24')}
+          style={{
+            display: 'flex', alignItems: 'center', gap: '0.5rem',
+            fontSize: '0.72rem', letterSpacing: '0.06em',
+            color: '#c9a84c', textDecoration: 'none',
+            padding: '0.45rem 0.75rem', borderRadius: 5,
+            background: 'rgba(201,168,76,0.08)',
+            border: '1px solid rgba(201,168,76,0.18)',
+            transition: 'background 0.2s',
+          }}
+          onMouseEnter={e => (e.currentTarget.style.background = 'rgba(201,168,76,0.14)')}
+          onMouseLeave={e => (e.currentTarget.style.background = 'rgba(201,168,76,0.08)')}
         >
           <ExternalLink size={11} />
-          View live site
+          ← Back to site
         </a>
         <button
           onClick={logout}
-          style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.72rem', color: '#342c24', background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontFamily: 'var(--font-body)' }}
+          style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.72rem', color: '#3a2e26', background: 'none', border: 'none', cursor: 'pointer', padding: '0.2rem 0', fontFamily: 'var(--font-body)' }}
           onMouseEnter={e => (e.currentTarget.style.color = '#c04020')}
-          onMouseLeave={e => (e.currentTarget.style.color = '#342c24')}
+          onMouseLeave={e => (e.currentTarget.style.color = '#3a2e26')}
         >
           <LogOut size={11} />
           Log out

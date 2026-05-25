@@ -12,7 +12,6 @@ import Testimonies  from './components/Testimonies';
 import Press        from './components/Press';
 import Booking      from './components/Booking';
 import Newsletter   from './components/Newsletter';
-import SongRequest  from './components/SongRequest';
 import Footer       from './components/Footer';
 import SectionDivider from './components/SectionDivider';
 
@@ -48,7 +47,6 @@ export default function Home() {
       <Press />
       <Booking />
       <Newsletter />
-      <SongRequest />
       <Footer />
     </main>
   );

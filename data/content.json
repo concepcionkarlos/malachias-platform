@@ -1,0 +1,206 @@
+{
+  "shows": [],
+  "merch": [
+    {
+      "id": "1",
+      "name": "\"Faith Through Fire\" Pullover Hoodie",
+      "price": 55,
+      "category": "apparel",
+      "available": false,
+      "visible": true,
+      "atShows": true,
+      "story": "Named after the song we wrote during the hardest season. Heavy cotton. Made to last.",
+      "description": "Limited run of 100. Heavy 12oz fleece, kangaroo pocket, embroidered crest. Black.",
+      "specs": [
+        {
+          "label": "Fabric",
+          "value": "80/20 cotton-poly fleece, 12 oz"
+        },
+        {
+          "label": "Fit",
+          "value": "Unisex — relaxed"
+        },
+        {
+          "label": "Print",
+          "value": "Embroidered crest + back print"
+        },
+        {
+          "label": "Color",
+          "value": "Black only"
+        },
+        {
+          "label": "Run",
+          "value": "Limited — 100 units"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "name": "\"No Man Left Behind\" Field Tee",
+      "price": 28,
+      "category": "apparel",
+      "available": false,
+      "visible": true,
+      "atShows": true,
+      "story": "For the brothers who showed up. Chest graphic. Black on black.",
+      "description": "Pre-shrunk cotton. Chest left graphic, oversized back print. Built for the field.",
+      "specs": [
+        {
+          "label": "Fabric",
+          "value": "100% pre-shrunk cotton, 6 oz"
+        },
+        {
+          "label": "Fit",
+          "value": "Unisex — slightly relaxed"
+        },
+        {
+          "label": "Print",
+          "value": "Direct-to-garment (DTG)"
+        },
+        {
+          "label": "Color",
+          "value": "Black only"
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "name": "\"Malachi 3:1\" Field Patch Set",
+      "price": 18,
+      "category": "accessories",
+      "available": false,
+      "visible": true,
+      "atShows": true,
+      "story": "Embroidered. Iron-on. Malachias crest, a cross, and the scripture that started all of this.",
+      "description": "3-patch set. Embroidered, iron-on backing. Limited to 200 sets.",
+      "specs": [
+        {
+          "label": "Quantity",
+          "value": "3 patches per set"
+        },
+        {
+          "label": "Material",
+          "value": "Embroidered twill"
+        },
+        {
+          "label": "Backing",
+          "value": "Iron-on"
+        },
+        {
+          "label": "Run",
+          "value": "Limited — 200 sets"
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "name": "\"The Messenger\" Debut LP",
+      "price": 30,
+      "category": "music",
+      "available": false,
+      "visible": true,
+      "story": "When the record is done. 12-inch. Limited first pressing.",
+      "description": "Debut LP on vinyl. Limited first pressing. Pre-order list forming now.",
+      "specs": [
+        {
+          "label": "Format",
+          "value": "12-inch vinyl"
+        },
+        {
+          "label": "Pressing",
+          "value": "First run — limited"
+        },
+        {
+          "label": "Color",
+          "value": "Standard black"
+        }
+      ]
+    }
+  ],
+  "bandMembers": [
+    {
+      "id": "1",
+      "name": "The Founder",
+      "role": "Founder · Guitar · Vocals",
+      "branch": "U.S. Army",
+      "bio": "Veteran. Came home from deployment changed, the way it changes most people who go. The transition took years — figuring out who he was without the uniform, without the mission structure, without the brothers who kept him standing. Music cracked something open in that time. Faith came through the crack. He started Malachias because he needed a mission, and because there are people in every room who need to hear something real. He plays guitar, writes every original, and fronts every show with the same thing he had on his hardest nights: nothing to prove and nothing left to lose.",
+      "visible": true
+    }
+  ],
+  "siteContent": {
+    "heroHeadline": "WE PLAY FOR THE ONES WHO NEED IT MOST.",
+    "heroSubheadline": "Music forged in faith. Carried through fire. For anyone still fighting their way back.",
+    "aboutHeadline": "THE STORY",
+    "aboutShort": "Born in Fort Wayne, Indiana. Founded by a U.S. Army veteran. Malachias plays Christian rock with a mission: reduce suicidal ideation, lift people from depression, help heal the wounds PTSD leaves behind.",
+    "groupPhoto": "/Malachias.PNG",
+    "aboutText": [
+      "Fort Wayne, Indiana. That's where this started.",
+      "The founder served in the Indiana Army National Guard from 1994 to 2003 — first as a medic, then as an infantryman. Then active duty Army from 2006 to 2014, deploying twice to Iraq. Once as a medic. Once as an Army bandsman. Music and war in the same life.",
+      "He accepted Jesus as his Savior in fifth grade at a Vacation Bible School. Raised in a home that didn't go to church, didn't pray, didn't talk about God. Spent years trying to figure out what that moment meant — through hard years, two failed marriages, a DUI. When he deployed to Iraq he found himself reaching back into that faith. In 2011 he converted to Messianic Christian.",
+      "Malachias came out of all of it. The mission is specific: reduce suicidal ideation, lift people from depression, help heal and lessen the triggers PTSD leaves behind. The music is for people who are real, who struggle with their faith, and who want to grow and heal."
+    ],
+    "serviceArea": "United States",
+    "footerTagline": "Fort Wayne. Faith. Two tours. One mission.",
+    "ctaPrimaryLabel": "Book Malachias",
+    "ctaSecondaryLabel": "View Press Kit",
+    "contactEmail": "booking@malachias.com",
+    "facebook": "https://www.facebook.com/share/17s554A9qA/?mibextid=wwXIfr",
+    "instagram": "https://www.instagram.com/malachiasmusic",
+    "youtube": "https://www.youtube.com/channel/UCboGsplcNdd9Pha-n83mZYA",
+    "appleMusic": "https://music.apple.com/us/artist/malachias/937313536",
+    "spotify": "https://open.spotify.com/artist/2YSqk7Skh7jsm5fR0uU3vl",
+    "metaDescription": "Malachias is a Christian rock band founded by a U.S. Army veteran from Fort Wayne, Indiana. Music with a mission: healing suicidal ideation, depression, and PTSD through faith.",
+    "ogTitle": "MALACHIAS — Christian Rock. Veteran Mission. Fort Wayne, Indiana."
+  },
+  "mediaItems": [],
+  "epkContent": {
+    "tagline": "Christian Rock · Veteran-Founded · Faith Through Fire",
+    "bookerIntro": "Contact us directly for availability, set length, and technical requirements. We play churches, military events, veteran support gatherings, and community stages.",
+    "repertoire": [
+      {
+        "era": "Faith",
+        "artists": "Original faith-driven rock. Songs about doubt, redemption, survival, and hope."
+      },
+      {
+        "era": "Healing",
+        "artists": "Music for veterans, trauma survivors, and anyone fighting their way back."
+      },
+      {
+        "era": "Brotherhood",
+        "artists": "Songs about not leaving people behind. On stage and off."
+      }
+    ],
+    "techSpecs": [
+      {
+        "label": "Set Length",
+        "value": "45 min · 1 hr · Full set (custom)"
+      },
+      {
+        "label": "Setup Time",
+        "value": "90 minutes prior to show"
+      },
+      {
+        "label": "Soundcheck",
+        "value": "30 minutes"
+      },
+      {
+        "label": "PA System",
+        "value": "Self-contained or house PA accepted"
+      },
+      {
+        "label": "Stage Required",
+        "value": "12ft × 10ft minimum"
+      },
+      {
+        "label": "Power",
+        "value": "2 × 20A circuits minimum"
+      },
+      {
+        "label": "Special",
+        "value": "Available for outdoor events, churches, VFW halls"
+      }
+    ]
+  },
+  "bookingRequests": [],
+  "subscribers": []
+}

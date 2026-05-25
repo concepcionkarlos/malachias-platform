@@ -223,7 +223,7 @@ export default function Footer() {
             One Nation Under God
           </p>
 
-          {/* Privacy / Terms */}
+          {/* Privacy / Terms / Admin */}
           <div className="flex gap-4 text-[0.66rem] tracking-wider" style={{ color: 'var(--text-ghost)' }}>
             <a
               href="#"
@@ -240,6 +240,14 @@ export default function Footer() {
               onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-ghost)')}
             >
               Terms
+            </a>
+            <a
+              href="/admin"
+              className="transition-colors duration-300"
+              onMouseEnter={e => (e.currentTarget.style.color = '#4a4438')}
+              onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-ghost)')}
+            >
+              Admin
             </a>
           </div>
         </div>

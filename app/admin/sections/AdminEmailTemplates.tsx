@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, useRef } from 'react'
-import { Plus, Trash2, Save, Lock, Eye, Code } from 'lucide-react'
+import { Plus, Trash2, Save, Lock, Eye } from 'lucide-react'
 import type { EmailTemplate } from '@/lib/data'
 
 const CARD: React.CSSProperties = { background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 8 }
@@ -22,7 +22,6 @@ function NewTemplateForm({ onCreate, onCancel }: {
   const [name, setName] = useState('')
   const [slug, setSlug] = useState('')
   const [subject, setSubject] = useState('')
-  const [bodyHtml, setBodyHtml] = useState('')
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
 
@@ -33,7 +32,7 @@ function NewTemplateForm({ onCreate, onCancel }: {
     try {
       const res = await fetch('/api/email-templates', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, slug, subject, bodyHtml }),
+        body: JSON.stringify({ name, slug, subject, bodyHtml: '' }),
       })
       if (!res.ok) { const e = await res.json(); throw new Error(e.error ?? 'Failed') }
       const created: EmailTemplate = await res.json()
@@ -58,11 +57,6 @@ function NewTemplateForm({ onCreate, onCancel }: {
       <div>
         <label style={LABEL}>SUBJECT</label>
         <input value={subject} onChange={e => setSubject(e.target.value)} style={INPUT} required placeholder="Email subject" />
-      </div>
-      <div>
-        <label style={LABEL}>BODY HTML</label>
-        <textarea value={bodyHtml} onChange={e => setBodyHtml(e.target.value)} rows={8}
-          style={{ ...INPUT, fontFamily: 'monospace', fontSize: 12, resize: 'vertical' }} />
       </div>
       {error && <div style={{ fontSize: 12, color: '#c04020' }}>{error}</div>}
       <div style={{ display: 'flex', gap: 8 }}>
@@ -89,23 +83,22 @@ function TemplateEditor({ template, onChange, onDelete }: {
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const [error, setError] = useState('')
-  const [previewMode, setPreviewMode] = useState<'code'|'preview'>('code')
   const [deleting, setDeleting] = useState(false)
   const iframeRef = useRef<HTMLIFrameElement>(null)
 
   useEffect(() => { setForm(template); setSaved(false) }, [template.id]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Update iframe content
+  // Always render iframe preview
   useEffect(() => {
-    if (previewMode === 'preview' && iframeRef.current) {
+    if (iframeRef.current) {
       const doc = iframeRef.current.contentDocument
       if (doc) {
         doc.open()
-        doc.write(`<html><head><style>body{background:#111;color:#e8ddd0;font-family:sans-serif;padding:20px;margin:0;}</style></head><body>${form.bodyHtml}</body></html>`)
+        doc.write(`<html><head><style>body{background:#fff;margin:0;padding:0;}</style></head><body>${form.bodyHtml}</body></html>`)
         doc.close()
       }
     }
-  }, [previewMode, form.bodyHtml])
+  }, [form.bodyHtml])
 
   function setField(k: keyof EmailTemplate, v: unknown) { setForm(f => ({ ...f, [k]: v })) }
 
@@ -195,35 +188,20 @@ function TemplateEditor({ template, onChange, onDelete }: {
         </div>
       )}
 
-      {/* Body editor + preview toggle */}
+      {/* Email preview — HTML hidden */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 0, flex: 1 }}>
-        <div style={{ display: 'flex', gap: 0, marginBottom: 0, borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
-          <button onClick={() => setPreviewMode('code')}
-            style={{ ...BTN, borderRadius: '6px 0 0 0', background: previewMode === 'code' ? 'rgba(255,255,255,0.06)' : 'transparent', color: previewMode === 'code' ? '#e8ddd0' : '#8a7f70', border: 'none', fontSize: 12 }}>
-            <Code size={12} /> HTML
-          </button>
-          <button onClick={() => setPreviewMode('preview')}
-            style={{ ...BTN, borderRadius: '0 6px 0 0', background: previewMode === 'preview' ? 'rgba(255,255,255,0.06)' : 'transparent', color: previewMode === 'preview' ? '#e8ddd0' : '#8a7f70', border: 'none', fontSize: 12 }}>
-            <Eye size={12} /> Preview
-          </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '6px 10px', borderBottom: '1px solid rgba(255,255,255,0.07)', background: 'rgba(255,255,255,0.03)', borderRadius: '6px 6px 0 0' }}>
+          <Eye size={12} style={{ color: '#8a7f70' }} />
+          <span style={{ fontSize: 11, color: '#8a7f70', letterSpacing: '0.08em' }}>PREVIEW</span>
         </div>
-        {previewMode === 'code' ? (
-          <textarea
-            value={form.bodyHtml}
-            onChange={e => setField('bodyHtml', e.target.value)}
-            rows={18}
-            style={{ ...INPUT, fontFamily: 'monospace', fontSize: 12, resize: 'vertical', borderRadius: '0 6px 6px 6px', lineHeight: 1.5 }}
+        <div style={{ border: '1px solid rgba(255,255,255,0.1)', borderTop: 'none', borderRadius: '0 0 6px 6px', overflow: 'hidden', minHeight: 360 }}>
+          <iframe
+            ref={iframeRef}
+            title="Email preview"
+            style={{ width: '100%', height: 420, border: 'none', display: 'block' }}
+            sandbox="allow-same-origin"
           />
-        ) : (
-          <div style={{ border: '1px solid rgba(255,255,255,0.1)', borderRadius: '0 6px 6px 6px', overflow: 'hidden', minHeight: 300 }}>
-            <iframe
-              ref={iframeRef}
-              title="Email preview"
-              style={{ width: '100%', height: 400, border: 'none', display: 'block' }}
-              sandbox="allow-same-origin"
-            />
-          </div>
-        )}
+        </div>
       </div>
 
       {error && <div style={{ fontSize: 12, color: '#c04020' }}>{error}</div>}

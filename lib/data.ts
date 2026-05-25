@@ -148,26 +148,6 @@ export interface BookingRequest {
 
 export const bookingRequests: BookingRequest[] = []
 
-// ── Song Requests ─────────────────────────────────────────────────────────────
-
-export type SongRequestStatus = 'New' | 'Review' | 'Consider' | 'Added' | 'Declined'
-
-export interface SongRequest {
-  id: string
-  fullName: string
-  email: string
-  eventDate?: string
-  song1: string
-  song2?: string
-  song3?: string
-  notes?: string
-  bookingRequestId?: string
-  status: SongRequestStatus
-  createdAt: string
-  updatedAt: string
-}
-
-export const songRequests: SongRequest[] = []
 
 // ── Subscribers ───────────────────────────────────────────────────────────────
 
@@ -271,7 +251,7 @@ export interface OutreachLog {
 
 export interface BookingEmailLog {
   id: string
-  entityType: 'booking' | 'song-request'
+  entityType: 'booking'
   entityId: string
   toEmail: string
   subject: string
@@ -293,7 +273,7 @@ export interface InboundEmail {
   bodyText?: string
   bodyHtml?: string
   receivedAt: string
-  entityType?: 'booking' | 'venue' | 'song-request'
+  entityType?: 'booking' | 'venue'
   entityId?: string
   read: boolean
   resendMessageId?: string

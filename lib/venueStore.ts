@@ -86,16 +86,6 @@ const DEFAULT_TEMPLATES: EmailTemplate[] = [
         <p style="margin:0;font-size:15px;color:#444444;font-family:Arial,sans-serif;">See you on stage,<br><strong>Malachias</strong></p>`),
   },
   {
-    id: makeId(), slug: 'song-request-reply', name: 'Song Request Reply',
-    isSystem: true, createdAt: now(), updatedAt: now(),
-    subject: 'We got your request, {{clientName}}.',
-    bodyHtml: emailShell(`
-        <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">{{clientName}},</p>
-        <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">Thank you for sending in your request for <strong>{{songList}}</strong>. It means something that you reached out.</p>
-        <p style="margin:0 0 32px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">We'll review it as we build upcoming setlists. Keep following along — you might hear it live sooner than you think.</p>
-        <p style="margin:0;font-size:15px;color:#444444;font-family:Arial,sans-serif;">— <strong>Malachias</strong></p>`),
-  },
-  {
     id: makeId(), slug: 'venue-first-outreach', name: 'Venue / Church First Outreach',
     isSystem: true, createdAt: now(), updatedAt: now(),
     subject: 'Christian Rock Band — Available for Bookings · {{venueName}}',
@@ -313,7 +303,7 @@ export async function addBookingEmailLog(log: Omit<BookingEmailLog, 'id'>): Prom
   return newLog
 }
 
-export async function getBookingEmailLogs(entityType: 'booking' | 'song-request', entityId: string): Promise<BookingEmailLog[]> {
+export async function getBookingEmailLogs(entityType: 'booking', entityId: string): Promise<BookingEmailLog[]> {
   const store = await readVenueStore()
   return (store.bookingEmailLogs ?? []).filter((l) => l.entityType === entityType && l.entityId === entityId).sort((a, b) => b.sentAt.localeCompare(a.sentAt))
 }

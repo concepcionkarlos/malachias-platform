@@ -23,7 +23,7 @@ function fmtFull(ts: string) {
 
 function EntityBadge({ entityType, entityId }: { entityType?: string; entityId?: string }) {
   if (!entityType || !entityId) return null
-  const colorMap: Record<string, string> = { booking: '#c9a84c', venue: '#60a5fa', 'song-request': '#a78bfa' }
+  const colorMap: Record<string, string> = { booking: '#c9a84c', venue: '#60a5fa' }
   const color = colorMap[entityType] ?? '#8a7f70'
   return (
     <span style={{ display: 'inline-block', padding: '2px 10px', borderRadius: 99, fontSize: 11, fontWeight: 600, background: color + '1a', color, border: `1px solid ${color}44`, letterSpacing: '0.06em' }}>

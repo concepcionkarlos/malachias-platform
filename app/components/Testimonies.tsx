@@ -123,7 +123,7 @@ export default function Testimonies() {
                   maxWidth: '50rem',
                   marginBottom: '1.25rem',
                 }}>
-                  &ldquo;{v.quote}&rdquo;
+                  {`“${v.quote}”`}
                 </p>
 
                 {/* Attribution */}
