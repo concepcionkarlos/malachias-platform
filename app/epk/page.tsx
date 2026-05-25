@@ -66,6 +66,10 @@ export default async function EpkPage() {
         fontFamily: 'var(--font-body)',
       }}
     >
+      <style>{`
+        .epk-social-link:hover { color: #c9a84c !important; border-color: rgba(201,168,76,0.45) !important; }
+        .epk-email-link:hover  { color: #c9a84c !important; }
+      `}</style>
       {/* ── Top bar ─── */}
       <div
         style={{
@@ -354,6 +358,7 @@ export default async function EpkPage() {
                 href={s.href}
                 target="_blank"
                 rel="noopener noreferrer"
+                className="epk-social-link"
                 style={{
                   fontSize: '0.72rem',
                   letterSpacing: '0.12em',
@@ -364,14 +369,6 @@ export default async function EpkPage() {
                   textDecoration: 'none',
                   transition: 'border-color 0.25s, color 0.25s',
                   display: 'inline-block',
-                }}
-                onMouseEnter={e => {
-                  (e.currentTarget as HTMLAnchorElement).style.color = '#c9a84c';
-                  (e.currentTarget as HTMLAnchorElement).style.borderColor = 'rgba(201,168,76,0.45)';
-                }}
-                onMouseLeave={e => {
-                  (e.currentTarget as HTMLAnchorElement).style.color = 'rgba(201,168,76,0.65)';
-                  (e.currentTarget as HTMLAnchorElement).style.borderColor = 'rgba(201,168,76,0.18)';
                 }}
               >
                 {s.label}
@@ -412,9 +409,8 @@ export default async function EpkPage() {
                 </p>
                 <a
                   href={`mailto:${c.email}`}
-                  style={{ fontSize: '0.82rem', color: 'rgba(220,210,196,0.65)', textDecoration: 'none' }}
-                  onMouseEnter={e => ((e.currentTarget as HTMLAnchorElement).style.color = '#c9a84c')}
-                  onMouseLeave={e => ((e.currentTarget as HTMLAnchorElement).style.color = 'rgba(220,210,196,0.65)')}
+                  className="epk-email-link"
+                  style={{ fontSize: '0.82rem', color: 'rgba(220,210,196,0.65)', textDecoration: 'none', transition: 'color 0.2s' }}
                 >
                   {c.email}
                 </a>
