@@ -42,6 +42,20 @@ export default function AdminLogin({ onLogin }: { onLogin: () => void }) {
           </div>
         </div>
 
+        <a
+          href="/"
+          style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem',
+            fontSize: '0.65rem', letterSpacing: '0.14em', color: '#c9a84c',
+            textDecoration: 'none', marginBottom: '2rem',
+            opacity: 0.7, transition: 'opacity 0.2s',
+          }}
+          onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
+          onMouseLeave={e => (e.currentTarget.style.opacity = '0.7')}
+        >
+          ← Back to site
+        </a>
+
         <form onSubmit={submit}>
           <div style={{ marginBottom: '1rem' }}>
             <input

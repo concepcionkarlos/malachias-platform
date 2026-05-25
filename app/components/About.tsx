@@ -89,9 +89,7 @@ export default function About() {
               style={{ borderLeftColor: 'rgba(201,168,76,0.25)' }}
             >
               <p className="text-[0.82rem] leading-relaxed italic" style={{ color: 'var(--text-3)' }}>
-                &ldquo;I came home from Iraq and I didn&apos;t know who I was anymore.
-                Music cracked me open again.
-                Faith came through the crack.&rdquo;
+                {"\"I came home from Iraq and I didn’t know who I was anymore. Music cracked me open again. Faith came through the crack.\""}
               </p>
               <p className="text-[0.65rem] tracking-[0.18em] uppercase mt-2" style={{ color: 'rgba(201,168,76,0.35)' }}>
                 — The Founder

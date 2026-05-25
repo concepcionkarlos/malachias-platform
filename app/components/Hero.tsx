@@ -44,51 +44,60 @@ export default function Hero() {
         }} />
       </div>
 
-      {/* ─── Emblem — anchored right, atmospheric ────────────────────── */}
+      {/* ─── Emblem — right-anchored, atmospheric ───────────────────── */}
       <motion.div
         aria-hidden="true"
         style={{ y: logoY, zIndex: 2 }}
         className="absolute inset-0 pointer-events-none"
       >
-        <motion.div
-          initial={{ opacity: 0, scale: 0.94 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 3.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] as [number,number,number,number] }}
+        {/* Positioning wrapper — keeps FM scale animation from clobbering translateY */}
+        <div
           style={{
             position: 'absolute',
             top: '50%',
-            right: '-8%',
-            transform: 'translateY(-52%)',
-            width: 'min(58vw, 820px)',
+            right: '0%',
+            transform: 'translateY(-50%)',
+            width: 'min(56vw, 800px)',
             aspectRatio: '1 / 1',
-            opacity: 0.30,
-            WebkitMaskImage: `radial-gradient(
-              ellipse 78% 78% at 62% 50%,
-              black 5%, rgba(0,0,0,.85) 28%,
-              rgba(0,0,0,.45) 50%, rgba(0,0,0,.10) 66%,
-              transparent 78%
-            )`,
-            maskImage: `radial-gradient(
-              ellipse 78% 78% at 62% 50%,
-              black 5%, rgba(0,0,0,.85) 28%,
-              rgba(0,0,0,.45) 50%, rgba(0,0,0,.10) 66%,
-              transparent 78%
-            )`,
           }}
         >
-          <Image
-            src="/Malachias.PNG"
-            alt=""
-            fill
-            className="object-contain"
-            priority
-            sizes="(max-width: 1024px) 90vw, 820px"
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 3.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] as [number,number,number,number] }}
             style={{
-              mixBlendMode: 'screen',
-              filter: 'contrast(1.08) brightness(0.82) saturate(0.60)',
+              position: 'relative',
+              width: '100%',
+              height: '100%',
+              opacity: 0.44,
+              WebkitMaskImage: `radial-gradient(
+                ellipse 76% 76% at 52% 50%,
+                black 10%, rgba(0,0,0,.90) 34%,
+                rgba(0,0,0,.52) 54%, rgba(0,0,0,.16) 70%,
+                transparent 82%
+              )`,
+              maskImage: `radial-gradient(
+                ellipse 76% 76% at 52% 50%,
+                black 10%, rgba(0,0,0,.90) 34%,
+                rgba(0,0,0,.52) 54%, rgba(0,0,0,.16) 70%,
+                transparent 82%
+              )`,
             }}
-          />
-        </motion.div>
+          >
+            <Image
+              src="/Malachias.PNG"
+              alt=""
+              fill
+              className="object-contain"
+              priority
+              sizes="(max-width: 1024px) 90vw, 800px"
+              style={{
+                mixBlendMode: 'screen',
+                filter: 'contrast(1.10) brightness(0.92) saturate(0.62)',
+              }}
+            />
+          </motion.div>
+        </div>
       </motion.div>
 
       {/* ─── Fog layers — protect text zone, merge edges ─────────────── */}

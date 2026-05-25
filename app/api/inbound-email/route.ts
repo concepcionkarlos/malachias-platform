@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
   const fromName: string = typeof from === 'string' && from.includes('<') ? from.split('<')[0].trim() : undefined as never
 
   // Try to match to a known booking or venue by email
-  let entityType: 'booking' | 'venue' | 'song-request' | undefined
+  let entityType: 'booking' | 'venue' | undefined
   let entityId: string | undefined
 
   try {
@@ -29,10 +29,6 @@ export async function POST(req: NextRequest) {
     else {
       const venue = venues.find((v) => v.contactEmail === fromEmail)
       if (venue) { entityType = 'venue'; entityId = venue.id }
-      else {
-        const sr = content.songRequests.find((s) => s.email === fromEmail)
-        if (sr) { entityType = 'song-request'; entityId = sr.id }
-      }
     }
   } catch { /* best effort */ }
 
