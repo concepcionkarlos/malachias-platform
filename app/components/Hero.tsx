@@ -44,32 +44,34 @@ export default function Hero() {
         }} />
       </div>
 
-      {/* ─── Emblem — background atmosphere, not focal point ─────────── */}
+      {/* ─── Emblem — anchored right, atmospheric ────────────────────── */}
       <motion.div
         aria-hidden="true"
         style={{ y: logoY, zIndex: 2 }}
-        className="absolute inset-0 flex items-center justify-center pointer-events-none"
+        className="absolute inset-0 pointer-events-none"
       >
         <motion.div
-          initial={{ opacity: 0, scale: 0.96 }}
+          initial={{ opacity: 0, scale: 0.94 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 3.4, delay: 0.2, ease: [0.16, 1, 0.3, 1] as [number,number,number,number] }}
+          transition={{ duration: 3.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] as [number,number,number,number] }}
           style={{
-            position: 'relative',
-            width: 'min(92vw, 720px)',
-            aspectRatio: '3 / 2',
-            marginTop: '-6vh',
-            opacity: 0.26,
+            position: 'absolute',
+            top: '50%',
+            right: '-8%',
+            transform: 'translateY(-52%)',
+            width: 'min(58vw, 820px)',
+            aspectRatio: '1 / 1',
+            opacity: 0.30,
             WebkitMaskImage: `radial-gradient(
-              ellipse 74% 68% at 50% 50%,
-              black 10%, rgba(0,0,0,.80) 30%,
-              rgba(0,0,0,.40) 50%, rgba(0,0,0,.08) 65%,
+              ellipse 78% 78% at 62% 50%,
+              black 5%, rgba(0,0,0,.85) 28%,
+              rgba(0,0,0,.45) 50%, rgba(0,0,0,.10) 66%,
               transparent 78%
             )`,
             maskImage: `radial-gradient(
-              ellipse 74% 68% at 50% 50%,
-              black 10%, rgba(0,0,0,.80) 30%,
-              rgba(0,0,0,.40) 50%, rgba(0,0,0,.08) 65%,
+              ellipse 78% 78% at 62% 50%,
+              black 5%, rgba(0,0,0,.85) 28%,
+              rgba(0,0,0,.45) 50%, rgba(0,0,0,.10) 66%,
               transparent 78%
             )`,
           }}
@@ -80,32 +82,36 @@ export default function Hero() {
             fill
             className="object-contain"
             priority
-            sizes="(max-width: 1024px) 92vw, 720px"
+            sizes="(max-width: 1024px) 90vw, 820px"
             style={{
               mixBlendMode: 'screen',
-              filter: 'contrast(1.10) brightness(0.78) saturate(0.68)',
+              filter: 'contrast(1.08) brightness(0.82) saturate(0.60)',
             }}
           />
         </motion.div>
       </motion.div>
 
-      {/* ─── Environmental fog — merges emblem into darkness ─────────── */}
+      {/* ─── Fog layers — protect text zone, merge edges ─────────────── */}
       <div aria-hidden="true" className="absolute inset-0 pointer-events-none" style={{ zIndex: 3 }}>
+        {/* Strong left guard — keeps text legible */}
         <div style={{
-          position: 'absolute', top: 0, left: 0, bottom: 0, width: '38%',
-          background: 'linear-gradient(to right, rgba(2,2,2,0.92) 0%, rgba(2,2,2,0.50) 65%, transparent 100%)',
+          position: 'absolute', top: 0, left: 0, bottom: 0, width: '52%',
+          background: 'linear-gradient(to right, rgba(2,2,2,0.97) 0%, rgba(2,2,2,0.80) 40%, rgba(2,2,2,0.40) 70%, transparent 100%)',
         }} />
+        {/* Right edge fade */}
         <div style={{
-          position: 'absolute', top: 0, right: 0, bottom: 0, width: '38%',
-          background: 'linear-gradient(to left, rgba(2,2,2,0.92) 0%, rgba(2,2,2,0.50) 65%, transparent 100%)',
+          position: 'absolute', top: 0, right: 0, bottom: 0, width: '22%',
+          background: 'linear-gradient(to left, rgba(2,2,2,0.88) 0%, transparent 100%)',
         }} />
+        {/* Top fade */}
         <div style={{
-          position: 'absolute', top: 0, left: 0, right: 0, height: '32%',
-          background: 'linear-gradient(to bottom, rgba(2,2,2,0.96) 0%, rgba(2,2,2,0.50) 55%, transparent 100%)',
+          position: 'absolute', top: 0, left: 0, right: 0, height: '28%',
+          background: 'linear-gradient(to bottom, rgba(2,2,2,0.98) 0%, rgba(2,2,2,0.55) 50%, transparent 100%)',
         }} />
+        {/* Bottom fade */}
         <div style={{
-          position: 'absolute', bottom: 0, left: 0, right: 0, height: '30%',
-          background: 'linear-gradient(to top, rgba(2,2,2,0.82) 0%, transparent 100%)',
+          position: 'absolute', bottom: 0, left: 0, right: 0, height: '35%',
+          background: 'linear-gradient(to top, rgba(2,2,2,0.88) 0%, transparent 100%)',
         }} />
       </div>
 
@@ -133,68 +139,68 @@ export default function Hero() {
       {/* ─── Text — emotional statement ──────────────────────────────── */}
       <motion.div
         style={{ y: textY, opacity: masterO, zIndex: 10 }}
-        className="absolute inset-x-0 bottom-0 px-6 lg:px-16 pb-[13vh]"
+        className="absolute inset-x-0 bottom-0 px-6 lg:px-16 pb-[11vh]"
       >
-        <div style={{ maxWidth: '38rem' }}>
+        <div style={{ maxWidth: 'min(46rem, 54vw)' }}>
 
-          {/* Emotional statement — brand name lives only in the navbar */}
+          {/* Emotional statement */}
           <div
-            className="font-display leading-[0.92] tracking-[0.04em]"
-            style={{ textShadow: '0 0 80px rgba(190,140,60,0.08), 0 10px 50px rgba(0,0,0,0.98)' }}
+            className="font-display leading-[0.90] tracking-[0.03em]"
+            style={{ textShadow: '0 8px 60px rgba(0,0,0,0.99)' }}
           >
             <motion.span
-              initial={{ opacity: 0, y: 18 }}
+              initial={{ opacity: 0, y: 22 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1.1, delay: 0.85, ease: [0.16, 1, 0.3, 1] as [number,number,number,number] }}
-              style={{ display: 'block', fontSize: 'clamp(2.8rem, 6.5vw, 5rem)', color: 'rgba(237,229,216,0.60)' }}
+              style={{ display: 'block', fontSize: 'clamp(3rem, 7vw, 5.5rem)', color: 'rgba(237,229,216,0.42)' }}
             >
               WE PLAY
             </motion.span>
             <motion.span
-              initial={{ opacity: 0, y: 18 }}
+              initial={{ opacity: 0, y: 22 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1.1, delay: 1.0, ease: [0.16, 1, 0.3, 1] as [number,number,number,number] }}
-              style={{ display: 'block', fontSize: 'clamp(2.8rem, 6.5vw, 5rem)', color: '#ede5d8' }}
+              style={{ display: 'block', fontSize: 'clamp(3rem, 7vw, 5.5rem)', color: '#ede5d8' }}
             >
               FOR THE ONES
             </motion.span>
             <motion.span
-              initial={{ opacity: 0, y: 18 }}
+              initial={{ opacity: 0, y: 22 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1.1, delay: 1.15, ease: [0.16, 1, 0.3, 1] as [number,number,number,number] }}
-              style={{ display: 'block', fontSize: 'clamp(2.8rem, 6.5vw, 5rem)', color: 'rgba(237,229,216,0.40)' }}
+              style={{ display: 'block', fontSize: 'clamp(3rem, 7vw, 5.5rem)', color: 'rgba(237,229,216,0.28)' }}
             >
               WHO NEED IT MOST.
             </motion.span>
           </div>
 
-          {/* Gold rule */}
+          {/* Gold divider */}
           <motion.div
             initial={{ scaleX: 0, opacity: 0 }}
             animate={{ scaleX: 1, opacity: 1 }}
-            transition={{ duration: 1.5, delay: 1.15, ease: [0.22, 1, 0.36, 1] as [number,number,number,number] }}
+            transition={{ duration: 1.5, delay: 1.18, ease: [0.22, 1, 0.36, 1] as [number,number,number,number] }}
             className="gold-rule my-5"
-            style={{ transformOrigin: 'left', maxWidth: '10rem' }}
+            style={{ transformOrigin: 'left', maxWidth: '8rem' }}
           />
 
           {/* Sub-statement */}
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 1.2, delay: 1.20 }}
-            className="text-[0.78rem] leading-relaxed italic mb-6"
-            style={{ color: 'var(--text-2)', maxWidth: '22rem', letterSpacing: '0.02em' }}
+            transition={{ duration: 1.2, delay: 1.22 }}
+            className="text-[0.80rem] leading-relaxed italic mb-7"
+            style={{ color: 'var(--text-2)', maxWidth: '24rem', letterSpacing: '0.02em' }}
           >
             Music forged in faith. Carried through fire.
             For anyone still fighting their way back.
           </motion.p>
 
-          {/* CTAs */}
+          {/* CTAs — horizontal row */}
           <motion.div
-            initial={{ opacity: 0, y: 12 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 1.45 }}
-            className="flex flex-col xs:flex-row items-start gap-3 mb-7"
+            transition={{ duration: 0.9, delay: 1.48 }}
+            className="flex flex-row flex-wrap items-center gap-3 mb-8"
           >
             <a
               href="https://music.apple.com/us/artist/malachias/937313536"
@@ -207,21 +213,25 @@ export default function Hero() {
             <a href="#booking" className="btn btn-ghost">
               Book Us
             </a>
-            <a href="/epk" className="btn btn-ghost" style={{ opacity: 0.65 }}>
+            <a
+              href="/epk"
+              className="btn btn-ghost"
+              style={{ opacity: 0.55, fontSize: '0.62rem', letterSpacing: '0.20em', padding: '0.55rem 1rem' }}
+            >
               Press Kit
             </a>
           </motion.div>
 
-          {/* Scripture — restrained anchor */}
+          {/* Scripture anchor */}
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 1.6, delay: 1.9 }}
+            transition={{ duration: 1.6, delay: 1.95 }}
             style={{
-              fontSize: '0.58rem',
-              letterSpacing: '0.46em',
+              fontSize: '0.55rem',
+              letterSpacing: '0.44em',
               textTransform: 'uppercase',
-              color: 'var(--text-3)',
+              color: 'rgba(140,110,60,0.35)',
             }}
           >
             ✠ &nbsp; Malachi 3:1 &nbsp; ✠
