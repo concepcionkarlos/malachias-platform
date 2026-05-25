@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
 import Embers from './Embers';
@@ -8,6 +8,15 @@ import Embers from './Embers';
 export default function Hero() {
   const ref = useRef<HTMLElement>(null);
   const { scrollY } = useScroll();
+  const [mobile, setMobile] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 1023px)');
+    setMobile(mq.matches);
+    const fn = (e: MediaQueryListEvent) => setMobile(e.matches);
+    mq.addEventListener('change', fn);
+    return () => mq.removeEventListener('change', fn);
+  }, []);
 
   const logoY   = useTransform(scrollY, [0, 700], [0, -72]);
   const textY   = useTransform(scrollY, [0, 700], [0, -24]);
@@ -50,9 +59,16 @@ export default function Hero() {
         style={{ y: logoY, zIndex: 2 }}
         className="absolute inset-0 pointer-events-none"
       >
-        {/* Positioning wrapper — keeps FM scale animation from clobbering translateY */}
+        {/* Positioning wrapper — mobile: upper-right corner; desktop: center-right */}
         <div
-          style={{
+          style={mobile ? {
+            position: 'absolute',
+            top: '6%',
+            right: '-4%',
+            transform: 'none',
+            width: '52vw',
+            aspectRatio: '1 / 1',
+          } : {
             position: 'absolute',
             top: '50%',
             right: '0%',
@@ -69,7 +85,7 @@ export default function Hero() {
               position: 'relative',
               width: '100%',
               height: '100%',
-              opacity: 0.44,
+              opacity: mobile ? 0.32 : 0.44,
               WebkitMaskImage: `radial-gradient(
                 ellipse 76% 76% at 52% 50%,
                 black 10%, rgba(0,0,0,.90) 34%,
@@ -150,7 +166,7 @@ export default function Hero() {
         style={{ y: textY, opacity: masterO, zIndex: 10 }}
         className="absolute inset-x-0 bottom-0 px-6 lg:px-16 pb-[11vh]"
       >
-        <div style={{ maxWidth: 'min(46rem, 54vw)' }}>
+        <div style={{ maxWidth: mobile ? '90vw' : 'min(46rem, 54vw)' }}>
 
           {/* Emotional statement */}
           <div
@@ -161,7 +177,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 22 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1.1, delay: 0.85, ease: [0.16, 1, 0.3, 1] as [number,number,number,number] }}
-              style={{ display: 'block', fontSize: 'clamp(3rem, 7vw, 5.5rem)', color: 'rgba(237,229,216,0.42)' }}
+              style={{ display: 'block', fontSize: mobile ? 'clamp(2.6rem, 10vw, 3.2rem)' : 'clamp(3rem, 7vw, 5.5rem)', color: 'rgba(237,229,216,0.42)' }}
             >
               WE PLAY
             </motion.span>
@@ -169,7 +185,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 22 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1.1, delay: 1.0, ease: [0.16, 1, 0.3, 1] as [number,number,number,number] }}
-              style={{ display: 'block', fontSize: 'clamp(3rem, 7vw, 5.5rem)', color: '#ede5d8' }}
+              style={{ display: 'block', fontSize: mobile ? 'clamp(2.6rem, 10vw, 3.2rem)' : 'clamp(3rem, 7vw, 5.5rem)', color: '#ede5d8' }}
             >
               FOR THE ONES
             </motion.span>
@@ -177,7 +193,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 22 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1.1, delay: 1.15, ease: [0.16, 1, 0.3, 1] as [number,number,number,number] }}
-              style={{ display: 'block', fontSize: 'clamp(3rem, 7vw, 5.5rem)', color: 'rgba(237,229,216,0.28)' }}
+              style={{ display: 'block', fontSize: mobile ? 'clamp(2.6rem, 10vw, 3.2rem)' : 'clamp(3rem, 7vw, 5.5rem)', color: 'rgba(237,229,216,0.28)' }}
             >
               WHO NEED IT MOST.
             </motion.span>
