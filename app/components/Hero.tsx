@@ -3,6 +3,7 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
+import Embers from './Embers';
 
 export default function Hero() {
   const ref = useRef<HTMLElement>(null);
@@ -111,7 +112,25 @@ export default function Hero() {
       {/* ─── Vignette ─────────────────────────────────────────────────── */}
       <div aria-hidden="true" className="absolute inset-0 pointer-events-none vignette" style={{ zIndex: 4 }} />
 
-      {/* ─── Text — MALACHIAS is the focal point ─────────────────────── */}
+      {/* ─── Crimson ground glow — battle-born, beneath the words ────── */}
+      <div aria-hidden="true" className="absolute inset-x-0 bottom-0 pointer-events-none" style={{ zIndex: 5, height: '55%' }}>
+        <div style={{
+          position: 'absolute',
+          bottom: '8%', left: '2%',
+          width: '45vw', height: '50%',
+          background: 'radial-gradient(ellipse, rgba(120,18,8,0.12) 0%, rgba(80,10,5,0.05) 55%, transparent 80%)',
+          filter: 'blur(70px)',
+          animation: 'glowPulse 18s ease-in-out infinite 5s',
+          willChange: 'opacity',
+        }} />
+      </div>
+
+      {/* ─── Embers — rise from the ground, z above glow ─────────────── */}
+      <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 6 }}>
+        <Embers count={16} />
+      </div>
+
+      {/* ─── Text — emotional statement ──────────────────────────────── */}
       <motion.div
         style={{ y: textY, opacity: masterO, zIndex: 10 }}
         className="absolute inset-x-0 bottom-0 px-6 lg:px-16 pb-[13vh]"

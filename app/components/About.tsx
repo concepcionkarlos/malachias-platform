@@ -12,6 +12,9 @@ const fade = (delay = 0) => ({
 export default function About() {
   return (
     <section id="about" className="section-pad relative overflow-hidden" style={{ background: '#050505' }}>
+      {/* Ghost section numeral — large faint stencil top-right */}
+      <div aria-hidden="true" className="ghost-num" style={{ position: 'absolute', top: '4%', right: '-1%' }}>01</div>
+
       {/* Subtle warm ambient — left side, where the story lives */}
       <div aria-hidden="true" style={{
         position: 'absolute',
