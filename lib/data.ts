@@ -398,7 +398,8 @@ export const bandMembers: BandMember[] = [
     name: 'The Founder',
     role: 'Founder · Guitar · Vocals',
     branch: 'U.S. Army',
-    bio: "Veteran. Came home from deployment changed, the way it changes most people who go. The transition took years — figuring out who he was without the uniform, without the mission structure, without the brothers who kept him standing. Music cracked something open in that time. Faith came through the crack. He started Malachias because he needed a mission, and because there are people in every room who need to hear something real. He plays guitar, writes every original, and fronts every show with the same thing he had on his hardest nights: nothing to prove and nothing left to lose.",
+    tours: 'OIF I · OIF II',
+    bio: "Fort Wayne, Indiana. Indiana Army National Guard from 1994 to 2003 — medic first, then infantryman. Active duty Army from 2006 to 2014, deploying twice to Iraq: once as a medic, once as an Army bandsman.\n\nI accepted Jesus as my Savior in fifth grade at a Vacation Bible School. Raised in a home that didn't go to church, didn't pray, didn't talk about God. I came home from that summer and spent the next few decades trying to figure out what that moment actually meant — through two failed marriages, a DUI, years that wore me down. When I deployed to Iraq I found myself reaching deep into my faith. In 2011 I converted to Messianic Christian.\n\nMalachias came out of all of it. The mission is specific: reduce suicidal ideation, lift people from depression, help heal and lessen the triggers PTSD leaves behind. The music is for people who are real, who struggle with their faith, and who want to grow and heal.",
     visible: true,
   },
 ]
@@ -407,15 +408,16 @@ export const siteContent: SiteContent = {
   heroHeadline: 'WE PLAY FOR THE ONES WHO NEED IT MOST.',
   heroSubheadline: 'Music forged in faith. Carried through fire. For anyone still fighting their way back.',
   aboutHeadline: 'THE STORY',
-  aboutShort: 'Founded by a U.S. Army veteran. Malachias plays Christian rock for the people in the room who need to hear something true.',
+  aboutShort: 'Born in Fort Wayne, Indiana. Founded by a U.S. Army veteran. Malachias plays Christian rock with a mission: reduce suicidal ideation, lift people from depression, help heal the wounds PTSD leaves behind.',
   groupPhoto: '/Malachias.PNG',
   aboutText: [
-    "Malachias was started by a U.S. Army veteran who came back from deployment changed, the way most veterans do. Music and faith were the two things that still made sense in the aftermath — so he started a band.",
-    "We play Christian rock. Loud, honest music that comes from real places. Songs about doubt, struggle, redemption, and the kind of hope that doesn't come easy.",
-    "We're a small band, still growing. But every show we play is for the people in the room who need to hear something true tonight.",
+    "Fort Wayne, Indiana. That's where this started.",
+    "The founder served in the Indiana Army National Guard from 1994 to 2003 — first as a medic, then as an infantryman. Then active duty Army from 2006 to 2014, deploying twice to Iraq. Once as a medic. Once as an Army bandsman. Music and war in the same life.",
+    "He accepted Jesus as his Savior in fifth grade at a Vacation Bible School. Raised in a home that didn't go to church, didn't pray, didn't talk about God. Spent years trying to figure out what that moment meant — through hard years, two failed marriages, a DUI. When he deployed to Iraq he found himself reaching back into that faith. In 2011 he converted to Messianic Christian.",
+    "Malachias came out of all of it. The mission is specific: reduce suicidal ideation, lift people from depression, help heal and lessen the triggers PTSD leaves behind. The music is for people who are real, who struggle with their faith, and who want to grow and heal.",
   ],
   serviceArea: 'United States',
-  footerTagline: 'Christian rock forged in faith. Every stage is a mission.',
+  footerTagline: 'Fort Wayne. Faith. Two tours. One mission.',
   ctaPrimaryLabel: 'Book Malachias',
   ctaSecondaryLabel: 'View Press Kit',
   contactEmail: 'booking@malachias.com',
@@ -424,8 +426,8 @@ export const siteContent: SiteContent = {
   youtube: 'https://www.youtube.com/channel/UCboGsplcNdd9Pha-n83mZYA',
   appleMusic: 'https://music.apple.com/us/artist/malachias/937313536',
   spotify: 'https://open.spotify.com/artist/2YSqk7Skh7jsm5fR0uU3vl',
-  metaDescription: 'Malachias is a Christian rock band founded by a U.S. Army veteran. Music forged in faith, healing through brotherhood.',
-  ogTitle: 'MALACHIAS — Christian Rock. Veteran Spirit. Faith on Fire.',
+  metaDescription: 'Malachias is a Christian rock band founded by a U.S. Army veteran from Fort Wayne, Indiana. Music with a mission: healing suicidal ideation, depression, and PTSD through faith.',
+  ogTitle: 'MALACHIAS — Christian Rock. Veteran Mission. Fort Wayne, Indiana.',
 }
 
 export const mediaItems: MediaItem[] = []

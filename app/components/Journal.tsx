@@ -10,29 +10,29 @@ const fade = (delay = 0) => ({
 });
 
 const TAG_COLORS: Record<string, string> = {
-  Studio:    '#c9a84c',
-  'On Stage':'#8a7f70',
+  Origin:    '#c9a84c',
+  Service:   '#8a7f70',
   Mission:   'rgba(201,168,76,0.50)',
 };
 
 const ENTRIES = [
   {
-    tag:     'Studio',
-    date:    'March 2025',
-    title:   'Four new tracks in progress.',
-    excerpt: "We've been in the room together two, three nights a week. Four songs are taking shape — heavier in some places, quieter in others. We're not rushing it. These songs need to be right.",
+    tag:     'Origin',
+    date:    'Fort Wayne, Indiana',
+    title:   'Why this started here.',
+    excerpt: "Fort Wayne is home. The Guard unit was here. The decision to enlist was made here. When I came back from Iraq the second time — as a bandsman, of all things — I came back here. Malachias started in Fort Wayne because everything that made it necessary happened in Fort Wayne.",
   },
   {
-    tag:     'On Stage',
-    date:    'February 2025',
-    title:   'Victory Church, Fresno.',
-    excerpt: "Played to about 200 people. One guy came up after and said it was the first time he'd felt something in a church in three years. That's the whole reason we do this.",
+    tag:     'Service',
+    date:    'Iraq · 2006–2014',
+    title:   'Two deployments. Two different men.',
+    excerpt: "First tour as a medic. Second tour as an Army bandsman. I went over there holding people together with my hands. I came back the second time holding a guitar. Those aren't as different as they sound. Both are about being present when someone needs something real.",
   },
   {
     tag:     'Mission',
-    date:    'January 2025',
-    title:   'Why we play for veterans.',
-    excerpt: "Some of the men we play for have been carrying things most people don't talk about. Music doesn't fix what's broken. But sometimes it opens a door.",
+    date:    'The reason we play',
+    title:   'Reduce suicidal ideation. That\'s the mission.',
+    excerpt: "That's not a general statement. That's the specific reason Malachias exists. Veterans carrying things nobody talks about. People whose faith got worn down by years of hard living. Anyone who's at the bottom and not sure what's on the other side. That's who this music is for.",
   },
 ];
 
@@ -41,7 +41,6 @@ export default function Journal() {
     <section id="journal" style={{ background: '#080808' }} className="section-pad">
       <div className="max-w-5xl mx-auto px-6">
 
-        {/* Header */}
         <motion.div {...fade()} className="mb-12">
           <p className="label-xs mb-3" style={{ color: 'var(--gold)', letterSpacing: '0.40em' }}>
             From the Field
@@ -55,14 +54,12 @@ export default function Journal() {
           <div
             className="mt-4"
             style={{
-              width: '3rem',
-              height: '1px',
+              width: '3rem', height: '1px',
               background: 'linear-gradient(to right, rgba(201,168,76,0.60), transparent)',
             }}
           />
         </motion.div>
 
-        {/* Entries */}
         <div className="grid lg:grid-cols-3 gap-px" style={{ background: 'rgba(255,255,255,0.05)' }}>
           {ENTRIES.map((e, i) => (
             <motion.article
@@ -72,7 +69,6 @@ export default function Journal() {
               onMouseEnter={ev => ((ev.currentTarget as HTMLElement).style.background = '#0d0d0d')}
               onMouseLeave={ev => ((ev.currentTarget as HTMLElement).style.background = '#080808')}
             >
-              {/* Meta */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                 <span style={{ fontSize: '0.60rem', letterSpacing: '0.22em', color: TAG_COLORS[e.tag], textTransform: 'uppercase' }}>
                   {e.tag}
@@ -83,34 +79,13 @@ export default function Journal() {
                 </span>
               </div>
 
-              {/* Title */}
-              <h3
-                className="font-display"
-                style={{ fontSize: '1.25rem', letterSpacing: '0.04em', color: '#e8ddd0', lineHeight: 1.1 }}
-              >
+              <h3 className="font-display" style={{ fontSize: '1.25rem', letterSpacing: '0.04em', color: '#e8ddd0', lineHeight: 1.1 }}>
                 {e.title}
               </h3>
 
-              {/* Excerpt */}
               <p style={{ fontSize: '0.80rem', lineHeight: 1.7, color: 'var(--text-3)', flex: 1 }}>
                 {e.excerpt}
               </p>
-
-              {/* Read more */}
-              <span
-                style={{
-                  fontSize: '0.62rem',
-                  letterSpacing: '0.18em',
-                  color: 'rgba(201,168,76,0.30)',
-                  textTransform: 'uppercase',
-                  marginTop: '0.25rem',
-                  transition: 'color 0.3s',
-                }}
-                onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = 'rgba(201,168,76,0.70)')}
-                onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = 'rgba(201,168,76,0.30)')}
-              >
-                Read more →
-              </span>
             </motion.article>
           ))}
         </div>
