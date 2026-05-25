@@ -4,8 +4,29 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 
 export default function Newsletter() {
-  const [email, setEmail] = useState('');
-  const [sent, setSent]   = useState(false);
+  const [email, setEmail]   = useState('');
+  const [sent, setSent]     = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError]   = useState('');
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+    try {
+      const res = await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      if (!res.ok) throw new Error('Failed');
+      setSent(true);
+    } catch {
+      setError('Something went wrong. Try again.');
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <section
@@ -24,8 +45,6 @@ export default function Newsletter() {
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
           className="grid lg:grid-cols-[5fr_6fr] gap-8 lg:gap-16 items-center"
         >
-
-          {/* Left — Brotherhood framing */}
           <div>
             <p className="label-xs mb-3" style={{ color: 'var(--gold)', letterSpacing: '0.40em' }}>
               The Brotherhood
@@ -43,7 +62,6 @@ export default function Newsletter() {
             </p>
           </div>
 
-          {/* Right — form */}
           <div>
             {sent ? (
               <motion.div
@@ -51,10 +69,7 @@ export default function Newsletter() {
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.6 }}
               >
-                <p
-                  className="font-display text-xl tracking-[0.12em] mb-2"
-                  style={{ color: 'var(--gold)' }}
-                >
+                <p className="font-display text-xl tracking-[0.12em] mb-2" style={{ color: 'var(--gold)' }}>
                   You&apos;re in.
                 </p>
                 <p className="text-[0.82rem] leading-relaxed" style={{ color: 'var(--text-3)' }}>
@@ -63,10 +78,7 @@ export default function Newsletter() {
               </motion.div>
             ) : (
               <div>
-                <form
-                  onSubmit={e => { e.preventDefault(); setSent(true); }}
-                  className="flex flex-col sm:flex-row gap-3 mb-3"
-                >
+                <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 mb-3">
                   <input
                     className="field flex-1"
                     type="email"
@@ -76,17 +88,24 @@ export default function Newsletter() {
                     value={email}
                     onChange={e => setEmail(e.target.value)}
                   />
-                  <button type="submit" className="btn btn-primary shrink-0">
-                    Join the Brotherhood
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="btn btn-primary shrink-0"
+                    style={{ opacity: loading ? 0.6 : 1 }}
+                  >
+                    {loading ? 'Joining…' : 'Join the Brotherhood'}
                   </button>
                 </form>
+                {error && (
+                  <p style={{ fontSize: '0.72rem', color: '#c04020' }}>{error}</p>
+                )}
                 <p style={{ fontSize: '0.62rem', letterSpacing: '0.10em', color: 'var(--text-3)' }}>
                   Private. Honest. No spam. Unsubscribe any time.
                 </p>
               </div>
             )}
           </div>
-
         </motion.div>
       </div>
     </section>

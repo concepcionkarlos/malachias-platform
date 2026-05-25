@@ -169,6 +169,15 @@ export interface SongRequest {
 
 export const songRequests: SongRequest[] = []
 
+// ── Subscribers ───────────────────────────────────────────────────────────────
+
+export interface Subscriber {
+  email: string
+  joinedAt: string
+}
+
+export const subscribers: Subscriber[] = []
+
 // ── Admin Notes ───────────────────────────────────────────────────────────────
 
 export type AdminNotePriority = 'normal' | 'high'
@@ -388,7 +397,8 @@ export const bandMembers: BandMember[] = [
     id: '1',
     name: 'The Founder',
     role: 'Founder · Guitar · Vocals',
-    bio: 'Army veteran. Started Malachias after coming home from deployment. Music and faith were the two things that still made sense.',
+    branch: 'U.S. Army',
+    bio: "Veteran. Came home from deployment changed, the way it changes most people who go. The transition took years — figuring out who he was without the uniform, without the mission structure, without the brothers who kept him standing. Music cracked something open in that time. Faith came through the crack. He started Malachias because he needed a mission, and because there are people in every room who need to hear something real. He plays guitar, writes every original, and fronts every show with the same thing he had on his hardest nights: nothing to prove and nothing left to lose.",
     visible: true,
   },
 ]

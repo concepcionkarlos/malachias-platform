@@ -2,6 +2,7 @@ import Navbar       from './components/Navbar';
 import Hero         from './components/Hero';
 import About        from './components/About';
 import Music        from './components/Music';
+import Shows        from './components/Shows';
 import Journal      from './components/Journal';
 import Merch        from './components/Merch';
 import Mission      from './components/Mission';
@@ -20,6 +21,7 @@ export default function Home() {
       <SectionDivider accent="gold" />
       <About />
       <Music />
+      <Shows />
       <Journal />
       <Merch />
       <SectionDivider accent="crimson" />

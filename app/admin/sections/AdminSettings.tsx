@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { LogOut, Download, Info, Shield, Mail, Database, Image as ImageIcon, Map } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { LogOut, Download, Info, Shield, Mail, Database, Image as ImageIcon, Map, Users } from 'lucide-react'
 
 const CARD: React.CSSProperties = { background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 8 }
 const LABEL: React.CSSProperties = { fontSize: 11, color: '#8a7f70', letterSpacing: '0.08em', display: 'block', marginBottom: 4 }
@@ -24,6 +24,14 @@ export default function AdminSettings() {
   const [exporting, setExporting] = useState(false)
   const [exportMsg, setExportMsg] = useState('')
   const [loggingOut, setLoggingOut] = useState(false)
+  const [subscribers, setSubscribers] = useState<{ email: string; joinedAt: string }[]>([])
+
+  useEffect(() => {
+    fetch('/api/content')
+      .then(r => r.json())
+      .then(d => { if (Array.isArray(d.subscribers)) setSubscribers(d.subscribers) })
+      .catch(() => {})
+  }, [])
 
   async function handleExport() {
     setExporting(true); setExportMsg('')
@@ -111,6 +119,44 @@ export default function AdminSettings() {
             note="Active when ADMIN_PASSWORD is set. Without it, the admin panel is unauthenticated — always set this in production."
           />
         </div>
+      </div>
+
+      {/* Subscribers */}
+      <div style={{ ...CARD, padding: '20px 24px', marginBottom: 20 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
+          <Users size={15} style={{ color: '#c9a84c' }} />
+          <div style={SECTION_HDR}>BROTHERHOOD LIST</div>
+          <span style={{ marginLeft: 'auto', fontSize: 12, color: '#c9a84c', background: 'rgba(201,168,76,0.10)', padding: '2px 10px', borderRadius: 20 }}>
+            {subscribers.length}
+          </span>
+        </div>
+        {subscribers.length === 0 ? (
+          <p style={{ fontSize: 13, color: '#5c5044' }}>No subscribers yet.</p>
+        ) : (
+          <div style={{ maxHeight: 220, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 1 }}>
+            {[...subscribers].sort((a, b) => b.joinedAt.localeCompare(a.joinedAt)).map(s => (
+              <div key={s.email} style={{ display: 'flex', justifyContent: 'space-between', padding: '7px 0', borderBottom: '1px solid rgba(255,255,255,0.04)', fontSize: 13 }}>
+                <span style={{ color: '#e8ddd0' }}>{s.email}</span>
+                <span style={{ color: '#5c5044', fontSize: 11 }}>{new Date(s.joinedAt).toLocaleDateString()}</span>
+              </div>
+            ))}
+          </div>
+        )}
+        <button
+          onClick={() => {
+            const csv = 'Email,Joined\n' + subscribers.map(s => `${s.email},${s.joinedAt}`).join('\n')
+            const blob = new Blob([csv], { type: 'text/csv' })
+            const url = URL.createObjectURL(blob)
+            const a = document.createElement('a')
+            a.href = url; a.download = 'subscribers.csv'
+            document.body.appendChild(a); a.click()
+            document.body.removeChild(a); URL.revokeObjectURL(url)
+          }}
+          disabled={subscribers.length === 0}
+          style={{ ...BTN, marginTop: 14, background: 'rgba(255,255,255,0.04)', color: '#8a7f70', border: '1px solid rgba(255,255,255,0.08)', opacity: subscribers.length === 0 ? 0.4 : 1 }}
+        >
+          <Download size={13} /> Export CSV
+        </button>
       </div>
 
       {/* Export */}
