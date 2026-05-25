@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { Pencil, Check, X } from 'lucide-react'
 import type { BookingRequest, BookingStatus } from '@/lib/data'
 
 interface ContentStore {
@@ -8,6 +9,9 @@ interface ContentStore {
   subscribers?: { email: string; joinedAt: string }[]
   monthlyGoal?: { month: string; bookingTarget: number; revenueTarget: number }
 }
+
+const INPUT: React.CSSProperties = { background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 5, color: '#e8ddd0', padding: '5px 9px', fontSize: 13, fontFamily: 'var(--font-body)', width: 80, boxSizing: 'border-box' as const }
+const BTN_XS: React.CSSProperties = { border: 'none', cursor: 'pointer', padding: '4px 7px', borderRadius: 4, fontSize: 11, display: 'inline-flex', alignItems: 'center', gap: 3 }
 
 function statusColor(status: BookingStatus): string {
   if (status === 'New') return '#c9a84c'
@@ -32,6 +36,76 @@ const card: React.CSSProperties = {
   border: '1px solid rgba(255,255,255,0.07)',
   borderRadius: 8,
   padding: '20px 24px',
+}
+
+function MonthlyGoalCard({ goal, newThisMonth, goalProgress }: {
+  goal: ContentStore['monthlyGoal'] | null
+  newThisMonth: number
+  goalProgress: number | null
+}) {
+  const card: React.CSSProperties = { background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 8, padding: '20px 24px', marginBottom: 32 }
+  const thisMonth = new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+  const [editing, setEditing] = useState(false)
+  const [target, setTarget] = useState(String(goal?.bookingTarget ?? 4))
+  const [saving, setSaving] = useState(false)
+
+  async function save() {
+    setSaving(true)
+    try {
+      const monthKey = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short' })
+      await fetch('/api/content', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ monthlyGoal: { month: monthKey, bookingTarget: Number(target) || 4, revenueTarget: 0 } }),
+      })
+      setEditing(false)
+      window.location.reload()
+    } catch { setSaving(false) }
+  }
+
+  const progress = goal ? Math.min(100, Math.round((newThisMonth / goal.bookingTarget) * 100)) : null
+
+  return (
+    <div style={card}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+        <div style={{ fontSize: 11, letterSpacing: '0.12em', color: '#8a7f70', fontFamily: 'var(--font-display)' }}>
+          MONTHLY GOAL — {goal ? goal.month.toUpperCase() : thisMonth.toUpperCase()}
+        </div>
+        {!editing && (
+          <button type="button" onClick={() => { setTarget(String(goal?.bookingTarget ?? 4)); setEditing(true) }} style={{ ...BTN_XS, background: 'rgba(255,255,255,0.05)', color: '#5c5044' }}>
+            <Pencil size={11} /> {goal ? 'Edit' : 'Set Goal'}
+          </button>
+        )}
+      </div>
+
+      {editing ? (
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <span style={{ fontSize: 12, color: '#8a7f70' }}>Booking target:</span>
+          <input type="number" min={1} max={999} value={target} onChange={e => setTarget(e.target.value)} style={INPUT} aria-label="Booking target" />
+          <button type="button" onClick={save} disabled={saving} style={{ ...BTN_XS, background: '#c9a84c', color: '#070707', fontWeight: 600 }}>
+            <Check size={11} /> {saving ? '…' : 'Save'}
+          </button>
+          <button type="button" aria-label="Cancel" onClick={() => setEditing(false)} style={{ ...BTN_XS, background: 'rgba(255,255,255,0.05)', color: '#5c5044' }}>
+            <X size={11} />
+          </button>
+        </div>
+      ) : goal && progress !== null ? (
+        <>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div style={{ flex: 1, background: 'rgba(255,255,255,0.05)', borderRadius: 4, height: 8, overflow: 'hidden' }}>
+              <div style={{ height: '100%', width: `${progress}%`, background: '#c9a84c', borderRadius: 4, transition: 'width 0.3s' }} />
+            </div>
+            <span style={{ fontSize: 13, color: '#c9a84c', minWidth: 48, textAlign: 'right' }}>{progress}%</span>
+          </div>
+          <div style={{ fontSize: 12, color: '#5c5044', marginTop: 6 }}>
+            {newThisMonth} / {goal.bookingTarget} bookings this month
+          </div>
+        </>
+      ) : (
+        <p style={{ fontSize: 13, color: '#5c5044' }}>No goal set for this month. Click "Set Goal" to track progress.</p>
+      )}
+    </div>
+  )
 }
 
 export default function AdminDashboard() {
@@ -88,22 +162,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* Monthly goal */}
-      {goal && goalProgress !== null && (
-        <div style={{ ...card, marginBottom: 32 }}>
-          <div style={{ fontSize: 11, letterSpacing: '0.12em', color: '#8a7f70', marginBottom: 12, fontFamily: 'var(--font-display)' }}>
-            MONTHLY GOAL — {goal.month.toUpperCase()}
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <div style={{ flex: 1, background: 'rgba(255,255,255,0.05)', borderRadius: 4, height: 8, overflow: 'hidden' }}>
-              <div style={{ height: '100%', width: `${goalProgress}%`, background: '#c9a84c', borderRadius: 4, transition: 'width 0.3s' }} />
-            </div>
-            <span style={{ fontSize: 13, color: '#c9a84c', minWidth: 48, textAlign: 'right' }}>{goalProgress}%</span>
-          </div>
-          <div style={{ fontSize: 12, color: '#5c5044', marginTop: 6 }}>
-            {newThisMonth} / {goal.bookingTarget} bookings target
-          </div>
-        </div>
-      )}
+      <MonthlyGoalCard goal={goal ?? null} newThisMonth={newThisMonth} goalProgress={goalProgress} />
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
         {/* Recent bookings table */}
