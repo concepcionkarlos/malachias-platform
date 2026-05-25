@@ -12,13 +12,43 @@ const fade = (delay = 0) => ({
 
 const VENUES = ['Churches', 'Military events', 'Community gatherings', 'Small venues'];
 
+const EVENT_TYPES = [
+  'Church Concert', 'Church Service', 'Military Event', 'Veteran Support Event',
+  'Community Gathering', 'Private Event', 'Festival', 'Other',
+];
+
 export default function Booking() {
-  const [form, setForm] = useState({ name: '', email: '', message: '' });
+  const [form, setForm] = useState({
+    fullName: '', email: '', phone: '', venueOrOrg: '',
+    eventDate: '', city: '', eventType: '', budgetRange: '',
+    guestCount: '', message: '',
+  });
   const [sent, setSent] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const set = (k: keyof typeof form) =>
-    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
       setForm(prev => ({ ...prev, [k]: e.target.value }));
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+    try {
+      const res = await fetch('/api/booking', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      });
+      if (!res.ok) throw new Error('Submission failed');
+      setSent(true);
+    } catch {
+      setError('Something went wrong. Please try again or email us directly.');
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <section id="booking" style={{ background: '#060606' }} className="section-pad">
@@ -41,8 +71,7 @@ export default function Booking() {
               <div
                 className="mt-4 mb-8"
                 style={{
-                  width: '3rem',
-                  height: '1px',
+                  width: '3rem', height: '1px',
                   background: 'linear-gradient(to right, rgba(201,168,76,0.60), transparent)',
                 }}
               />
@@ -54,7 +83,7 @@ export default function Booking() {
             </motion.p>
 
             <motion.div {...fade(0.10)} className="space-y-2 mb-8">
-              {VENUES.map((v, i) => (
+              {VENUES.map((v) => (
                 <div key={v} className="flex items-center gap-3">
                   <span style={{ color: 'var(--gold)', fontSize: '0.55rem', opacity: 0.6 }}>▸</span>
                   <span className="text-[0.80rem] tracking-wide" style={{ color: 'var(--text-3)' }}>{v}</span>
@@ -82,10 +111,7 @@ export default function Booking() {
           <motion.div {...fade(0.08)}>
             {sent ? (
               <div className="tac-box py-14 px-8 text-center">
-                <p
-                  className="font-display text-2xl tracking-[0.16em] mb-3"
-                  style={{ color: 'var(--gold)' }}
-                >
+                <p className="font-display text-2xl tracking-[0.16em] mb-3" style={{ color: 'var(--gold)' }}>
                   Message received.
                 </p>
                 <p className="text-sm" style={{ color: 'var(--text-2)' }}>
@@ -93,42 +119,98 @@ export default function Booking() {
                 </p>
               </div>
             ) : (
-              <form
-                onSubmit={e => { e.preventDefault(); setSent(true); }}
-                className="space-y-4"
-              >
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <input
+                    className="field"
+                    type="text"
+                    placeholder="Your name *"
+                    required
+                    autoComplete="name"
+                    value={form.fullName}
+                    onChange={set('fullName')}
+                  />
+                  <input
+                    className="field"
+                    type="email"
+                    placeholder="Your email *"
+                    required
+                    autoComplete="email"
+                    value={form.email}
+                    onChange={set('email')}
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <input
+                    className="field"
+                    type="tel"
+                    placeholder="Phone (optional)"
+                    autoComplete="tel"
+                    value={form.phone}
+                    onChange={set('phone')}
+                  />
+                  <input
+                    className="field"
+                    type="text"
+                    placeholder="Venue or organization"
+                    value={form.venueOrOrg}
+                    onChange={set('venueOrOrg')}
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <input
+                    className="field"
+                    type="date"
+                    placeholder="Event date"
+                    value={form.eventDate}
+                    onChange={set('eventDate')}
+                  />
+                  <input
+                    className="field"
+                    type="text"
+                    placeholder="City / Location"
+                    value={form.city}
+                    onChange={set('city')}
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <select className="field" aria-label="Event type" value={form.eventType} onChange={set('eventType')}>
+                    <option value="">Event type…</option>
+                    {EVENT_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
+                  </select>
+                  <input
+                    className="field"
+                    type="text"
+                    placeholder="Guest count (approx)"
+                    value={form.guestCount}
+                    onChange={set('guestCount')}
+                  />
+                </div>
                 <input
                   className="field"
                   type="text"
-                  placeholder="Your name"
-                  required
-                  autoComplete="name"
-                  value={form.name}
-                  onChange={set('name')}
-                />
-                <input
-                  className="field"
-                  type="email"
-                  placeholder="Your email"
-                  required
-                  autoComplete="email"
-                  value={form.email}
-                  onChange={set('email')}
+                  placeholder="Budget range (optional)"
+                  value={form.budgetRange}
+                  onChange={set('budgetRange')}
                 />
                 <textarea
                   className="field resize-none"
-                  rows={6}
-                  placeholder="Tell us about the event — date, location, what you're looking for."
+                  rows={5}
+                  placeholder="Tell us about the event — what you're looking for, any special needs."
                   required
                   value={form.message}
                   onChange={set('message')}
                 />
+                {error && (
+                  <p style={{ color: '#c04020', fontSize: '0.82rem' }}>{error}</p>
+                )}
                 <button
                   type="submit"
+                  disabled={loading}
                   className="btn btn-primary w-full justify-center"
-                  style={{ letterSpacing: '0.16em' }}
+                  style={{ letterSpacing: '0.16em', opacity: loading ? 0.6 : 1 }}
                 >
-                  Send Message
+                  {loading ? 'Sending…' : 'Send Message'}
                 </button>
               </form>
             )}
