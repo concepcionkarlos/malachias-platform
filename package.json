@@ -10,11 +10,14 @@
     "typecheck": "node node_modules/typescript/lib/tsc.js --noEmit"
   },
   "dependencies": {
+    "@vercel/blob": "^2.4.0",
+    "@vercel/kv": "^3.0.0",
     "framer-motion": "^12.38.0",
     "lucide-react": "^1.16.0",
     "next": "16.2.6",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "resend": "^6.12.3"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

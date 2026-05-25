@@ -6,8 +6,12 @@ const nextConfig: NextConfig = {
   compress: true,
   images: {
     formats: ["image/avif", "image/webp"],
-    minimumCacheTTL: 2592000,   // 30 days
+    minimumCacheTTL: 2592000,
     dangerouslyAllowSVG: false,
+    remotePatterns: [
+      { protocol: "https", hostname: "**.public.blob.vercel-storage.com" },
+      { protocol: "https", hostname: "img.youtube.com" },
+    ],
   },
   experimental: {
     optimizePackageImports: ["framer-motion", "lucide-react"],
