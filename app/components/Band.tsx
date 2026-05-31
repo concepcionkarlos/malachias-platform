@@ -12,17 +12,31 @@ const MEMBERS = [
     tag: 'FOUNDER & DIRECTOR',
     tagColor: '#c9a84c',
     photos: ['/Malachias 1.jpeg', '/malachias 2.jpeg'],
+    origin: 'Fort Wayne, IN  ·  Iraq (×2)',
     bio: 'The voice and the vision. After two tours in Iraq — first as a medic, then as an Army bandsman — he came home carrying something that needed to come out. Malachias is his name in its ancient form: the messenger. That\'s not a stage name. That\'s a calling. He leads the band the way he led in service: with conviction, without apology, and always for the ones who need it most.',
     pull: 'The messenger.\nThe mission.\nThe music.',
     flip: false,
   },
   {
     num: '02',
+    name: 'JC CONCEPCIÓN',
+    role: 'Lead Guitar',
+    tag: 'LEAD GUITARIST',
+    tagColor: '#7a9ec0',
+    photos: ['/JC Concepcion.PNG', '/JC Concepcion 2.PNG'],
+    origin: 'Havana, Cuba  →  Miami, FL',
+    bio: 'Born in Havana, Cuba — raised on fire, faith, and the sound of a guitar that could say what words couldn\'t. He crossed an ocean to call Miami home, and he found in the United States what every man of faith searches for: the freedom to worship without fear and play without limits. JC brings something ancient and unbreakable to every note he plays. His love for God isn\'t background to the music — it\'s the music. When he steps up to play, you\'re hearing a man who has already decided what matters.',
+    pull: 'From Havana\nto the altar —\nevery string a prayer.',
+    flip: false,
+  },
+  {
+    num: '03',
     name: 'HENRY',
     role: 'Drums',
     tag: 'DRUMMER',
     tagColor: '#c04020',
     photos: ['/Henry Drums.PNG', '/Henry Drums 2.PNG'],
+    origin: '',
     bio: 'The pulse beneath the mission. Henry plays like a man who understands what it means to hold the line — steady when everything around you is shaking, driving forward when others go quiet. Every song hits harder because he\'s back there, anchoring the sound to something solid and unstoppable.',
     pull: 'The rhythm\nthat holds\nthe line.',
     flip: true,
@@ -227,11 +241,28 @@ function MemberCard({ m, index }: { m: typeof MEMBERS[0]; index: number }) {
             letterSpacing: '0.28em',
             color: 'rgba(201,168,76,0.45)',
             textTransform: 'uppercase',
-            marginBottom: '1.8rem',
+            marginBottom: m.origin ? '0.6rem' : '1.8rem',
           }}
         >
           {m.role}
         </motion.p>
+
+        {/* Origin — only shown when set */}
+        {m.origin && (
+          <motion.p
+            {...fade(baseDelay + 0.155)}
+            style={{
+              fontSize: '0.58rem',
+              letterSpacing: '0.22em',
+              color: `${m.tagColor}99`,
+              textTransform: 'uppercase',
+              fontStyle: 'italic',
+              marginBottom: '1.8rem',
+            }}
+          >
+            {m.origin}
+          </motion.p>
+        )}
 
         {/* Gold rule */}
         <motion.div
