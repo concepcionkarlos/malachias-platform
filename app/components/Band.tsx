@@ -19,11 +19,11 @@ const MEMBERS = [
   },
   {
     num: '02',
-    name: 'JC CONCEPCIÓN',
+    name: 'JC CONCEPCION',
     role: 'Lead Guitar',
     tag: 'LEAD GUITARIST',
     tagColor: '#7a9ec0',
-    photos: ['/JC Concepcion.PNG', '/JC Concepcion 2.PNG'],
+    photos: ['/JC Concepcion 2.PNG', '/JC Concepcion.PNG'],
     origin: 'Havana, Cuba  →  Miami, FL',
     bio: 'Born in Havana, Cuba — raised on fire, faith, and the sound of a guitar that could say what words couldn\'t. He crossed an ocean to call Miami home, and he found in the United States what every man of faith searches for: the freedom to worship without fear and play without limits. JC brings something ancient and unbreakable to every note he plays. His love for God isn\'t background to the music — it\'s the music. When he steps up to play, you\'re hearing a man who has already decided what matters.',
     pull: 'From Havana\nto the altar —\nevery string a prayer.',
