@@ -120,22 +120,7 @@ function MemberCard({ m, index }: { m: typeof MEMBERS[0]; index: number }) {
               key={src}
               animate={{ opacity: active === i ? 1 : 0 }}
               transition={{ duration: 0.7, ease: 'easeInOut' }}
-              style={{
-                position: 'absolute',
-                inset: 0,
-                WebkitMaskImage: mobile
-                  ? 'linear-gradient(to bottom, black 50%, rgba(0,0,0,0.5) 75%, transparent 100%)'
-                  : m.flip
-                    ? 'linear-gradient(to right, transparent 0%, black 15%, black 80%, transparent 100%), linear-gradient(to bottom, black 60%, transparent 100%)'
-                    : 'linear-gradient(to left, transparent 0%, black 15%, black 80%, transparent 100%), linear-gradient(to bottom, black 60%, transparent 100%)',
-                maskImage: mobile
-                  ? 'linear-gradient(to bottom, black 50%, rgba(0,0,0,0.5) 75%, transparent 100%)'
-                  : m.flip
-                    ? 'linear-gradient(to right, transparent 0%, black 15%, black 80%, transparent 100%), linear-gradient(to bottom, black 60%, transparent 100%)'
-                    : 'linear-gradient(to left, transparent 0%, black 15%, black 80%, transparent 100%), linear-gradient(to bottom, black 60%, transparent 100%)',
-                WebkitMaskComposite: 'source-in',
-                maskComposite: 'intersect',
-              }}
+              style={{ position: 'absolute', inset: 0 }}
             >
               <Image
                 src={src}
@@ -145,20 +130,35 @@ function MemberCard({ m, index }: { m: typeof MEMBERS[0]; index: number }) {
                 sizes="(max-width: 1023px) 100vw, 45vw"
                 style={{
                   filter: 'contrast(1.08) brightness(0.88) saturate(0.72)',
-                  mixBlendMode: 'normal',
                 }}
               />
             </motion.div>
           ))}
 
-          {/* Warm glow beneath photo */}
-          <div style={{
+          {/* Fade overlays — cross-browser reliable, same technique as Hero fog */}
+          {/* Side fade (toward text column) */}
+          <div aria-hidden="true" style={{
+            position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 2,
+            background: mobile
+              ? 'none'
+              : m.flip
+                ? 'linear-gradient(to left, transparent 45%, #030202 100%)'
+                : 'linear-gradient(to right, transparent 45%, #030202 100%)',
+          }} />
+          {/* Bottom fade */}
+          <div aria-hidden="true" style={{
+            position: 'absolute', bottom: 0, left: 0, right: 0, pointerEvents: 'none', zIndex: 2,
+            height: mobile ? '45%' : '35%',
+            background: 'linear-gradient(to bottom, transparent 0%, #030202 100%)',
+          }} />
+          {/* Warm glow */}
+          <div aria-hidden="true" style={{
             position: 'absolute',
             bottom: 0, left: 0, right: 0,
             height: '40%',
-            background: `radial-gradient(ellipse at 50% 100%, ${m.tagColor}18 0%, transparent 70%)`,
+            background: `radial-gradient(ellipse at 50% 100%, ${m.tagColor}22 0%, transparent 70%)`,
             pointerEvents: 'none',
-            zIndex: 2,
+            zIndex: 3,
           }} />
 
           {/* Photo toggle hint */}
