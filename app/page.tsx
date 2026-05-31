@@ -3,6 +3,7 @@ import { readContent } from '@/lib/store';
 import Navbar       from './components/Navbar';
 import Hero         from './components/Hero';
 import About        from './components/About';
+import Band         from './components/Band';
 import Music        from './components/Music';
 import Shows        from './components/Shows';
 import Journal      from './components/Journal';
@@ -36,6 +37,7 @@ export default function Home() {
       <Hero />
       <SectionDivider accent="gold" />
       <About />
+      <Band />
       <Music />
       <Shows />
       <Journal />
