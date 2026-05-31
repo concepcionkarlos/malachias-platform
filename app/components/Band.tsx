@@ -31,6 +31,18 @@ const MEMBERS = [
   },
   {
     num: '03',
+    name: 'EFRAIN SIERRA',
+    role: 'Rhythm Guitar · Riffs',
+    tag: 'RHYTHM GUITARIST',
+    tagColor: '#8b6e3a',
+    photos: ['/Efrain Rhytms.PNG', '/Efrain Rhytms 2.PNG'],
+    origin: 'Puerto Rico  →  Miami, FL',
+    bio: 'Family first. Faith second. Guitar always. Efraín Sierra came out of Puerto Rico carrying all three — and when he found Malachias, he found a place where all three could live at once. He plays rhythm the way a man prays: consistent, intentional, and with everything behind it. His riffs aren\'t decoration — they\'re the backbone that lets the melody breathe and the message land. He\'s not here for the spotlight. He\'s here because God put a guitar in his hands and a mission in front of him.',
+    pull: 'Every riff\nan act\nof worship.',
+    flip: true,
+  },
+  {
+    num: '04',
     name: 'HENRY',
     role: 'Drums',
     tag: 'DRUMMER',
@@ -39,7 +51,7 @@ const MEMBERS = [
     origin: '',
     bio: 'The pulse beneath the mission. Henry plays like a man who understands what it means to hold the line — steady when everything around you is shaking, driving forward when others go quiet. Every song hits harder because he\'s back there, anchoring the sound to something solid and unstoppable.',
     pull: 'The rhythm\nthat holds\nthe line.',
-    flip: true,
+    flip: false,
   },
 ];
 
