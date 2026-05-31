@@ -48,7 +48,7 @@ const MEMBERS = [
     tag: 'DRUMMER',
     tagColor: '#c04020',
     photos: ['/Henry Drums.PNG', '/Henry Drums 2.PNG'],
-    origin: '',
+    origin: 'Puerto Rico',
     bio: 'The pulse beneath the mission. Henry plays like a man who understands what it means to hold the line — steady when everything around you is shaking, driving forward when others go quiet. Every song hits harder because he\'s back there, anchoring the sound to something solid and unstoppable.',
     pull: 'The rhythm\nthat holds\nthe line.',
     flip: false,
