@@ -7,6 +7,7 @@ import { Menu, X } from 'lucide-react';
 
 const NAV = [
   { label: 'The Story',   href: '#about'   },
+  { label: 'The Band',    href: '#band'    },
   { label: 'The Sound',   href: '#music'   },
   { label: 'The Field',   href: '#journal' },
   { label: 'The Store',   href: '#merch'   },
