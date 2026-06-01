@@ -159,53 +159,53 @@ export default function AdminMerch() {
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
               <div style={{ gridColumn: '1 / -1' }}>
-                <label style={LABEL}>Name</label>
-                <input type="text" value={form.name} onChange={e => setField('name', e.target.value)} style={INPUT} />
+                <label htmlFor="merch-name" style={LABEL}>Name</label>
+                <input id="merch-name" type="text" value={form.name} onChange={e => setField('name', e.target.value)} style={INPUT} placeholder="Item name" />
               </div>
               <div>
-                <label style={LABEL}>Price ($)</label>
-                <input type="number" value={form.price} onChange={e => setField('price', parseFloat(e.target.value) || 0)} style={INPUT} />
+                <label htmlFor="merch-price" style={LABEL}>Price ($)</label>
+                <input id="merch-price" type="number" value={form.price} onChange={e => setField('price', parseFloat(e.target.value) || 0)} style={INPUT} placeholder="0.00" />
               </div>
               <div>
-                <label style={LABEL}>Category</label>
-                <select value={form.category} onChange={e => setField('category', e.target.value as MerchItem['category'])} style={INPUT}>
+                <label htmlFor="merch-category" style={LABEL}>Category</label>
+                <select id="merch-category" value={form.category} onChange={e => setField('category', e.target.value as MerchItem['category'])} style={INPUT}>
                   {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
                 </select>
               </div>
               <div>
-                <label style={LABEL}>Stock Quantity</label>
-                <input type="number" value={form.stockQuantity ?? ''} onChange={e => setField('stockQuantity', e.target.value ? Number(e.target.value) : undefined)} style={INPUT} />
+                <label htmlFor="merch-stock" style={LABEL}>Stock Quantity</label>
+                <input id="merch-stock" type="number" value={form.stockQuantity ?? ''} onChange={e => setField('stockQuantity', e.target.value ? Number(e.target.value) : undefined)} style={INPUT} placeholder="Leave blank for unlimited" />
               </div>
               <div>
-                <label style={LABEL}>External URL</label>
-                <input type="text" value={form.externalUrl ?? ''} onChange={e => setField('externalUrl', e.target.value)} style={INPUT} />
+                <label htmlFor="merch-url" style={LABEL}>External URL</label>
+                <input id="merch-url" type="text" value={form.externalUrl ?? ''} onChange={e => setField('externalUrl', e.target.value)} style={INPUT} placeholder="https://…" />
               </div>
             </div>
 
             <div style={{ marginTop: 14 }}>
-              <label style={LABEL}>Image URL</label>
+              <label htmlFor="merch-image" style={LABEL}>Image URL</label>
               <div style={{ display: 'flex', gap: 8 }}>
-                <input type="text" value={form.image ?? ''} onChange={e => setField('image', e.target.value)} style={INPUT} placeholder="https://…" />
-                <button onClick={() => fileRef.current?.click()} disabled={uploading} style={{ ...BTN_SM, background: 'rgba(201,168,76,0.15)', color: '#c9a84c', padding: '7px 12px', flexShrink: 0 }}>
+                <input id="merch-image" type="text" value={form.image ?? ''} onChange={e => setField('image', e.target.value)} style={INPUT} placeholder="https://…" />
+                <button type="button" onClick={() => fileRef.current?.click()} disabled={uploading} style={{ ...BTN_SM, background: 'rgba(201,168,76,0.15)', color: '#c9a84c', padding: '7px 12px', flexShrink: 0 }}>
                   <Upload size={13} /> {uploading ? '…' : 'Upload'}
                 </button>
-                <input ref={fileRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={e => { const f = e.target.files?.[0]; if (f) uploadImage(f) }} />
+                <input ref={fileRef} type="file" accept="image/*" aria-label="Upload image file" style={{ display: 'none' }} onChange={e => { const f = e.target.files?.[0]; if (f) uploadImage(f) }} />
               </div>
             </div>
 
             <div style={{ marginTop: 14 }}>
-              <label style={LABEL}>Description</label>
-              <textarea value={form.description ?? ''} onChange={e => setField('description', e.target.value)} rows={2} style={{ ...INPUT, resize: 'vertical' }} />
+              <label htmlFor="merch-description" style={LABEL}>Description</label>
+              <textarea id="merch-description" value={form.description ?? ''} onChange={e => setField('description', e.target.value)} rows={2} style={{ ...INPUT, resize: 'vertical' }} placeholder="Short product description" />
             </div>
 
             <div style={{ marginTop: 14 }}>
-              <label style={LABEL}>Story</label>
-              <textarea value={form.story ?? ''} onChange={e => setField('story', e.target.value)} rows={2} style={{ ...INPUT, resize: 'vertical' }} />
+              <label htmlFor="merch-story" style={LABEL}>Story</label>
+              <textarea id="merch-story" value={form.story ?? ''} onChange={e => setField('story', e.target.value)} rows={2} style={{ ...INPUT, resize: 'vertical' }} placeholder="The story behind this item" />
             </div>
 
             <div style={{ marginTop: 14 }}>
-              <label style={LABEL}>Specs (JSON array of {"{"}"label","value"{"}"} objects)</label>
-              <textarea value={specsText} onChange={e => setSpecsText(e.target.value)} rows={4} style={{ ...INPUT, resize: 'vertical', fontFamily: 'monospace', fontSize: 12 }} />
+              <label htmlFor="merch-specs" style={LABEL}>Specs (JSON array of {"{"}"label","value"{"}"} objects)</label>
+              <textarea id="merch-specs" value={specsText} onChange={e => setSpecsText(e.target.value)} rows={4} style={{ ...INPUT, resize: 'vertical', fontFamily: 'monospace', fontSize: 12 }} placeholder='[{"label":"Size","value":"M"}]' />
             </div>
 
             <div style={{ display: 'flex', gap: 20, marginTop: 14, flexWrap: 'wrap' }}>
