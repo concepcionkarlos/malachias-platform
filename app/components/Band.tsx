@@ -43,6 +43,18 @@ const MEMBERS = [
   },
   {
     num: '04',
+    name: 'GABE',
+    role: 'Bass',
+    tag: 'BASSIST · VETERAN',
+    tagColor: '#5a7a5a',
+    photos: ['/Gabe Bass.PNG', '/Gabe Bass 2.PNG'],
+    origin: '',
+    bio: 'Two things shaped Gabe before he ever picked up a bass: service and faith. Like the man who founded this band, he wore the uniform — and he came home carrying the same weight, the same questions, and the same need for something that was bigger than all of it. On bass, he doesn\'t just hold the bottom end. He holds the room. Every song he plays is a reminder that the mission isn\'t abstract — it\'s personal. He\'s lived the thing Malachias sings about. That\'s why it sounds the way it does.',
+    pull: 'He served.\nHe came home.\nHe plays for the ones who didn\'t.',
+    flip: false,
+  },
+  {
+    num: '05',
     name: 'HENRY',
     role: 'Drums',
     tag: 'DRUMMER',
@@ -51,7 +63,7 @@ const MEMBERS = [
     origin: 'Puerto Rico',
     bio: 'The pulse beneath the mission. Henry plays like a man who understands what it means to hold the line — steady when everything around you is shaking, driving forward when others go quiet. Every song hits harder because he\'s back there, anchoring the sound to something solid and unstoppable.',
     pull: 'The rhythm\nthat holds\nthe line.',
-    flip: false,
+    flip: true,
   },
 ];
 
