@@ -9,7 +9,7 @@ const MEMBERS = [
     num: '01',
     name: 'MALACHIAS',
     role: 'Director · Vocals · Guitar',
-    tag: 'FOUNDER & DIRECTOR',
+    tag: 'FOUNDER · DIRECTOR · VETERAN',
     tagColor: '#c9a84c',
     photos: ['/Malachias 1.jpeg', '/malachias 2.jpeg'],
     origin: 'Fort Wayne, IN  ·  Iraq (×2)',
@@ -383,6 +383,79 @@ export default function Band() {
             <MemberCard key={m.name} m={m} index={i} />
           ))}
         </div>
+
+        {/* Band Credo */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 1.2, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+          style={{
+            marginTop: 'clamp(5rem, 12vw, 9rem)',
+            paddingTop: '3rem',
+            borderTop: '1px solid rgba(201,168,76,0.10)',
+            textAlign: 'center',
+          }}
+        >
+          {/* Cross mark */}
+          <p style={{ fontSize: '0.72rem', color: 'rgba(140,110,60,0.30)', letterSpacing: '0.5em', marginBottom: '2rem' }}>
+            ✠
+          </p>
+
+          {/* The declaration */}
+          <p
+            className="font-display"
+            style={{
+              fontSize: 'clamp(1.6rem, 4.5vw, 3rem)',
+              lineHeight: 1.1,
+              letterSpacing: '0.06em',
+              color: 'rgba(237,229,216,0.12)',
+            }}
+          >
+            Five stories.
+            <br />
+            <span style={{ color: 'rgba(201,168,76,0.30)' }}>One God.</span>
+            <br />
+            One flag.
+            <br />
+            <span style={{ color: 'rgba(192,64,32,0.28)' }}>One mission.</span>
+          </p>
+
+          {/* Descriptor row */}
+          <div style={{
+            marginTop: '2.5rem',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            gap: '1.2rem',
+            flexWrap: 'wrap',
+          }}>
+            {['Fort Wayne', 'Havana', 'Puerto Rico', 'Sebring', 'Iraq'].map((place, i) => (
+              <span key={place} style={{
+                fontSize: '0.52rem',
+                letterSpacing: '0.38em',
+                textTransform: 'uppercase',
+                color: 'rgba(120,100,70,0.35)',
+                fontFamily: 'var(--font-body)',
+              }}>
+                {place}{i < 4 ? <>&ensp;·&ensp;</> : null}
+              </span>
+            ))}
+          </div>
+
+          {/* Faith & flag line */}
+          <p style={{
+            marginTop: '1.5rem',
+            fontSize: '0.54rem',
+            letterSpacing: '0.34em',
+            textTransform: 'uppercase',
+            color: 'rgba(140,110,60,0.22)',
+            fontFamily: 'var(--font-body)',
+            fontStyle: 'italic',
+          }}>
+            United by faith · Proud to call America home
+          </p>
+        </motion.div>
 
       </div>
     </section>
