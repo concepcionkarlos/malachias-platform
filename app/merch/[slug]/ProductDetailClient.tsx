@@ -91,11 +91,13 @@ export default function ProductDetailClient({ product }: { product: FWProduct })
               {images.length > 1 && (
                 <>
                   <button
+                    type="button"
                     onClick={() => setActiveImg(i => (i - 1 + images.length) % images.length)}
                     style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', background: 'rgba(0,0,0,0.60)', border: 'none', borderRadius: 2, padding: '0.4rem', cursor: 'pointer', color: '#c9a84c', backdropFilter: 'blur(8px)' }}
                     aria-label="Previous"
                   ><ChevronLeft size={16} /></button>
                   <button
+                    type="button"
                     onClick={() => setActiveImg(i => (i + 1) % images.length)}
                     style={{ position: 'absolute', right: '0.75rem', top: '50%', transform: 'translateY(-50%)', background: 'rgba(0,0,0,0.60)', border: 'none', borderRadius: 2, padding: '0.4rem', cursor: 'pointer', color: '#c9a84c', backdropFilter: 'blur(8px)' }}
                     aria-label="Next"

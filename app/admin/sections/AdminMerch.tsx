@@ -98,7 +98,7 @@ export default function AdminMerch() {
     <div style={{ fontFamily: 'var(--font-body)', color: '#e8ddd0' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
         <h2 style={{ fontFamily: 'var(--font-display)', letterSpacing: '0.18em', fontSize: 13, color: '#8a7f70', textTransform: 'uppercase', margin: 0 }}>Merch</h2>
-        <button onClick={openAdd} style={{ ...BTN_SM, background: '#c9a84c', color: '#070707', fontWeight: 600, padding: '7px 14px' }}>
+        <button type="button" onClick={openAdd} style={{ ...BTN_SM, background: '#c9a84c', color: '#070707', fontWeight: 600, padding: '7px 14px' }}>
           <Plus size={14} /> Add Item
         </button>
       </div>
@@ -139,8 +139,8 @@ export default function AdminMerch() {
                   </label>
                 </div>
                 <div style={{ display: 'flex', gap: 5 }}>
-                  <button onClick={() => openEdit(item)} style={{ ...BTN_SM, background: 'rgba(96,165,250,0.15)', color: '#60a5fa' }}><Pencil size={12} /></button>
-                  <button onClick={() => del(item.id)} style={{ ...BTN_SM, background: 'rgba(192,64,32,0.15)', color: '#c04020' }}><Trash2 size={12} /></button>
+                  <button type="button" onClick={() => openEdit(item)} style={{ ...BTN_SM, background: 'rgba(96,165,250,0.15)', color: '#60a5fa' }}><Pencil size={12} /></button>
+                  <button type="button" onClick={() => del(item.id)} style={{ ...BTN_SM, background: 'rgba(192,64,32,0.15)', color: '#c04020' }}><Trash2 size={12} /></button>
                 </div>
               </div>
             </div>
@@ -154,7 +154,7 @@ export default function AdminMerch() {
           <div style={{ ...CARD, padding: 28, width: '100%', maxWidth: 640, maxHeight: '85vh', overflowY: 'auto' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
               <span style={{ fontFamily: 'var(--font-display)', letterSpacing: '0.14em', fontSize: 13, color: '#c9a84c' }}>{editId ? 'EDIT ITEM' : 'ADD ITEM'}</span>
-              <button onClick={closeModal} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8a7f70' }}><X size={18} /></button>
+              <button type="button" aria-label="Close" onClick={closeModal} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8a7f70' }}><X size={18} /></button>
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
@@ -218,8 +218,8 @@ export default function AdminMerch() {
             </div>
 
             <div style={{ display: 'flex', gap: 10, marginTop: 22, justifyContent: 'flex-end' }}>
-              <button onClick={closeModal} style={{ ...BTN_SM, background: 'rgba(255,255,255,0.06)', color: '#8a7f70', padding: '8px 16px' }}>Cancel</button>
-              <button onClick={save} disabled={saving} style={{ ...BTN_SM, background: '#c9a84c', color: '#070707', fontWeight: 600, padding: '8px 18px' }}>
+              <button type="button" onClick={closeModal} style={{ ...BTN_SM, background: 'rgba(255,255,255,0.06)', color: '#8a7f70', padding: '8px 16px' }}>Cancel</button>
+              <button type="button" onClick={save} disabled={saving} style={{ ...BTN_SM, background: '#c9a84c', color: '#070707', fontWeight: 600, padding: '8px 18px' }}>
                 <Check size={14} /> {saving ? 'Saving…' : 'Save'}
               </button>
             </div>
