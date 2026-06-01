@@ -10,7 +10,7 @@ const NAV = [
   { label: 'The Band',    href: '#band'    },
   { label: 'The Sound',   href: '#music'   },
   { label: 'The Field',   href: '#journal' },
-  { label: 'The Store',   href: '#merch'   },
+  { label: 'The Store',   href: '/merch'   },
   { label: 'The Mission', href: '#mission' },
 ];
 

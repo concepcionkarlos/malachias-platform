@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { readContent } from '@/lib/store';
+import { fetchFWProducts } from '@/lib/fourthwall';
 import Navbar       from './components/Navbar';
 import Hero         from './components/Hero';
 import About        from './components/About';
@@ -30,7 +31,9 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function Home() {
+export default async function Home() {
+  const fwProducts = await fetchFWProducts();
+
   return (
     <main className="bg-black min-h-screen overflow-x-hidden">
       <Navbar />
@@ -41,7 +44,7 @@ export default function Home() {
       <Music />
       <Shows />
       <Journal />
-      <Merch />
+      <Merch fourthwallProducts={fwProducts} />
       <SectionDivider accent="crimson" />
       <Mission />
       <Testimonies />
