@@ -1,0 +1,8 @@
+{
+  "microsoft-edge-tools.webhint": {
+    "hints": {
+      "no-inline-styles": "off"
+    }
+  },
+  "webhint.hintrc": ".hintrc"
+}
