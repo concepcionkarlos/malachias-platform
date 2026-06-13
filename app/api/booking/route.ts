@@ -4,6 +4,10 @@ import { readContent, writeContent } from '@/lib/store'
 import { triggerAutoReply, sendAdminNotification } from '@/lib/emailService'
 import type { BookingRequest } from '@/lib/data'
 
+function esc(s: string): string {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+}
+
 export async function POST(req: NextRequest) {
   const body = await req.json()
   const { fullName, venueOrOrg, email, phone, eventDate, city, eventType, budgetRange, guestCount, message } = body
@@ -31,10 +35,10 @@ export async function POST(req: NextRequest) {
   await sendAdminNotification({
     toEmail: adminEmail,
     subject: `New booking request from ${fullName}`,
-    bodyHtml: `<p>New booking request received from <strong>${fullName}</strong> (${email}).</p>
-               <p>Event: ${eventType} on ${eventDate} in ${city}</p>
-               <p>Budget: ${budgetRange} | Guests: ${guestCount}</p>
-               <p>Message: ${message}</p>`,
+    bodyHtml: `<p>New booking request received from <strong>${esc(fullName)}</strong> (${esc(email)}).</p>
+               <p>Event: ${esc(eventType ?? '')} on ${esc(eventDate ?? '')} in ${esc(city ?? '')}</p>
+               <p>Budget: ${esc(budgetRange ?? '')} | Guests: ${esc(guestCount ?? '')}</p>
+               <p>Message: ${esc(message ?? '')}</p>`,
   }).catch(() => {})
 
   return NextResponse.json({ ok: true, id: booking.id }, { status: 201 })
