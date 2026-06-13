@@ -158,6 +158,36 @@ export interface Subscriber {
 
 export const subscribers: Subscriber[] = []
 
+// ── Band Tasks ────────────────────────────────────────────────────────────────
+
+export type TaskStatus = 'todo' | 'in_progress' | 'done'
+export type TaskPriority = 'high' | 'medium' | 'low'
+export type TaskCategory = 'show-prep' | 'outreach' | 'social' | 'rehearsal' | 'merch' | 'admin' | 'other'
+
+export interface BandTask {
+  id: string
+  title: string
+  description?: string
+  status: TaskStatus
+  priority: TaskPriority
+  category: TaskCategory
+  dueDate?: string
+  createdAt: string
+  completedAt?: string
+}
+
+export const TASK_CATEGORIES: { id: TaskCategory; label: string; emoji: string }[] = [
+  { id: 'show-prep',  label: 'Show Prep',  emoji: '🎤' },
+  { id: 'outreach',   label: 'Outreach',   emoji: '📣' },
+  { id: 'social',     label: 'Social',     emoji: '📱' },
+  { id: 'rehearsal',  label: 'Rehearsal',  emoji: '🎸' },
+  { id: 'merch',      label: 'Merch',      emoji: '👕' },
+  { id: 'admin',      label: 'Admin',      emoji: '📋' },
+  { id: 'other',      label: 'Other',      emoji: '⚡' },
+]
+
+export const bandTasks: BandTask[] = []
+
 // ── Admin Notes ───────────────────────────────────────────────────────────────
 
 export type AdminNotePriority = 'normal' | 'high'

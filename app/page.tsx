@@ -16,6 +16,7 @@ import Booking      from './components/Booking';
 import Newsletter   from './components/Newsletter';
 import Footer       from './components/Footer';
 import SectionDivider from './components/SectionDivider';
+import BandTogether   from './components/BandTogether';
 
 export async function generateMetadata(): Promise<Metadata> {
   const { siteContent: c } = await readContent();
@@ -41,6 +42,7 @@ export default async function Home() {
       <SectionDivider accent="gold" />
       <About />
       <Band />
+      <BandTogether />
       <Music />
       <Shows />
       <Journal />

@@ -4,7 +4,7 @@ import { useSearchParams, useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
 import {
   LayoutDashboard, Calendar, Users, ShoppingBag, FileText, Image, Mail,
-  MapPin, Settings, Newspaper, BarChart2, StickyNote, Inbox,
+  MapPin, Settings, Newspaper, BarChart2, StickyNote, Inbox, CheckSquare,
   Menu, X, ExternalLink, LogOut, ChevronRight,
 } from 'lucide-react'
 import AdminLogin from './AdminLogin'
@@ -13,6 +13,7 @@ const SECTIONS = {
   dashboard:       { label: 'Dashboard',       icon: LayoutDashboard, group: 'Overview'    },
   bookings:        { label: 'Bookings',         icon: Calendar,        group: 'Operations'  },
   shows:           { label: 'Shows',            icon: MapPin,          group: 'Operations'  },
+  tasks:           { label: 'Task Board',       icon: CheckSquare,     group: 'Operations'  },
   'band-members':  { label: 'Band Members',     icon: Users,           group: 'Platform'    },
   merch:           { label: 'Merch',            icon: ShoppingBag,     group: 'Platform'    },
   media:           { label: 'Media',            icon: Image,           group: 'Platform'    },
@@ -34,6 +35,7 @@ const SectionComponents: Record<TabKey, React.ComponentType> = {
   dashboard:         dynamic(() => import('./sections/AdminDashboard')),
   bookings:          dynamic(() => import('./sections/AdminBookings')),
   shows:             dynamic(() => import('./sections/AdminShows')),
+  tasks:             dynamic(() => import('./sections/AdminTasks')),
   'band-members':    dynamic(() => import('./sections/AdminBandMembers')),
   merch:             dynamic(() => import('./sections/AdminMerch')),
   media:             dynamic(() => import('./sections/AdminMedia')),

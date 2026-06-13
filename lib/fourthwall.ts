@@ -204,12 +204,27 @@ function buildProductUrl(shop: FWShop | null, slug: string): string {
 }
 
 export async function fetchFWProducts(): Promise<FWProduct[]> {
-  const [raw, shop] = await Promise.all([
-    fwFetch<{ results: FWProduct[]; paging: FWPaging }>('/v1/collections/all/products'),
+  const [firstPage, shop] = await Promise.all([
+    fwFetch<{ results: FWProduct[]; paging: FWPaging }>('/v1/collections/all/products?limit=100'),
     fetchShop(),
   ])
-  if (!raw) return []
-  return raw.results.map(p => ({ ...p, url: buildProductUrl(shop, p.slug) }))
+  if (!firstPage) return []
+
+  const allResults = [...firstPage.results]
+  const { totalPages } = firstPage.paging
+
+  if (totalPages > 1) {
+    const remainingPages = await Promise.all(
+      Array.from({ length: totalPages - 1 }, (_, i) =>
+        fwFetch<{ results: FWProduct[]; paging: FWPaging }>(`/v1/collections/all/products?limit=100&page=${i + 2}`)
+      )
+    )
+    for (const page of remainingPages) {
+      if (page) allResults.push(...page.results)
+    }
+  }
+
+  return allResults.map(p => ({ ...p, url: buildProductUrl(shop, p.slug) }))
 }
 
 export async function fetchFWProduct(slugOrId: string): Promise<FWProduct | null> {

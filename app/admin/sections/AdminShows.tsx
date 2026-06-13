@@ -65,8 +65,8 @@ export default function AdminShows() {
   async function del(id: string) {
     if (!confirm('Delete this show?')) return
     const updated = shows.filter(s => s.id !== id)
-    await fetch('/api/content', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ shows: updated }) })
-    setShows(updated)
+    const res = await fetch('/api/content', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ shows: updated }) })
+    if (res.ok) setShows(updated)
   }
 
   if (loading) return <p style={{ color: '#5c5044', fontFamily: 'var(--font-body)' }}>Loading…</p>

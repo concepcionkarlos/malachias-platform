@@ -82,14 +82,14 @@ export default function AdminMerch() {
   async function del(id: string) {
     if (!confirm('Delete this item?')) return
     const updated = items.filter(i => i.id !== id)
-    await fetch('/api/content', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ merch: updated }) })
-    setItems(updated)
+    const res = await fetch('/api/content', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ merch: updated }) })
+    if (res.ok) setItems(updated)
   }
 
   async function toggleField(id: string, k: 'available' | 'visible') {
     const updated = items.map(i => i.id === id ? { ...i, [k]: !i[k] } : i)
-    await fetch('/api/content', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ merch: updated }) })
-    setItems(updated)
+    const res = await fetch('/api/content', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ merch: updated }) })
+    if (res.ok) setItems(updated)
   }
 
   if (loading) return <p style={{ color: '#5c5044', fontFamily: 'var(--font-body)' }}>Loading…</p>
