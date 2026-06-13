@@ -121,8 +121,7 @@ export default function Music() {
             <iframe
               allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write"
               frameBorder="0"
-              height="450"
-              style={{ width: '100%', overflow: 'hidden', background: 'transparent', display: 'block' }}
+              style={{ width: '100%', height: 'clamp(300px, 70vw, 450px)', overflow: 'hidden', background: 'transparent', display: 'block' }}
               sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation"
               src="https://embed.music.apple.com/us/artist/malachias/937313536"
               title="Malachias on Apple Music"

@@ -11,6 +11,13 @@ import {
   fwColors, fwSizes, fwFindVariant, fwVariantInStock,
 } from '@/lib/fourthwall';
 
+function sanitizeHtml(html: string): string {
+  return html
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+    .replace(/on\w+\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]*)/gi, '')
+    .replace(/javascript\s*:/gi, 'unsafe:')
+}
+
 const fade = (delay = 0) => ({
   initial: { opacity: 0, y: 18 },
   animate: { opacity: 1, y: 0 },
@@ -268,7 +275,7 @@ export default function ProductDetailClient({ product }: { product: FWProduct })
                 </p>
                 <div
                   style={{ fontSize: '0.85rem', lineHeight: 1.75, color: 'rgba(220,210,195,0.65)', fontFamily: 'var(--font-body)' }}
-                  dangerouslySetInnerHTML={{ __html: product.description }}
+                  dangerouslySetInnerHTML={{ __html: sanitizeHtml(product.description) }}
                 />
               </motion.div>
             )}

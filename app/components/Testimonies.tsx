@@ -130,7 +130,7 @@ export default function Testimonies() {
                 <p style={{
                   fontSize: '0.64rem',
                   letterSpacing: '0.22em',
-                  color: 'rgba(80,68,52,0.72)',
+                  color: 'rgba(150,130,100,0.85)',
                   textTransform: 'uppercase',
                   fontFamily: 'var(--font-body)',
                 }}>

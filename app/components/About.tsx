@@ -103,7 +103,7 @@ export default function About() {
               className="font-display leading-[1.1] tracking-[0.04em]"
               style={{
                 fontSize: 'clamp(1.8rem, 4vw, 2.6rem)',
-                color: 'rgba(237,229,216,0.10)',
+                color: 'rgba(237,229,216,0.22)',
               }}
             >
               Fort Wayne.

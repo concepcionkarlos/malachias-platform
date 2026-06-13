@@ -326,7 +326,7 @@ function MemberCard({ m, index }: { m: typeof MEMBERS[0]; index: number }) {
             fontSize: 'clamp(1.4rem, 3.5vw, 2.2rem)',
             lineHeight: 1.15,
             letterSpacing: '0.04em',
-            color: 'rgba(237,229,216,0.08)',
+            color: 'rgba(237,229,216,0.18)',
             whiteSpace: 'pre-line',
           }}
         >
