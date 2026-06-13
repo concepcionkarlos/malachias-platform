@@ -38,10 +38,11 @@ const card: React.CSSProperties = {
   padding: '20px 24px',
 }
 
-function MonthlyGoalCard({ goal, newThisMonth, goalProgress }: {
+function MonthlyGoalCard({ goal, newThisMonth, goalProgress, onGoalSaved }: {
   goal: ContentStore['monthlyGoal'] | null
   newThisMonth: number
   goalProgress: number | null
+  onGoalSaved: (g: ContentStore['monthlyGoal']) => void
 }) {
   const card: React.CSSProperties = { background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 8, padding: '20px 24px', marginBottom: 32 }
   const thisMonth = new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
@@ -53,14 +54,15 @@ function MonthlyGoalCard({ goal, newThisMonth, goalProgress }: {
     setSaving(true)
     try {
       const monthKey = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short' })
-      await fetch('/api/content', {
+      const newGoal = { month: monthKey, bookingTarget: Number(target) || 4, revenueTarget: 0 }
+      const res = await fetch('/api/content', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ monthlyGoal: { month: monthKey, bookingTarget: Number(target) || 4, revenueTarget: 0 } }),
+        body: JSON.stringify({ monthlyGoal: newGoal }),
       })
-      setEditing(false)
-      window.location.reload()
-    } catch { setSaving(false) }
+      if (res.ok) { setEditing(false); onGoalSaved(newGoal) }
+    } catch { /* leave editing open on error */ }
+    setSaving(false)
   }
 
   const progress = goal ? Math.min(100, Math.round((newThisMonth / goal.bookingTarget) * 100)) : null
@@ -162,7 +164,12 @@ export default function AdminDashboard() {
       </div>
 
       {/* Monthly goal */}
-      <MonthlyGoalCard goal={goal ?? null} newThisMonth={newThisMonth} goalProgress={goalProgress} />
+      <MonthlyGoalCard
+        goal={goal ?? null}
+        newThisMonth={newThisMonth}
+        goalProgress={goalProgress}
+        onGoalSaved={newGoal => setData(prev => prev ? { ...prev, monthlyGoal: newGoal } : prev)}
+      />
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
         {/* Recent bookings table */}

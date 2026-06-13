@@ -228,7 +228,7 @@ export default function Footer() {
             <a
               href="#"
               className="transition-colors duration-300"
-              onMouseEnter={e => (e.currentTarget.style.color = '#4a4438')}
+              onMouseEnter={e => (e.currentTarget.style.color = 'rgba(201,168,76,0.55)')}
               onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-ghost)')}
             >
               Privacy
@@ -236,7 +236,7 @@ export default function Footer() {
             <a
               href="#"
               className="transition-colors duration-300"
-              onMouseEnter={e => (e.currentTarget.style.color = '#4a4438')}
+              onMouseEnter={e => (e.currentTarget.style.color = 'rgba(201,168,76,0.55)')}
               onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-ghost)')}
             >
               Terms
@@ -244,7 +244,7 @@ export default function Footer() {
             <a
               href="/admin"
               className="transition-colors duration-300"
-              onMouseEnter={e => (e.currentTarget.style.color = '#4a4438')}
+              onMouseEnter={e => (e.currentTarget.style.color = 'rgba(201,168,76,0.55)')}
               onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-ghost)')}
             >
               Admin

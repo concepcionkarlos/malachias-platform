@@ -101,7 +101,8 @@ export default function Navbar() {
             <a
               key={link.href}
               href={link.href}
-              className="relative text-[0.65rem] font-semibold tracking-[0.22em] uppercase text-[#6a6058] hover:text-white transition-colors duration-300 group py-1"
+              className="relative text-[0.65rem] font-semibold tracking-[0.22em] uppercase hover:text-white transition-colors duration-300 group py-1"
+              style={{ color: 'rgba(232,221,208,0.55)' }}
             >
               {link.label}
               <span className="absolute bottom-0 left-0 h-px w-0 group-hover:w-full transition-all duration-300 bg-[#c9a84c]" />
@@ -176,7 +177,8 @@ export default function Navbar() {
                   initial={{ x: -14, opacity: 0 }}
                   animate={{ x: 0,   opacity: 1  }}
                   transition={{ delay: i * 0.04 }}
-                  className="text-[0.72rem] tracking-[0.24em] uppercase text-[#6a6058] hover:text-white transition-colors"
+                  className="text-[0.72rem] tracking-[0.24em] uppercase hover:text-white transition-colors"
+                  style={{ color: 'rgba(232,221,208,0.55)' }}
                 >
                   {link.label}
                 </motion.a>

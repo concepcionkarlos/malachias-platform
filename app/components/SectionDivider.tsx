@@ -11,7 +11,7 @@ interface SectionDividerProps {
 
 const ACCENTS = {
   gold:    { hex: '#c9a84c', glow: 'rgba(201,168,76,0.35)',  faint: 'rgba(201,168,76,0.12)' },
-  crimson: { hex: '#8b0000', glow: 'rgba(139,0,0,0.35)',     faint: 'rgba(139,0,0,0.10)'   },
+  crimson: { hex: '#c04020', glow: 'rgba(192,64,32,0.35)',   faint: 'rgba(192,64,32,0.10)' },
 };
 
 export default function SectionDivider({ accent = 'gold', label }: SectionDividerProps) {

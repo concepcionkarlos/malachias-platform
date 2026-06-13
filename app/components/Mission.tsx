@@ -45,6 +45,12 @@ export default function Mission() {
           <p className="label-xs mb-3" style={{ color: 'rgba(192,64,32,0.80)', letterSpacing: '0.40em' }}>
             Why We Play
           </p>
+          <h2
+            className="font-display leading-[0.92] tracking-[0.06em] text-white"
+            style={{ fontSize: 'clamp(2.8rem, 7vw, 5rem)', marginBottom: '1rem' }}
+          >
+            THE MISSION
+          </h2>
           <div style={{
             width: '3rem', height: '1px',
             background: 'linear-gradient(to right, rgba(192,64,32,0.55), rgba(201,168,76,0.12), transparent)',
