@@ -48,6 +48,21 @@ function fmtTs(ts: string) {
   return new Date(ts).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' })
 }
 
+function getFreshness(updatedAt: string): { color: string; label: string; age: number } {
+  const days = (Date.now() - new Date(updatedAt).getTime()) / (1000 * 60 * 60 * 24)
+  if (days < 2)  return { color: '#34d399', label: 'Fresh',   age: days }
+  if (days < 5)  return { color: '#fbbf24', label: 'Warm',    age: days }
+  if (days < 14) return { color: '#fb923c', label: 'Cooling', age: days }
+  return           { color: '#c04020',  label: 'Cold',    age: days }
+}
+
+function isFollowUpOverdue(b: BookingRequest): boolean {
+  const terminal: BookingStatus[] = ['Completed', 'Lost', 'Archived']
+  if (terminal.includes(b.status)) return false
+  if (!b.followUpDate) return false
+  return new Date(b.followUpDate + 'T00:00:00').getTime() < Date.now()
+}
+
 // ── Variable extraction from template ─────────────────────────────────────────
 function extractVars(tpl: EmailTemplate): string[] {
   const matches = (tpl.subject + ' ' + tpl.bodyHtml).match(/\{\{(\w+)\}\}/g) ?? []
@@ -385,18 +400,31 @@ function KanbanColumn({ status, bookings, onSelect }: {
             Empty
           </div>
         )}
-        {bookings.map(b => (
-          <div key={b.id} onClick={() => onSelect(b)}
-            style={{ ...CARD, padding: '10px 12px', cursor: 'pointer', borderLeft: `3px solid ${STATUS_COLOR[status]}` }}
-            onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.05)')}
-            onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.03)')}>
-            <div style={{ fontSize: 13, fontWeight: 600, color: '#e8ddd0', marginBottom: 3 }}>{b.fullName}</div>
-            <div style={{ fontSize: 11, color: '#8a7f70', marginBottom: 3 }}>{b.venueOrOrg}</div>
-            <div style={{ fontSize: 11, color: '#5c5044' }}>{fmtDate(b.eventDate)}</div>
-            {b.eventType && <div style={{ fontSize: 11, color: '#5c5044' }}>{b.eventType}</div>}
-            {b.budgetRange && <div style={{ fontSize: 11, color: '#c9a84c', marginTop: 4 }}>{b.budgetRange}</div>}
-          </div>
-        ))}
+        {bookings.map(b => {
+          const freshness = getFreshness(b.updatedAt)
+          const overdue = isFollowUpOverdue(b)
+          return (
+            <div key={b.id} onClick={() => onSelect(b)}
+              style={{ ...CARD, padding: '10px 12px', cursor: 'pointer', borderLeft: `3px solid ${STATUS_COLOR[status]}` }}
+              onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.05)')}
+              onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.03)')}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 3 }}>
+                <div style={{ fontSize: 13, fontWeight: 600, color: '#e8ddd0' }}>{b.fullName}</div>
+                <span title={`${freshness.label} — ${Math.floor(freshness.age)}d ago`}
+                  style={{ width: 8, height: 8, borderRadius: '50%', background: freshness.color, flexShrink: 0, marginTop: 3, marginLeft: 6, boxShadow: `0 0 4px ${freshness.color}88` }} />
+              </div>
+              <div style={{ fontSize: 11, color: '#8a7f70', marginBottom: 3 }}>{b.venueOrOrg}</div>
+              <div style={{ fontSize: 11, color: '#5c5044' }}>{fmtDate(b.eventDate)}</div>
+              {b.eventType && <div style={{ fontSize: 11, color: '#5c5044' }}>{b.eventType}</div>}
+              {b.budgetRange && <div style={{ fontSize: 11, color: '#c9a84c', marginTop: 4 }}>{b.budgetRange}</div>}
+              {overdue && (
+                <div style={{ marginTop: 6, fontSize: 10, letterSpacing: '0.10em', color: '#c04020', background: 'rgba(192,64,32,0.12)', padding: '2px 6px', borderRadius: 3, display: 'inline-block' }}>
+                  FOLLOW-UP OVERDUE
+                </div>
+              )}
+            </div>
+          )
+        })}
       </div>
     </div>
   )
@@ -494,7 +522,7 @@ export default function AdminBookings() {
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
             <thead>
               <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
-                {['Name', 'Venue / Org', 'Event Date', 'Type', 'Budget', 'Status', ''].map(h => (
+                {['Name', 'Venue / Org', 'Event Date', 'Type', 'Budget', 'Status', 'Fresh', ''].map(h => (
                   <th key={h} style={{ padding: '10px 14px', textAlign: 'left', fontSize: 11, color: '#8a7f70', letterSpacing: '0.08em', fontWeight: 600 }}>{h}</th>
                 ))}
               </tr>
@@ -503,21 +531,35 @@ export default function AdminBookings() {
               {filtered.length === 0 && (
                 <tr><td colSpan={7} style={{ padding: '30px', textAlign: 'center', color: '#5c5044' }}>No bookings found</td></tr>
               )}
-              {filtered.map((b, i) => (
-                <tr key={b.id}
-                  onClick={() => setSelected(b)}
-                  style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', cursor: 'pointer', background: i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.01)' }}
-                  onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.04)')}
-                  onMouseLeave={e => (e.currentTarget.style.background = i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.01)')}>
-                  <td style={{ padding: '10px 14px', color: '#e8ddd0', fontWeight: 600 }}>{b.fullName}</td>
-                  <td style={{ padding: '10px 14px', color: '#8a7f70' }}>{b.venueOrOrg}</td>
-                  <td style={{ padding: '10px 14px', color: '#8a7f70' }}>{fmtDate(b.eventDate)}</td>
-                  <td style={{ padding: '10px 14px', color: '#8a7f70' }}>{b.eventType}</td>
-                  <td style={{ padding: '10px 14px', color: '#c9a84c' }}>{b.budgetRange}</td>
-                  <td style={{ padding: '10px 14px' }}><StatusBadge status={b.status} /></td>
-                  <td style={{ padding: '10px 14px' }}><ChevronRight size={14} style={{ color: '#5c5044' }} /></td>
-                </tr>
-              ))}
+              {filtered.map((b, i) => {
+                const freshness = getFreshness(b.updatedAt)
+                const overdue = isFollowUpOverdue(b)
+                return (
+                  <tr key={b.id}
+                    onClick={() => setSelected(b)}
+                    style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', cursor: 'pointer', background: i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.01)' }}
+                    onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.04)')}
+                    onMouseLeave={e => (e.currentTarget.style.background = i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.01)')}>
+                    <td style={{ padding: '10px 14px', color: '#e8ddd0', fontWeight: 600 }}>
+                      {b.fullName}
+                      {overdue && <span style={{ marginLeft: 6, fontSize: 9, color: '#c04020', background: 'rgba(192,64,32,0.15)', padding: '1px 5px', borderRadius: 3, letterSpacing: '0.06em' }}>OVERDUE</span>}
+                    </td>
+                    <td style={{ padding: '10px 14px', color: '#8a7f70' }}>{b.venueOrOrg}</td>
+                    <td style={{ padding: '10px 14px', color: '#8a7f70' }}>{fmtDate(b.eventDate)}</td>
+                    <td style={{ padding: '10px 14px', color: '#8a7f70' }}>{b.eventType}</td>
+                    <td style={{ padding: '10px 14px', color: '#c9a84c' }}>{b.budgetRange}</td>
+                    <td style={{ padding: '10px 14px' }}><StatusBadge status={b.status} /></td>
+                    <td style={{ padding: '10px 14px' }}>
+                      <span title={`${freshness.label} — ${Math.floor(freshness.age)}d`}
+                        style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 11, color: freshness.color }}>
+                        <span style={{ width: 7, height: 7, borderRadius: '50%', background: freshness.color, boxShadow: `0 0 4px ${freshness.color}88` }} />
+                        {freshness.label}
+                      </span>
+                    </td>
+                    <td style={{ padding: '10px 14px' }}><ChevronRight size={14} style={{ color: '#5c5044' }} /></td>
+                  </tr>
+                )
+              })}
             </tbody>
           </table>
         </div>

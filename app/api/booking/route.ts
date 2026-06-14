@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import crypto from 'crypto'
 import { readContent, writeContent } from '@/lib/store'
 import { triggerAutoReply, sendAdminNotification } from '@/lib/emailService'
+import { enrollInBookingDrip } from '@/lib/venueStore'
 import type { BookingRequest } from '@/lib/data'
 
 function esc(s: string): string {
@@ -30,6 +31,7 @@ export async function POST(req: NextRequest) {
   await writeContent({ bookingRequests: [...store.bookingRequests, booking] })
 
   await triggerAutoReply(booking).catch(() => {})
+  await enrollInBookingDrip(booking).catch(() => {})
 
   const adminEmail = process.env.ADMIN_NOTIFY_EMAIL ?? store.siteContent.contactEmail
   await sendAdminNotification({

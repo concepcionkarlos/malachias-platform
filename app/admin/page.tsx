@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic'
 import {
   LayoutDashboard, Calendar, Users, ShoppingBag, FileText, Image, Mail,
   MapPin, Settings, Newspaper, BarChart2, StickyNote, Inbox, CheckSquare,
-  Music, BookOpen,
+  Music, BookOpen, Zap,
   Menu, X, ExternalLink, LogOut, ChevronRight,
 } from 'lucide-react'
 import AdminLogin from './AdminLogin'
@@ -23,6 +23,7 @@ const SECTIONS = {
   epk:             { label: 'Press Kit',        icon: Newspaper,       group: 'Platform'    },
   content:         { label: 'Site Content',     icon: FileText,        group: 'Platform'    },
   'venue-finder':  { label: 'Venue Finder',     icon: MapPin,          group: 'Outreach'    },
+  'drip':          { label: 'Drip Campaigns',   icon: Zap,             group: 'Outreach'    },
   'email-templates': { label: 'Email Templates', icon: Mail,           group: 'Outreach'    },
   inbox:           { label: 'Inbox',            icon: Inbox,           group: 'Outreach'    },
   analytics:       { label: 'Analytics',        icon: BarChart2,       group: 'Reports'     },
@@ -47,6 +48,7 @@ const SectionComponents: Record<TabKey, React.ComponentType> = {
   epk:               dynamic(() => import('./sections/AdminEPK')),
   content:           dynamic(() => import('./sections/AdminContent')),
   'venue-finder':    dynamic(() => import('./sections/AdminVenueFinder')),
+  'drip':            dynamic(() => import('./sections/AdminDrip')),
   'email-templates': dynamic(() => import('./sections/AdminEmailTemplates')),
   inbox:             dynamic(() => import('./sections/AdminInbox')),
   analytics:         dynamic(() => import('./sections/AdminAnalytics')),

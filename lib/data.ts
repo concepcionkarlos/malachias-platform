@@ -403,6 +403,37 @@ export interface VenueStore {
   autoReplyLogs: AutoReplyLog[]
   bookingEmailLogs: BookingEmailLog[]
   inboundEmails: InboundEmail[]
+  dripCampaigns: DripCampaign[]
+  dripEnrollments: DripEnrollment[]
+}
+
+// ── Drip Campaigns ────────────────────────────────────────────────────────────
+
+export interface DripStep {
+  day: number
+  templateSlug: string
+}
+
+export interface DripCampaign {
+  id: string
+  name: string
+  description?: string
+  trigger: 'booking-new' | 'manual'
+  steps: DripStep[]
+  active: boolean
+  createdAt: string
+}
+
+export interface DripEnrollment {
+  id: string
+  campaignId: string
+  entityType: 'booking'
+  entityId: string
+  toEmail: string
+  entityName: string
+  enrolledAt: string
+  completedSteps: number[]
+  status: 'active' | 'completed' | 'paused' | 'unsubscribed'
 }
 
 export interface PlaceSearchResult {
