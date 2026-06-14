@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+Disallow: /admin
+Disallow: /api/
+Disallow: /rehearsal/
+
+Sitemap: https://malachiasmusic.com/sitemap.xml

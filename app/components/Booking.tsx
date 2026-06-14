@@ -10,11 +10,24 @@ const fade = (delay = 0) => ({
   transition: { duration: 0.75, delay, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] },
 });
 
-const VENUES = ['Churches', 'Military events', 'Community gatherings', 'Small venues'];
+const VENUES = [
+  'Bars & Clubs', 'Rock Festivals', 'Metal Events',
+  'Churches', 'VFW Halls', 'Military Events', 'Community Shows', 'Private Events',
+];
 
 const EVENT_TYPES = [
-  'Church Concert', 'Church Service', 'Military Event', 'Veteran Support Event',
-  'Community Gathering', 'Private Event', 'Festival', 'Other',
+  'Bar / Club Night',
+  'Rock Festival',
+  'Metal / Hard Rock Event',
+  'Outdoor Festival',
+  'Church Concert',
+  'Church Service',
+  'Military Event',
+  'Veteran Support Event',
+  'Community Gathering',
+  'Private Event',
+  'Corporate / Fundraiser',
+  'Other',
 ];
 
 export default function Booking() {
@@ -78,8 +91,8 @@ export default function Booking() {
             </motion.div>
 
             <motion.p {...fade(0.06)} className="text-[0.93rem] leading-relaxed mb-8" style={{ color: 'var(--text-2)' }}>
-              We play churches, community events, military gatherings, and small venues.
-              If you want us there, reach out. We&apos;ll figure it out together.
+              Bars, festivals, churches, clubs, military events — if there&apos;s a stage,
+              we&apos;ll be there. Reach out and we&apos;ll make it work.
             </motion.p>
 
             <motion.div {...fade(0.10)} className="space-y-2 mb-8">
