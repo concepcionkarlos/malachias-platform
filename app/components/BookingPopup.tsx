@@ -2,10 +2,11 @@
 
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import Image from 'next/image'
 import { X } from 'lucide-react'
 
 const LS_KEY   = 'malachias_popup_ts'
-const TTL_MS   = 7 * 24 * 60 * 60 * 1000   // resurface after 7 days
+const TTL_MS   = 7 * 24 * 60 * 60 * 1000
 const DELAY_MS = 4000
 
 export default function BookingPopup() {
@@ -17,7 +18,6 @@ export default function BookingPopup() {
       const seen = parseInt(raw, 10)
       if (!isNaN(seen) && Date.now() - seen < TTL_MS) return
     }
-
     const timer = setTimeout(() => setVisible(true), DELAY_MS)
     return () => clearTimeout(timer)
   }, [])
@@ -35,107 +35,219 @@ export default function BookingPopup() {
   return (
     <AnimatePresence>
       {visible && (
-        <motion.div
-          initial={{ opacity: 0, y: 48, scale: 0.94 }}
-          animate={{ opacity: 1, y: 0,  scale: 1    }}
-          exit={{    opacity: 0, y: 28, scale: 0.94 }}
-          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-          style={{
-            position: 'fixed',
-            bottom: 28,
-            right: 28,
-            zIndex: 9999,
-            width: 312,
-            background: 'linear-gradient(160deg, #0f0d0b 0%, #0a0806 100%)',
-            border: '1px solid rgba(201,168,76,0.42)',
-            boxShadow: '0 16px 72px rgba(0,0,0,0.88), 0 0 0 1px rgba(201,168,76,0.07), inset 0 1px 0 rgba(201,168,76,0.06)',
-            overflow: 'hidden',
-          }}
-          role="dialog"
-          aria-label="Book Malachias"
-        >
-          {/* Gold top stripe */}
-          <div style={{ height: 2, background: 'linear-gradient(to right, #c9a84c, rgba(201,168,76,0.25), transparent)' }} />
+        <>
+          {/* ── Dark full-screen backdrop ── */}
+          <motion.div
+            key="popup-backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4 }}
+            onClick={dismiss}
+            style={{
+              position: 'fixed',
+              inset: 0,
+              zIndex: 9998,
+              background: 'rgba(0,0,0,0.88)',
+              backdropFilter: 'blur(6px)',
+              WebkitBackdropFilter: 'blur(6px)',
+              cursor: 'pointer',
+            }}
+            aria-hidden="true"
+          />
 
-          <div style={{ padding: '18px 18px 20px' }}>
-            {/* Header row */}
-            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 12 }}>
-              <div>
-                <div style={{ fontSize: '0.58rem', letterSpacing: '0.32em', textTransform: 'uppercase', color: '#c9a84c', fontFamily: 'var(--font-display)', marginBottom: 4 }}>
-                  MALACHIAS
-                </div>
-                <div style={{ fontSize: '1.1rem', fontFamily: 'var(--font-display)', letterSpacing: '0.06em', color: '#e8ddd0', lineHeight: 1.1 }}>
-                  WE GOT YOU.
-                </div>
-              </div>
+          {/* ── Centered modal card ── */}
+          <motion.div
+            key="popup-card"
+            initial={{ opacity: 0, scale: 0.88, y: 32 }}
+            animate={{ opacity: 1, scale: 1,    y: 0  }}
+            exit={{    opacity: 0, scale: 0.92,  y: 16 }}
+            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+            style={{
+              position: 'fixed',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              zIndex: 9999,
+              width: 'min(560px, 92vw)',
+              background: '#080604',
+              border: '1px solid rgba(201,168,76,0.30)',
+              boxShadow: '0 32px 120px rgba(0,0,0,0.95), 0 0 0 1px rgba(201,168,76,0.06)',
+              overflow: 'hidden',
+            }}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Book Malachias"
+          >
+            {/* Emblem watermark */}
+            <div
+              aria-hidden="true"
+              style={{
+                position: 'absolute',
+                inset: 0,
+                zIndex: 0,
+                overflow: 'hidden',
+                pointerEvents: 'none',
+              }}
+            >
+              <Image
+                src="/Malachias.PNG"
+                alt=""
+                fill
+                sizes="560px"
+                style={{
+                  objectFit: 'contain',
+                  objectPosition: 'right center',
+                  opacity: 0.055,
+                  mixBlendMode: 'screen',
+                  filter: 'contrast(1.2) brightness(0.8)',
+                  transform: 'scale(1.15) translateX(10%)',
+                }}
+              />
+            </div>
+
+            {/* Gold top bar */}
+            <div style={{ position: 'relative', zIndex: 1, height: 3, background: 'linear-gradient(to right, #c9a84c 0%, rgba(201,168,76,0.40) 60%, transparent 100%)' }} />
+
+            <div style={{ position: 'relative', zIndex: 1, padding: '40px 44px 44px' }}>
+
+              {/* Close — top right, subtle */}
               <button
                 onClick={dismiss}
-                aria-label="Dismiss"
-                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#524437', padding: 2, marginTop: 2, flexShrink: 0 }}
-                onMouseEnter={e => (e.currentTarget.style.color = '#8a7f70')}
-                onMouseLeave={e => (e.currentTarget.style.color = '#524437')}
+                aria-label="Close"
+                style={{
+                  position: 'absolute',
+                  top: 18,
+                  right: 18,
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  color: '#3a3228',
+                  padding: 4,
+                  lineHeight: 1,
+                  transition: 'color 0.2s ease',
+                }}
+                onMouseEnter={e => (e.currentTarget.style.color = '#7a6e5e')}
+                onMouseLeave={e => (e.currentTarget.style.color = '#3a3228')}
               >
-                <X size={14} />
+                <X size={16} />
+              </button>
+
+              {/* Brand tag */}
+              <div style={{
+                fontSize: '0.55rem',
+                letterSpacing: '0.45em',
+                textTransform: 'uppercase',
+                color: '#c9a84c',
+                fontFamily: 'var(--font-display)',
+                marginBottom: 20,
+              }}>
+                MALACHIAS — FORT WAYNE, IN
+              </div>
+
+              {/* Big headline */}
+              <div style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: 'clamp(2.8rem, 8vw, 4rem)',
+                lineHeight: 0.92,
+                letterSpacing: '0.02em',
+                color: '#ede5d8',
+                marginBottom: 24,
+              }}>
+                <span style={{ display: 'block' }}>BRING US</span>
+                <span style={{ display: 'block', color: '#c9a84c' }}>TO YOUR</span>
+                <span style={{ display: 'block' }}>COMMUNITY.</span>
+              </div>
+
+              {/* Hairline */}
+              <div style={{ height: 1, background: 'linear-gradient(to right, rgba(201,168,76,0.45) 0%, rgba(201,168,76,0.08) 70%, transparent 100%)', marginBottom: 24 }} />
+
+              {/* Body copy */}
+              <p style={{
+                fontSize: '0.88rem',
+                lineHeight: 1.7,
+                color: '#a89880',
+                margin: '0 0 24px',
+                fontFamily: 'var(--font-body)',
+                maxWidth: '36ch',
+              }}>
+                Bars, festivals, churches, clubs, private events — we bring it wherever there&apos;s a stage.
+                Takes 2 minutes to reach out. We move fast.
+              </p>
+
+              {/* Venue tags */}
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 32 }}>
+                {['Bars & Clubs', 'Rock Festivals', 'Metal Events', 'Churches', 'VFW Halls', 'Private Events'].map(tag => (
+                  <span key={tag} style={{
+                    fontSize: '0.58rem',
+                    padding: '4px 12px',
+                    border: '1px solid rgba(201,168,76,0.22)',
+                    color: '#6b6050',
+                    letterSpacing: '0.10em',
+                    textTransform: 'uppercase',
+                    fontFamily: 'var(--font-body)',
+                  }}>
+                    {tag}
+                  </span>
+                ))}
+              </div>
+
+              {/* Primary CTA — solid gold, black text, large */}
+              <button
+                onClick={goBook}
+                style={{
+                  display: 'block',
+                  width: '100%',
+                  padding: '18px 0',
+                  background: 'linear-gradient(135deg, #c9a84c 0%, #b8902e 100%)',
+                  border: 'none',
+                  color: '#000',
+                  fontSize: '0.85rem',
+                  letterSpacing: '0.22em',
+                  textTransform: 'uppercase',
+                  cursor: 'pointer',
+                  fontFamily: 'var(--font-display)',
+                  fontWeight: 700,
+                  transition: 'filter 0.2s ease, transform 0.2s ease',
+                  marginBottom: 14,
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.filter = 'brightness(1.12)'
+                  e.currentTarget.style.transform = 'translateY(-1px)'
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.filter = 'brightness(1)'
+                  e.currentTarget.style.transform = 'translateY(0)'
+                }}
+              >
+                Send a Booking Request →
+              </button>
+
+              {/* Secondary — barely visible */}
+              <button
+                onClick={dismiss}
+                style={{
+                  display: 'block',
+                  width: '100%',
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontSize: '0.62rem',
+                  color: '#3a3228',
+                  letterSpacing: '0.12em',
+                  fontFamily: 'var(--font-body)',
+                  textAlign: 'center',
+                  textTransform: 'uppercase',
+                  transition: 'color 0.2s ease',
+                }}
+                onMouseEnter={e => (e.currentTarget.style.color = '#6b6050')}
+                onMouseLeave={e => (e.currentTarget.style.color = '#3a3228')}
+              >
+                Not right now
               </button>
             </div>
-
-            {/* Body */}
-            <p style={{ fontSize: '0.8rem', lineHeight: 1.65, color: '#a89880', margin: '0 0 16px', fontFamily: 'var(--font-body)' }}>
-              Looking to book us for a church, military event, or community show?
-              Takes 2 minutes — we&apos;ll get back to you fast.
-            </p>
-
-            {/* Venue tags */}
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5, marginBottom: 16 }}>
-              {['Churches', 'VFW Halls', 'Festivals', 'Private Events'].map(tag => (
-                <span
-                  key={tag}
-                  style={{ fontSize: '0.6rem', padding: '2px 8px', border: '1px solid rgba(201,168,76,0.18)', color: '#7a6e5e', letterSpacing: '0.06em', fontFamily: 'var(--font-body)' }}
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-
-            {/* CTA */}
-            <button
-              onClick={goBook}
-              style={{
-                width: '100%', padding: '11px 0',
-                background: 'linear-gradient(135deg, rgba(201,168,76,0.12) 0%, rgba(160,110,28,0.16) 100%)',
-                border: '1px solid rgba(201,168,76,0.50)',
-                color: '#c9a84c',
-                fontSize: '0.72rem',
-                letterSpacing: '0.16em',
-                textTransform: 'uppercase',
-                cursor: 'pointer',
-                fontFamily: 'var(--font-display)',
-                transition: 'background 0.25s ease, color 0.25s ease',
-              }}
-              onMouseEnter={e => {
-                const btn = e.currentTarget
-                btn.style.background = 'linear-gradient(135deg, rgba(201,168,76,0.85) 0%, rgba(185,138,38,1) 100%)'
-                btn.style.color = '#000'
-              }}
-              onMouseLeave={e => {
-                const btn = e.currentTarget
-                btn.style.background = 'linear-gradient(135deg, rgba(201,168,76,0.12) 0%, rgba(160,110,28,0.16) 100%)'
-                btn.style.color = '#c9a84c'
-              }}
-            >
-              Send a Booking Request
-            </button>
-
-            <button
-              onClick={dismiss}
-              style={{ display: 'block', width: '100%', marginTop: 8, background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.65rem', color: '#524437', letterSpacing: '0.08em', fontFamily: 'var(--font-body)', textAlign: 'center' }}
-              onMouseEnter={e => (e.currentTarget.style.color = '#7a6e5e')}
-              onMouseLeave={e => (e.currentTarget.style.color = '#524437')}
-            >
-              Not right now
-            </button>
-          </div>
-        </motion.div>
+          </motion.div>
+        </>
       )}
     </AnimatePresence>
   )
