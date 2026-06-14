@@ -396,6 +396,19 @@ export interface InboundEmail {
   resendMessageId?: string
 }
 
+export interface SentEmail {
+  id: string
+  toEmail: string
+  toName?: string
+  subject: string
+  bodyHtml: string
+  bodyText?: string
+  sentAt: string
+  resendEmailId?: string
+  status: 'sent' | 'failed'
+  errorMessage?: string
+}
+
 export interface VenueStore {
   venues: Venue[]
   outreachLogs: OutreachLog[]
@@ -403,6 +416,7 @@ export interface VenueStore {
   autoReplyLogs: AutoReplyLog[]
   bookingEmailLogs: BookingEmailLog[]
   inboundEmails: InboundEmail[]
+  sentEmails: SentEmail[]
   dripCampaigns: DripCampaign[]
   dripEnrollments: DripEnrollment[]
 }
@@ -548,7 +562,7 @@ export const siteContent: SiteContent = {
   footerTagline: 'Fort Wayne. Faith. Two tours. One mission.',
   ctaPrimaryLabel: 'Book Malachias',
   ctaSecondaryLabel: 'View Press Kit',
-  contactEmail: 'booking@malachias.com',
+  contactEmail: 'booking@malachiasmusic.com',
   facebook: 'https://www.facebook.com/share/17s554A9qA/?mibextid=wwXIfr',
   instagram: 'https://www.instagram.com/malachiasmusic',
   youtube: 'https://www.youtube.com/channel/UCboGsplcNdd9Pha-n83mZYA',
