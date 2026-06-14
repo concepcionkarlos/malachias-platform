@@ -430,7 +430,7 @@ export default function Band() {
             gap: '1.2rem',
             flexWrap: 'wrap',
           }}>
-            {['Fort Wayne', 'Havana', 'Puerto Rico', 'Sebring', 'Iraq'].map((place, i) => (
+            {['Fort Wayne', 'Havana', 'Puerto Rico', 'Sebring', 'Iraq', 'South Florida'].map((place, i) => (
               <span key={place} style={{
                 fontSize: '0.52rem',
                 letterSpacing: '0.38em',
@@ -438,7 +438,7 @@ export default function Band() {
                 color: 'rgba(120,100,70,0.35)',
                 fontFamily: 'var(--font-body)',
               }}>
-                {place}{i < 4 ? <>&ensp;·&ensp;</> : null}
+                {place}{i < 5 ? <>&ensp;·&ensp;</> : null}
               </span>
             ))}
           </div>

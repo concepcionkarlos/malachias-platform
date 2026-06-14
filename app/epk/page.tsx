@@ -7,7 +7,7 @@ export async function generateMetadata() {
   const { siteContent } = await readContent()
   return {
     title: `Press Kit — MALACHIAS`,
-    description: siteContent.metaDescription ?? 'Electronic Press Kit for Malachias — Christian rock, veteran-founded, Fort Wayne Indiana.',
+    description: siteContent.metaDescription ?? 'Electronic Press Kit for Malachias — Christian rock, veteran-founded, based in South Florida.',
   }
 }
 
@@ -466,7 +466,7 @@ export default async function EpkPage() {
               textAlign: 'center' as const,
             }}
           >
-            © {new Date().getFullYear()} Malachias · Fort Wayne, Indiana · {siteContent.serviceArea || 'United States'} &nbsp;✠&nbsp; Malachi 3:1
+            © {new Date().getFullYear()} Malachias · South Florida · {siteContent.serviceArea || 'United States'} &nbsp;✠&nbsp; Malachi 3:1
           </p>
         </div>
 

@@ -25,9 +25,9 @@ import BookingPopup   from './components/BookingPopup';
 export async function generateMetadata(): Promise<Metadata> {
   const { siteContent: c } = await readContent();
   return {
-    title: c.ogTitle ?? 'MALACHIAS — Christian Rock. Veteran Mission. Fort Wayne, Indiana.',
-    description: c.metaDescription ?? 'Malachias is a Christian rock band founded by a U.S. Army veteran from Fort Wayne, Indiana. Music with a mission: healing suicidal ideation, depression, and PTSD through faith.',
-    keywords: c.metaKeywords ?? 'Christian rock band, veteran music, faith rock, Fort Wayne Indiana, PTSD healing, Malachias',
+    title: c.ogTitle ?? 'MALACHIAS — Christian Rock. Veteran Spirit. South Florida.',
+    description: c.metaDescription ?? 'Malachias is a Christian rock band based in South Florida, founded by a U.S. Army veteran. Bars, festivals, churches, military events — music with a mission: healing suicidal ideation, depression, and PTSD through faith.',
+    keywords: c.metaKeywords ?? 'Christian rock band, veteran music, faith rock, South Florida band, Miami rock band, PTSD healing, Malachias',
     openGraph: {
       title: c.ogTitle ?? c.heroHeadline,
       description: c.ogDescription ?? c.metaDescription,
