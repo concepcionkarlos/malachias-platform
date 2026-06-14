@@ -30,7 +30,7 @@ const GUIDES: GuideSection[] = [
       },
       {
         heading: 'Local Bars & Music Venues',
-        body: 'Call on Tuesday/Wednesday afternoons — that\'s when bookers are most available. Ask for the booking manager, not the general manager. Offer to play for a door deal (% of cover) to get in the door. Bring 3 minutes of video on your phone — they\'ll want to see the live show. Fort Wayne venues: The Clyde Theatre, Piere\'s, Summit City Music Hall.',
+        body: 'Call on Tuesday/Wednesday afternoons — that\'s when bookers are most available. Ask for the booking manager, not the general manager. Offer to play for a door deal (% of cover) to get in the door. Bring 3 minutes of video on your phone — they\'ll want to see the live show. South Florida venues to target: Ball & Chain (Miami), Gramps (Miami), Churchill\'s Pub (Miami), Revolution Live (Fort Lauderdale), Culture Room (Fort Lauderdale), Respectable Street (West Palm Beach).',
       },
       {
         heading: 'Festivals & Outdoor Events',
@@ -51,7 +51,7 @@ const GUIDES: GuideSection[] = [
     items: [
       {
         heading: 'The 3-Line Pitch',
-        body: "Malachias is a Christian rock band founded by a U.S. Army veteran from Fort Wayne. We play original faith-driven rock for veterans, churches, and community events — music that's honest about struggle and real about hope. We're available for [date range] and would love to be part of [event name].",
+        body: "Malachias is a Christian rock band based in South Florida, founded by a U.S. Army veteran. We play original faith-driven rock for bars, festivals, churches, veterans, and community events — music that's honest about struggle and real about hope. We're available for [date range] and would love to be part of [event name].",
       },
       {
         heading: 'Email Outreach Best Practices',
@@ -85,7 +85,7 @@ const GUIDES: GuideSection[] = [
     items: [
       {
         heading: 'What to Charge',
-        body: 'Starting rates for a new band in Fort Wayne market:\n- Small venue / bar: $200–$500 (door deal or guarantee)\n- Church event: $300–$800 + freewill offering\n- Private event: $500–$1,500 depending on hours\n- Festival slot: $500–$2,000+ depending on stage size\n- Military/VFW: negotiate — mission alignment matters more than rate here.',
+        body: 'Starting rates for the South Florida market:\n- Small bar / club night: $300–$700 (door deal or guarantee)\n- Mid-size venue: $500–$1,200\n- Church event: $400–$1,000 + freewill offering\n- Private / corporate event: $800–$2,500 depending on hours\n- Festival slot: $1,000–$5,000+ depending on stage size\n- Military/VFW: negotiate — mission alignment matters more than rate here.',
       },
       {
         heading: 'Getting Paid',

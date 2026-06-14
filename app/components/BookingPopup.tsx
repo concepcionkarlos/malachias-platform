@@ -156,7 +156,7 @@ export default function BookingPopup() {
                 fontFamily: 'var(--font-display)',
                 marginBottom: 20,
               }}>
-                MALACHIAS — FORT WAYNE, IN
+                MALACHIAS — SOUTH FLORIDA
               </div>
 
               {/* Big headline */}
