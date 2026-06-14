@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic'
 import {
   LayoutDashboard, Calendar, Users, ShoppingBag, FileText, Image, Mail,
   MapPin, Settings, Newspaper, BarChart2, StickyNote, CheckSquare,
-  Music, BookOpen, Zap,
+  Music, BookOpen, Zap, ListMusic, Repeat, Target, BookMarked,
   Menu, X, ExternalLink, LogOut, ChevronRight,
 } from 'lucide-react'
 import AdminLogin from './AdminLogin'
@@ -22,6 +22,10 @@ const SECTIONS = {
   media:           { label: 'Media',            icon: Image,           group: 'Platform'    },
   epk:             { label: 'Press Kit',        icon: Newspaper,       group: 'Platform'    },
   content:         { label: 'Site Content',     icon: FileText,        group: 'Platform'    },
+  setlist:         { label: 'Set List',         icon: ListMusic,       group: 'Music'       },
+  rehearsals:      { label: 'Rehearsals',       icon: Repeat,          group: 'Music'       },
+  goals:           { label: 'Daily Goals',      icon: Target,          group: 'Music'       },
+  guides:          { label: 'Playbook',         icon: BookMarked,      group: 'Music'       },
   'venue-finder':  { label: 'Venue Finder',     icon: MapPin,          group: 'Outreach'    },
   'drip':          { label: 'Drip Campaigns',   icon: Zap,             group: 'Outreach'    },
   'email-templates': { label: 'Email Templates', icon: Mail,           group: 'Outreach'    },
@@ -33,7 +37,7 @@ const SECTIONS = {
 
 type TabKey = keyof typeof SECTIONS
 
-const GROUPS = ['Overview', 'Operations', 'Content', 'Platform', 'Outreach', 'Reports', 'System']
+const GROUPS = ['Overview', 'Operations', 'Content', 'Music', 'Platform', 'Outreach', 'Reports', 'System']
 
 const SectionComponents: Record<TabKey, React.ComponentType> = {
   dashboard:         dynamic(() => import('./sections/AdminDashboard')),
@@ -47,6 +51,10 @@ const SectionComponents: Record<TabKey, React.ComponentType> = {
   media:             dynamic(() => import('./sections/AdminMedia')),
   epk:               dynamic(() => import('./sections/AdminEPK')),
   content:           dynamic(() => import('./sections/AdminContent')),
+  setlist:           dynamic(() => import('./sections/AdminSetlist')),
+  rehearsals:        dynamic(() => import('./sections/AdminRehearsals')),
+  goals:             dynamic(() => import('./sections/AdminGoals')),
+  guides:            dynamic(() => import('./sections/AdminGuides')),
   'venue-finder':    dynamic(() => import('./sections/AdminVenueFinder')),
   'drip':            dynamic(() => import('./sections/AdminDrip')),
   'email-templates': dynamic(() => import('./sections/AdminEmailTemplates')),

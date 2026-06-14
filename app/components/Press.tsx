@@ -138,12 +138,12 @@ export default function Press() {
             >
               Assets available upon request. Email{' '}
               <a
-                href="mailto:press@malachias.com"
+                href="mailto:press@malachiasmusic.com"
                 style={{ color: 'var(--text-2)', textDecoration: 'none', transition: 'color 0.2s' }}
                 onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = 'var(--gold)')}
                 onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = 'var(--text-2)')}
               >
-                press@malachias.com
+                press@malachiasmusic.com
               </a>
             </p>
           </motion.div>

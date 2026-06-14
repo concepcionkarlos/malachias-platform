@@ -15,9 +15,9 @@ const NAV_LINKS = [
 ];
 
 const CONTACTS = [
-  { role: 'Booking', email: 'booking@malachias.com' },
-  { role: 'Press',   email: 'press@malachias.com'   },
-  { role: 'General', email: 'hello@malachias.com'   },
+  { role: 'Booking', email: 'booking@malachiasmusic.com' },
+  { role: 'Press',   email: 'press@malachiasmusic.com'   },
+  { role: 'General', email: 'hello@malachiasmusic.com'   },
 ];
 
 const SOCIALS = [

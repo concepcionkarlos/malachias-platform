@@ -96,13 +96,13 @@ export default function Booking() {
                 Direct line
               </p>
               <a
-                href="mailto:booking@malachias.com"
+                href="mailto:booking@malachiasmusic.com"
                 className="text-[0.85rem] transition-colors duration-300"
                 style={{ color: 'var(--text-2)' }}
                 onMouseEnter={e => (e.currentTarget.style.color = 'var(--gold)')}
                 onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-2)')}
               >
-                booking@malachias.com
+                booking@malachiasmusic.com
               </a>
             </motion.div>
           </div>
