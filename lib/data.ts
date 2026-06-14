@@ -409,6 +409,50 @@ export interface SentEmail {
   errorMessage?: string
 }
 
+// ── Songs / Set List ──────────────────────────────────────────────────────────
+
+export type SongStatus = 'ready' | 'learning' | 'shelved'
+
+export interface Song {
+  id: string
+  title: string
+  type: 'original' | 'cover'
+  originalArtist?: string
+  status: SongStatus
+  notes?: string
+  order: number
+  addedAt: string
+}
+
+// ── Rehearsals ────────────────────────────────────────────────────────────────
+
+export type RehearsalStatus = 'upcoming' | 'completed' | 'cancelled'
+
+export interface Rehearsal {
+  id: string
+  date: string
+  time?: string
+  location?: string
+  songIds: string[]
+  notes?: string
+  status: RehearsalStatus
+  summary?: string
+  createdAt: string
+}
+
+// ── Daily Goals ───────────────────────────────────────────────────────────────
+
+export type GoalCategory = 'booking' | 'music' | 'social' | 'admin' | 'other'
+
+export interface Goal {
+  id: string
+  text: string
+  category: GoalCategory
+  done: boolean
+  date: string
+  createdAt: string
+}
+
 export interface VenueStore {
   venues: Venue[]
   outreachLogs: OutreachLog[]
@@ -419,6 +463,9 @@ export interface VenueStore {
   sentEmails: SentEmail[]
   dripCampaigns: DripCampaign[]
   dripEnrollments: DripEnrollment[]
+  songs: Song[]
+  rehearsals: Rehearsal[]
+  goals: Goal[]
 }
 
 // ── Drip Campaigns ────────────────────────────────────────────────────────────

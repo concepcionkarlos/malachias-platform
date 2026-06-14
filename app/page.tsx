@@ -19,6 +19,7 @@ import SectionDivider from './components/SectionDivider';
 import BandTogether   from './components/BandTogether';
 import SongStories    from './components/SongStories';
 import WarRoom        from './components/WarRoom';
+import Setlist        from './components/Setlist';
 
 export async function generateMetadata(): Promise<Metadata> {
   const { siteContent: c } = await readContent();
@@ -48,6 +49,7 @@ export default async function Home() {
       <Music />
       <SongStories />
       <WarRoom />
+      <Setlist />
       <Shows />
       <Journal />
       <Merch fourthwallProducts={fwProducts} />

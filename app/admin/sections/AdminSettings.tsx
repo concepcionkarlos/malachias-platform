@@ -201,7 +201,7 @@ export default function AdminSettings() {
               <StatusRow
                 ok={false}
                 label="Email FROM address"
-                detail="RESEND_FROM_EMAIL not set — using noreply@malachias.com which requires verified domain"
+                detail="RESEND_FROM_EMAIL not set — using booking@malachiasmusic.com which requires verified domain"
                 fix="Add RESEND_FROM_EMAIL=onboarding@resend.dev (test) or your verified domain"
               />
             )}
@@ -298,7 +298,7 @@ export default function AdminSettings() {
             ))}
           </div>
           <div style={{ marginLeft: 18, marginTop: 10, fontSize: 12, color: '#5c5044', lineHeight: 1.6 }}>
-            <strong style={{ color: '#fb923c' }}>Note:</strong> <code style={{ fontFamily: 'monospace', fontSize: 11 }}>onboarding@resend.dev</code> works immediately without domain verification (max 100 emails/day on free plan). To use <code style={{ fontFamily: 'monospace', fontSize: 11 }}>noreply@malachias.com</code> later, verify the domain in Resend → Domains.
+            <strong style={{ color: '#fb923c' }}>Note:</strong> <code style={{ fontFamily: 'monospace', fontSize: 11 }}>onboarding@resend.dev</code> works immediately without domain verification (max 100 emails/day on free plan). To use <code style={{ fontFamily: 'monospace', fontSize: 11 }}>booking@malachiasmusic.com</code> later, verify the domain in Resend → Domains.
           </div>
         </div>
 

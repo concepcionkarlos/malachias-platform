@@ -10,7 +10,7 @@ import {
 } from './venueStore'
 import { renderTemplate } from './templateUtils'
 
-const FROM = process.env.RESEND_FROM_EMAIL ?? 'Malachias <noreply@malachias.com>'
+const FROM = process.env.RESEND_FROM_EMAIL ?? 'Malachias <booking@malachiasmusic.com>'
 const DEV_MODE = !process.env.RESEND_API_KEY
 
 export async function triggerAutoReply(booking: BookingRequest): Promise<void> {

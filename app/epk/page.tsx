@@ -108,7 +108,7 @@ export default async function EpkPage() {
           Press Kit
         </span>
         <a
-          href="mailto:booking@malachias.com"
+          href="mailto:booking@malachiasmusic.com"
           style={{
             fontSize: '0.68rem',
             letterSpacing: '0.14em',
@@ -391,9 +391,9 @@ export default async function EpkPage() {
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1.5rem' }}>
             {[
-              { role: 'Booking', email: siteContent.contactEmail || 'booking@malachias.com' },
-              { role: 'Press',   email: 'press@malachias.com' },
-              { role: 'General', email: 'hello@malachias.com' },
+              { role: 'Booking', email: siteContent.contactEmail || 'booking@malachiasmusic.com' },
+              { role: 'Press',   email: 'press@malachiasmusic.com' },
+              { role: 'General', email: 'hello@malachiasmusic.com' },
             ].map(c => (
               <div key={c.role}>
                 <p
