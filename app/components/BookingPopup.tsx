@@ -4,57 +4,51 @@ import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X } from 'lucide-react'
 
-const SESSION_KEY = 'malachias_booking_popup_dismissed'
-const DELAY_MS    = 5000
+const LS_KEY   = 'malachias_popup_ts'
+const TTL_MS   = 7 * 24 * 60 * 60 * 1000   // resurface after 7 days
+const DELAY_MS = 4000
 
 export default function BookingPopup() {
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
-    if (typeof window === 'undefined') return
-    if (sessionStorage.getItem(SESSION_KEY)) return
+    const raw = localStorage.getItem(LS_KEY)
+    if (raw) {
+      const seen = parseInt(raw, 10)
+      if (!isNaN(seen) && Date.now() - seen < TTL_MS) return
+    }
 
-    const timer = setTimeout(() => {
-      // Don't show if user has already scrolled past the fold to the booking section
-      const booking = document.getElementById('booking')
-      if (booking) {
-        const rect = booking.getBoundingClientRect()
-        if (rect.top < window.innerHeight) return
-      }
-      setVisible(true)
-    }, DELAY_MS)
-
+    const timer = setTimeout(() => setVisible(true), DELAY_MS)
     return () => clearTimeout(timer)
   }, [])
 
   function dismiss() {
     setVisible(false)
-    sessionStorage.setItem(SESSION_KEY, '1')
+    localStorage.setItem(LS_KEY, String(Date.now()))
   }
 
   function goBook() {
     dismiss()
-    const el = document.getElementById('booking')
-    el?.scrollIntoView({ behavior: 'smooth' })
+    document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth' })
   }
 
   return (
     <AnimatePresence>
       {visible && (
         <motion.div
-          initial={{ opacity: 0, y: 32, scale: 0.96 }}
-          animate={{ opacity: 1, y: 0,  scale: 1     }}
-          exit={{    opacity: 0, y: 24, scale: 0.96  }}
-          transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+          initial={{ opacity: 0, y: 48, scale: 0.94 }}
+          animate={{ opacity: 1, y: 0,  scale: 1    }}
+          exit={{    opacity: 0, y: 28, scale: 0.94 }}
+          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
           style={{
             position: 'fixed',
-            bottom: 24,
-            right: 24,
+            bottom: 28,
+            right: 28,
             zIndex: 9999,
-            width: 300,
-            background: '#0d0b0a',
-            border: '1px solid rgba(201,168,76,0.35)',
-            boxShadow: '0 8px 48px rgba(0,0,0,0.72), 0 0 0 1px rgba(201,168,76,0.06)',
+            width: 312,
+            background: 'linear-gradient(160deg, #0f0d0b 0%, #0a0806 100%)',
+            border: '1px solid rgba(201,168,76,0.42)',
+            boxShadow: '0 16px 72px rgba(0,0,0,0.88), 0 0 0 1px rgba(201,168,76,0.07), inset 0 1px 0 rgba(201,168,76,0.06)',
             overflow: 'hidden',
           }}
           role="dialog"
