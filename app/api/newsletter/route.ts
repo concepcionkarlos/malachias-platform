@@ -1,5 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { readContent, writeContent } from '@/lib/store'
+import { isAuthenticated } from '@/lib/auth'
+
+export async function GET() {
+  if (!(await isAuthenticated())) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  const store = await readContent()
+  return NextResponse.json({ subscribers: store.subscribers ?? [] })
+}
 
 export async function POST(req: NextRequest) {
   const { email } = await req.json()

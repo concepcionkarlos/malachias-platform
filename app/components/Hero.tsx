@@ -177,7 +177,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 22 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1.1, delay: 0.85, ease: [0.16, 1, 0.3, 1] as [number,number,number,number] }}
-              style={{ display: 'block', fontSize: mobile ? 'clamp(2.6rem, 10vw, 3.2rem)' : 'clamp(3rem, 7vw, 5.5rem)', color: 'rgba(237,229,216,0.42)' }}
+              style={{ display: 'block', fontSize: mobile ? 'clamp(2.6rem, 10vw, 3.2rem)' : 'clamp(3rem, 7vw, 5.5rem)', color: 'rgba(237,229,216,0.65)' }}
             >
               WE PLAY
             </motion.span>
@@ -193,7 +193,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 22 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1.1, delay: 1.15, ease: [0.16, 1, 0.3, 1] as [number,number,number,number] }}
-              style={{ display: 'block', fontSize: mobile ? 'clamp(2.6rem, 10vw, 3.2rem)' : 'clamp(3rem, 7vw, 5.5rem)', color: 'rgba(237,229,216,0.28)' }}
+              style={{ display: 'block', fontSize: mobile ? 'clamp(2.6rem, 10vw, 3.2rem)' : 'clamp(3rem, 7vw, 5.5rem)', color: 'rgba(237,229,216,0.55)' }}
             >
               WHO NEED IT MOST.
             </motion.span>

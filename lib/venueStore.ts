@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import crypto from 'crypto'
-import type { Venue, OutreachLog, EmailTemplate, AutoReplyLog, BookingEmailLog, InboundEmail, SentEmail, VenueStore, DripCampaign, DripEnrollment, Song, Rehearsal, Goal } from './data'
+import type { Venue, OutreachLog, EmailTemplate, AutoReplyLog, BookingEmailLog, InboundEmail, SentEmail, VenueStore, DripCampaign, DripEnrollment, Song, Rehearsal, RehearsalConfirmation, Goal, ShowSetList, ContentPost, FinanceEntry, BandStats } from './data'
 
 const VENUE_DATA_PATH = path.join(process.cwd(), 'data', 'venues.json')
 const useKV = !!process.env.KV_REST_API_URL
@@ -10,6 +10,7 @@ const KV_KEYS = {
   autoReplyLogs: 'autoReplyLogs', bookingEmailLogs: 'bookingEmailLogs', inboundEmails: 'inboundEmails',
   sentEmails: 'sentEmails',
   songs: 'songs', rehearsals: 'rehearsals', goals: 'goals',
+  showSetLists: 'showSetLists', contentPosts: 'contentPosts', finances: 'finances', bandStats: 'bandStats',
 } as const
 
 const DEFAULT_SONGS: Song[] = [
@@ -25,6 +26,7 @@ const DEFAULT_SONGS: Song[] = [
   { id: 's10', title: 'Freedom',                  type: 'original', status: 'ready', order: 10, addedAt: '2026-06-14T00:00:00Z' },
   { id: 's11', title: 'Even Flow',                type: 'cover', originalArtist: 'Pearl Jam',     status: 'ready', order: 11, addedAt: '2026-06-14T00:00:00Z' },
   { id: 's12', title: 'My Kinda Party',           type: 'cover', originalArtist: 'Jason Aldean',  status: 'ready', order: 12, addedAt: '2026-06-14T00:00:00Z' },
+  { id: 's13', title: 'Heroes',                  type: 'cover', originalArtist: 'Motörhead',      status: 'ready', order: 13, addedAt: '2026-06-14T00:00:00Z' },
 ]
 
 function makeId() { return crypto.randomBytes(8).toString('hex') }
@@ -212,7 +214,7 @@ function readLocal(): VenueStore {
     const dir = path.dirname(VENUE_DATA_PATH)
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
     if (!fs.existsSync(VENUE_DATA_PATH)) {
-      const seed: VenueStore = { venues: [], outreachLogs: [], emailTemplates: DEFAULT_TEMPLATES, autoReplyLogs: [], bookingEmailLogs: [], inboundEmails: [], sentEmails: [], dripCampaigns: DEFAULT_DRIP_CAMPAIGNS, dripEnrollments: [], songs: DEFAULT_SONGS, rehearsals: [], goals: [] }
+      const seed: VenueStore = { venues: [], outreachLogs: [], emailTemplates: DEFAULT_TEMPLATES, autoReplyLogs: [], bookingEmailLogs: [], inboundEmails: [], sentEmails: [], dripCampaigns: DEFAULT_DRIP_CAMPAIGNS, dripEnrollments: [], songs: DEFAULT_SONGS, rehearsals: [], goals: [], showSetLists: [], contentPosts: [], finances: [], bandStats: null }
       fs.writeFileSync(VENUE_DATA_PATH, JSON.stringify(seed, null, 2))
       return seed
     }
@@ -230,12 +232,16 @@ function readLocal(): VenueStore {
       bookingEmailLogs: parsed.bookingEmailLogs ?? [], inboundEmails: parsed.inboundEmails ?? [],
       sentEmails: parsed.sentEmails ?? [],
       dripCampaigns, dripEnrollments: parsed.dripEnrollments ?? [],
-      songs: (parsed.songs && parsed.songs.length > 0) ? parsed.songs : DEFAULT_SONGS, rehearsals: parsed.rehearsals ?? [], goals: parsed.goals ?? [],
+      songs: (parsed.songs && parsed.songs.length > 0) ? parsed.songs : DEFAULT_SONGS,
+      rehearsals: (parsed.rehearsals ?? []).map((r: Rehearsal) => ({ ...r, confirmations: r.confirmations ?? [] })),
+      goals: parsed.goals ?? [],
+      showSetLists: parsed.showSetLists ?? [], contentPosts: parsed.contentPosts ?? [],
+      finances: parsed.finances ?? [], bandStats: parsed.bandStats ?? null,
     }
     if (changed) fs.writeFileSync(VENUE_DATA_PATH, JSON.stringify(store, null, 2))
     return store
   } catch {
-    return { venues: [], outreachLogs: [], emailTemplates: DEFAULT_TEMPLATES, autoReplyLogs: [], bookingEmailLogs: [], inboundEmails: [], sentEmails: [], dripCampaigns: DEFAULT_DRIP_CAMPAIGNS, dripEnrollments: [], songs: DEFAULT_SONGS, rehearsals: [], goals: [] }
+    return { venues: [], outreachLogs: [], emailTemplates: DEFAULT_TEMPLATES, autoReplyLogs: [], bookingEmailLogs: [], inboundEmails: [], sentEmails: [], dripCampaigns: DEFAULT_DRIP_CAMPAIGNS, dripEnrollments: [], songs: DEFAULT_SONGS, rehearsals: [], goals: [], showSetLists: [], contentPosts: [], finances: [], bandStats: null }
   }
 }
 
@@ -262,10 +268,12 @@ async function readKV(): Promise<VenueStore> {
   else { const sync = syncDefaultTemplates(templates); if (sync.changed) { templates = sync.templates; await kv.set(KV_KEYS.emailTemplates, templates) } }
   let campaigns = dripCampaigns ?? []
   if (campaigns.length === 0) { campaigns = DEFAULT_DRIP_CAMPAIGNS; await kv.set('dripCampaigns', campaigns) }
-  const [songs, rehearsals, goals] = await Promise.all([
+  const [songs, rehearsals, goals, showSetLists, contentPosts, finances, bandStats] = await Promise.all([
     kv.get<Song[]>(KV_KEYS.songs), kv.get<Rehearsal[]>(KV_KEYS.rehearsals), kv.get<Goal[]>(KV_KEYS.goals),
+    kv.get<ShowSetList[]>(KV_KEYS.showSetLists), kv.get<ContentPost[]>(KV_KEYS.contentPosts),
+    kv.get<FinanceEntry[]>(KV_KEYS.finances), kv.get<BandStats>(KV_KEYS.bandStats),
   ])
-  return { venues: venues ?? [], outreachLogs: outreachLogs ?? [], emailTemplates: templates, autoReplyLogs: autoReplyLogs ?? [], bookingEmailLogs: bookingEmailLogs ?? [], inboundEmails: inboundEmails ?? [], sentEmails: sentEmails ?? [], dripCampaigns: campaigns, dripEnrollments: dripEnrollments ?? [], songs: (songs && songs.length > 0) ? songs : DEFAULT_SONGS, rehearsals: rehearsals ?? [], goals: goals ?? [] }
+  return { venues: venues ?? [], outreachLogs: outreachLogs ?? [], emailTemplates: templates, autoReplyLogs: autoReplyLogs ?? [], bookingEmailLogs: bookingEmailLogs ?? [], inboundEmails: inboundEmails ?? [], sentEmails: sentEmails ?? [], dripCampaigns: campaigns, dripEnrollments: dripEnrollments ?? [], songs: (songs && songs.length > 0) ? songs : DEFAULT_SONGS, rehearsals: (rehearsals ?? []).map(r => ({ ...r, confirmations: r.confirmations ?? [] })), goals: goals ?? [], showSetLists: showSetLists ?? [], contentPosts: contentPosts ?? [], finances: finances ?? [], bandStats: bandStats ?? null }
 }
 
 async function writeKV(updates: Partial<VenueStore>): Promise<VenueStore> {
@@ -612,4 +620,106 @@ export async function deleteGoal(id: string): Promise<void> {
   const store = await readVenueStore()
   const goals = store.goals.filter(g => g.id !== id)
   useKV ? await writeKV({ goals }) : writeLocal({ goals })
+}
+
+// ── Rehearsal Token / RSVP ────────────────────────────────────────────────────
+
+export async function getRehearsalByToken(token: string): Promise<Rehearsal | null> {
+  const store = await readVenueStore()
+  return store.rehearsals.find(r => r.token === token) ?? null
+}
+
+export async function addRehearsalConfirmation(id: string, confirmation: RehearsalConfirmation): Promise<Rehearsal> {
+  const store = await readVenueStore()
+  const rehearsal = store.rehearsals.find(r => r.id === id)
+  if (!rehearsal) throw new Error('Rehearsal not found')
+  const confirmations = [...(rehearsal.confirmations ?? []).filter(c => c.email !== confirmation.email && c.name !== confirmation.name), confirmation]
+  const updated = { ...rehearsal, confirmations }
+  const rehearsals = store.rehearsals.map(r => r.id === id ? updated : r)
+  useKV ? await writeKV({ rehearsals }) : writeLocal({ rehearsals })
+  return updated
+}
+
+// ── Show Set Lists ────────────────────────────────────────────────────────────
+
+export async function getShowSetList(showId: string): Promise<ShowSetList | null> {
+  const store = await readVenueStore()
+  return store.showSetLists.find(s => s.showId === showId) ?? null
+}
+
+export async function saveShowSetList(showId: string, items: ShowSetList['items']): Promise<ShowSetList> {
+  const store = await readVenueStore()
+  const existing = store.showSetLists.find(s => s.showId === showId)
+  const updated: ShowSetList = { showId, items, updatedAt: now() }
+  const showSetLists = existing
+    ? store.showSetLists.map(s => s.showId === showId ? updated : s)
+    : [...store.showSetLists, updated]
+  useKV ? await writeKV({ showSetLists }) : writeLocal({ showSetLists })
+  return updated
+}
+
+// ── Content Calendar ──────────────────────────────────────────────────────────
+
+export async function getContentPosts(): Promise<ContentPost[]> {
+  const store = await readVenueStore()
+  return [...store.contentPosts].sort((a, b) => (a.scheduledFor ?? a.createdAt).localeCompare(b.scheduledFor ?? b.createdAt))
+}
+
+export async function addContentPost(data: Omit<ContentPost, 'id' | 'createdAt'>): Promise<ContentPost> {
+  const store = await readVenueStore()
+  const post: ContentPost = { ...data, id: makeId(), createdAt: now() }
+  const contentPosts = [...store.contentPosts, post]
+  useKV ? await writeKV({ contentPosts }) : writeLocal({ contentPosts })
+  return post
+}
+
+export async function updateContentPost(id: string, patch: Partial<Omit<ContentPost, 'id'>>): Promise<ContentPost> {
+  const store = await readVenueStore()
+  const post = store.contentPosts.find(p => p.id === id)
+  if (!post) throw new Error('Post not found')
+  const updated = { ...post, ...patch }
+  const contentPosts = store.contentPosts.map(p => p.id === id ? updated : p)
+  useKV ? await writeKV({ contentPosts }) : writeLocal({ contentPosts })
+  return updated
+}
+
+export async function deleteContentPost(id: string): Promise<void> {
+  const store = await readVenueStore()
+  const contentPosts = store.contentPosts.filter(p => p.id !== id)
+  useKV ? await writeKV({ contentPosts }) : writeLocal({ contentPosts })
+}
+
+// ── Finance Tracker ───────────────────────────────────────────────────────────
+
+export async function getFinances(): Promise<FinanceEntry[]> {
+  const store = await readVenueStore()
+  return [...store.finances].sort((a, b) => b.date.localeCompare(a.date))
+}
+
+export async function addFinanceEntry(data: Omit<FinanceEntry, 'id' | 'createdAt'>): Promise<FinanceEntry> {
+  const store = await readVenueStore()
+  const entry: FinanceEntry = { ...data, id: makeId(), createdAt: now() }
+  const finances = [...store.finances, entry]
+  useKV ? await writeKV({ finances }) : writeLocal({ finances })
+  return entry
+}
+
+export async function deleteFinanceEntry(id: string): Promise<void> {
+  const store = await readVenueStore()
+  const finances = store.finances.filter(f => f.id !== id)
+  useKV ? await writeKV({ finances }) : writeLocal({ finances })
+}
+
+// ── Band Stats ────────────────────────────────────────────────────────────────
+
+export async function getBandStats(): Promise<BandStats | null> {
+  const store = await readVenueStore()
+  return store.bandStats
+}
+
+export async function saveBandStats(patch: Partial<BandStats>): Promise<BandStats> {
+  const store = await readVenueStore()
+  const bandStats: BandStats = { ...(store.bandStats ?? {}), ...patch, updatedAt: now() }
+  useKV ? await writeKV({ bandStats }) : writeLocal({ bandStats })
+  return bandStats
 }

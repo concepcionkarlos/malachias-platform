@@ -9,7 +9,7 @@ const INPUT: React.CSSProperties = { background: 'rgba(255,255,255,0.05)', borde
 const LABEL: React.CSSProperties = { fontSize: 11, color: '#8a7f70', letterSpacing: '0.08em', display: 'block', marginBottom: 4 }
 const BTN_SM: React.CSSProperties = { border: 'none', cursor: 'pointer', padding: '5px 8px', borderRadius: 5, fontSize: 12, display: 'inline-flex', alignItems: 'center', gap: 4 }
 
-const BLANK: Omit<BandMember, 'id'> = { name: '', role: '', bio: '', photo: '', branch: '', tours: '', visible: true }
+const BLANK: Omit<BandMember, 'id'> = { name: '', role: '', bio: '', photo: '', branch: '', tours: '', visible: true, email: '' }
 
 export default function AdminBandMembers() {
   const [members, setMembers] = useState<BandMember[]>([])
@@ -134,7 +134,7 @@ export default function AdminBandMembers() {
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
-              {[{ k: 'name', label: 'Name' }, { k: 'role', label: 'Role / Instrument' }, { k: 'branch', label: 'Military Branch' }, { k: 'tours', label: 'Tours / Deployments' }].map(({ k, label }) => (
+              {[{ k: 'name', label: 'Name' }, { k: 'role', label: 'Role / Instrument' }, { k: 'branch', label: 'Military Branch' }, { k: 'tours', label: 'Tours / Deployments' }, { k: 'email', label: 'Email (for rehearsal invites)' }].map(({ k, label }) => (
                 <div key={k}>
                   <label style={LABEL}>{label}</label>
                   <input type="text" value={(form as Record<string, unknown>)[k] as string ?? ''} onChange={e => setField(k as keyof Omit<BandMember, 'id'>, e.target.value)} style={INPUT} />
