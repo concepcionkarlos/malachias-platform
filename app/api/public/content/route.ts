@@ -15,5 +15,10 @@ export async function GET() {
     merch: store.merch.filter(m => m.visible !== false),
     mediaItems: store.mediaItems.filter(m => m.visible !== false),
     epkContent: store.epkContent,
+    songStories: (store.songStories ?? [])
+      .filter(s => s.visible !== false)
+      .sort((a, b) => a.order - b.order),
+    dailyReflections: (store.dailyReflections ?? [])
+      .sort((a, b) => b.date.localeCompare(a.date)),
   })
 }

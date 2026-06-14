@@ -188,6 +188,85 @@ export const TASK_CATEGORIES: { id: TaskCategory; label: string; emoji: string }
 
 export const bandTasks: BandTask[] = []
 
+// ── Song Stories ──────────────────────────────────────────────────────────────
+
+export interface SongStory {
+  id: string
+  title: string
+  verse: string
+  verseRef: string
+  story: string
+  moment?: string
+  spotifyUrl?: string
+  appleUrl?: string
+  youtubeUrl?: string
+  order: number
+  visible: boolean
+  createdAt: string
+}
+
+export const songStories: SongStory[] = [
+  {
+    id: 'ss-1',
+    title: 'The Messenger',
+    verse: '"See, I will send my messenger, who will prepare the way before me."',
+    verseRef: 'Malachi 3:1',
+    story: "This song didn't start as a song. It started as a question I couldn't shake after I came home from Iraq the second time.\n\nI'd been deployed as an Army bandsman — music and war, in the same deployment, in the same body. I watched men fall apart in country and hold it together long enough to get home. And then fall apart at home where no one was watching.\n\nThe name Malachias is the ancient form of Malachi — it means \"my messenger.\" I didn't choose it because it sounded good. I chose it because the night I was trying to figure out what this band was supposed to be, I kept coming back to that verse. A messenger is sent. A messenger doesn't go on their own. A messenger carries something.\n\nThis song is the answer to the question: what are we carrying, and who are we carrying it to?",
+    moment: 'Fort Wayne, 2017',
+    spotifyUrl: 'https://open.spotify.com/artist/2YSqk7Skh7jsm5fR0uU3vl',
+    appleUrl: 'https://music.apple.com/us/artist/malachias/937313536',
+    order: 1,
+    visible: true,
+    createdAt: '2024-01-01T00:00:00Z',
+  },
+  {
+    id: 'ss-2',
+    title: 'No One Left Behind',
+    verse: '"Greater love has no one than this: to lay down one\'s life for one\'s friends."',
+    verseRef: 'John 15:13',
+    story: "There's a phrase in the military that gets used so much it almost loses its weight: No one left behind. You say it enough times and it becomes a rule instead of a conviction.\n\nI wrote this song because I've watched men get left behind. Not in combat — after. After they come home and nobody knows what to do with them. After the VA appointment is six months out. After their marriage falls apart and their faith goes with it and they're sitting alone at 2am with thoughts that shouldn't be there.\n\nThe gospel says the same thing. Greater love has no one than this. That's not a suggestion. That's a standard.\n\nWe wrote this song for the ones still out there. For the ones their families are holding on for. For anyone who has ever felt left. You're not.",
+    moment: 'Fort Wayne, 2018',
+    order: 2,
+    visible: true,
+    createdAt: '2024-01-01T00:00:00Z',
+  },
+  {
+    id: 'ss-3',
+    title: 'Faith Through Fire',
+    verse: '"When you pass through the waters, I will be with you; and when you pass through the rivers, they will not sweep over you. When you walk through the fire, you will not be burned."',
+    verseRef: 'Isaiah 43:2',
+    story: "I did not write this song from a place of victory. I wrote it from the middle.\n\nThere were years when I didn't know if faith was real or if I was just trained to reach for something when things got bad. Two failed marriages. A DUI. Coming home from a war and not recognizing myself in the mirror. The kind of dark that doesn't lift easy.\n\nIsaiah 43:2 doesn't say you won't go through fire. It says you won't be burned. That difference matters more than I can explain. It means the fire is real. The river is real. The hard thing is real. But so is the One walking through it with you.\n\nThis song is for everyone who is in the middle of it right now. You don't have to be on the other side to be covered.",
+    moment: 'Fort Wayne, 2019',
+    order: 3,
+    visible: true,
+    createdAt: '2024-01-01T00:00:00Z',
+  },
+]
+
+// ── Daily Reflections ─────────────────────────────────────────────────────────
+
+export interface DailyReflection {
+  id: string
+  date: string
+  verse: string
+  verseRef: string
+  reflection: string
+  suggestedSong?: string
+  createdAt: string
+}
+
+export const dailyReflections: DailyReflection[] = [
+  {
+    id: 'dr-1',
+    date: '2026-06-13',
+    verse: '"The Lord is my shepherd; I shall not want. He makes me lie down in green pastures. He leads me beside still waters. He restores my soul."',
+    verseRef: 'Psalm 23:1–3',
+    reflection: "After two tours, I came home needing to be led somewhere quiet. The Army trains you to be moving, scanning, ready. Psalm 23 is the antidote to that state — not because it promises no danger, but because it promises presence through it. Rest isn't weakness. It's where restoration happens.",
+    suggestedSong: 'The Messenger',
+    createdAt: '2026-06-13T06:00:00Z',
+  },
+]
+
 // ── Admin Notes ───────────────────────────────────────────────────────────────
 
 export type AdminNotePriority = 'normal' | 'high'
