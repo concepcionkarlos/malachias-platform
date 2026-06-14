@@ -20,9 +20,9 @@ const DEFAULT_SONGS: Song[] = [
   { id: 's5',  title: 'For Those That Remain',    type: 'original', status: 'ready', order: 5,  addedAt: '2026-06-14T00:00:00Z' },
   { id: 's6',  title: 'Rise Above',               type: 'original', status: 'ready', order: 6,  addedAt: '2026-06-14T00:00:00Z' },
   { id: 's7',  title: "Knocking on Heaven's Door", type: 'cover', originalArtist: "Bob Dylan / Guns N' Roses", status: 'ready', order: 7,  addedAt: '2026-06-14T00:00:00Z' },
-  { id: 's8',  title: 'Something in the Way',     type: 'cover', originalArtist: 'Nirvana',       status: 'ready', order: 8,  addedAt: '2026-06-14T00:00:00Z' },
+  { id: 's8',  title: 'Something in the Way',     type: 'original', status: 'ready', order: 8,  addedAt: '2026-06-14T00:00:00Z' },
   { id: 's9',  title: 'Enter Sandman',            type: 'cover', originalArtist: 'Metallica',     status: 'ready', order: 9,  addedAt: '2026-06-14T00:00:00Z' },
-  { id: 's10', title: 'Freedom',                  type: 'cover', originalArtist: 'The Dead Daisies', status: 'ready', order: 10, addedAt: '2026-06-14T00:00:00Z' },
+  { id: 's10', title: 'Freedom',                  type: 'original', status: 'ready', order: 10, addedAt: '2026-06-14T00:00:00Z' },
   { id: 's11', title: 'Even Flow',                type: 'cover', originalArtist: 'Pearl Jam',     status: 'ready', order: 11, addedAt: '2026-06-14T00:00:00Z' },
   { id: 's12', title: 'My Kinda Party',           type: 'cover', originalArtist: 'Jason Aldean',  status: 'ready', order: 12, addedAt: '2026-06-14T00:00:00Z' },
 ]
@@ -230,7 +230,7 @@ function readLocal(): VenueStore {
       bookingEmailLogs: parsed.bookingEmailLogs ?? [], inboundEmails: parsed.inboundEmails ?? [],
       sentEmails: parsed.sentEmails ?? [],
       dripCampaigns, dripEnrollments: parsed.dripEnrollments ?? [],
-      songs: parsed.songs ?? DEFAULT_SONGS, rehearsals: parsed.rehearsals ?? [], goals: parsed.goals ?? [],
+      songs: (parsed.songs && parsed.songs.length > 0) ? parsed.songs : DEFAULT_SONGS, rehearsals: parsed.rehearsals ?? [], goals: parsed.goals ?? [],
     }
     if (changed) fs.writeFileSync(VENUE_DATA_PATH, JSON.stringify(store, null, 2))
     return store
@@ -265,7 +265,7 @@ async function readKV(): Promise<VenueStore> {
   const [songs, rehearsals, goals] = await Promise.all([
     kv.get<Song[]>(KV_KEYS.songs), kv.get<Rehearsal[]>(KV_KEYS.rehearsals), kv.get<Goal[]>(KV_KEYS.goals),
   ])
-  return { venues: venues ?? [], outreachLogs: outreachLogs ?? [], emailTemplates: templates, autoReplyLogs: autoReplyLogs ?? [], bookingEmailLogs: bookingEmailLogs ?? [], inboundEmails: inboundEmails ?? [], sentEmails: sentEmails ?? [], dripCampaigns: campaigns, dripEnrollments: dripEnrollments ?? [], songs: songs ?? DEFAULT_SONGS, rehearsals: rehearsals ?? [], goals: goals ?? [] }
+  return { venues: venues ?? [], outreachLogs: outreachLogs ?? [], emailTemplates: templates, autoReplyLogs: autoReplyLogs ?? [], bookingEmailLogs: bookingEmailLogs ?? [], inboundEmails: inboundEmails ?? [], sentEmails: sentEmails ?? [], dripCampaigns: campaigns, dripEnrollments: dripEnrollments ?? [], songs: (songs && songs.length > 0) ? songs : DEFAULT_SONGS, rehearsals: rehearsals ?? [], goals: goals ?? [] }
 }
 
 async function writeKV(updates: Partial<VenueStore>): Promise<VenueStore> {
