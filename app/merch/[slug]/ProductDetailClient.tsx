@@ -123,13 +123,13 @@ export default function ProductDetailClient({ product }: { product: FWProduct })
                     onClick={() => setActiveImg(i)}
                     aria-label={`View image ${i + 1}`}
                     style={{
-                      position: 'relative', width: 56, height: 56, flexShrink: 0,
+                      position: 'relative', width: 72, height: 72, flexShrink: 0,
                       background: '#0d0d0d', padding: 0,
                       border: `1px solid ${activeImg === i ? 'rgba(201,168,76,0.60)' : 'rgba(255,255,255,0.06)'}`,
                       cursor: 'pointer', overflow: 'hidden', transition: 'border-color 0.2s',
                     }}
                   >
-                    <Image src={img.url} alt="" fill className="object-cover" sizes="56px" style={{ filter: 'brightness(0.90)' }} />
+                    <Image src={img.url} alt="" fill className="object-cover" sizes="72px" style={{ filter: 'brightness(0.90)' }} />
                   </button>
                 ))}
               </div>
@@ -142,7 +142,7 @@ export default function ProductDetailClient({ product }: { product: FWProduct })
               {fwCategory(product)}
             </motion.span>
 
-            <motion.h1 {...fade(0.08)} className="font-display" style={{ fontSize: 'clamp(1.8rem, 5vw, 3rem)', letterSpacing: '0.05em', color: '#e8ddd0', lineHeight: 0.95, marginBottom: '1rem' }}>
+            <motion.h1 {...fade(0.08)} className="font-display" style={{ fontSize: 'clamp(1.4rem, 3.2vw, 2.4rem)', letterSpacing: '0.05em', color: '#e8ddd0', lineHeight: 1.0, marginBottom: '1rem' }}>
               {product.name}
             </motion.h1>
 
@@ -185,12 +185,13 @@ export default function ProductDetailClient({ product }: { product: FWProduct })
                       onClick={() => handleColorSelect(c.name)}
                       title={c.name}
                       style={{
-                        width: 28, height: 28, borderRadius: '50%',
+                        width: 32, height: 32, borderRadius: '50%',
                         background: c.swatch,
-                        border: `2px solid ${selectedColor === c.name ? '#c9a84c' : 'rgba(255,255,255,0.12)'}`,
+                        border: `2px solid ${selectedColor === c.name ? '#c9a84c' : 'rgba(255,255,255,0.18)'}`,
+                        boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.12)',
                         cursor: 'pointer', padding: 0, transition: 'border-color 0.2s',
-                        outline: selectedColor === c.name ? '1px solid rgba(201,168,76,0.30)' : 'none',
-                        outlineOffset: 2,
+                        outline: selectedColor === c.name ? '1px solid rgba(201,168,76,0.35)' : 'none',
+                        outlineOffset: 3,
                       }}
                       aria-label={c.name}
                       aria-pressed={selectedColor === c.name ? 'true' : 'false'}
