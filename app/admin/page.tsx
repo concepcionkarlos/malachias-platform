@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic'
 import {
   LayoutDashboard, Calendar, Users, ShoppingBag, FileText, Image, Mail,
   MapPin, Settings, Newspaper, BarChart2, StickyNote, Inbox, CheckSquare,
+  Music, BookOpen,
   Menu, X, ExternalLink, LogOut, ChevronRight,
 } from 'lucide-react'
 import AdminLogin from './AdminLogin'
@@ -14,6 +15,8 @@ const SECTIONS = {
   bookings:        { label: 'Bookings',         icon: Calendar,        group: 'Operations'  },
   shows:           { label: 'Shows',            icon: MapPin,          group: 'Operations'  },
   tasks:           { label: 'Task Board',       icon: CheckSquare,     group: 'Operations'  },
+  'song-stories':  { label: 'Behind the Song',  icon: Music,           group: 'Content'     },
+  'war-room':      { label: 'War Room',         icon: BookOpen,        group: 'Content'     },
   'band-members':  { label: 'Band Members',     icon: Users,           group: 'Platform'    },
   merch:           { label: 'Merch',            icon: ShoppingBag,     group: 'Platform'    },
   media:           { label: 'Media',            icon: Image,           group: 'Platform'    },
@@ -29,13 +32,15 @@ const SECTIONS = {
 
 type TabKey = keyof typeof SECTIONS
 
-const GROUPS = ['Overview', 'Operations', 'Platform', 'Outreach', 'Reports', 'System']
+const GROUPS = ['Overview', 'Operations', 'Content', 'Platform', 'Outreach', 'Reports', 'System']
 
 const SectionComponents: Record<TabKey, React.ComponentType> = {
   dashboard:         dynamic(() => import('./sections/AdminDashboard')),
   bookings:          dynamic(() => import('./sections/AdminBookings')),
   shows:             dynamic(() => import('./sections/AdminShows')),
   tasks:             dynamic(() => import('./sections/AdminTasks')),
+  'song-stories':    dynamic(() => import('./sections/AdminSongStories')),
+  'war-room':        dynamic(() => import('./sections/AdminWarRoom')),
   'band-members':    dynamic(() => import('./sections/AdminBandMembers')),
   merch:             dynamic(() => import('./sections/AdminMerch')),
   media:             dynamic(() => import('./sections/AdminMedia')),
