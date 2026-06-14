@@ -20,6 +20,7 @@ import BandTogether   from './components/BandTogether';
 import SongStories    from './components/SongStories';
 import WarRoom        from './components/WarRoom';
 import Setlist        from './components/Setlist';
+import BookingPopup   from './components/BookingPopup';
 
 export async function generateMetadata(): Promise<Metadata> {
   const { siteContent: c } = await readContent();
@@ -61,6 +62,7 @@ export default async function Home() {
       <Booking />
       <Newsletter />
       <Footer />
+      <BookingPopup />
     </main>
   );
 }
