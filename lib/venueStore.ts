@@ -1,13 +1,14 @@
 import fs from 'fs'
 import path from 'path'
 import crypto from 'crypto'
-import type { Venue, OutreachLog, EmailTemplate, AutoReplyLog, BookingEmailLog, InboundEmail, VenueStore, DripCampaign, DripEnrollment } from './data'
+import type { Venue, OutreachLog, EmailTemplate, AutoReplyLog, BookingEmailLog, InboundEmail, SentEmail, VenueStore, DripCampaign, DripEnrollment } from './data'
 
 const VENUE_DATA_PATH = path.join(process.cwd(), 'data', 'venues.json')
 const useKV = !!process.env.KV_REST_API_URL
 const KV_KEYS = {
   venues: 'venues', outreachLogs: 'outreachLogs', emailTemplates: 'emailTemplates',
   autoReplyLogs: 'autoReplyLogs', bookingEmailLogs: 'bookingEmailLogs', inboundEmails: 'inboundEmails',
+  sentEmails: 'sentEmails',
 } as const
 
 function makeId() { return crypto.randomBytes(8).toString('hex') }
@@ -31,7 +32,7 @@ function emailShell(body: string): string {
       </td></tr>
       <tr><td style="padding:40px;">${body}</td></tr>
       <tr><td style="background:#f9f7f4;padding:20px 40px;border-top:1px solid #e8e0d5;">
-        <p style="margin:0;font-size:11px;color:#999999;line-height:1.5;font-family:Arial,sans-serif;">Malachias · malachias.com · <a href="mailto:booking@malachias.com" style="color:#999999;">booking@malachias.com</a></p>
+        <p style="margin:0;font-size:11px;color:#999999;line-height:1.5;font-family:Arial,sans-serif;">Malachias · malachiasmusic.com · <a href="mailto:booking@malachiasmusic.com" style="color:#999999;">booking@malachiasmusic.com</a></p>
       </td></tr>
     </table>
   </td></tr>
@@ -65,7 +66,7 @@ const DEFAULT_TEMPLATES: EmailTemplate[] = [
         <h1 style="margin:0 0 16px;font-size:22px;color:#111111;font-family:Arial,sans-serif;">We heard you.</h1>
         <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">{{clientName}}, thank you for reaching out about <strong>{{eventType}}</strong> on <strong>{{eventDate}}</strong>.</p>
         <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">We'll be in touch within 24–48 hours. We take every booking seriously — if you need us there, we'll figure it out together.</p>
-        <p style="margin:0 0 32px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">In the meantime, you can learn more about us and hear the music at <a href="https://malachias.com" style="color:${GOLD};">malachias.com</a>.</p>
+        <p style="margin:0 0 32px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">In the meantime, you can learn more about us and hear the music at <a href="https://www.malachiasmusic.com" style="color:${GOLD};">malachiasmusic.com</a>.</p>
         <p style="margin:0;font-size:15px;color:#444444;font-family:Arial,sans-serif;">— <strong>Malachias</strong></p>`),
   },
   {
@@ -82,7 +83,7 @@ const DEFAULT_TEMPLATES: EmailTemplate[] = [
           <li>Approximate number of attendees</li>
           <li>Set length and any special requirements</li>
         </ul>
-        <p style="margin:0 0 32px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">You can also check our press kit at <a href="https://malachias.com" style="color:${GOLD};">malachias.com</a>.</p>
+        <p style="margin:0 0 32px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">You can also check our press kit at <a href="https://www.malachiasmusic.com" style="color:${GOLD};">malachiasmusic.com</a>.</p>
         <p style="margin:0;font-size:15px;color:#444444;font-family:Arial,sans-serif;">— <strong>Malachias</strong><br><a href="mailto:{{replyEmail}}" style="color:${GOLD};">{{replyEmail}}</a></p>`),
   },
   {
@@ -170,10 +171,22 @@ const DEFAULT_TEMPLATES: EmailTemplate[] = [
 ]
 
 function syncDefaultTemplates(existing: EmailTemplate[]): { templates: EmailTemplate[]; changed: boolean } {
+  let changed = false
+  // Update bodyHtml/subject of existing system templates when defaults change
+  const updated = existing.map(t => {
+    if (!t.isSystem) return t
+    const def = DEFAULT_TEMPLATES.find(d => d.slug === t.slug)
+    if (!def) return t
+    if (def.bodyHtml !== t.bodyHtml || def.subject !== t.subject) {
+      changed = true
+      return { ...t, bodyHtml: def.bodyHtml, subject: def.subject, updatedAt: new Date().toISOString() }
+    }
+    return t
+  })
   const existingSlugs = new Set(existing.map((t) => t.slug))
   const missing = DEFAULT_TEMPLATES.filter((t) => !existingSlugs.has(t.slug))
-  if (missing.length === 0) return { templates: existing, changed: false }
-  return { templates: [...existing, ...missing], changed: true }
+  if (missing.length > 0) changed = true
+  return { templates: [...updated, ...missing], changed }
 }
 
 // ── Local FS ──────────────────────────────────────────────────────────────────
@@ -183,7 +196,7 @@ function readLocal(): VenueStore {
     const dir = path.dirname(VENUE_DATA_PATH)
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
     if (!fs.existsSync(VENUE_DATA_PATH)) {
-      const seed: VenueStore = { venues: [], outreachLogs: [], emailTemplates: DEFAULT_TEMPLATES, autoReplyLogs: [], bookingEmailLogs: [], inboundEmails: [], dripCampaigns: DEFAULT_DRIP_CAMPAIGNS, dripEnrollments: [] }
+      const seed: VenueStore = { venues: [], outreachLogs: [], emailTemplates: DEFAULT_TEMPLATES, autoReplyLogs: [], bookingEmailLogs: [], inboundEmails: [], sentEmails: [], dripCampaigns: DEFAULT_DRIP_CAMPAIGNS, dripEnrollments: [] }
       fs.writeFileSync(VENUE_DATA_PATH, JSON.stringify(seed, null, 2))
       return seed
     }
@@ -199,12 +212,13 @@ function readLocal(): VenueStore {
       venues: parsed.venues ?? [], outreachLogs: parsed.outreachLogs ?? [],
       emailTemplates: templates, autoReplyLogs: parsed.autoReplyLogs ?? [],
       bookingEmailLogs: parsed.bookingEmailLogs ?? [], inboundEmails: parsed.inboundEmails ?? [],
+      sentEmails: parsed.sentEmails ?? [],
       dripCampaigns, dripEnrollments: parsed.dripEnrollments ?? [],
     }
     if (changed) fs.writeFileSync(VENUE_DATA_PATH, JSON.stringify(store, null, 2))
     return store
   } catch {
-    return { venues: [], outreachLogs: [], emailTemplates: DEFAULT_TEMPLATES, autoReplyLogs: [], bookingEmailLogs: [], inboundEmails: [], dripCampaigns: DEFAULT_DRIP_CAMPAIGNS, dripEnrollments: [] }
+    return { venues: [], outreachLogs: [], emailTemplates: DEFAULT_TEMPLATES, autoReplyLogs: [], bookingEmailLogs: [], inboundEmails: [], sentEmails: [], dripCampaigns: DEFAULT_DRIP_CAMPAIGNS, dripEnrollments: [] }
   }
 }
 
@@ -219,18 +233,19 @@ function writeLocal(updates: Partial<VenueStore>): VenueStore {
 
 async function readKV(): Promise<VenueStore> {
   const { kv } = await import('@vercel/kv')
-  const [venues, outreachLogs, emailTemplates, autoReplyLogs, bookingEmailLogs, inboundEmails, dripCampaigns, dripEnrollments] = await Promise.all([
+  const [venues, outreachLogs, emailTemplates, autoReplyLogs, bookingEmailLogs, inboundEmails, dripCampaigns, dripEnrollments, sentEmails] = await Promise.all([
     kv.get<Venue[]>(KV_KEYS.venues), kv.get<OutreachLog[]>(KV_KEYS.outreachLogs),
     kv.get<EmailTemplate[]>(KV_KEYS.emailTemplates), kv.get<AutoReplyLog[]>(KV_KEYS.autoReplyLogs),
     kv.get<BookingEmailLog[]>(KV_KEYS.bookingEmailLogs), kv.get<InboundEmail[]>(KV_KEYS.inboundEmails),
     kv.get<DripCampaign[]>('dripCampaigns'), kv.get<DripEnrollment[]>('dripEnrollments'),
+    kv.get<SentEmail[]>(KV_KEYS.sentEmails),
   ])
   let templates = emailTemplates ?? []
   if (templates.length === 0) { templates = DEFAULT_TEMPLATES; await kv.set(KV_KEYS.emailTemplates, templates) }
   else { const sync = syncDefaultTemplates(templates); if (sync.changed) { templates = sync.templates; await kv.set(KV_KEYS.emailTemplates, templates) } }
   let campaigns = dripCampaigns ?? []
   if (campaigns.length === 0) { campaigns = DEFAULT_DRIP_CAMPAIGNS; await kv.set('dripCampaigns', campaigns) }
-  return { venues: venues ?? [], outreachLogs: outreachLogs ?? [], emailTemplates: templates, autoReplyLogs: autoReplyLogs ?? [], bookingEmailLogs: bookingEmailLogs ?? [], inboundEmails: inboundEmails ?? [], dripCampaigns: campaigns, dripEnrollments: dripEnrollments ?? [] }
+  return { venues: venues ?? [], outreachLogs: outreachLogs ?? [], emailTemplates: templates, autoReplyLogs: autoReplyLogs ?? [], bookingEmailLogs: bookingEmailLogs ?? [], inboundEmails: inboundEmails ?? [], sentEmails: sentEmails ?? [], dripCampaigns: campaigns, dripEnrollments: dripEnrollments ?? [] }
 }
 
 async function writeKV(updates: Partial<VenueStore>): Promise<VenueStore> {
@@ -395,6 +410,27 @@ export async function deleteInboundEmail(id: string): Promise<void> {
   const store = await readVenueStore()
   const inboundEmails = (store.inboundEmails ?? []).filter((e) => e.id !== id)
   useKV ? await writeKV({ inboundEmails }) : writeLocal({ inboundEmails })
+}
+
+// ── Sent Emails ───────────────────────────────────────────────────────────────
+
+export async function addSentEmail(email: Omit<SentEmail, 'id'>): Promise<SentEmail> {
+  const store = await readVenueStore()
+  const newEmail: SentEmail = { ...email, id: makeId() }
+  const sentEmails = [newEmail, ...(store.sentEmails ?? [])]
+  useKV ? await writeKV({ sentEmails }) : writeLocal({ sentEmails })
+  return newEmail
+}
+
+export async function getSentEmails(): Promise<SentEmail[]> {
+  const store = await readVenueStore()
+  return store.sentEmails ?? []
+}
+
+export async function deleteSentEmail(id: string): Promise<void> {
+  const store = await readVenueStore()
+  const sentEmails = (store.sentEmails ?? []).filter((e) => e.id !== id)
+  useKV ? await writeKV({ sentEmails }) : writeLocal({ sentEmails })
 }
 
 // ── Drip Campaigns ────────────────────────────────────────────────────────────

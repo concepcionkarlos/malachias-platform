@@ -4,7 +4,7 @@ import { useSearchParams, useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
 import {
   LayoutDashboard, Calendar, Users, ShoppingBag, FileText, Image, Mail,
-  MapPin, Settings, Newspaper, BarChart2, StickyNote, Inbox, CheckSquare,
+  MapPin, Settings, Newspaper, BarChart2, StickyNote, CheckSquare,
   Music, BookOpen, Zap,
   Menu, X, ExternalLink, LogOut, ChevronRight,
 } from 'lucide-react'
@@ -25,7 +25,7 @@ const SECTIONS = {
   'venue-finder':  { label: 'Venue Finder',     icon: MapPin,          group: 'Outreach'    },
   'drip':          { label: 'Drip Campaigns',   icon: Zap,             group: 'Outreach'    },
   'email-templates': { label: 'Email Templates', icon: Mail,           group: 'Outreach'    },
-  inbox:           { label: 'Inbox',            icon: Inbox,           group: 'Outreach'    },
+  email:           { label: 'Email',            icon: Mail,            group: 'Outreach'    },
   analytics:       { label: 'Analytics',        icon: BarChart2,       group: 'Reports'     },
   notes:           { label: 'Notes',            icon: StickyNote,      group: 'Reports'     },
   settings:        { label: 'Settings',         icon: Settings,        group: 'System'      },
@@ -50,7 +50,7 @@ const SectionComponents: Record<TabKey, React.ComponentType> = {
   'venue-finder':    dynamic(() => import('./sections/AdminVenueFinder')),
   'drip':            dynamic(() => import('./sections/AdminDrip')),
   'email-templates': dynamic(() => import('./sections/AdminEmailTemplates')),
-  inbox:             dynamic(() => import('./sections/AdminInbox')),
+  email:             dynamic(() => import('./sections/AdminEmail')),
   analytics:         dynamic(() => import('./sections/AdminAnalytics')),
   notes:             dynamic(() => import('./sections/AdminNotes')),
   settings:          dynamic(() => import('./sections/AdminSettings')),
