@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import crypto from 'crypto'
-import type { Venue, OutreachLog, EmailTemplate, AutoReplyLog, BookingEmailLog, InboundEmail, VenueStore } from './data'
+import type { Venue, OutreachLog, EmailTemplate, AutoReplyLog, BookingEmailLog, InboundEmail, VenueStore, DripCampaign, DripEnrollment } from './data'
 
 const VENUE_DATA_PATH = path.join(process.cwd(), 'data', 'venues.json')
 const useKV = !!process.env.KV_REST_API_URL
@@ -39,6 +39,22 @@ function emailShell(body: string): string {
 </body>
 </html>`
 }
+
+const DEFAULT_DRIP_CAMPAIGNS: DripCampaign[] = [
+  {
+    id: 'drip-booking-default',
+    name: 'New Booking Follow-up',
+    description: 'Automatic 3-touch sequence for new booking inquiries (Day 2, 5, 10)',
+    trigger: 'booking-new',
+    active: true,
+    steps: [
+      { day: 2,  templateSlug: 'drip-booking-d2'  },
+      { day: 5,  templateSlug: 'drip-booking-d5'  },
+      { day: 10, templateSlug: 'drip-booking-d10' },
+    ],
+    createdAt: now(),
+  },
+]
 
 const DEFAULT_TEMPLATES: EmailTemplate[] = [
   {
@@ -84,6 +100,40 @@ const DEFAULT_TEMPLATES: EmailTemplate[] = [
         </ul>
         <p style="margin:0 0 32px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">Questions between now and the show: <a href="mailto:{{replyEmail}}" style="color:${GOLD};">{{replyEmail}}</a></p>
         <p style="margin:0;font-size:15px;color:#444444;font-family:Arial,sans-serif;">See you on stage,<br><strong>Malachias</strong></p>`),
+  },
+  {
+    id: makeId(), slug: 'drip-booking-d2', name: 'Drip — Day 2 Follow-up',
+    isSystem: true, createdAt: now(), updatedAt: now(),
+    subject: 'Quick question about your event, {{clientName}}',
+    bodyHtml: emailShell(`
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">{{clientName}},</p>
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">Just checking in — we received your booking inquiry a couple days ago and wanted to make sure you didn't have any questions.</p>
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">We'd love to be part of what you're planning. Malachias brings our own setup and we've been told we leave rooms different than we found them.</p>
+        <p style="margin:0 0 32px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">Would it help to hop on a quick call? Or if you'd like our full press kit, just reply here and we'll send it right over.</p>
+        <p style="margin:0;font-size:15px;color:#444444;font-family:Arial,sans-serif;">— <strong>Malachias</strong><br><a href="mailto:{{replyEmail}}" style="color:${GOLD};">{{replyEmail}}</a></p>`),
+  },
+  {
+    id: makeId(), slug: 'drip-booking-d5', name: 'Drip — Day 5 Mission Touch',
+    isSystem: true, createdAt: now(), updatedAt: now(),
+    subject: 'What Malachias actually does, {{clientName}}',
+    bodyHtml: emailShell(`
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">{{clientName}},</p>
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">I wanted to share something beyond the booking details.</p>
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">Malachias was founded by a U.S. Army veteran with a specific mission: reduce suicidal ideation, lift people from depression, and help heal the wounds PTSD leaves behind. Our music is original, faith-driven rock — built for people who are real, who struggle but want to grow and heal.</p>
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">We've played churches, veteran support events, and community stages. We bring our own PA and we're easy to work with. Every show, we put everything we have into the room.</p>
+        <p style="margin:0 0 32px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">If the date is still on your radar, we'd be honored to be there.</p>
+        <p style="margin:0;font-size:15px;color:#444444;font-family:Arial,sans-serif;">— <strong>Malachias</strong><br><a href="mailto:{{replyEmail}}" style="color:${GOLD};">{{replyEmail}}</a></p>`),
+  },
+  {
+    id: makeId(), slug: 'drip-booking-d10', name: 'Drip — Day 10 Final',
+    isSystem: true, createdAt: now(), updatedAt: now(),
+    subject: 'Last check-in, {{clientName}}',
+    bodyHtml: emailShell(`
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">{{clientName}},</p>
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">This is my last follow-up — I don't want to fill up your inbox.</p>
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">If the timing didn't work out or plans changed, no hard feelings at all. We'll still be here.</p>
+        <p style="margin:0 0 32px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">But if the date is still alive and you'd like Malachias to be part of it, just reply to this email. We move fast.</p>
+        <p style="margin:0;font-size:15px;color:#444444;font-family:Arial,sans-serif;">Either way — thank you for reaching out. The door is always open.<br><br>— <strong>Malachias</strong><br><a href="mailto:{{replyEmail}}" style="color:${GOLD};">{{replyEmail}}</a></p>`),
   },
   {
     id: makeId(), slug: 'venue-first-outreach', name: 'Venue / Church First Outreach',
@@ -133,7 +183,7 @@ function readLocal(): VenueStore {
     const dir = path.dirname(VENUE_DATA_PATH)
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
     if (!fs.existsSync(VENUE_DATA_PATH)) {
-      const seed: VenueStore = { venues: [], outreachLogs: [], emailTemplates: DEFAULT_TEMPLATES, autoReplyLogs: [], bookingEmailLogs: [], inboundEmails: [] }
+      const seed: VenueStore = { venues: [], outreachLogs: [], emailTemplates: DEFAULT_TEMPLATES, autoReplyLogs: [], bookingEmailLogs: [], inboundEmails: [], dripCampaigns: DEFAULT_DRIP_CAMPAIGNS, dripEnrollments: [] }
       fs.writeFileSync(VENUE_DATA_PATH, JSON.stringify(seed, null, 2))
       return seed
     }
@@ -143,15 +193,18 @@ function readLocal(): VenueStore {
     let changed = false
     if (templates.length === 0) { templates = DEFAULT_TEMPLATES; changed = true }
     else { const sync = syncDefaultTemplates(templates); if (sync.changed) { templates = sync.templates; changed = true } }
+    let dripCampaigns: DripCampaign[] = parsed.dripCampaigns ?? []
+    if (dripCampaigns.length === 0) { dripCampaigns = DEFAULT_DRIP_CAMPAIGNS; changed = true }
     const store: VenueStore = {
       venues: parsed.venues ?? [], outreachLogs: parsed.outreachLogs ?? [],
       emailTemplates: templates, autoReplyLogs: parsed.autoReplyLogs ?? [],
       bookingEmailLogs: parsed.bookingEmailLogs ?? [], inboundEmails: parsed.inboundEmails ?? [],
+      dripCampaigns, dripEnrollments: parsed.dripEnrollments ?? [],
     }
     if (changed) fs.writeFileSync(VENUE_DATA_PATH, JSON.stringify(store, null, 2))
     return store
   } catch {
-    return { venues: [], outreachLogs: [], emailTemplates: DEFAULT_TEMPLATES, autoReplyLogs: [], bookingEmailLogs: [], inboundEmails: [] }
+    return { venues: [], outreachLogs: [], emailTemplates: DEFAULT_TEMPLATES, autoReplyLogs: [], bookingEmailLogs: [], inboundEmails: [], dripCampaigns: DEFAULT_DRIP_CAMPAIGNS, dripEnrollments: [] }
   }
 }
 
@@ -166,15 +219,18 @@ function writeLocal(updates: Partial<VenueStore>): VenueStore {
 
 async function readKV(): Promise<VenueStore> {
   const { kv } = await import('@vercel/kv')
-  const [venues, outreachLogs, emailTemplates, autoReplyLogs, bookingEmailLogs, inboundEmails] = await Promise.all([
+  const [venues, outreachLogs, emailTemplates, autoReplyLogs, bookingEmailLogs, inboundEmails, dripCampaigns, dripEnrollments] = await Promise.all([
     kv.get<Venue[]>(KV_KEYS.venues), kv.get<OutreachLog[]>(KV_KEYS.outreachLogs),
     kv.get<EmailTemplate[]>(KV_KEYS.emailTemplates), kv.get<AutoReplyLog[]>(KV_KEYS.autoReplyLogs),
     kv.get<BookingEmailLog[]>(KV_KEYS.bookingEmailLogs), kv.get<InboundEmail[]>(KV_KEYS.inboundEmails),
+    kv.get<DripCampaign[]>('dripCampaigns'), kv.get<DripEnrollment[]>('dripEnrollments'),
   ])
   let templates = emailTemplates ?? []
   if (templates.length === 0) { templates = DEFAULT_TEMPLATES; await kv.set(KV_KEYS.emailTemplates, templates) }
   else { const sync = syncDefaultTemplates(templates); if (sync.changed) { templates = sync.templates; await kv.set(KV_KEYS.emailTemplates, templates) } }
-  return { venues: venues ?? [], outreachLogs: outreachLogs ?? [], emailTemplates: templates, autoReplyLogs: autoReplyLogs ?? [], bookingEmailLogs: bookingEmailLogs ?? [], inboundEmails: inboundEmails ?? [] }
+  let campaigns = dripCampaigns ?? []
+  if (campaigns.length === 0) { campaigns = DEFAULT_DRIP_CAMPAIGNS; await kv.set('dripCampaigns', campaigns) }
+  return { venues: venues ?? [], outreachLogs: outreachLogs ?? [], emailTemplates: templates, autoReplyLogs: autoReplyLogs ?? [], bookingEmailLogs: bookingEmailLogs ?? [], inboundEmails: inboundEmails ?? [], dripCampaigns: campaigns, dripEnrollments: dripEnrollments ?? [] }
 }
 
 async function writeKV(updates: Partial<VenueStore>): Promise<VenueStore> {
@@ -339,4 +395,71 @@ export async function deleteInboundEmail(id: string): Promise<void> {
   const store = await readVenueStore()
   const inboundEmails = (store.inboundEmails ?? []).filter((e) => e.id !== id)
   useKV ? await writeKV({ inboundEmails }) : writeLocal({ inboundEmails })
+}
+
+// ── Drip Campaigns ────────────────────────────────────────────────────────────
+
+export async function getDripCampaigns(): Promise<DripCampaign[]> {
+  const store = await readVenueStore()
+  return store.dripCampaigns
+}
+
+export async function updateDripCampaign(id: string, patch: Partial<DripCampaign>): Promise<DripCampaign> {
+  const store = await readVenueStore()
+  const idx = store.dripCampaigns.findIndex((c) => c.id === id)
+  if (idx === -1) throw new Error(`Campaign ${id} not found`)
+  const updated: DripCampaign = { ...store.dripCampaigns[idx], ...patch }
+  const dripCampaigns = store.dripCampaigns.map((c) => (c.id === id ? updated : c))
+  useKV ? await writeKV({ dripCampaigns }) : writeLocal({ dripCampaigns })
+  return updated
+}
+
+// ── Drip Enrollments ──────────────────────────────────────────────────────────
+
+export async function getDripEnrollments(): Promise<DripEnrollment[]> {
+  const store = await readVenueStore()
+  return store.dripEnrollments.sort((a, b) => b.enrolledAt.localeCompare(a.enrolledAt))
+}
+
+export async function getActiveDripEnrollments(): Promise<DripEnrollment[]> {
+  const store = await readVenueStore()
+  return store.dripEnrollments.filter((e) => e.status === 'active')
+}
+
+export async function addDripEnrollment(data: Omit<DripEnrollment, 'id'>): Promise<DripEnrollment> {
+  const store = await readVenueStore()
+  const existing = store.dripEnrollments.find(
+    (e) => e.entityId === data.entityId && e.campaignId === data.campaignId && e.status === 'active'
+  )
+  if (existing) return existing
+  const enrollment: DripEnrollment = { ...data, id: makeId() }
+  const dripEnrollments = [...store.dripEnrollments, enrollment]
+  useKV ? await writeKV({ dripEnrollments }) : writeLocal({ dripEnrollments })
+  return enrollment
+}
+
+export async function updateDripEnrollment(id: string, patch: Partial<DripEnrollment>): Promise<DripEnrollment> {
+  const store = await readVenueStore()
+  const idx = store.dripEnrollments.findIndex((e) => e.id === id)
+  if (idx === -1) throw new Error(`Enrollment ${id} not found`)
+  const updated: DripEnrollment = { ...store.dripEnrollments[idx], ...patch }
+  const dripEnrollments = store.dripEnrollments.map((e) => (e.id === id ? updated : e))
+  useKV ? await writeKV({ dripEnrollments }) : writeLocal({ dripEnrollments })
+  return updated
+}
+
+export async function enrollInBookingDrip(booking: { id: string; email: string; fullName: string; createdAt: string }): Promise<void> {
+  const store = await readVenueStore()
+  const campaign = store.dripCampaigns.find((c) => c.trigger === 'booking-new' && c.active)
+  if (!campaign) return
+  await addDripEnrollment({
+    campaignId: campaign.id,
+    entityType: 'booking',
+    entityId: booking.id,
+    toEmail: booking.email,
+    entityName: booking.fullName,
+    enrolledAt: booking.createdAt,
+    completedSteps: [],
+    status: 'active',
+  })
 }
