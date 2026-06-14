@@ -22,6 +22,20 @@ export default function BookingPopup() {
     return () => clearTimeout(timer)
   }, [])
 
+  // Scroll-lock body + Escape key while open
+  useEffect(() => {
+    if (!visible) return
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') dismiss() }
+    document.addEventListener('keydown', onKey)
+    return () => {
+      document.body.style.overflow = prev
+      document.removeEventListener('keydown', onKey)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [visible])
+
   function dismiss() {
     setVisible(false)
     localStorage.setItem(LS_KEY, String(Date.now()))
@@ -35,45 +49,45 @@ export default function BookingPopup() {
   return (
     <AnimatePresence>
       {visible && (
-        <>
-          {/* ── Dark full-screen backdrop ── */}
-          <motion.div
-            key="popup-backdrop"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.4 }}
-            onClick={dismiss}
-            style={{
-              position: 'fixed',
-              inset: 0,
-              zIndex: 9998,
-              background: 'rgba(0,0,0,0.88)',
-              backdropFilter: 'blur(6px)',
-              WebkitBackdropFilter: 'blur(6px)',
-              cursor: 'pointer',
-            }}
-            aria-hidden="true"
-          />
-
-          {/* ── Centered modal card ── */}
+        /* ── Full-screen overlay — fades in/out, clicks outside dismiss ── */
+        <motion.div
+          key="popup-overlay"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.4 }}
+          onClick={dismiss}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 9998,
+            background: 'rgba(0,0,0,0.88)',
+            backdropFilter: 'blur(7px)',
+            WebkitBackdropFilter: 'blur(7px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: 20,
+            cursor: 'pointer',
+          }}
+        >
+          {/* ── Card — scale/y animation, stopPropagation prevents backdrop dismiss ── */}
           <motion.div
             key="popup-card"
-            initial={{ opacity: 0, scale: 0.88, y: 32 }}
-            animate={{ opacity: 1, scale: 1,    y: 0  }}
-            exit={{    opacity: 0, scale: 0.92,  y: 16 }}
+            initial={{ scale: 0.88, y: 36 }}
+            animate={{ scale: 1,    y: 0  }}
+            exit={{    scale: 0.92, y: 20 }}
             transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+            onClick={e => e.stopPropagation()}
             style={{
-              position: 'fixed',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              zIndex: 9999,
-              width: 'min(560px, 92vw)',
+              position: 'relative',
+              width: '100%',
+              maxWidth: 560,
               background: '#080604',
               border: '1px solid rgba(201,168,76,0.30)',
               boxShadow: '0 32px 120px rgba(0,0,0,0.95), 0 0 0 1px rgba(201,168,76,0.06)',
               overflow: 'hidden',
+              cursor: 'default',
             }}
             role="dialog"
             aria-modal="true"
@@ -247,7 +261,7 @@ export default function BookingPopup() {
               </button>
             </div>
           </motion.div>
-        </>
+        </motion.div>
       )}
     </AnimatePresence>
   )
