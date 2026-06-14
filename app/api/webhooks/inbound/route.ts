@@ -16,19 +16,29 @@ export async function POST(req: NextRequest) {
     let receivedAt = new Date().toISOString()
 
     if (contentType.includes('application/json')) {
-      // Resend format (envelope only — no body)
       const payload = await req.json()
-      const data = payload.data ?? payload
-      fromRaw = data.from ?? ''
-      const toRaw = data.to ?? []
-      toEmail = Array.isArray(toRaw) ? (toRaw[0] ?? toEmail) : (toRaw || toEmail)
-      subject = data.subject ?? subject
-      emailId = data.email_id ?? data.id
-      receivedAt = data.created_at ?? receivedAt
-      // Resend doesn't send body — mark clearly
-      bodyText = undefined
+
+      if (payload.fromEmail) {
+        // Google Apps Script format — full body included
+        fromRaw = payload.fromEmail ?? ''
+        toEmail = payload.toEmail ?? toEmail
+        subject = payload.subject ?? subject
+        bodyHtml = payload.bodyHtml || undefined
+        bodyText = payload.bodyText || undefined
+        receivedAt = payload.receivedAt ?? receivedAt
+        emailId = payload.gmailMessageId
+      } else {
+        // Resend format (envelope only — no body)
+        const data = payload.data ?? payload
+        fromRaw = data.from ?? ''
+        const toRaw = data.to ?? []
+        toEmail = Array.isArray(toRaw) ? (toRaw[0] ?? toEmail) : (toRaw || toEmail)
+        subject = data.subject ?? subject
+        emailId = data.email_id ?? data.id
+        receivedAt = data.created_at ?? receivedAt
+      }
     } else {
-      // Mailgun format (multipart/form-data — includes full body)
+      // Mailgun / form-data format
       const form = await req.formData()
       const get = (key: string) => (form.get(key) as string | null) ?? undefined
 
@@ -37,8 +47,6 @@ export async function POST(req: NextRequest) {
       subject = get('subject') ?? subject
       emailId = get('Message-Id') ?? get('message-id')
       receivedAt = new Date((parseInt(get('timestamp') ?? '0') || Date.now() / 1000) * 1000).toISOString()
-
-      // Mailgun sends both stripped (no quoted text) and full body
       bodyHtml = get('stripped-html') ?? get('body-html')
       bodyText = get('stripped-text') ?? get('body-plain')
     }
