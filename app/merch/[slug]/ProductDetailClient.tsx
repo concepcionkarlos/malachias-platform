@@ -245,11 +245,12 @@ export default function ProductDetailClient({ product }: { product: FWProduct })
                   href={product.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn btn-primary"
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.68rem', letterSpacing: '0.18em', padding: '0.75rem 1.8rem' }}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '0.6rem', fontSize: '0.72rem', letterSpacing: '0.18em', padding: '0.9rem 2.2rem', background: '#c9a84c', color: '#030202', textDecoration: 'none', fontWeight: 700, fontFamily: 'var(--font-body)', textTransform: 'uppercase', transition: 'opacity 0.2s' }}
+                  onMouseEnter={e => ((e.currentTarget as HTMLElement).style.opacity = '0.88')}
+                  onMouseLeave={e => ((e.currentTarget as HTMLElement).style.opacity = '1')}
                 >
-                  <ShoppingBag size={14} />
-                  Buy Now
+                  <ShoppingBag size={15} />
+                  Support the Band — Buy Now
                 </a>
               ) : (
                 <Link
@@ -260,8 +261,16 @@ export default function ProductDetailClient({ product }: { product: FWProduct })
                   Notify Me When Available
                 </Link>
               )}
-              <p style={{ marginTop: '0.5rem', fontSize: '0.52rem', color: 'var(--text-3)', letterSpacing: '0.12em' }}>
-                Secure checkout &amp; fulfillment by Fourthwall
+              <div style={{ marginTop: '1rem', padding: '0.85rem 1rem', background: 'rgba(201,168,76,0.05)', border: '1px solid rgba(201,168,76,0.10)', display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
+                <p style={{ margin: 0, fontSize: '0.58rem', letterSpacing: '0.14em', color: '#5c5044', textTransform: 'uppercase' }}>Your purchase directly supports</p>
+                {['Live shows & touring', 'Original music recording', 'Veteran mission outreach'].map(s => (
+                  <p key={s} style={{ margin: 0, fontSize: '0.75rem', color: '#8a7f70', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                    <span style={{ color: '#c9a84c', fontSize: '0.60rem' }}>✓</span> {s}
+                  </p>
+                ))}
+              </div>
+              <p style={{ marginTop: '0.6rem', fontSize: '0.52rem', color: '#2e2820', letterSpacing: '0.12em' }}>
+                Secure checkout &amp; fulfillment by Fourthwall · No label, no middleman
               </p>
             </motion.div>
 
