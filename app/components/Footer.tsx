@@ -249,25 +249,16 @@ export default function Footer() {
             One Nation Under God
           </p>
 
-          {/* Privacy / Terms */}
-          <div className="flex gap-4 text-[0.66rem] tracking-wider" style={{ color: 'var(--text-ghost)' }}>
-            <a
-              href="#"
-              className="transition-colors duration-300"
-              onMouseEnter={e => (e.currentTarget.style.color = 'rgba(201,168,76,0.55)')}
-              onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-ghost)')}
-            >
-              Privacy
-            </a>
-            <a
-              href="#"
-              className="transition-colors duration-300"
-              onMouseEnter={e => (e.currentTarget.style.color = 'rgba(201,168,76,0.55)')}
-              onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-ghost)')}
-            >
-              Terms
-            </a>
-          </div>
+          {/* Contact */}
+          <a
+            href="mailto:hello@malachiasmusic.com"
+            className="text-[0.66rem] tracking-wider transition-colors duration-300"
+            style={{ color: 'var(--text-ghost)' }}
+            onMouseEnter={e => (e.currentTarget.style.color = 'rgba(201,168,76,0.55)')}
+            onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-ghost)')}
+          >
+            hello@malachiasmusic.com
+          </a>
         </div>
       </div>
 
