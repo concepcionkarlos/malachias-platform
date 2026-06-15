@@ -13,6 +13,7 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "img.youtube.com" },
       { protocol: "https", hostname: "**.fourthwall.com" },
       { protocol: "https", hostname: "**.fourthwallcdn.com" },
+      { protocol: "https", hostname: "**.fourthwall.dev" },
     ],
   },
   experimental: {
