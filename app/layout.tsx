@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     template: '%s — MALACHIAS',
   },
   description:
-    'Malachias is a Christian rock band based in South Florida, founded by a U.S. Army veteran. Bars, festivals, churches, military events — we play wherever the music is needed.',
+    'Malachias is a veteran-founded Christian rock band from South Florida. Faith-driven music that heals PTSD, depression, and suicidal ideation. Available for bars, festivals, churches, and military events.',
   keywords: [
     'Christian rock band', 'veteran music', 'faith rock', 'military band', 'Malachias',
     'South Florida band', 'Miami rock band', 'South Florida rock festival', 'Christian metal',
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
   alternates: { canonical: SITE_URL },
   openGraph: {
     title: 'MALACHIAS — Christian Rock. Veteran Spirit. Faith on Fire.',
-    description: 'Faith-driven rock music from a band of brothers. Founded by a U.S. Army veteran. Available for bars, festivals, churches, and community events.',
+    description: 'Faith-driven rock from a veteran-founded band in South Florida. Music that heals PTSD and depression. Available for bars, festivals, churches, military events, and community gatherings.',
     type: 'website',
     url: SITE_URL,
     siteName: 'Malachias',
@@ -57,19 +57,26 @@ const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'MusicGroup',
   name: 'Malachias',
-  description: 'Christian rock band based in South Florida, founded by a U.S. Army veteran. Music for bars, festivals, churches, and community events.',
-  genre: ['Christian Rock', 'Rock', 'Hard Rock'],
+  description: 'Christian rock band based in South Florida, founded by a U.S. Army veteran. Music that heals PTSD, depression, and suicidal ideation through faith. Available for bars, festivals, churches, and military events.',
+  genre: ['Christian Rock', 'Rock', 'Hard Rock', 'Faith Rock'],
   foundingDate: '2014',
   foundingLocation: {
     '@type': 'Place',
     name: 'South Florida',
     address: { '@type': 'PostalAddress', addressLocality: 'Miami', addressRegion: 'FL', addressCountry: 'US' },
   },
-  location: {
+  areaServed: {
     '@type': 'Place',
     name: 'South Florida',
     address: { '@type': 'PostalAddress', addressLocality: 'Miami', addressRegion: 'FL', addressCountry: 'US' },
   },
+  member: [
+    { '@type': 'Person', name: 'Malachias', roleName: 'Vocals, Guitar, Founder' },
+    { '@type': 'Person', name: 'JC Concepcion', roleName: 'Lead Guitar' },
+    { '@type': 'Person', name: 'Efrain Sierra', roleName: 'Rhythm Guitar' },
+    { '@type': 'Person', name: 'Gabe Grantham', roleName: 'Bass' },
+    { '@type': 'Person', name: 'Henry', roleName: 'Drums' },
+  ],
   url: SITE_URL,
   email: 'booking@malachiasmusic.com',
   sameAs: [

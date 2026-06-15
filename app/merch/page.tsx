@@ -5,12 +5,14 @@ import MerchPageClient from './MerchPageClient';
 export const revalidate = 3600;  // Re-fetch Fourthwall catalog every hour
 
 export const metadata: Metadata = {
-  title: 'Official Merch — MALACHIAS',
-  description: 'Support the mission. Official Malachias merchandise — faith, freedom, music. Every piece tied to a story.',
+  title: 'Official Merch — MALACHIAS | Christian Rock Band South Florida',
+  description: 'Support a veteran-founded Christian rock band. Official Malachias gear funds live shows, original music, and veteran outreach events. No label. Every purchase matters.',
+  alternates: { canonical: 'https://malachiasmusic.com/merch' },
   openGraph: {
-    title: 'Official Merch — MALACHIAS',
-    description: 'Support the mission. Official Malachias merchandise.',
+    title: 'Support Malachias — Official Band Merch',
+    description: 'Veteran-founded Christian rock band. Every purchase funds shows, recordings, and veteran outreach. No label. Direct to the band.',
     type: 'website',
+    url: 'https://malachiasmusic.com/merch',
   },
 };
 

@@ -91,8 +91,10 @@ export default function Booking() {
             </motion.div>
 
             <motion.p {...fade(0.06)} className="text-[0.93rem] leading-relaxed mb-8" style={{ color: 'var(--text-2)' }}>
-              Bars, festivals, churches, clubs, military events — if there&apos;s a stage,
-              we&apos;ll be there. Reach out and we&apos;ll make it work.
+              We play bars, rock festivals, churches, VFW halls, and military events
+              across South Florida — a veteran-founded band with a specific mission:
+              healing through music. If you have an audience that needs to hear
+              something real, reach out. We&apos;ll be there.
             </motion.p>
 
             <motion.div {...fade(0.10)} className="space-y-2 mb-8">
@@ -223,7 +225,7 @@ export default function Booking() {
                   className="btn btn-primary w-full justify-center"
                   style={{ letterSpacing: '0.16em', opacity: loading ? 0.6 : 1 }}
                 >
-                  {loading ? 'Sending…' : 'Send Message'}
+                  {loading ? 'Sending…' : 'Send Booking Request'}
                 </button>
               </form>
             )}

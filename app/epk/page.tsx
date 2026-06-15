@@ -4,10 +4,16 @@ import Link from 'next/link'
 import { readContent } from '@/lib/store'
 
 export async function generateMetadata() {
-  const { siteContent } = await readContent()
   return {
-    title: `Press Kit — MALACHIAS`,
-    description: siteContent.metaDescription ?? 'Electronic Press Kit for Malachias — Christian rock, veteran-founded, based in South Florida.',
+    title: 'Press Kit — MALACHIAS | Book a Christian Rock Band South Florida',
+    description: 'Electronic press kit for Malachias — veteran-founded Christian rock band, South Florida. Stage plot, tech rider, set lengths, band bio, and direct booking contact for bars, churches, and military events.',
+    alternates: { canonical: 'https://malachiasmusic.com/epk' },
+    openGraph: {
+      title: 'Press Kit — MALACHIAS | Christian Rock Band South Florida',
+      description: 'Booking info and press materials for Malachias. Veteran-founded, faith-driven rock. Available for bars, festivals, churches, VFW halls, and military events.',
+      type: 'website',
+      url: 'https://malachiasmusic.com/epk',
+    },
   }
 }
 
