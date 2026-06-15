@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ArrowUpRight, ArrowDownLeft, ChevronDown, ChevronUp, AlertCircle, Mail } from 'lucide-react'
 
 const CARD: React.CSSProperties = {
@@ -33,19 +33,17 @@ function MessageCard({ msg }: { msg: ThreadMessage }) {
   const iframeRef = useRef<HTMLIFrameElement>(null)
   const isSent = msg.direction === 'sent'
 
+  useEffect(() => {
+    if (!open || !msg.bodyHtml || !iframeRef.current) return
+    const doc = iframeRef.current.contentDocument
+    if (!doc) return
+    doc.open()
+    doc.write(`<html><head><style>body{margin:0;padding:16px;background:#fff;font-family:sans-serif;font-size:14px;line-height:1.6;}a{color:#0066cc;}</style></head><body>${msg.bodyHtml}</body></html>`)
+    doc.close()
+  }, [open, msg.bodyHtml])
+
   function handleOpen() {
-    setOpen(o => {
-      const next = !o
-      if (next && msg.bodyHtml && iframeRef.current) {
-        const doc = iframeRef.current.contentDocument
-        if (doc) {
-          doc.open()
-          doc.write(`<html><head><style>body{margin:0;padding:16px;background:#fff;font-family:sans-serif;font-size:14px;line-height:1.6;}a{color:#0066cc;}</style></head><body>${msg.bodyHtml}</body></html>`)
-          doc.close()
-        }
-      }
-      return next
-    })
+    setOpen(o => !o)
   }
 
   return (
