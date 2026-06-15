@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import crypto from 'crypto'
 import { readContent, writeContent } from '@/lib/store'
 import { isAuthenticated } from '@/lib/auth'
+import { rateLimit } from '@/lib/rateLimit'
 import type { FanStory } from '@/lib/data'
 
 export async function GET() {
@@ -11,6 +12,9 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
+  const limited = rateLimit(req, 'fan-stories', { limit: 3, windowMs: 60_000 })
+  if (limited) return limited
+
   const { name, email, story, songTitle } = await req.json()
   if (!story || story.trim().length < 10) {
     return NextResponse.json({ error: 'Story is required' }, { status: 400 })

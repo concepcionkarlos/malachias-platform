@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { isAuthenticated } from '@/lib/auth'
 import { readContent, writeContent } from '@/lib/store'
+import { pauseBookingDrip, isTerminalBookingStatus } from '@/lib/venueStore'
 import type { BookingRequest } from '@/lib/data'
 
 export async function GET() {
@@ -19,10 +20,14 @@ export async function PATCH(req: NextRequest) {
   if (updates.bookingRequests === 'merge-item' && updates.item) {
     const item = updates.item as BookingRequest
     const current = await readContent()
+    const prev = current.bookingRequests.find((b) => b.id === item.id)
     const bookingRequests = current.bookingRequests.map((b) =>
       b.id === item.id ? item : b
     )
     const store = await writeContent({ bookingRequests })
+    if (prev && prev.status !== item.status && isTerminalBookingStatus(item.status)) {
+      await pauseBookingDrip(item.id)
+    }
     return NextResponse.json(store)
   }
 

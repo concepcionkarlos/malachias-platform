@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { readContent, writeContent } from '@/lib/store'
 import { isAuthenticated } from '@/lib/auth'
+import { rateLimit } from '@/lib/rateLimit'
 
 export async function GET() {
   if (!(await isAuthenticated())) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -9,6 +10,9 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
+  const limited = rateLimit(req, 'newsletter', { limit: 3, windowMs: 60_000 })
+  if (limited) return limited
+
   const { email } = await req.json()
   if (!email || !email.includes('@')) {
     return NextResponse.json({ error: 'Valid email required' }, { status: 400 })

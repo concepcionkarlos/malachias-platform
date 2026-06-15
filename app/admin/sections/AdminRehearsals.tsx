@@ -19,6 +19,8 @@ export default function AdminRehearsals() {
   const [inviteEmails, setInviteEmails] = useState('')
   const [inviteLoading, setInviteLoading] = useState(false)
   const [copiedId, setCopiedId]     = useState<string | null>(null)
+  const [completingId, setCompletingId] = useState<string | null>(null)
+  const [completingSummary, setCompletingSummary] = useState('')
 
   useEffect(() => {
     Promise.all([
@@ -272,10 +274,33 @@ export default function AdminRehearsals() {
                       </div>
                     )}
 
+                    {r.status === 'upcoming' && completingId === r.id && (
+                      <div style={{ background: 'rgba(52,211,153,0.06)', border: '1px solid rgba(52,211,153,0.18)', borderRadius: 6, padding: '10px 12px', marginBottom: 10 }}>
+                        <label style={{ fontSize: 11, color: '#5c5044', display: 'block', marginBottom: 6 }}>Summary / notes from rehearsal (optional)</label>
+                        <textarea
+                          value={completingSummary}
+                          onChange={e => setCompletingSummary(e.target.value)}
+                          placeholder="What did you work on? Any highlights or next steps?"
+                          rows={2}
+                          style={{ ...INPUT, resize: 'none', marginBottom: 8 }}
+                        />
+                        <div style={{ display: 'flex', gap: 8 }}>
+                          <button
+                            onClick={() => { setStatus(r.id, 'completed', completingSummary); setCompletingId(null); setCompletingSummary('') }}
+                            style={{ fontSize: 11, padding: '5px 12px', background: '#34d399', color: '#030202', border: 'none', borderRadius: 6, cursor: 'pointer', fontWeight: 700, fontFamily: 'var(--font-body)' }}
+                          >
+                            Confirm
+                          </button>
+                          <button onClick={() => { setCompletingId(null); setCompletingSummary('') }} style={{ fontSize: 11, padding: '5px 10px', background: 'transparent', color: '#5c5044', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 6, cursor: 'pointer', fontFamily: 'var(--font-body)' }}>
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    )}
                     <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                      {r.status === 'upcoming' && (
+                      {r.status === 'upcoming' && completingId !== r.id && (
                         <>
-                          <button onClick={() => { const s = prompt('Summary / notes from rehearsal:') ?? ''; setStatus(r.id, 'completed', s) }} style={{ fontSize: 11, padding: '5px 12px', background: 'rgba(52,211,153,0.10)', border: '1px solid rgba(52,211,153,0.25)', borderRadius: 6, color: '#34d399', cursor: 'pointer', fontFamily: 'var(--font-body)' }}>
+                          <button onClick={() => { setCompletingId(r.id); setCompletingSummary('') }} style={{ fontSize: 11, padding: '5px 12px', background: 'rgba(52,211,153,0.10)', border: '1px solid rgba(52,211,153,0.25)', borderRadius: 6, color: '#34d399', cursor: 'pointer', fontFamily: 'var(--font-body)' }}>
                             Mark Completed
                           </button>
                           <button onClick={() => setStatus(r.id, 'cancelled')} style={{ fontSize: 11, padding: '5px 12px', background: 'transparent', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 6, color: '#5c5044', cursor: 'pointer', fontFamily: 'var(--font-body)' }}>

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 import { ArrowUpRight, ArrowDownLeft, ChevronDown, ChevronUp, AlertCircle, Mail } from 'lucide-react'
 
 const CARD: React.CSSProperties = {
@@ -30,21 +30,13 @@ function fmtTs(ts: string) {
 
 function MessageCard({ msg }: { msg: ThreadMessage }) {
   const [open, setOpen] = useState(false)
-  const iframeRef = useRef<HTMLIFrameElement>(null)
   const isSent = msg.direction === 'sent'
 
-  useEffect(() => {
-    if (!open || !msg.bodyHtml || !iframeRef.current) return
-    const doc = iframeRef.current.contentDocument
-    if (!doc) return
-    doc.open()
-    doc.write(`<html><head><style>body{margin:0;padding:16px;background:#fff;font-family:sans-serif;font-size:14px;line-height:1.6;}a{color:#0066cc;}</style></head><body>${msg.bodyHtml}</body></html>`)
-    doc.close()
-  }, [open, msg.bodyHtml])
+  const srcdoc = msg.bodyHtml
+    ? `<html><head><style>body{margin:0;padding:16px;background:#fff;font-family:sans-serif;font-size:14px;line-height:1.6;}a{color:#0066cc;}</style></head><body>${msg.bodyHtml}</body></html>`
+    : undefined
 
-  function handleOpen() {
-    setOpen(o => !o)
-  }
+  function handleOpen() { setOpen(o => !o) }
 
   return (
     <div style={CARD}>
@@ -105,12 +97,12 @@ function MessageCard({ msg }: { msg: ThreadMessage }) {
 
       {open && (
         <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-          {msg.bodyHtml ? (
+          {srcdoc ? (
             <iframe
-              ref={iframeRef}
               title="Email body"
+              srcDoc={srcdoc}
               style={{ width: '100%', height: 440, border: 'none', display: 'block', background: '#fff' }}
-              sandbox="allow-same-origin"
+              sandbox=""
             />
           ) : msg.bodyText ? (
             <div style={{

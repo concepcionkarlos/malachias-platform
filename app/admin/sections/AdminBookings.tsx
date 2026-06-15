@@ -12,7 +12,7 @@ const INPUT: React.CSSProperties = { background: 'rgba(255,255,255,0.05)', borde
 const LABEL: React.CSSProperties = { fontSize: 11, color: '#8a7f70', letterSpacing: '0.08em', display: 'block', marginBottom: 4 }
 const BTN: React.CSSProperties = { border: 'none', cursor: 'pointer', padding: '7px 14px', borderRadius: 6, fontSize: 13, display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: 'var(--font-body)' }
 
-const BOOKING_STATUSES: BookingStatus[] = ['New','Contacted','Quote Sent','Follow-up','Negotiating','Confirmed','Advance Sent','Paid','Completed','Lost']
+const BOOKING_STATUSES: BookingStatus[] = ['New','Contacted','Quote Sent','Follow-up','Negotiating','Confirmed','Advance Sent','Paid','Completed','Lost','Archived']
 
 const STATUS_COLOR: Record<BookingStatus, string> = {
   'New': '#c9a84c',

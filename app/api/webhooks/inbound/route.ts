@@ -4,6 +4,13 @@ import { addInboundEmail } from '@/lib/venueStore'
 export const dynamic = 'force-dynamic'
 
 export async function POST(req: NextRequest) {
+  const secret = process.env.WEBHOOK_INBOUND_SECRET
+  if (secret) {
+    const provided = req.headers.get('authorization') ?? req.headers.get('x-webhook-secret') ?? ''
+    const token = provided.replace(/^Bearer\s+/i, '')
+    if (token !== secret) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
   try {
     const contentType = req.headers.get('content-type') ?? ''
 

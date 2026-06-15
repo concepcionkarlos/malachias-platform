@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { Plus, Video, Radio, CheckCircle, XCircle, Clock, ExternalLink, Trash2, Edit2, Copy, X, Save } from 'lucide-react'
-import type { LiveSession, LivePlatform, LiveSessionStatus } from '@/lib/data'
+import type { LiveSession, LivePlatform, LiveSessionStatus, Song } from '@/lib/data'
 
 const GOLD = '#c9a84c'
 const DARK = '#0d0b09'
@@ -180,7 +180,7 @@ function FormDrawer({ initial, onSave, onClose }: FormDrawerProps) {
   )
 }
 
-function SessionCard({ session, onEdit, onDelete }: { session: LiveSession; onEdit: () => void; onDelete: () => void }) {
+function SessionCard({ session, onEdit, onDelete, songs }: { session: LiveSession; onEdit: () => void; onDelete: () => void; songs: Song[] }) {
   const [copied, setCopied] = useState(false)
   const status = STATUS_META[session.status]
   const platformColor = PLATFORM_COLORS[session.platform]
@@ -215,6 +215,22 @@ function SessionCard({ session, onEdit, onDelete }: { session: LiveSession; onEd
           <div style={{ fontSize: 15, fontWeight: 700, color: '#e8ddd0', marginBottom: 2 }}>{session.title}</div>
           <div style={{ fontSize: 12, color: '#5c5044' }}>{fmtDate(session.scheduledAt)}</div>
           {session.description && <div style={{ fontSize: 12, color: '#8a7f70', marginTop: 5, lineHeight: 1.6 }}>{session.description}</div>}
+          {session.setListIds && session.setListIds.length > 0 && (
+            <div style={{ marginTop: 8, display: 'flex', flexWrap: 'wrap', gap: 5 }}>
+              {session.setListIds.map(id => {
+                const song = songs.find(s => s.id === id)
+                return song ? (
+                  <span key={id} style={{
+                    fontSize: 10, padding: '2px 8px', borderRadius: 99,
+                    background: 'rgba(201,168,76,0.10)', border: '1px solid rgba(201,168,76,0.20)',
+                    color: '#c9a84c',
+                  }}>
+                    {song.title}
+                  </span>
+                ) : null
+              })}
+            </div>
+          )}
         </div>
         <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
           {session.platformUrl && (
@@ -254,6 +270,7 @@ function SessionCard({ session, onEdit, onDelete }: { session: LiveSession; onEd
 
 export default function AdminLiveSessions() {
   const [sessions, setSessions] = useState<LiveSession[]>([])
+  const [songs, setSongs] = useState<Song[]>([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
   const [editing, setEditing] = useState<LiveSession | null>(null)
@@ -262,8 +279,12 @@ export default function AdminLiveSessions() {
   const load = useCallback(async () => {
     setLoading(true)
     try {
-      const res = await fetch('/api/live-sessions')
-      if (res.ok) setSessions(await res.json())
+      const [sessRes, songRes] = await Promise.all([
+        fetch('/api/live-sessions'),
+        fetch('/api/songs'),
+      ])
+      if (sessRes.ok) setSessions(await sessRes.json())
+      if (songRes.ok) setSongs(await songRes.json())
     } finally { setLoading(false) }
   }, [])
 
@@ -362,7 +383,7 @@ export default function AdminLiveSessions() {
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           {shown.map(s => (
-            <SessionCard key={s.id} session={s}
+            <SessionCard key={s.id} session={s} songs={songs}
               onEdit={() => { setEditing(s); setShowForm(true) }}
               onDelete={() => handleDelete(s.id)}
             />

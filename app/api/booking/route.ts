@@ -3,6 +3,7 @@ import crypto from 'crypto'
 import { readContent, writeContent } from '@/lib/store'
 import { triggerAutoReply, sendAdminNotification } from '@/lib/emailService'
 import { enrollInBookingDrip } from '@/lib/venueStore'
+import { rateLimit } from '@/lib/rateLimit'
 import type { BookingRequest } from '@/lib/data'
 
 function esc(s: string): string {
@@ -10,6 +11,8 @@ function esc(s: string): string {
 }
 
 export async function POST(req: NextRequest) {
+  const limited = rateLimit(req, 'booking', { limit: 5, windowMs: 60_000 })
+  if (limited) return limited
   const body = await req.json()
   const { fullName, venueOrOrg, email, phone, eventDate, city, eventType, budgetRange, guestCount, message } = body
 
