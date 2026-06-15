@@ -21,6 +21,7 @@ import SongStories    from './components/SongStories';
 import WarRoom        from './components/WarRoom';
 import Setlist        from './components/Setlist';
 import BookingPopup   from './components/BookingPopup';
+import SupportPopup  from './components/SupportPopup';
 import NextShowBanner     from './components/NextShowBanner';
 import FanStoryForm       from './components/FanStoryForm';
 import LiveSessionBanner  from './components/LiveSessionBanner';
@@ -93,6 +94,7 @@ export default async function Home() {
       <Newsletter />
       <Footer />
       <BookingPopup />
+      <SupportPopup />
     </main>
   );
 }
