@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from 'react'
 import { X, ChevronRight, Mail, Clock, Search, List, Columns, Send } from 'lucide-react'
 import type { BookingRequest, BookingStatus, EmailTemplate, BookingEmailLog, InboundEmail } from '@/lib/data'
 import EmailThread, { type ThreadMessage } from './EmailThread'
+import NextStepCard from './NextStepCard'
 
 // ── Style tokens ──────────────────────────────────────────────────────────────
 const CARD: React.CSSProperties = { background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 8 }
@@ -294,6 +295,7 @@ function BookingDrawer({
       <div style={{ flex: 1, overflowY: 'auto', padding: '18px 20px' }}>
         {tab === 'details' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <NextStepCard type="booking" status={booking.status} />
             {/* Quick stats */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
               {[

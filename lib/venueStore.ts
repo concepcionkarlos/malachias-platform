@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import crypto from 'crypto'
-import type { Venue, OutreachLog, EmailTemplate, AutoReplyLog, BookingEmailLog, InboundEmail, SentEmail, VenueStore, DripCampaign, DripEnrollment, Song, Rehearsal, RehearsalConfirmation, Goal, ShowSetList, ContentPost, FinanceEntry, BandStats } from './data'
+import type { Venue, OutreachLog, EmailTemplate, AutoReplyLog, BookingEmailLog, InboundEmail, SentEmail, VenueStore, DripCampaign, DripEnrollment, Song, Rehearsal, RehearsalConfirmation, Goal, ShowSetList, ContentPost, FinanceEntry, BandStats, LiveSession } from './data'
 
 const VENUE_DATA_PATH = path.join(process.cwd(), 'data', 'venues.json')
 const useKV = !!process.env.KV_REST_API_URL
@@ -11,6 +11,7 @@ const KV_KEYS = {
   sentEmails: 'sentEmails',
   songs: 'songs', rehearsals: 'rehearsals', goals: 'goals',
   showSetLists: 'showSetLists', contentPosts: 'contentPosts', finances: 'finances', bandStats: 'bandStats',
+  liveSessions: 'liveSessions',
 } as const
 
 const DEFAULT_SONGS: Song[] = [
@@ -261,6 +262,25 @@ const DEFAULT_TEMPLATES: EmailTemplate[] = [
         <p style="margin:0 0 32px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">Questions before then: <a href="mailto:${BOOKING_EMAIL}" style="color:${GOLD};">${BOOKING_EMAIL}</a></p>
         <p style="margin:0;font-size:15px;color:#444444;font-family:Arial,sans-serif;">See you on stage,<br><strong>Malachias</strong></p>`),
   },
+  {
+    id: makeId(), slug: 'song-request-reply', name: 'Song Request Reply',
+    isSystem: true, createdAt: now(), updatedAt: now(),
+    subject: 'We got your song request, {{clientName}}!',
+    bodyHtml: emailShell(`
+        <h1 style="margin:0 0 16px;font-size:22px;color:#111111;font-family:Arial,sans-serif;">Request received.</h1>
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">Hey {{clientName}},</p>
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">Thank you for the song request — it genuinely means a lot. Fans like you are the reason we keep going.</p>
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">We've received your request for <strong>{{songList}}</strong> and we'll be reviewing it as we plan upcoming setlists. We're always looking for songs that hit the room right.</p>
+        <p style="margin:0 0 32px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">Stay tuned to our upcoming shows — you might just hear your song live soon. Check out our schedule at <a href="${SITE_URL_EMAIL}" style="color:${GOLD};">malachiasmusic.com</a>.</p>
+        <p style="margin:0 0 8px;font-size:15px;color:#444444;font-family:Arial,sans-serif;">— <strong>Malachias</strong><br>
+          <a href="mailto:${BOOKING_EMAIL}" style="color:${GOLD};">${BOOKING_EMAIL}</a>
+        </p>
+        <table width="100%" cellpadding="0" cellspacing="0" style="margin-top:28px;">
+          <tr><td style="background:#f9f6f0;border-left:3px solid ${GOLD};padding:14px 18px;border-radius:0 4px 4px 0;">
+            <p style="margin:0;font-size:13px;line-height:1.6;color:#666666;font-family:Arial,sans-serif;">Want to be first to know about new shows, music drops, and merch? <a href="${SITE_URL_EMAIL}/#newsletter" style="color:${GOLD};font-weight:700;">Join our list here</a> — no spam, just the real stuff.</p>
+          </td></tr>
+        </table>`),
+  },
 ]
 
 function syncDefaultTemplates(existing: EmailTemplate[]): { templates: EmailTemplate[]; changed: boolean } {
@@ -289,7 +309,7 @@ function readLocal(): VenueStore {
     const dir = path.dirname(VENUE_DATA_PATH)
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
     if (!fs.existsSync(VENUE_DATA_PATH)) {
-      const seed: VenueStore = { venues: [], outreachLogs: [], emailTemplates: DEFAULT_TEMPLATES, autoReplyLogs: [], bookingEmailLogs: [], inboundEmails: [], sentEmails: [], dripCampaigns: DEFAULT_DRIP_CAMPAIGNS, dripEnrollments: [], songs: DEFAULT_SONGS, rehearsals: [], goals: [], showSetLists: [], contentPosts: [], finances: [], bandStats: null }
+      const seed: VenueStore = { venues: [], outreachLogs: [], emailTemplates: DEFAULT_TEMPLATES, autoReplyLogs: [], bookingEmailLogs: [], inboundEmails: [], sentEmails: [], dripCampaigns: DEFAULT_DRIP_CAMPAIGNS, dripEnrollments: [], songs: DEFAULT_SONGS, rehearsals: [], goals: [], showSetLists: [], contentPosts: [], finances: [], bandStats: null, liveSessions: [] }
       fs.writeFileSync(VENUE_DATA_PATH, JSON.stringify(seed, null, 2))
       return seed
     }
@@ -312,11 +332,12 @@ function readLocal(): VenueStore {
       goals: parsed.goals ?? [],
       showSetLists: parsed.showSetLists ?? [], contentPosts: parsed.contentPosts ?? [],
       finances: parsed.finances ?? [], bandStats: parsed.bandStats ?? null,
+      liveSessions: parsed.liveSessions ?? [],
     }
     if (changed) fs.writeFileSync(VENUE_DATA_PATH, JSON.stringify(store, null, 2))
     return store
   } catch {
-    return { venues: [], outreachLogs: [], emailTemplates: DEFAULT_TEMPLATES, autoReplyLogs: [], bookingEmailLogs: [], inboundEmails: [], sentEmails: [], dripCampaigns: DEFAULT_DRIP_CAMPAIGNS, dripEnrollments: [], songs: DEFAULT_SONGS, rehearsals: [], goals: [], showSetLists: [], contentPosts: [], finances: [], bandStats: null }
+    return { venues: [], outreachLogs: [], emailTemplates: DEFAULT_TEMPLATES, autoReplyLogs: [], bookingEmailLogs: [], inboundEmails: [], sentEmails: [], dripCampaigns: DEFAULT_DRIP_CAMPAIGNS, dripEnrollments: [], songs: DEFAULT_SONGS, rehearsals: [], goals: [], showSetLists: [], contentPosts: [], finances: [], bandStats: null, liveSessions: [] }
   }
 }
 
@@ -343,12 +364,13 @@ async function readKV(): Promise<VenueStore> {
   else { const sync = syncDefaultTemplates(templates); if (sync.changed) { templates = sync.templates; await kv.set(KV_KEYS.emailTemplates, templates) } }
   let campaigns = dripCampaigns ?? []
   if (campaigns.length === 0) { campaigns = DEFAULT_DRIP_CAMPAIGNS; await kv.set('dripCampaigns', campaigns) }
-  const [songs, rehearsals, goals, showSetLists, contentPosts, finances, bandStats] = await Promise.all([
+  const [songs, rehearsals, goals, showSetLists, contentPosts, finances, bandStats, liveSessions] = await Promise.all([
     kv.get<Song[]>(KV_KEYS.songs), kv.get<Rehearsal[]>(KV_KEYS.rehearsals), kv.get<Goal[]>(KV_KEYS.goals),
     kv.get<ShowSetList[]>(KV_KEYS.showSetLists), kv.get<ContentPost[]>(KV_KEYS.contentPosts),
     kv.get<FinanceEntry[]>(KV_KEYS.finances), kv.get<BandStats>(KV_KEYS.bandStats),
+    kv.get<LiveSession[]>(KV_KEYS.liveSessions),
   ])
-  return { venues: venues ?? [], outreachLogs: outreachLogs ?? [], emailTemplates: templates, autoReplyLogs: autoReplyLogs ?? [], bookingEmailLogs: bookingEmailLogs ?? [], inboundEmails: inboundEmails ?? [], sentEmails: sentEmails ?? [], dripCampaigns: campaigns, dripEnrollments: dripEnrollments ?? [], songs: (songs && songs.length > 0) ? songs : DEFAULT_SONGS, rehearsals: (rehearsals ?? []).map(r => ({ ...r, confirmations: r.confirmations ?? [] })), goals: goals ?? [], showSetLists: showSetLists ?? [], contentPosts: contentPosts ?? [], finances: finances ?? [], bandStats: bandStats ?? null }
+  return { venues: venues ?? [], outreachLogs: outreachLogs ?? [], emailTemplates: templates, autoReplyLogs: autoReplyLogs ?? [], bookingEmailLogs: bookingEmailLogs ?? [], inboundEmails: inboundEmails ?? [], sentEmails: sentEmails ?? [], dripCampaigns: campaigns, dripEnrollments: dripEnrollments ?? [], songs: (songs && songs.length > 0) ? songs : DEFAULT_SONGS, rehearsals: (rehearsals ?? []).map(r => ({ ...r, confirmations: r.confirmations ?? [] })), goals: goals ?? [], showSetLists: showSetLists ?? [], contentPosts: contentPosts ?? [], finances: finances ?? [], bandStats: bandStats ?? null, liveSessions: liveSessions ?? [] }
 }
 
 async function writeKV(updates: Partial<VenueStore>): Promise<VenueStore> {
@@ -797,4 +819,35 @@ export async function saveBandStats(patch: Partial<BandStats>): Promise<BandStat
   const bandStats: BandStats = { ...(store.bandStats ?? {}), ...patch, updatedAt: now() }
   useKV ? await writeKV({ bandStats }) : writeLocal({ bandStats })
   return bandStats
+}
+
+// ── Live Sessions ─────────────────────────────────────────────────────────────
+
+export async function getLiveSessions(): Promise<LiveSession[]> {
+  const store = await readVenueStore()
+  return store.liveSessions.sort((a, b) => b.scheduledAt.localeCompare(a.scheduledAt))
+}
+
+export async function addLiveSession(data: Omit<LiveSession, 'id' | 'createdAt' | 'updatedAt'>): Promise<LiveSession> {
+  const store = await readVenueStore()
+  const session: LiveSession = { ...data, id: makeId(), createdAt: now(), updatedAt: now() }
+  const liveSessions = [...store.liveSessions, session]
+  useKV ? await writeKV({ liveSessions }) : writeLocal({ liveSessions })
+  return session
+}
+
+export async function updateLiveSession(id: string, patch: Partial<LiveSession>): Promise<LiveSession> {
+  const store = await readVenueStore()
+  const idx = store.liveSessions.findIndex(s => s.id === id)
+  if (idx === -1) throw new Error(`LiveSession ${id} not found`)
+  const updated: LiveSession = { ...store.liveSessions[idx], ...patch, updatedAt: now() }
+  const liveSessions = store.liveSessions.map(s => s.id === id ? updated : s)
+  useKV ? await writeKV({ liveSessions }) : writeLocal({ liveSessions })
+  return updated
+}
+
+export async function deleteLiveSession(id: string): Promise<void> {
+  const store = await readVenueStore()
+  const liveSessions = store.liveSessions.filter(s => s.id !== id)
+  useKV ? await writeKV({ liveSessions }) : writeLocal({ liveSessions })
 }

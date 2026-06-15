@@ -7,7 +7,7 @@ import {
   MapPin, Settings, Newspaper, BarChart2, StickyNote, CheckSquare,
   Music, BookOpen, Zap, ListMusic, Repeat, Target, BookMarked,
   Layers, CalendarDays, DollarSign, Send, TrendingUp,
-  Menu, X, ExternalLink, LogOut, ChevronRight, Heart,
+  Menu, X, ExternalLink, LogOut, ChevronRight, Heart, Video,
 } from 'lucide-react'
 import AdminLogin from './AdminLogin'
 
@@ -30,6 +30,7 @@ const SECTIONS = {
   goals:           { label: 'Daily Goals',      icon: Target,          group: 'Music'       },
   guides:          { label: 'Playbook',         icon: BookMarked,      group: 'Music'       },
   'content-cal':   { label: 'Content Calendar', icon: CalendarDays,    group: 'Content'     },
+  'live-sessions': { label: 'Live Sessions',    icon: Video,           group: 'Content'     },
   finances:        { label: 'Finances',         icon: DollarSign,      group: 'Reports'     },
   'email-blast':   { label: 'Email Blast',      icon: Send,            group: 'Outreach'    },
   stats:           { label: 'Stats',            icon: TrendingUp,      group: 'Reports'     },
@@ -65,6 +66,7 @@ const SectionComponents: Record<TabKey, React.ComponentType> = {
   goals:             dynamic(() => import('./sections/AdminGoals')),
   guides:            dynamic(() => import('./sections/AdminGuides')),
   'content-cal':     dynamic(() => import('./sections/AdminContentCalendar')),
+  'live-sessions':   dynamic(() => import('./sections/AdminLiveSessions')),
   finances:          dynamic(() => import('./sections/AdminFinances')),
   'email-blast':     dynamic(() => import('./sections/AdminEmailBlast')),
   stats:             dynamic(() => import('./sections/AdminStats')),

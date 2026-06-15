@@ -603,6 +603,28 @@ export interface BandStats {
   updatedAt: string
 }
 
+// ── Live Session ──────────────────────────────────────────────────────────────
+
+export type LivePlatform = 'tiktok' | 'instagram' | 'youtube' | 'facebook' | 'twitch'
+export type LiveSessionStatus = 'planned' | 'live' | 'completed' | 'cancelled'
+
+export interface LiveSession {
+  id: string
+  title: string
+  description?: string
+  platform: LivePlatform
+  scheduledAt: string        // ISO datetime
+  status: LiveSessionStatus
+  platformUrl?: string       // link to the live / stream page
+  setListIds?: string[]      // song IDs from setlist to feature
+  caption?: string           // auto-generated or custom social caption
+  recordingUrl?: string      // post-live recording link
+  viewerCount?: number
+  notes?: string
+  createdAt: string
+  updatedAt: string
+}
+
 export interface VenueStore {
   venues: Venue[]
   outreachLogs: OutreachLog[]
@@ -620,6 +642,7 @@ export interface VenueStore {
   contentPosts: ContentPost[]
   finances: FinanceEntry[]
   bandStats: BandStats | null
+  liveSessions: LiveSession[]
 }
 
 // ── Drip Campaigns ────────────────────────────────────────────────────────────
