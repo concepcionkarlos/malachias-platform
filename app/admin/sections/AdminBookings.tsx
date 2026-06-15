@@ -2,7 +2,8 @@
 
 import { useEffect, useState, useRef } from 'react'
 import { X, ChevronRight, Mail, Clock, Search, List, Columns, Send } from 'lucide-react'
-import type { BookingRequest, BookingStatus, EmailTemplate, BookingEmailLog } from '@/lib/data'
+import type { BookingRequest, BookingStatus, EmailTemplate, BookingEmailLog, InboundEmail } from '@/lib/data'
+import EmailThread, { type ThreadMessage } from './EmailThread'
 
 // ── Style tokens ──────────────────────────────────────────────────────────────
 const CARD: React.CSSProperties = { background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 8 }
@@ -165,33 +166,42 @@ function EmailComposer({ booking }: { booking: BookingRequest }) {
   )
 }
 
-// ── Email History ──────────────────────────────────────────────────────────────
-function EmailHistory({ bookingId }: { bookingId: string }) {
-  const [logs, setLogs] = useState<BookingEmailLog[]>([])
+// ── Email Thread ───────────────────────────────────────────────────────────────
+function BookingEmailThread({ bookingId }: { bookingId: string }) {
+  const [msgs, setMsgs] = useState<ThreadMessage[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetch(`/api/bookings/${bookingId}/email-logs`).then(r => r.json()).then((d: BookingEmailLog[]) => {
-      setLogs(d); setLoading(false)
-    }).catch(() => setLoading(false))
+    fetch(`/api/bookings/${bookingId}/email-thread`)
+      .then(r => r.json())
+      .then(({ sent, received }: { sent: BookingEmailLog[]; received: InboundEmail[] }) => {
+        const normalized: ThreadMessage[] = [
+          ...sent.map(s => ({
+            id: s.id,
+            direction: 'sent' as const,
+            subject: s.subject,
+            counterparty: s.toEmail,
+            timestamp: s.sentAt,
+            status: s.status,
+            bodyHtml: s.bodyHtml,
+          })),
+          ...received.map(r => ({
+            id: r.id,
+            direction: 'received' as const,
+            subject: r.subject,
+            counterparty: r.fromName ? `${r.fromName} <${r.fromEmail}>` : r.fromEmail,
+            timestamp: r.receivedAt,
+            bodyHtml: r.bodyHtml,
+            bodyText: r.bodyText,
+          })),
+        ]
+        setMsgs(normalized)
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false))
   }, [bookingId])
 
-  if (loading) return <div style={{ color: '#5c5044', fontSize: 13 }}>Loading…</div>
-  if (!logs.length) return <div style={{ color: '#5c5044', fontSize: 13 }}>No emails sent yet.</div>
-
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-      {logs.map(l => (
-        <div key={l.id} style={{ ...CARD, padding: '10px 14px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
-            <span style={{ fontSize: 12, fontWeight: 600, color: '#e8ddd0' }}>{l.subject}</span>
-            <span style={{ fontSize: 11, color: l.status === 'sent' ? '#34d399' : '#c04020' }}>{l.status}</span>
-          </div>
-          <div style={{ fontSize: 11, color: '#8a7f70' }}>To: {l.toEmail} · {fmtTs(l.sentAt)}</div>
-        </div>
-      ))}
-    </div>
-  )
+  return <EmailThread messages={msgs} loading={loading} />
 }
 
 // ── Booking Drawer ─────────────────────────────────────────────────────────────
@@ -277,7 +287,7 @@ function BookingDrawer({
       <div style={{ display: 'flex', borderBottom: '1px solid rgba(255,255,255,0.07)', flexShrink: 0 }}>
         <button style={TAB_STYLE(tab === 'details')} onClick={() => setTab('details')}>DETAILS</button>
         <button style={TAB_STYLE(tab === 'email')} onClick={() => setTab('email')}><Mail size={12} /> SEND EMAIL</button>
-        <button style={TAB_STYLE(tab === 'history')} onClick={() => setTab('history')}><Clock size={12} /> HISTORY</button>
+        <button style={TAB_STYLE(tab === 'history')} onClick={() => setTab('history')}><Clock size={12} /> EMAILS</button>
       </div>
 
       {/* Body */}
@@ -375,7 +385,7 @@ function BookingDrawer({
           </div>
         )}
         {tab === 'email' && <EmailComposer booking={booking} />}
-        {tab === 'history' && <EmailHistory bookingId={booking.id} />}
+        {tab === 'history' && <BookingEmailThread bookingId={booking.id} />}
       </div>
     </div>
   )

@@ -73,8 +73,8 @@ export interface FWCollection {
 export interface FWShop {
   id: string
   name: string
-  domain: string        // slug, e.g. "reboundrockband-shop"
-  publicDomain: string  // full, e.g. "reboundrockband-shop.fourthwall.com"
+  domain: string        // slug, e.g. "malachias-shop"
+  publicDomain: string  // full, e.g. "malachias-shop.fourthwall.com"
 }
 
 export interface FWPaging {

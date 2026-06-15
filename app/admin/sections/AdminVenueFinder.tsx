@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import { Search, Plus, X, Trash2, Star, Send, Globe, Phone } from 'lucide-react'
-import type { Venue, VenueStatus, EmailTemplate, PlaceSearchResult } from '@/lib/data'
+import type { Venue, VenueStatus, EmailTemplate, PlaceSearchResult, OutreachLog, InboundEmail } from '@/lib/data'
+import EmailThread, { type ThreadMessage } from './EmailThread'
 
 const CARD: React.CSSProperties = { background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 8 }
 const INPUT: React.CSSProperties = { background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 6, color: '#e8ddd0', padding: '7px 11px', fontSize: 13, width: '100%', boxSizing: 'border-box', fontFamily: 'var(--font-body)' }
@@ -61,8 +62,11 @@ function VenueDrawer({ venue, templates, onClose, onUpdate, onDelete }: {
 }) {
   const [form, setForm] = useState<Venue>(venue)
   const [saving, setSaving] = useState(false)
-  const [tab, setTab] = useState<'details'|'email'|'activity'>('details')
+  const [tab, setTab] = useState<'details'|'email'|'thread'>('details')
   const [selectedTemplateId, setSelectedTemplateId] = useState('')
+  const [threadMsgs, setThreadMsgs] = useState<ThreadMessage[]>([])
+  const [threadLoading, setThreadLoading] = useState(false)
+  const [threadLoaded, setThreadLoaded] = useState(false)
   const [vars, setVars] = useState<Record<string, string>>({})
   const [replyTo, setReplyTo] = useState('')
   const [sending, setSending] = useState(false)
@@ -75,7 +79,42 @@ function VenueDrawer({ venue, templates, onClose, onUpdate, onDelete }: {
 
   useEffect(() => {
     setForm(venue)
+    setThreadLoaded(false)
+    setThreadMsgs([])
   }, [venue.id]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (tab !== 'thread' || threadLoaded) return
+    setThreadLoading(true)
+    fetch(`/api/venues/${venue.id}/email-thread`)
+      .then(r => r.json())
+      .then(({ sent, received }: { sent: OutreachLog[]; received: InboundEmail[] }) => {
+        const msgs: ThreadMessage[] = [
+          ...sent.map(s => ({
+            id: s.id,
+            direction: 'sent' as const,
+            subject: s.subject,
+            counterparty: s.toEmail,
+            timestamp: s.sentAt,
+            status: s.status,
+            bodyHtml: s.bodyHtml,
+          })),
+          ...received.map(r => ({
+            id: r.id,
+            direction: 'received' as const,
+            subject: r.subject,
+            counterparty: r.fromName ? `${r.fromName} <${r.fromEmail}>` : r.fromEmail,
+            timestamp: r.receivedAt,
+            bodyHtml: r.bodyHtml,
+            bodyText: r.bodyText,
+          })),
+        ]
+        setThreadMsgs(msgs)
+        setThreadLoaded(true)
+      })
+      .catch(() => setThreadLoaded(true))
+      .finally(() => setThreadLoading(false))
+  }, [tab, venue.id, threadLoaded])
 
   useEffect(() => {
     if (!activeTpl) return
@@ -146,7 +185,7 @@ function VenueDrawer({ venue, templates, onClose, onUpdate, onDelete }: {
       <div style={{ display: 'flex', borderBottom: '1px solid rgba(255,255,255,0.07)', flexShrink: 0 }}>
         <button style={TAB(tab === 'details')} onClick={() => setTab('details')}>DETAILS</button>
         <button style={TAB(tab === 'email')} onClick={() => setTab('email')}>SEND EMAIL</button>
-        <button style={TAB(tab === 'activity')} onClick={() => setTab('activity')}>ACTIVITY</button>
+        <button style={TAB(tab === 'thread')} onClick={() => setTab('thread')}>EMAILS</button>
       </div>
       <div style={{ flex: 1, overflowY: 'auto', padding: '18px 20px' }}>
         {tab === 'details' && (
@@ -249,21 +288,8 @@ function VenueDrawer({ venue, templates, onClose, onUpdate, onDelete }: {
             </button>
           </div>
         )}
-        {tab === 'activity' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            {(!venue.activityLog || venue.activityLog.length === 0) ? (
-              <div style={{ color: '#5c5044', fontSize: 13 }}>No activity logged yet.</div>
-            ) : (
-              [...(venue.activityLog)].reverse().map((entry, i) => (
-                <div key={i} style={{ ...CARD, padding: '10px 14px' }}>
-                  <div style={{ fontSize: 12, color: '#e8ddd0', lineHeight: 1.5 }}>{entry.text}</div>
-                  <div style={{ fontSize: 11, color: '#5c5044', marginTop: 4 }}>
-                    {new Date(entry.ts).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' })}
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
+        {tab === 'thread' && (
+          <EmailThread messages={threadMsgs} loading={threadLoading} />
         )}
       </div>
     </div>
