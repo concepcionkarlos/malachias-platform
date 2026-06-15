@@ -117,16 +117,25 @@ export default function Merch({ fourthwallProducts = [] }: MerchProps) {
             className="font-display leading-[0.92] tracking-[0.06em] text-white"
             style={{ fontSize: 'clamp(2.8rem, 7vw, 5rem)' }}
           >
-            OFFICIAL MERCH
+            WEAR THE MISSION
           </h2>
           <div
             className="mt-4 mb-5"
             style={{ width: '3rem', height: '1px', background: 'linear-gradient(to right, rgba(201,168,76,0.60), transparent)' }}
           />
-          <p className="text-[0.82rem] leading-relaxed" style={{ color: 'var(--text-3)', maxWidth: '32rem' }}>
-            Every piece is tied to a song, a story, or a reason.
-            Nothing here is filler. Faith · Freedom · Music.
+          <p className="text-[0.90rem] leading-relaxed" style={{ color: 'var(--text-3)', maxWidth: '36rem' }}>
+            No label. No corporate backing. Just a veteran, a guitar, and a mission.<br />
+            When you wear Malachias, you carry that with you.
           </p>
+        </motion.div>
+
+        {/* Impact points */}
+        <motion.div {...fade(0.05)} className="flex flex-wrap gap-x-8 gap-y-2 mb-10">
+          {['Funds live shows', 'Funds original recordings', 'Supports veteran outreach', 'Faith-driven music'].map(s => (
+            <span key={s} style={{ fontSize: '0.70rem', color: '#5c5044', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+              <span style={{ color: '#c9a84c' }}>✓</span> {s}
+            </span>
+          ))}
         </motion.div>
 
         {/* Status strip */}
@@ -141,7 +150,7 @@ export default function Merch({ fourthwallProducts = [] }: MerchProps) {
           </span>
           <span style={{ fontSize: '0.60rem', color: 'var(--text-3)', letterSpacing: '0.12em' }}>·</span>
           <span style={{ fontSize: '0.62rem', color: 'var(--text-3)', letterSpacing: '0.14em' }}>
-            {hasFourthwall ? 'Powered by Fourthwall · Checkout handled securely' : 'Supporters hear first when the drop lands'}
+            {hasFourthwall ? 'Official Malachias gear · Fulfillment by Fourthwall' : 'Supporters hear first when the drop lands'}
           </span>
         </motion.div>
 
@@ -178,10 +187,10 @@ export default function Merch({ fourthwallProducts = [] }: MerchProps) {
           {hasFourthwall ? (
             <>
               <p className="text-[0.82rem] leading-relaxed" style={{ color: 'var(--text-3)', maxWidth: '28rem' }}>
-                Showing featured drops. See the full catalog in the store.
+                Every purchase keeps the mission alive. No middleman, no label — just you and the band.
               </p>
-              <Link href="/merch" className="btn btn-primary shrink-0">
-                Shop Now →
+              <Link href="/merch" className="btn btn-primary shrink-0" style={{ fontSize: '0.72rem', letterSpacing: '0.18em', padding: '0.75rem 2rem' }}>
+                Support the Band →
               </Link>
             </>
           ) : (
