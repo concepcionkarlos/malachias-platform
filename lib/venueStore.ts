@@ -230,24 +230,39 @@ const DEFAULT_TEMPLATES: EmailTemplate[] = [
   {
     id: makeId(), slug: 'venue-follow-up', name: 'Venue Follow-Up',
     isSystem: true, createdAt: now(), updatedAt: now(),
-    subject: 'Following Up — Malachias / {{venueName}}',
+    subject: 'Still interested in booking Malachias at {{venueName}}?',
     bodyHtml: emailShell(`
         <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">Hello {{venueName}} team,</p>
 
-        <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">I reached out recently about bringing <strong>Malachias</strong> to your venue. Wanted to follow up in case my last message got buried.</p>
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">I wanted to circle back after my previous message. I know inboxes get busy — just wanted to make sure this landed.</p>
 
-        <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">We're a veteran-founded rock band based in South Florida. We play bars and clubs, rock and metal festivals, churches, military events, and community stages — original music with full live setup. Every show, we leave the room different than we found it.</p>
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">We're <strong>Malachias</strong> — an original rock band founded by a U.S. Army combat veteran, based in South Florida. We play bars, clubs, rock festivals, VFW halls, churches, and outdoor events. We come fully self-contained with our own PA, and we're easy to work with on timing and logistics.</p>
 
-        <p style="margin:0 0 32px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">If there are upcoming dates that could be a fit, just reply here. You can also check our full press kit at <a href="${SITE_URL_EMAIL}/epk" style="color:${GOLD};">malachiasmusic.com/epk</a>.</p>
+        <p style="margin:0 0 8px;font-size:14px;font-weight:700;color:#111111;font-family:Arial,sans-serif;">What we bring to a room:</p>
+        <ul style="margin:0 0 24px;padding-left:20px;font-size:15px;line-height:1.9;color:#444444;font-family:Arial,sans-serif;">
+          <li>Original catalog of 12+ songs built for live rooms — high energy, faith-driven rock</li>
+          <li>Full PA setup included — no extra equipment or sound tech needed from your end</li>
+          <li>Professional, punctual, and easy to coordinate with</li>
+          <li>Mission-driven: our music exists to heal, lift, and connect people</li>
+        </ul>
 
-        <p style="margin:0 0 8px;font-size:15px;color:#444444;font-family:Arial,sans-serif;">Thank you,<br><strong>Malachias</strong><br>
+        <p style="margin:0 0 8px;font-size:14px;font-weight:700;color:#111111;font-family:Arial,sans-serif;">Hear us before you decide:</p>
+        <p style="margin:0 0 24px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">
+          <a href="https://open.spotify.com/artist/2YSqk7Skh7jsm5fR0uU3vl" style="color:${GOLD};">Spotify</a> &nbsp;·&nbsp;
+          <a href="https://music.apple.com/us/artist/malachias/937313536" style="color:${GOLD};">Apple Music</a> &nbsp;·&nbsp;
+          <a href="${SITE_URL_EMAIL}/epk" style="color:${GOLD};">Full Press Kit</a>
+        </p>
+
+        <p style="margin:0 0 32px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">If there are upcoming dates at <strong>{{venueName}}</strong> that could be a fit, we'd love to make it happen. Just reply to this email — we respond fast and we keep it simple.</p>
+
+        <p style="margin:0 0 8px;font-size:15px;color:#444444;font-family:Arial,sans-serif;">Thank you for your time,<br><strong>Malachias</strong><br>
           <a href="mailto:${BOOKING_EMAIL}" style="color:${GOLD};">${BOOKING_EMAIL}</a> &nbsp;·&nbsp;
           <a href="${SITE_URL_EMAIL}" style="color:${GOLD};">malachiasmusic.com</a>
         </p>
 
         <table width="100%" cellpadding="0" cellspacing="0" style="margin-top:28px;">
           <tr><td style="background:#f9f6f0;border-left:3px solid ${GOLD};padding:14px 18px;border-radius:0 4px 4px 0;">
-            <p style="margin:0;font-size:13px;line-height:1.6;color:#666666;font-family:Arial,sans-serif;">New to Malachias? <a href="${SITE_URL_EMAIL}/#newsletter" style="color:${GOLD};font-weight:700;">Join our list</a> for new music, upcoming shows, and merch — no spam, just the real stuff.</p>
+            <p style="margin:0;font-size:13px;line-height:1.6;color:#666666;font-family:Arial,sans-serif;">Want to stay in the loop on new shows, music drops, and what Malachias has cooking? <a href="${SITE_URL_EMAIL}/#newsletter" style="color:${GOLD};font-weight:700;">Join our list here</a> — no spam, just the real stuff.</p>
           </td></tr>
         </table>`),
   },
