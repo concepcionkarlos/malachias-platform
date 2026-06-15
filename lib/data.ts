@@ -189,6 +189,18 @@ export const TASK_CATEGORIES: { id: TaskCategory; label: string; emoji: string }
 
 export const bandTasks: BandTask[] = []
 
+// ── Fan Stories ───────────────────────────────────────────────────────────────
+
+export interface FanStory {
+  id: string
+  name: string          // "" if anonymous
+  email?: string
+  story: string
+  songTitle?: string    // song that meant the most to them
+  status: 'pending' | 'approved' | 'rejected'
+  createdAt: string
+}
+
 // ── Song Stories ──────────────────────────────────────────────────────────────
 
 export interface SongStory {

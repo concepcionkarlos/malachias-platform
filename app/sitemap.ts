@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next'
 import { fetchFWProducts } from '@/lib/fourthwall'
+import { JOURNAL_ENTRIES } from '@/lib/journalEntries'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://malachiasmusic.com'
 
@@ -11,6 +12,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: new Date(),
     changeFrequency: 'weekly',
     priority: 0.6,
+  }))
+
+  const journalUrls: MetadataRoute.Sitemap = JOURNAL_ENTRIES.map(e => ({
+    url: `${SITE_URL}/journal/${e.slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly',
+    priority: 0.65,
   }))
 
   return [
@@ -32,6 +40,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly',
       priority: 0.75,
     },
+    {
+      url: `${SITE_URL}/gallery`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.70,
+    },
+    ...journalUrls,
     ...productUrls,
   ]
 }

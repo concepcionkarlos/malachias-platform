@@ -43,13 +43,13 @@ export const metadata: Metadata = {
     url: SITE_URL,
     siteName: 'Malachias',
     locale: 'en_US',
-    images: [{ url: `${SITE_URL}/malachias 2.jpeg`, width: 1200, height: 630, alt: 'Malachias — Christian Rock Band' }],
+    images: [{ url: `${SITE_URL}/Malachias.PNG`, width: 1200, height: 630, alt: 'Malachias — Christian Rock Band' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'MALACHIAS — Christian Rock. Veteran Spirit.',
     description: 'Faith-driven rock from a veteran-founded band. Available for bars, festivals, churches & community events.',
-    images: [`${SITE_URL}/malachias 2.jpeg`],
+    images: [`${SITE_URL}/Malachias.PNG`],
   },
 };
 
@@ -79,7 +79,7 @@ const jsonLd = {
     'https://www.instagram.com/malachiasmusic',
     'https://www.facebook.com/share/17s554A9qA/?mibextid=wwXIfr',
   ],
-  image: `${SITE_URL}/malachias 2.jpeg`,
+  image: `${SITE_URL}/Malachias.PNG`,
   contactPoint: {
     '@type': 'ContactPoint',
     contactType: 'Booking',

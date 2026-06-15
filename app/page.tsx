@@ -21,6 +21,8 @@ import SongStories    from './components/SongStories';
 import WarRoom        from './components/WarRoom';
 import Setlist        from './components/Setlist';
 import BookingPopup   from './components/BookingPopup';
+import NextShowBanner from './components/NextShowBanner';
+import FanStoryForm   from './components/FanStoryForm';
 
 export async function generateMetadata(): Promise<Metadata> {
   const { siteContent: c } = await readContent();
@@ -41,6 +43,7 @@ export default async function Home() {
 
   return (
     <main className="bg-black min-h-screen overflow-x-hidden">
+      <NextShowBanner />
       <Navbar />
 
       {/* ── 1. HOOK — visceral first impression ───────────────────── */}
@@ -84,6 +87,7 @@ export default async function Home() {
       <Press />
       <SectionDivider accent="gold" label="BROTHERHOOD" />
       <Booking />
+      <FanStoryForm />
       <Newsletter />
       <Footer />
       <BookingPopup />

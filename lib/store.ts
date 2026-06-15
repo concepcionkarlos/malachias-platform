@@ -1,6 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-import type { Show, MerchItem, BandMember, SiteContent, MediaItem, EpkContent, BookingRequest, AdminNote, Subscriber, BandTask, SongStory, DailyReflection } from './data'
+import type { Show, MerchItem, BandMember, SiteContent, MediaItem, EpkContent, BookingRequest, AdminNote, Subscriber, BandTask, SongStory, DailyReflection, FanStory } from './data'
 import {
   shows as defaultShows,
   merch as defaultMerch,
@@ -27,6 +27,7 @@ export interface ContentStore {
   tasks: BandTask[]
   songStories: SongStory[]
   dailyReflections: DailyReflection[]
+  fanStories: FanStory[]
   adminNotes?: AdminNote[]
   monthlyGoal?: { month: string; bookingTarget: number; revenueTarget: number }
 }
@@ -47,6 +48,7 @@ function getDefaults(): ContentStore {
     tasks: defaultBandTasks,
     songStories: defaultSongStories,
     dailyReflections: defaultDailyReflections,
+    fanStories: [],
   }
 }
 

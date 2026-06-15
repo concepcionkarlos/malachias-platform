@@ -7,7 +7,7 @@ import {
   MapPin, Settings, Newspaper, BarChart2, StickyNote, CheckSquare,
   Music, BookOpen, Zap, ListMusic, Repeat, Target, BookMarked,
   Layers, CalendarDays, DollarSign, Send, TrendingUp,
-  Menu, X, ExternalLink, LogOut, ChevronRight,
+  Menu, X, ExternalLink, LogOut, ChevronRight, Heart,
 } from 'lucide-react'
 import AdminLogin from './AdminLogin'
 
@@ -17,6 +17,7 @@ const SECTIONS = {
   shows:           { label: 'Shows',            icon: MapPin,          group: 'Operations'  },
   tasks:           { label: 'Task Board',       icon: CheckSquare,     group: 'Operations'  },
   'song-stories':  { label: 'Behind the Song',  icon: Music,           group: 'Content'     },
+  'fan-stories':   { label: 'Fan Stories',      icon: Heart,           group: 'Content'     },
   'war-room':      { label: 'War Room',         icon: BookOpen,        group: 'Content'     },
   'band-members':  { label: 'Band Members',     icon: Users,           group: 'Platform'    },
   merch:           { label: 'Merch',            icon: ShoppingBag,     group: 'Platform'    },
@@ -51,6 +52,7 @@ const SectionComponents: Record<TabKey, React.ComponentType> = {
   shows:             dynamic(() => import('./sections/AdminShows')),
   tasks:             dynamic(() => import('./sections/AdminTasks')),
   'song-stories':    dynamic(() => import('./sections/AdminSongStories')),
+  'fan-stories':     dynamic(() => import('./sections/AdminFanStories')),
   'war-room':        dynamic(() => import('./sections/AdminWarRoom')),
   'band-members':    dynamic(() => import('./sections/AdminBandMembers')),
   merch:             dynamic(() => import('./sections/AdminMerch')),
