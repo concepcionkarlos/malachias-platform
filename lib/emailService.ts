@@ -11,6 +11,7 @@ import {
 import { renderTemplate } from './templateUtils'
 
 const FROM = process.env.RESEND_FROM_EMAIL ?? 'Malachias <booking@malachiasmusic.com>'
+const BCC  = 'booking@malachiasmusic.com'
 const DEV_MODE = !process.env.RESEND_API_KEY
 
 export async function triggerAutoReply(booking: BookingRequest): Promise<void> {
@@ -43,7 +44,7 @@ export async function triggerAutoReply(booking: BookingRequest): Promise<void> {
   try {
     const { Resend } = await import('resend')
     const resend = new Resend(process.env.RESEND_API_KEY)
-    const result = await resend.emails.send({ from: FROM, to: booking.email, subject, html: bodyHtml, scheduledAt })
+    const result = await resend.emails.send({ from: FROM, to: booking.email, bcc: BCC, subject, html: bodyHtml, scheduledAt })
     await updateAutoReplyLog(log.id, { resendEmailId: result.data?.id, status: 'scheduled', scheduledAt })
   } catch (err) {
     await updateAutoReplyLog(log.id, { status: 'failed', errorMessage: err instanceof Error ? err.message : String(err) })
@@ -74,6 +75,7 @@ export async function sendOutreachEmail(opts: {
   const result = await resend.emails.send({
     from: FROM,
     to: opts.toEmail,
+    bcc: BCC,
     subject: opts.subject,
     html: opts.bodyHtml,
     ...(opts.replyTo ? { replyTo: opts.replyTo } : {}),
