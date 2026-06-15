@@ -98,7 +98,7 @@ export async function POST(req: NextRequest) {
   try {
     const { Resend } = await import('resend')
     const resend = new Resend(apiKey)
-    const result = await resend.emails.send({ from, to: toEmail, subject, html: bodyHtml, text: fullText })
+    const result = await resend.emails.send({ from, to: toEmail, bcc: 'booking@malachiasmusic.com', subject, html: bodyHtml, text: fullText })
     resendEmailId = result.data?.id
   } catch (err) {
     status = 'failed'
