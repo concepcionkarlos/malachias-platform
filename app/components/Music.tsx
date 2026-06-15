@@ -129,9 +129,29 @@ export default function Music() {
           </div>
         </motion.div>
 
+        {/* Spotify embed */}
+        <motion.div {...fade(0.10)} className="mb-10">
+          <div className="tac-box overflow-hidden">
+            <div className="px-5 pt-4 pb-2 flex items-center gap-2">
+              <span style={{ color: '#1DB954', fontSize: '0.7rem' }}>▸</span>
+              <p className="tac-label" style={{ color: 'var(--text-3)' }}>Spotify</p>
+            </div>
+            <iframe
+              src="https://open.spotify.com/embed/artist/2YSqk7Skh7jsm5fR0uU3vl?utm_source=generator&theme=0"
+              width="100%"
+              height="352"
+              frameBorder="0"
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+              loading="lazy"
+              title="Malachias on Spotify"
+              style={{ display: 'block', border: 'none' }}
+            />
+          </div>
+        </motion.div>
+
         {/* YouTube videos — only shown if the admin has added any */}
         {videos.length > 0 && (
-          <motion.div {...fade(0.12)} className="mb-10">
+          <motion.div {...fade(0.14)} className="mb-10">
             <p className="text-[0.58rem] tracking-[0.30em] uppercase mb-4" style={{ color: 'var(--text-3)' }}>
               Videos
             </p>
@@ -193,7 +213,7 @@ export default function Music() {
         )}
 
         {/* Streaming platforms */}
-        <motion.div {...fade(0.14)} className="flex flex-wrap gap-3 mb-4">
+        <motion.div {...fade(0.18)} className="flex flex-wrap gap-3 mb-4">
           {STREAMING.map(p => (
             <a
               key={p.name}

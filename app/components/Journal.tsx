@@ -1,6 +1,8 @@
 'use client';
 
+import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { JOURNAL_ENTRIES } from '@/lib/journalEntries';
 
 const fade = (delay = 0) => ({
   initial: { opacity: 0, y: 22 },
@@ -14,27 +16,6 @@ const TAG_COLORS: Record<string, string> = {
   Service:   '#8a7f70',
   Mission:   'rgba(201,168,76,0.50)',
 };
-
-const ENTRIES = [
-  {
-    tag:     'Origin',
-    date:    'Fort Wayne, Indiana',
-    title:   'Why this started here.',
-    excerpt: "Fort Wayne is home. The Guard unit was here. The decision to enlist was made here. When I came back from Iraq the second time — as a bandsman, of all things — I came back here. Malachias started in Fort Wayne because everything that made it necessary happened in Fort Wayne.",
-  },
-  {
-    tag:     'Service',
-    date:    'Iraq · 2006–2014',
-    title:   'Two deployments. Two different men.',
-    excerpt: "First tour as a medic. Second tour as an Army bandsman. I went over there holding people together with my hands. I came back the second time holding a guitar. Those aren't as different as they sound. Both are about being present when someone needs something real.",
-  },
-  {
-    tag:     'Mission',
-    date:    'The reason we play',
-    title:   'Reduce suicidal ideation. That\'s the mission.',
-    excerpt: "That's not a general statement. That's the specific reason Malachias exists. Veterans carrying things nobody talks about. People whose faith got worn down by years of hard living. Anyone who's at the bottom and not sure what's on the other side. That's who this music is for.",
-  },
-];
 
 export default function Journal() {
   return (
@@ -61,7 +42,7 @@ export default function Journal() {
         </motion.div>
 
         <div className="grid lg:grid-cols-3 gap-px" style={{ background: 'rgba(255,255,255,0.05)' }}>
-          {ENTRIES.map((e, i) => (
+          {JOURNAL_ENTRIES.map((e, i) => (
             <motion.article
               key={e.title}
               {...fade(0.06 + i * 0.06)}
@@ -86,6 +67,23 @@ export default function Journal() {
               <p style={{ fontSize: '0.80rem', lineHeight: 1.7, color: 'var(--text-3)', flex: 1 }}>
                 {e.excerpt}
               </p>
+
+              <Link
+                href={`/journal/${e.slug}`}
+                style={{
+                  fontSize: '0.60rem',
+                  letterSpacing: '0.20em',
+                  textTransform: 'uppercase',
+                  color: 'rgba(201,168,76,0.70)',
+                  textDecoration: 'none',
+                  alignSelf: 'flex-start',
+                  borderBottom: '1px solid rgba(201,168,76,0.25)',
+                  paddingBottom: '1px',
+                  transition: 'color 0.2s',
+                }}
+              >
+                Read more →
+              </Link>
             </motion.article>
           ))}
         </div>
