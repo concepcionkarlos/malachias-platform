@@ -18,8 +18,8 @@ export default function SupportPopup() {
       const seen = parseInt(raw, 10)
       if (!isNaN(seen) && Date.now() - seen < TTL_MS) return
     }
-    // Don't show on merch pages — user is already there
-    if (window.location.pathname.startsWith('/merch')) return
+    // Don't show on merch or support pages — user is already there
+    if (window.location.pathname.startsWith('/merch') || window.location.pathname.startsWith('/support')) return
 
     const t = setTimeout(() => setVisible(true), DELAY_MS)
     return () => clearTimeout(t)
@@ -97,13 +97,13 @@ export default function SupportPopup() {
             {/* CTAs */}
             <div style={{ display: 'flex', gap: '0.6rem', alignItems: 'center' }}>
               <Link
-                href="/merch"
+                href="/support"
                 onClick={dismiss}
                 style={{ flex: 1, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem', padding: '0.65rem 1rem', background: '#c9a84c', color: '#030202', fontSize: '0.62rem', letterSpacing: '0.16em', textTransform: 'uppercase', textDecoration: 'none', fontWeight: 700, fontFamily: 'var(--font-body)', transition: 'opacity 0.2s' }}
                 onMouseEnter={e => ((e.currentTarget as HTMLElement).style.opacity = '0.88')}
                 onMouseLeave={e => ((e.currentTarget as HTMLElement).style.opacity = '1')}
               >
-                <ShoppingBag size={12} /> Shop Merch
+                <ShoppingBag size={12} /> Support Us
               </Link>
               <button
                 onClick={dismiss}

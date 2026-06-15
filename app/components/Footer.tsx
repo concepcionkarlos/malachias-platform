@@ -3,15 +3,18 @@
 import { motion } from 'framer-motion';
 
 
-const NAV_LINKS = [
+interface FooterLink { label: string; href: string; gold?: boolean }
+
+const NAV_LINKS: FooterLink[] = [
   { label: 'The Story',    href: '#about'      },
   { label: 'The Sound',    href: '#music'      },
   { label: 'The Field',    href: '#journal'    },
-  { label: 'The Store',    href: '#merch'      },
+  { label: 'The Store',    href: '/merch'      },
   { label: 'The Mission',  href: '#mission'    },
   { label: 'Press & EPK',  href: '#press'      },
   { label: 'Book Us',      href: '#booking'    },
   { label: 'Stay in Touch',href: '#newsletter' },
+  { label: '♥ Support',    href: '/support',   gold: true },
 ];
 
 const CONTACTS = [
@@ -135,6 +138,29 @@ export default function Footer() {
               ))}
             </div>
 
+            {/* Support CTA */}
+            <a
+              href="/support"
+              className="inline-flex items-center gap-2 transition-opacity duration-200 hover:opacity-85 mb-5"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.4rem',
+                padding: '0.5rem 1.1rem',
+                background: 'rgba(201,168,76,0.10)',
+                border: '1px solid rgba(201,168,76,0.25)',
+                fontSize: '0.58rem',
+                letterSpacing: '0.20em',
+                textTransform: 'uppercase',
+                color: '#c9a84c',
+                textDecoration: 'none',
+                fontWeight: 700,
+                fontFamily: 'var(--font-body)',
+              }}
+            >
+              ♥ Support the Band
+            </a>
+
             {/* Scripture */}
             <p className="text-[0.65rem] tracking-[0.12em] italic leading-relaxed" style={{ color: 'var(--text-ghost)' }}>
               Malachi 3:1 — &ldquo;See, I will send my messenger&rdquo;
@@ -155,9 +181,9 @@ export default function Footer() {
                   <a
                     href={l.href}
                     className="text-[0.82rem] flex items-center gap-2 group transition-colors duration-300"
-                    style={{ color: 'var(--text-3)' }}
+                    style={{ color: l.gold ? '#c9a84c' : 'var(--text-3)', fontWeight: l.gold ? 700 : undefined }}
                     onMouseEnter={e => (e.currentTarget.style.color = '#c9a84c')}
-                    onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-3)')}
+                    onMouseLeave={e => (e.currentTarget.style.color = l.gold ? '#c9a84c' : 'var(--text-3)')}
                   >
                     <span className="w-3 h-px bg-[#c9a84c]/0 group-hover:bg-[#c9a84c]/50 transition-all duration-300" />
                     {l.label}
