@@ -5,13 +5,16 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 
 
-const NAV = [
+interface NavItem { label: string; href: string; gold?: boolean }
+
+const NAV: NavItem[] = [
   { label: 'The Story',   href: '#about'   },
   { label: 'The Band',    href: '#band'    },
   { label: 'The Sound',   href: '#music'   },
   { label: 'The Field',   href: '#journal' },
   { label: 'The Store',   href: '/merch'   },
   { label: 'The Mission', href: '#mission' },
+  { label: 'Support',     href: '/support', gold: true },
 ];
 
 const SOCIAL_ICONS = [
@@ -102,7 +105,7 @@ export default function Navbar() {
               key={link.href}
               href={link.href}
               className="relative text-[0.65rem] font-semibold tracking-[0.22em] uppercase hover:text-white transition-colors duration-300 group py-1"
-              style={{ color: 'rgba(232,221,208,0.55)' }}
+              style={{ color: link.gold ? '#c9a84c' : 'rgba(232,221,208,0.55)' }}
             >
               {link.label}
               <span className="absolute bottom-0 left-0 h-px w-0 group-hover:w-full transition-all duration-300 bg-[#c9a84c]" />
@@ -131,6 +134,15 @@ export default function Navbar() {
               </a>
             ))}
           </div>
+
+          {/* Support CTA — desktop */}
+          <a
+            href="/support"
+            className="hidden lg:inline-flex items-center gap-1.5 !py-2 !px-4 !text-[0.60rem] !tracking-[0.18em] uppercase font-bold transition-opacity duration-200 hover:opacity-85"
+            style={{ background: '#c9a84c', color: '#030201', fontSize: '0.60rem', letterSpacing: '0.18em', textDecoration: 'none', fontFamily: 'var(--font-body)' }}
+          >
+            ♥ Support
+          </a>
 
           {/* Book Us CTA — desktop */}
           <a
@@ -178,9 +190,9 @@ export default function Navbar() {
                   animate={{ x: 0,   opacity: 1  }}
                   transition={{ delay: i * 0.04 }}
                   className="text-[0.72rem] tracking-[0.24em] uppercase hover:text-white transition-colors"
-                  style={{ color: 'rgba(232,221,208,0.55)' }}
+                  style={{ color: link.gold ? '#c9a84c' : 'rgba(232,221,208,0.55)' }}
                 >
-                  {link.label}
+                  {link.gold ? `♥ ${link.label}` : link.label}
                 </motion.a>
               ))}
 
