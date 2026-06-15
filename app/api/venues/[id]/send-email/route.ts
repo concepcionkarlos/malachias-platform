@@ -16,7 +16,12 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
   const body: { template: EmailTemplate; vars: Record<string, string>; replyTo?: string } = await req.json()
   const { template, vars, replyTo } = body
 
-  const { subject, bodyHtml } = renderTemplate(template, { venueName: venue.name, ...vars })
+  const { subject, bodyHtml } = renderTemplate(template, {
+    venueName: venue.name,
+    replyEmail: 'booking@malachiasmusic.com',
+    bandName: 'Malachias',
+    ...vars,
+  })
 
   const toEmail = venue.contactEmail
   if (!toEmail) return NextResponse.json({ error: 'Venue has no contact email' }, { status: 400 })

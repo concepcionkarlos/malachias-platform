@@ -44,5 +44,12 @@ export function isAuthenticatedFromRequest(req: NextRequest): boolean {
 
 export function verifyPassword(password: string): boolean {
   const expected = process.env.ADMIN_PASSWORD ?? 'malachias-admin'
-  return password === expected
+  try {
+    const a = Buffer.from(password.padEnd(expected.length))
+    const b = Buffer.from(expected.padEnd(password.length))
+    if (a.length !== b.length) return false
+    return crypto.timingSafeEqual(a, b)
+  } catch {
+    return false
+  }
 }

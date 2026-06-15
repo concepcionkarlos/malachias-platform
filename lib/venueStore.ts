@@ -367,24 +367,26 @@ function writeLocal(updates: Partial<VenueStore>): VenueStore {
 
 async function readKV(): Promise<VenueStore> {
   const { kv } = await import('@vercel/kv')
-  const [venues, outreachLogs, emailTemplates, autoReplyLogs, bookingEmailLogs, inboundEmails, dripCampaigns, dripEnrollments, sentEmails] = await Promise.all([
+  const [
+    venues, outreachLogs, emailTemplates, autoReplyLogs, bookingEmailLogs, inboundEmails,
+    dripCampaigns, dripEnrollments, sentEmails,
+    songs, rehearsals, goals, showSetLists, contentPosts, finances, bandStats, liveSessions,
+  ] = await Promise.all([
     kv.get<Venue[]>(KV_KEYS.venues), kv.get<OutreachLog[]>(KV_KEYS.outreachLogs),
     kv.get<EmailTemplate[]>(KV_KEYS.emailTemplates), kv.get<AutoReplyLog[]>(KV_KEYS.autoReplyLogs),
     kv.get<BookingEmailLog[]>(KV_KEYS.bookingEmailLogs), kv.get<InboundEmail[]>(KV_KEYS.inboundEmails),
     kv.get<DripCampaign[]>('dripCampaigns'), kv.get<DripEnrollment[]>('dripEnrollments'),
     kv.get<SentEmail[]>(KV_KEYS.sentEmails),
+    kv.get<Song[]>(KV_KEYS.songs), kv.get<Rehearsal[]>(KV_KEYS.rehearsals), kv.get<Goal[]>(KV_KEYS.goals),
+    kv.get<ShowSetList[]>(KV_KEYS.showSetLists), kv.get<ContentPost[]>(KV_KEYS.contentPosts),
+    kv.get<FinanceEntry[]>(KV_KEYS.finances), kv.get<BandStats>(KV_KEYS.bandStats),
+    kv.get<LiveSession[]>(KV_KEYS.liveSessions),
   ])
   let templates = emailTemplates ?? []
   if (templates.length === 0) { templates = DEFAULT_TEMPLATES; await kv.set(KV_KEYS.emailTemplates, templates) }
   else { const sync = syncDefaultTemplates(templates); if (sync.changed) { templates = sync.templates; await kv.set(KV_KEYS.emailTemplates, templates) } }
   let campaigns = dripCampaigns ?? []
   if (campaigns.length === 0) { campaigns = DEFAULT_DRIP_CAMPAIGNS; await kv.set('dripCampaigns', campaigns) }
-  const [songs, rehearsals, goals, showSetLists, contentPosts, finances, bandStats, liveSessions] = await Promise.all([
-    kv.get<Song[]>(KV_KEYS.songs), kv.get<Rehearsal[]>(KV_KEYS.rehearsals), kv.get<Goal[]>(KV_KEYS.goals),
-    kv.get<ShowSetList[]>(KV_KEYS.showSetLists), kv.get<ContentPost[]>(KV_KEYS.contentPosts),
-    kv.get<FinanceEntry[]>(KV_KEYS.finances), kv.get<BandStats>(KV_KEYS.bandStats),
-    kv.get<LiveSession[]>(KV_KEYS.liveSessions),
-  ])
   return { venues: venues ?? [], outreachLogs: outreachLogs ?? [], emailTemplates: templates, autoReplyLogs: autoReplyLogs ?? [], bookingEmailLogs: bookingEmailLogs ?? [], inboundEmails: inboundEmails ?? [], sentEmails: sentEmails ?? [], dripCampaigns: campaigns, dripEnrollments: dripEnrollments ?? [], songs: (songs && songs.length > 0) ? songs : DEFAULT_SONGS, rehearsals: (rehearsals ?? []).map(r => ({ ...r, confirmations: r.confirmations ?? [] })), goals: goals ?? [], showSetLists: showSetLists ?? [], contentPosts: contentPosts ?? [], finances: finances ?? [], bandStats: bandStats ?? null, liveSessions: liveSessions ?? [] }
 }
 
@@ -622,6 +624,24 @@ export async function updateDripEnrollment(id: string, patch: Partial<DripEnroll
   const dripEnrollments = store.dripEnrollments.map((e) => (e.id === id ? updated : e))
   useKV ? await writeKV({ dripEnrollments }) : writeLocal({ dripEnrollments })
   return updated
+}
+
+const DRIP_TERMINAL_STATUSES = new Set(['Confirmed', 'Paid', 'Completed', 'Lost', 'Archived'])
+
+export async function pauseBookingDrip(bookingId: string): Promise<void> {
+  const store = await readVenueStore()
+  const active = store.dripEnrollments.filter(
+    (e) => e.entityId === bookingId && e.entityType === 'booking' && e.status === 'active'
+  )
+  if (active.length === 0) return
+  const dripEnrollments = store.dripEnrollments.map((e) =>
+    active.some((a) => a.id === e.id) ? { ...e, status: 'paused' as const } : e
+  )
+  useKV ? await writeKV({ dripEnrollments }) : writeLocal({ dripEnrollments })
+}
+
+export function isTerminalBookingStatus(status: string): boolean {
+  return DRIP_TERMINAL_STATUSES.has(status)
 }
 
 export async function enrollInBookingDrip(booking: { id: string; email: string; fullName: string; createdAt: string }): Promise<void> {

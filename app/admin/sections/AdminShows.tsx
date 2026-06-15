@@ -52,7 +52,7 @@ export default function AdminShows() {
       if (editId) {
         updated = shows.map(s => s.id === editId ? { ...form, id: editId } : s)
       } else {
-        updated = [...shows, { ...form, id: Date.now().toString(36) }]
+        updated = [...shows, { ...form, id: crypto.randomUUID() }]
       }
       const res = await fetch('/api/content', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ shows: updated }) })
       if (!res.ok) throw new Error()

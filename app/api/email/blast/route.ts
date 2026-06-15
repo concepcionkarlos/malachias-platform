@@ -7,12 +7,17 @@ export const dynamic = 'force-dynamic'
 const GOLD = '#c9a84c'
 const DARK = '#030202'
 
-function buildBlastHtml(subject: string, body: string): string {
+const SITE_URL = 'https://www.malachiasmusic.com'
+const PHYSICAL_ADDRESS = 'Malachias · Miami, FL · USA'
+
+function buildBlastHtml(subject: string, body: string, recipientEmail: string): string {
   const paragraphs = body.split('\n').map(p =>
     p.trim()
       ? `<p style="margin:0 0 16px;font-size:15px;color:#444444;line-height:1.75;font-family:Arial,sans-serif;">${p}</p>`
       : '<br>'
   ).join('')
+
+  const unsubUrl = `${SITE_URL}/api/newsletter/unsubscribe?email=${encodeURIComponent(recipientEmail)}`
 
   return `<!DOCTYPE html>
 <html>
@@ -30,9 +35,13 @@ function buildBlastHtml(subject: string, body: string): string {
         <p style="margin:24px 0 0;font-size:15px;color:#444444;font-family:Arial,sans-serif;">— <strong>Malachias</strong></p>
       </td></tr>
       <tr><td style="background:#f9f7f4;padding:20px 40px;border-top:1px solid #e8e0d5;">
-        <p style="margin:0;font-size:11px;color:#999999;line-height:1.5;font-family:Arial,sans-serif;">
-          Malachias · <a href="https://malachiasmusic.com" style="color:#999999;">malachiasmusic.com</a>
-          · <a href="mailto:booking@malachiasmusic.com" style="color:#999999;">booking@malachiasmusic.com</a>
+        <p style="margin:0 0 8px;font-size:11px;color:#999999;line-height:1.5;font-family:Arial,sans-serif;">
+          ${PHYSICAL_ADDRESS} · <a href="mailto:booking@malachiasmusic.com" style="color:#999999;">booking@malachiasmusic.com</a>
+        </p>
+        <p style="margin:0;font-size:11px;color:#999999;font-family:Arial,sans-serif;">
+          You are receiving this email because you subscribed at <a href="${SITE_URL}" style="color:#999999;">malachiasmusic.com</a>.
+          &nbsp;·&nbsp;
+          <a href="${unsubUrl}" style="color:#c9a84c;">Unsubscribe</a>
         </p>
       </td></tr>
     </table>
@@ -56,7 +65,6 @@ export async function POST(req: NextRequest) {
   if (subscribers.length === 0) return NextResponse.json({ error: 'No subscribers' }, { status: 400 })
 
   const from = process.env.RESEND_FROM_EMAIL ?? 'Malachias <booking@malachiasmusic.com>'
-  const html = buildBlastHtml(subject, body)
 
   const { Resend } = await import('resend')
   const resend = new Resend(apiKey)
@@ -64,6 +72,7 @@ export async function POST(req: NextRequest) {
   const results: { email: string; ok: boolean }[] = []
 
   for (const email of subscribers) {
+    const html = buildBlastHtml(subject, body, email)
     try {
       await resend.emails.send({ from, to: email, subject, html })
       results.push({ email, ok: true })

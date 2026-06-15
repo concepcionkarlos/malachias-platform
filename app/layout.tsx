@@ -62,8 +62,8 @@ const jsonLd = {
   foundingDate: '2014',
   foundingLocation: {
     '@type': 'Place',
-    name: 'Fort Wayne, Indiana',
-    address: { '@type': 'PostalAddress', addressLocality: 'Fort Wayne', addressRegion: 'IN', addressCountry: 'US' },
+    name: 'South Florida',
+    address: { '@type': 'PostalAddress', addressLocality: 'Miami', addressRegion: 'FL', addressCountry: 'US' },
   },
   location: {
     '@type': 'Place',
