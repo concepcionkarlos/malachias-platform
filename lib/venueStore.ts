@@ -36,6 +36,8 @@ const now = () => new Date().toISOString()
 
 const GOLD = '#c9a84c'
 const DARK = '#030202'
+const BOOKING_EMAIL = 'booking@malachiasmusic.com'
+const SITE_URL_EMAIL = 'https://www.malachiasmusic.com'
 
 function emailShell(body: string): string {
   return `<!DOCTYPE html>
@@ -44,14 +46,52 @@ function emailShell(body: string): string {
 <table width="100%" cellpadding="0" cellspacing="0">
   <tr><td align="center" style="padding:40px 16px;">
     <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;max-width:600px;width:100%;">
-      <tr><td style="background:${DARK};padding:24px 40px;border-bottom:2px solid ${GOLD};">
-        <p style="margin:0;color:#e8ddd0;font-size:20px;font-weight:700;letter-spacing:3px;text-transform:uppercase;font-family:Arial,sans-serif;">MALACHIAS</p>
-        <p style="margin:4px 0 0;color:rgba(201,168,76,0.65);font-size:10px;letter-spacing:2px;text-transform:uppercase;font-family:Arial,sans-serif;">Christian Rock · Veteran Mission · Faith on Fire</p>
+
+      <!-- HEADER: logo + wordmark -->
+      <tr><td style="background:${DARK};padding:28px 40px 24px;border-bottom:3px solid ${GOLD};">
+        <table width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td style="width:64px;vertical-align:middle;padding-right:16px;">
+              <img src="${SITE_URL_EMAIL}/Malachias.PNG" alt="Malachias" width="56" height="56"
+                style="display:block;width:56px;height:56px;object-fit:contain;border-radius:4px;" />
+            </td>
+            <td style="vertical-align:middle;">
+              <p style="margin:0;color:#e8ddd0;font-size:22px;font-weight:700;letter-spacing:4px;text-transform:uppercase;font-family:Arial,sans-serif;line-height:1;">MALACHIAS</p>
+              <p style="margin:5px 0 0;color:rgba(201,168,76,0.70);font-size:10px;letter-spacing:2px;text-transform:uppercase;font-family:Arial,sans-serif;">Christian Rock · Veteran Spirit · South Florida</p>
+            </td>
+          </tr>
+        </table>
       </td></tr>
+
+      <!-- BODY -->
       <tr><td style="padding:40px;">${body}</td></tr>
-      <tr><td style="background:#f9f7f4;padding:20px 40px;border-top:1px solid #e8e0d5;">
-        <p style="margin:0;font-size:11px;color:#999999;line-height:1.5;font-family:Arial,sans-serif;">Malachias · malachiasmusic.com · <a href="mailto:booking@malachiasmusic.com" style="color:#999999;">booking@malachiasmusic.com</a></p>
+
+      <!-- SIGNATURE FOOTER -->
+      <tr><td style="background:#0d0b09;padding:28px 40px;border-top:1px solid ${GOLD}40;">
+        <table width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td>
+              <p style="margin:0 0 4px;font-size:13px;font-weight:700;color:#e8ddd0;letter-spacing:2px;text-transform:uppercase;font-family:Arial,sans-serif;">MALACHIAS</p>
+              <p style="margin:0 0 2px;font-size:11px;color:#8a7060;font-family:Arial,sans-serif;">Veteran-founded rock band · South Florida</p>
+              <p style="margin:8px 0 0;font-size:12px;font-family:Arial,sans-serif;">
+                <a href="mailto:${BOOKING_EMAIL}" style="color:${GOLD};text-decoration:none;">${BOOKING_EMAIL}</a>
+                &nbsp;·&nbsp;
+                <a href="${SITE_URL_EMAIL}" style="color:${GOLD};text-decoration:none;">malachiasmusic.com</a>
+              </p>
+              <p style="margin:10px 0 0;font-size:11px;font-family:Arial,sans-serif;">
+                <a href="${SITE_URL_EMAIL}/epk" style="color:#6a6050;text-decoration:none;">Press Kit</a>
+                &nbsp;&nbsp;
+                <a href="https://www.instagram.com/malachiasmusic" style="color:#6a6050;text-decoration:none;">Instagram</a>
+                &nbsp;&nbsp;
+                <a href="https://open.spotify.com/artist/2YSqk7Skh7jsm5fR0uU3vl" style="color:#6a6050;text-decoration:none;">Spotify</a>
+                &nbsp;&nbsp;
+                <a href="https://music.apple.com/us/artist/malachias/937313536" style="color:#6a6050;text-decoration:none;">Apple Music</a>
+              </p>
+            </td>
+          </tr>
+        </table>
       </td></tr>
+
     </table>
   </td></tr>
 </table>
@@ -155,25 +195,60 @@ const DEFAULT_TEMPLATES: EmailTemplate[] = [
         <p style="margin:0;font-size:15px;color:#444444;font-family:Arial,sans-serif;">Either way — thank you for reaching out. The door is always open.<br><br>— <strong>Malachias</strong><br><a href="mailto:{{replyEmail}}" style="color:${GOLD};">{{replyEmail}}</a></p>`),
   },
   {
-    id: makeId(), slug: 'venue-first-outreach', name: 'Venue / Church First Outreach',
+    id: makeId(), slug: 'venue-first-outreach', name: 'Venue First Outreach',
     isSystem: true, createdAt: now(), updatedAt: now(),
-    subject: 'Christian Rock Band — Available for Bookings · {{venueName}}',
+    subject: 'Live Rock Band Available to Play {{venueName}} — Malachias',
     bodyHtml: emailShell(`
         <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">Hello {{venueName}} team,</p>
-        <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">My name is [Name], and I represent <strong>Malachias</strong> — a Christian rock band founded by a U.S. Army veteran, based in {{serviceArea}}.</p>
-        <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">We play original faith-driven rock — honest, loud, and built for people who need to hear something real. We've played churches, veteran support events, community gatherings, and small venues. We bring our own PA and are easy to work with.</p>
-        <p style="margin:0 0 24px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">Would {{venueName}} be open to discussing a booking? I'd love to send over our full press kit and available dates.</p>
-        <p style="margin:0;font-size:15px;color:#444444;font-family:Arial,sans-serif;">Thank you,<br><strong>Malachias</strong><br><a href="mailto:{{contactEmail}}" style="color:${GOLD};">{{contactEmail}}</a></p>`),
+
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">We're <strong>Malachias</strong> — a faith-driven rock band based in South Florida, founded by a U.S. Army combat veteran. We play original rock that's honest, loud, and built for people who need to hear something real.</p>
+
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">We play <strong>everywhere</strong> — bars and clubs, rock and metal festivals, outdoor events, churches, VFW halls, military events, and community stages. We bring our own full PA setup and are easy to work with on timing, stage, and logistics.</p>
+
+        <p style="margin:0 0 8px;font-size:14px;font-weight:700;color:#111111;font-family:Arial,sans-serif;">Hear us first:</p>
+        <p style="margin:0 0 24px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">
+          <a href="https://open.spotify.com/artist/2YSqk7Skh7jsm5fR0uU3vl" style="color:${GOLD};">Spotify</a> &nbsp;·&nbsp;
+          <a href="https://music.apple.com/us/artist/malachias/937313536" style="color:${GOLD};">Apple Music</a> &nbsp;·&nbsp;
+          <a href="${SITE_URL_EMAIL}/epk" style="color:${GOLD};">Full Press Kit</a>
+        </p>
+
+        <p style="margin:0 0 32px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">Would <strong>{{venueName}}</strong> be open to discussing available dates? We move fast — reply to this email or reach us directly at <a href="mailto:${BOOKING_EMAIL}" style="color:${GOLD};">${BOOKING_EMAIL}</a>.</p>
+
+        <p style="margin:0 0 8px;font-size:15px;color:#444444;font-family:Arial,sans-serif;">Thank you,<br><strong>Malachias</strong><br>
+          <a href="mailto:${BOOKING_EMAIL}" style="color:${GOLD};">${BOOKING_EMAIL}</a> &nbsp;·&nbsp;
+          <a href="${SITE_URL_EMAIL}" style="color:${GOLD};">malachiasmusic.com</a>
+        </p>
+
+        <table width="100%" cellpadding="0" cellspacing="0" style="margin-top:32px;">
+          <tr><td style="background:#f9f6f0;border-left:3px solid ${GOLD};padding:16px 20px;border-radius:0 4px 4px 0;">
+            <p style="margin:0 0 6px;font-size:12px;font-weight:700;color:#333333;letter-spacing:1px;text-transform:uppercase;font-family:Arial,sans-serif;">Stay in the loop</p>
+            <p style="margin:0;font-size:13px;line-height:1.6;color:#666666;font-family:Arial,sans-serif;">We send out new music, upcoming shows, and merch drops to our list first. If you'd like to stay informed about what Malachias has cooking: <a href="${SITE_URL_EMAIL}/#newsletter" style="color:${GOLD};font-weight:700;">join our list here</a>.</p>
+          </td></tr>
+        </table>`),
   },
   {
     id: makeId(), slug: 'venue-follow-up', name: 'Venue Follow-Up',
     isSystem: true, createdAt: now(), updatedAt: now(),
-    subject: 'Following Up — Malachias at {{venueName}}',
+    subject: 'Following Up — Malachias / {{venueName}}',
     bodyHtml: emailShell(`
         <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">Hello {{venueName}} team,</p>
+
         <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">I reached out recently about bringing <strong>Malachias</strong> to your venue. Wanted to follow up in case my last message got buried.</p>
-        <p style="margin:0 0 24px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">We're a veteran-founded Christian rock band — original music, full live setup, available for churches, community events, and venues. If there are upcoming dates that might be a fit, I'd love to connect.</p>
-        <p style="margin:0;font-size:15px;color:#444444;font-family:Arial,sans-serif;">Thank you,<br><strong>Malachias</strong><br><a href="mailto:{{contactEmail}}" style="color:${GOLD};">{{contactEmail}}</a></p>`),
+
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">We're a veteran-founded rock band based in South Florida. We play bars and clubs, rock and metal festivals, churches, military events, and community stages — original music with full live setup. Every show, we leave the room different than we found it.</p>
+
+        <p style="margin:0 0 32px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">If there are upcoming dates that could be a fit, just reply here. You can also check our full press kit at <a href="${SITE_URL_EMAIL}/epk" style="color:${GOLD};">malachiasmusic.com/epk</a>.</p>
+
+        <p style="margin:0 0 8px;font-size:15px;color:#444444;font-family:Arial,sans-serif;">Thank you,<br><strong>Malachias</strong><br>
+          <a href="mailto:${BOOKING_EMAIL}" style="color:${GOLD};">${BOOKING_EMAIL}</a> &nbsp;·&nbsp;
+          <a href="${SITE_URL_EMAIL}" style="color:${GOLD};">malachiasmusic.com</a>
+        </p>
+
+        <table width="100%" cellpadding="0" cellspacing="0" style="margin-top:28px;">
+          <tr><td style="background:#f9f6f0;border-left:3px solid ${GOLD};padding:14px 18px;border-radius:0 4px 4px 0;">
+            <p style="margin:0;font-size:13px;line-height:1.6;color:#666666;font-family:Arial,sans-serif;">New to Malachias? <a href="${SITE_URL_EMAIL}/#newsletter" style="color:${GOLD};font-weight:700;">Join our list</a> for new music, upcoming shows, and merch — no spam, just the real stuff.</p>
+          </td></tr>
+        </table>`),
   },
   {
     id: makeId(), slug: 'venue-thanks-booked', name: 'Thanks & Booked Confirmation',
@@ -182,8 +257,8 @@ const DEFAULT_TEMPLATES: EmailTemplate[] = [
     bodyHtml: emailShell(`
         <h1 style="margin:0 0 16px;font-size:22px;color:#111111;font-family:Arial,sans-serif;">We're confirmed.</h1>
         <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">We're thrilled to be confirmed at <strong>{{venueName}}</strong> on <strong>{{eventDate}}</strong>. We'll give everything we have.</p>
-        <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">We'll be in touch closer to the show to coordinate load-in and logistics. Standard setup is 90 minutes before showtime.</p>
-        <p style="margin:0 0 32px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">Questions before then: <a href="mailto:{{contactEmail}}" style="color:${GOLD};">{{contactEmail}}</a></p>
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">We'll be in touch closer to the show to coordinate load-in and logistics. Standard setup is 90 minutes before showtime. We bring our own full PA.</p>
+        <p style="margin:0 0 32px;font-size:15px;line-height:1.7;color:#444444;font-family:Arial,sans-serif;">Questions before then: <a href="mailto:${BOOKING_EMAIL}" style="color:${GOLD};">${BOOKING_EMAIL}</a></p>
         <p style="margin:0;font-size:15px;color:#444444;font-family:Arial,sans-serif;">See you on stage,<br><strong>Malachias</strong></p>`),
   },
 ]
