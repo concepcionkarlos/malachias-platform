@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 const fade = (delay = 0) => ({
@@ -30,15 +30,61 @@ const EVENT_TYPES = [
   'Other',
 ];
 
+// Validation helpers (mirrors server-side logic)
+function phoneError(phone: string): string | null {
+  if (!phone.trim()) return null // optional
+  const digits = phone.replace(/\D/g, '')
+  if (digits.length < 7) return 'Phone number is too short.'
+  if (digits.length > 15) return 'Phone number is too long.'
+  if (new Set(digits.split('')).size <= 2) return 'That doesn\'t look like a real phone number.'
+  const asc = digits.split('').every((d, i, a) => i === 0 || +d === +a[i - 1] + 1)
+  const desc = digits.split('').every((d, i, a) => i === 0 || +d === +a[i - 1] - 1)
+  if (asc || desc) return 'That doesn\'t look like a real phone number.'
+  return null
+}
+
+function nameError(name: string): string | null {
+  const trimmed = name.trim()
+  if (trimmed.length < 2) return 'Please enter your name.'
+  if (/^\d+$/.test(trimmed)) return 'Name can\'t be only numbers.'
+  if (new Set(trimmed.toLowerCase().replace(/\s/g, '').split('')).size <= 1) return 'Please enter a real name.'
+  const rows = ['qwertyuiop', 'asdfghjkl', 'zxcvbnm']
+  const lower = trimmed.toLowerCase().replace(/\s/g, '')
+  for (const row of rows) {
+    let streak = 0
+    for (const ch of lower) { streak = row.includes(ch) ? streak + 1 : 0; if (streak >= 4) return 'That doesn\'t look like a real name.' }
+  }
+  return null
+}
+
+function messageError(msg: string): string | null {
+  const trimmed = msg.trim()
+  if (trimmed.length < 20) return 'Please tell us a bit more about the event (at least 20 characters).'
+  if (trimmed === trimmed.toUpperCase() && /[A-Z]/.test(trimmed)) return 'Please don\'t use all caps.'
+  const words = trimmed.split(/\s+/)
+  const unique = new Set(words.map(w => w.toLowerCase()))
+  if (words.length > 4 && unique.size / words.length < 0.3) return 'Your message looks like repeated text. Please describe the event.'
+  return null
+}
+
 export default function Booking() {
   const [form, setForm] = useState({
     fullName: '', email: '', phone: '', venueOrOrg: '',
     eventDate: '', city: '', eventType: '', budgetRange: '',
     guestCount: '', message: '', website: '',
   });
+  const [captcha, setCaptcha] = useState<{ a: number; b: number; answer: string } | null>(null);
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    setCaptcha({
+      a: Math.floor(Math.random() * 9) + 1,
+      b: Math.floor(Math.random() * 9) + 1,
+      answer: '',
+    });
+  }, []);
 
   const set = (k: keyof typeof form) =>
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
@@ -46,18 +92,45 @@ export default function Booking() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setLoading(true);
     setError('');
+
+    // Client-side field validation
+    const nErr = nameError(form.fullName)
+    if (nErr) { setError(nErr); return; }
+
+    const pErr = phoneError(form.phone)
+    if (pErr) { setError(pErr); return; }
+
+    const mErr = messageError(form.message)
+    if (mErr) { setError(mErr); return; }
+
+    // Math captcha
+    if (!captcha || captcha.answer.trim() === '' || parseInt(captcha.answer) !== captcha.a + captcha.b) {
+      setError(`Please answer the verification question: ${captcha?.a ?? '?'} + ${captcha?.b ?? '?'} = ?`);
+      return;
+    }
+
+    setLoading(true);
     try {
       const res = await fetch('/api/booking', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          ...form,
+          captchaA: captcha.a,
+          captchaB: captcha.b,
+          captchaAnswer: captcha.answer,
+        }),
       });
-      if (!res.ok) throw new Error('Submission failed');
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error ?? 'Submission failed');
+      }
       setSent(true);
-    } catch {
-      setError('Something went wrong. Please try again or email us directly.');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Something went wrong. Please try again or email us directly.');
+      // Regenerate captcha on failure
+      setCaptcha({ a: Math.floor(Math.random() * 9) + 1, b: Math.floor(Math.random() * 9) + 1, answer: '' });
     } finally {
       setLoading(false);
     }
@@ -126,7 +199,7 @@ export default function Booking() {
           <motion.div {...fade(0.08)}>
             {sent ? (
               <div className="tac-box py-14 px-8 text-center">
-                <p className="font-display text-2xl tracking-[0.16em] mb-3" style={{ color: 'var(--gold)' }}>
+                <p className="font-display text-2xl tracking[0.16em] mb-3" style={{ color: 'var(--gold)' }}>
                   Message received.
                 </p>
                 <p className="text-sm" style={{ color: 'var(--text-2)' }}>
@@ -146,6 +219,7 @@ export default function Booking() {
                   aria-hidden="true"
                   style={{ position: 'absolute', left: '-9999px', width: 1, height: 1, opacity: 0 }}
                 />
+
                 <div className="grid grid-cols-2 gap-4">
                   <input
                     className="field"
@@ -227,14 +301,43 @@ export default function Booking() {
                   value={form.message}
                   onChange={set('message')}
                 />
+
+                {/* Human verification — math captcha */}
+                {captcha && (
+                  <div style={{
+                    display: 'flex', alignItems: 'center', gap: '0.75rem',
+                    padding: '0.75rem 1rem',
+                    background: 'rgba(201,168,76,0.04)',
+                    border: '1px solid rgba(201,168,76,0.15)',
+                    borderRadius: 6,
+                  }}>
+                    <span style={{ fontSize: '0.72rem', letterSpacing: '0.12em', color: 'rgba(201,168,76,0.6)', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
+                      Human check
+                    </span>
+                    <span style={{ fontSize: '0.90rem', color: 'var(--text-2)', whiteSpace: 'nowrap' }}>
+                      {captcha.a} + {captcha.b} =
+                    </span>
+                    <input
+                      type="number"
+                      inputMode="numeric"
+                      required
+                      value={captcha.answer}
+                      onChange={e => setCaptcha(c => c ? { ...c, answer: e.target.value } : c)}
+                      className="field"
+                      placeholder="?"
+                      style={{ maxWidth: 72, textAlign: 'center' }}
+                    />
+                  </div>
+                )}
+
                 {error && (
-                  <p style={{ color: '#c04020', fontSize: '0.82rem' }}>{error}</p>
+                  <p style={{ color: '#c04020', fontSize: '0.82rem', lineHeight: 1.5 }}>{error}</p>
                 )}
                 <button
                   type="submit"
-                  disabled={loading}
+                  disabled={loading || !captcha}
                   className="btn btn-primary w-full justify-center"
-                  style={{ letterSpacing: '0.16em', opacity: loading ? 0.6 : 1 }}
+                  style={{ letterSpacing: '0.16em', opacity: (loading || !captcha) ? 0.6 : 1 }}
                 >
                   {loading ? 'Sending…' : 'Send Booking Request'}
                 </button>
