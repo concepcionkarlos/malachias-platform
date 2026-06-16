@@ -1,8 +1,9 @@
 'use client'
 
 import { useEffect, useState, useRef } from 'react'
-import { X, ChevronRight, Mail, Clock, Search, List, Columns, Send, Trash2 } from 'lucide-react'
+import { X, ChevronRight, Mail, Clock, Search, List, Columns, Send, Trash2, ShieldAlert, CheckSquare, Square } from 'lucide-react'
 import type { BookingRequest, BookingStatus, EmailTemplate, BookingEmailLog, InboundEmail } from '@/lib/data'
+import type { SpamCandidate } from '@/app/api/bookings/scan-spam/route'
 import EmailThread, { type ThreadMessage } from './EmailThread'
 import NextStepCard from './NextStepCard'
 
@@ -463,6 +464,181 @@ function KanbanColumn({ status, bookings, onSelect }: {
   )
 }
 
+// ── Spam Scanner ──────────────────────────────────────────────────────────────
+function SpamScanner({ onDeleted }: { onDeleted: (ids: string[]) => void }) {
+  const [open, setOpen] = useState(false)
+  const [scanning, setScanning] = useState(false)
+  const [candidates, setCandidates] = useState<SpamCandidate[] | null>(null)
+  const [selected, setSelected] = useState<Set<string>>(new Set())
+  const [deleting, setDeleting] = useState(false)
+  const [done, setDone] = useState('')
+
+  async function scan() {
+    setScanning(true); setCandidates(null); setSelected(new Set()); setDone('')
+    const res = await fetch('/api/bookings/scan-spam')
+    const data = await res.json()
+    setCandidates(data.candidates ?? [])
+    // Auto-select all high-confidence ones (score >= 2)
+    const autoSelect = new Set<string>((data.candidates as SpamCandidate[]).filter(c => c.score >= 2).map(c => c.id))
+    setSelected(autoSelect)
+    setScanning(false)
+  }
+
+  async function deleteSelected() {
+    if (!selected.size) return
+    if (!confirm(`Permanently delete ${selected.size} booking(s)?`)) return
+    setDeleting(true)
+    const ids = [...selected]
+    const res = await fetch('/api/bookings/scan-spam', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ids }),
+    })
+    const data = await res.json()
+    setDone(`Deleted ${data.deleted} booking(s). ${data.remaining} remaining.`)
+    setCandidates(prev => prev ? prev.filter(c => !ids.includes(c.id)) : prev)
+    setSelected(new Set())
+    onDeleted(ids)
+    setDeleting(false)
+  }
+
+  function toggle(id: string) {
+    setSelected(prev => { const n = new Set(prev); n.has(id) ? n.delete(id) : n.add(id); return n })
+  }
+
+  function toggleAll() {
+    if (!candidates) return
+    setSelected(prev => prev.size === candidates.length ? new Set() : new Set(candidates.map(c => c.id)))
+  }
+
+  if (!open) {
+    return (
+      <button
+        onClick={() => { setOpen(true); scan() }}
+        style={{ ...BTN, background: 'rgba(192,64,32,0.10)', color: '#c04020', border: '1px solid rgba(192,64,32,0.2)', fontSize: 12 }}
+      >
+        <ShieldAlert size={13} /> Scan for Spam
+      </button>
+    )
+  }
+
+  return (
+    <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 200, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
+      <div style={{ background: '#0d0d0d', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 10, width: '100%', maxWidth: 680, maxHeight: '85vh', display: 'flex', flexDirection: 'column' }}>
+        {/* Header */}
+        <div style={{ padding: '16px 20px', borderBottom: '1px solid rgba(255,255,255,0.07)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexShrink: 0 }}>
+          <div>
+            <div style={{ fontSize: 14, fontWeight: 700, color: '#e8ddd0', display: 'flex', alignItems: 'center', gap: 8 }}>
+              <ShieldAlert size={16} style={{ color: '#c04020' }} /> Spam Scanner
+            </div>
+            {candidates && (
+              <div style={{ fontSize: 11, color: '#5c5044', marginTop: 3 }}>
+                {candidates.length} suspicious booking{candidates.length !== 1 ? 's' : ''} found
+              </div>
+            )}
+          </div>
+          <button onClick={() => setOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#5c5044' }}>
+            <X size={16} />
+          </button>
+        </div>
+
+        {/* Body */}
+        <div style={{ flex: 1, overflowY: 'auto', padding: '16px 20px' }}>
+          {scanning && <p style={{ color: '#8a7f70', fontSize: 13, textAlign: 'center', padding: '30px 0' }}>Scanning bookings…</p>}
+
+          {!scanning && candidates !== null && candidates.length === 0 && (
+            <p style={{ color: '#34d399', fontSize: 13, textAlign: 'center', padding: '30px 0' }}>
+              No suspicious bookings found. All clear.
+            </p>
+          )}
+
+          {!scanning && candidates !== null && candidates.length > 0 && (
+            <>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+                <button onClick={toggleAll} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8a7f70', display: 'flex', alignItems: 'center', gap: 5, fontSize: 12, padding: 0 }}>
+                  {selected.size === candidates.length ? <CheckSquare size={14} style={{ color: '#c9a84c' }} /> : <Square size={14} />}
+                  Select all
+                </button>
+                <span style={{ fontSize: 11, color: '#5c5044' }}>{selected.size} selected</span>
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {candidates.map(c => (
+                  <div
+                    key={c.id}
+                    onClick={() => toggle(c.id)}
+                    style={{
+                      padding: '10px 14px', borderRadius: 6, cursor: 'pointer',
+                      background: selected.has(c.id) ? 'rgba(192,64,32,0.10)' : 'rgba(255,255,255,0.02)',
+                      border: `1px solid ${selected.has(c.id) ? 'rgba(192,64,32,0.3)' : 'rgba(255,255,255,0.05)'}`,
+                    }}
+                  >
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8 }}>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+                          {selected.has(c.id) ? <CheckSquare size={13} style={{ color: '#c04020', flexShrink: 0 }} /> : <Square size={13} style={{ color: '#5c5044', flexShrink: 0 }} />}
+                          <span style={{ fontSize: 13, fontWeight: 600, color: '#e8ddd0' }}>{c.fullName}</span>
+                          <span style={{ fontSize: 11, color: '#5c5044' }}>{c.email}</span>
+                        </div>
+                        {c.phone && <div style={{ fontSize: 11, color: '#5c5044', paddingLeft: 21 }}>📞 {c.phone}</div>}
+                        {c.message && (
+                          <div style={{ fontSize: 11, color: '#5c5044', paddingLeft: 21, marginTop: 2, fontStyle: 'italic' }}>
+                            &ldquo;{c.message.slice(0, 80)}{c.message.length > 80 ? '…' : ''}&rdquo;
+                          </div>
+                        )}
+                        <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', marginTop: 6, paddingLeft: 21 }}>
+                          {c.flags.map((f, i) => (
+                            <span key={i} style={{
+                              fontSize: 10, padding: '2px 6px', borderRadius: 3, letterSpacing: '0.04em',
+                              background: f.severity === 'high' ? 'rgba(192,64,32,0.15)' : 'rgba(251,146,60,0.12)',
+                              color: f.severity === 'high' ? '#c04020' : '#fb923c',
+                              border: `1px solid ${f.severity === 'high' ? 'rgba(192,64,32,0.25)' : 'rgba(251,146,60,0.2)'}`,
+                            }}>
+                              {f.reason}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      <span style={{
+                        fontSize: 11, fontWeight: 700, padding: '3px 8px', borderRadius: 4, flexShrink: 0,
+                        background: c.score >= 4 ? 'rgba(192,64,32,0.2)' : 'rgba(251,146,60,0.15)',
+                        color: c.score >= 4 ? '#c04020' : '#fb923c',
+                      }}>
+                        Score {c.score}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+
+          {done && <p style={{ fontSize: 13, color: '#34d399', marginTop: 12 }}>{done}</p>}
+        </div>
+
+        {/* Footer */}
+        {!scanning && candidates !== null && candidates.length > 0 && (
+          <div style={{ padding: '14px 20px', borderTop: '1px solid rgba(255,255,255,0.07)', display: 'flex', gap: 8, flexShrink: 0 }}>
+            <button
+              onClick={deleteSelected}
+              disabled={deleting || selected.size === 0}
+              style={{ ...BTN, background: selected.size > 0 ? '#c04020' : 'rgba(192,64,32,0.2)', color: '#fff', fontWeight: 700, opacity: deleting ? 0.7 : 1 }}
+            >
+              <Trash2 size={13} /> {deleting ? 'Deleting…' : `Delete ${selected.size > 0 ? selected.size : ''} selected`}
+            </button>
+            <button onClick={scan} disabled={scanning} style={{ ...BTN, background: 'rgba(255,255,255,0.05)', color: '#8a7f70' }}>
+              Re-scan
+            </button>
+            <button onClick={() => setOpen(false)} style={{ ...BTN, background: 'none', color: '#5c5044' }}>
+              Cancel
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
 // ── Main component ─────────────────────────────────────────────────────────────
 export default function AdminBookings() {
   const [bookings, setBookings] = useState<BookingRequest[]>([])
@@ -490,6 +666,10 @@ export default function AdminBookings() {
     setSelected(null)
   }
 
+  function handleBulkDelete(ids: string[]) {
+    setBookings(prev => prev.filter(b => !ids.includes(b.id)))
+  }
+
   const filtered = bookings.filter(b => {
     const q = search.toLowerCase()
     const matchSearch = !search || b.fullName.toLowerCase().includes(q) || b.venueOrOrg.toLowerCase().includes(q) || b.email.toLowerCase().includes(q)
@@ -508,6 +688,7 @@ export default function AdminBookings() {
           BOOKING REQUESTS
         </h2>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+          <SpamScanner onDeleted={handleBulkDelete} />
           <div style={{ position: 'relative' }}>
             <Search size={13} style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: '#5c5044' }} />
             <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search bookings…"
