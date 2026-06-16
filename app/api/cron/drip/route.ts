@@ -9,9 +9,8 @@ export const dynamic = 'force-dynamic'
 export async function GET(req: NextRequest) {
   const cronSecret = process.env.CRON_SECRET
   const auth = req.headers.get('authorization')
-  const isProd = process.env.NODE_ENV === 'production'
-  if (isProd && !cronSecret) return NextResponse.json({ error: 'CRON_SECRET not configured' }, { status: 500 })
-  if (cronSecret && auth !== `Bearer ${cronSecret}`) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  if (!cronSecret) return NextResponse.json({ error: 'CRON_SECRET not configured' }, { status: 500 })
+  if (auth !== `Bearer ${cronSecret}`) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   const [enrollments, campaigns, store] = await Promise.all([
     getActiveDripEnrollments(),

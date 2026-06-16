@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
+import crypto from 'crypto'
+import path from 'path'
 import { isAuthenticatedFromRequest } from '@/lib/auth'
+
+const ALLOWED_EXTS = new Set(['.jpg', '.jpeg', '.png', '.webp', '.gif', '.mp3', '.mp4', '.pdf'])
 
 export async function POST(req: NextRequest) {
   if (!isAuthenticatedFromRequest(req)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -8,8 +12,14 @@ export async function POST(req: NextRequest) {
   const file = form.get('file') as File | null
   if (!file) return NextResponse.json({ error: 'No file provided' }, { status: 400 })
 
+  const ext = path.extname(file.name).toLowerCase()
+  if (!ALLOWED_EXTS.has(ext)) return NextResponse.json({ error: 'File type not allowed' }, { status: 400 })
+
+  // Sanitized name — random ID + extension only, no user-controlled path segments
+  const safeName = `uploads/${crypto.randomBytes(8).toString('hex')}${ext}`
+
   const { put } = await import('@vercel/blob')
-  const blob = await put(file.name, file, { access: 'public' })
+  const blob = await put(safeName, file, { access: 'public' })
 
   return NextResponse.json({ url: blob.url })
 }

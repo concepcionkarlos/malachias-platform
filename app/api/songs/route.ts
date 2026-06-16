@@ -5,6 +5,7 @@ import { getSongs, addSong, updateSong, deleteSong } from '@/lib/venueStore'
 export const dynamic = 'force-dynamic'
 
 export async function GET() {
+  if (!(await isAuthenticated())) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   const songs = await getSongs()
   return NextResponse.json(songs)
 }

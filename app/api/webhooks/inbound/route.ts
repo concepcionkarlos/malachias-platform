@@ -1,14 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { addInboundEmail } from '@/lib/venueStore'
+import { verifyWebhookSecret } from '@/lib/webhookAuth'
 
 export const dynamic = 'force-dynamic'
 
 export async function POST(req: NextRequest) {
   const secret = process.env.WEBHOOK_INBOUND_SECRET
-  if (secret) {
-    const provided = req.headers.get('authorization') ?? req.headers.get('x-webhook-secret') ?? ''
-    const token = provided.replace(/^Bearer\s+/i, '')
-    if (token !== secret) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  if (!secret) return NextResponse.json({ error: 'Webhook not configured' }, { status: 500 })
+  const authHeader = req.headers.get('authorization') ?? ''
+  const provided = authHeader.replace(/^Bearer\s+/i, '') || (req.headers.get('x-webhook-secret') ?? '')
+  if (!verifyWebhookSecret(provided, secret)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
   try {

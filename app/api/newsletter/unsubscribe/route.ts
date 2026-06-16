@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { readContent, writeContent } from '@/lib/store'
+import { rateLimit } from '@/lib/rateLimit'
 
 export async function GET(req: NextRequest) {
+  const limited = rateLimit(req, 'unsubscribe', { limit: 5, windowMs: 60_000 })
+  if (limited) return new NextResponse('Too many requests. Please try again later.', { status: 429, headers: { 'Content-Type': 'text/plain' } })
+
   const email = req.nextUrl.searchParams.get('email')
   if (!email) {
     return new NextResponse('Missing email parameter.', { status: 400, headers: { 'Content-Type': 'text/plain' } })
