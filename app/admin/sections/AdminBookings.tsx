@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, useRef } from 'react'
-import { X, ChevronRight, Mail, Clock, Search, List, Columns, Send } from 'lucide-react'
+import { X, ChevronRight, Mail, Clock, Search, List, Columns, Send, Trash2 } from 'lucide-react'
 import type { BookingRequest, BookingStatus, EmailTemplate, BookingEmailLog, InboundEmail } from '@/lib/data'
 import EmailThread, { type ThreadMessage } from './EmailThread'
 import NextStepCard from './NextStepCard'
@@ -12,7 +12,7 @@ const INPUT: React.CSSProperties = { background: 'rgba(255,255,255,0.05)', borde
 const LABEL: React.CSSProperties = { fontSize: 11, color: '#8a7f70', letterSpacing: '0.08em', display: 'block', marginBottom: 4 }
 const BTN: React.CSSProperties = { border: 'none', cursor: 'pointer', padding: '7px 14px', borderRadius: 6, fontSize: 13, display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: 'var(--font-body)' }
 
-const BOOKING_STATUSES: BookingStatus[] = ['New','Contacted','Quote Sent','Follow-up','Negotiating','Confirmed','Advance Sent','Paid','Completed','Lost','Archived']
+const BOOKING_STATUSES: BookingStatus[] = ['New','Contacted','Quote Sent','Follow-up','Negotiating','Confirmed','Advance Sent','Paid','Completed','Lost','Archived','Spam']
 
 const STATUS_COLOR: Record<BookingStatus, string> = {
   'New': '#c9a84c',
@@ -26,6 +26,7 @@ const STATUS_COLOR: Record<BookingStatus, string> = {
   'Completed': '#8a7f70',
   'Lost': '#c04020',
   'Archived': '#5c5044',
+  'Spam': '#6b2020',
 }
 
 function StatusBadge({ status }: { status: BookingStatus }) {
@@ -207,17 +208,27 @@ function BookingEmailThread({ bookingId }: { bookingId: string }) {
 
 // ── Booking Drawer ─────────────────────────────────────────────────────────────
 function BookingDrawer({
-  booking, onClose, onUpdate,
+  booking, onClose, onUpdate, onDelete,
 }: {
   booking: BookingRequest
   onClose: () => void
   onUpdate: (updated: BookingRequest) => void
+  onDelete: (id: string) => void
 }) {
   const [tab, setTab] = useState<'details'|'email'|'history'>('details')
   const [editing, setEditing] = useState(false)
   const [form, setForm] = useState<BookingRequest>(booking)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
+  const [deleting, setDeleting] = useState(false)
+
+  async function handleDelete() {
+    if (!confirm(`Permanently delete booking from ${booking.fullName}? This cannot be undone.`)) return
+    setDeleting(true)
+    await fetch(`/api/bookings/${booking.id}`, { method: 'DELETE' })
+    onDelete(booking.id)
+    onClose()
+  }
 
   useEffect(() => { setForm(booking); setEditing(false) }, [booking.id]) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -265,12 +276,22 @@ function BookingDrawer({
       {/* Header */}
       <div style={{ padding: '16px 20px', borderBottom: '1px solid rgba(255,255,255,0.07)', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexShrink: 0 }}>
         <div>
-          <div style={{ fontSize: 15, fontWeight: 700, color: '#e8ddd0' }}>{booking.fullName}</div>
-          <div style={{ fontSize: 12, color: '#8a7f70', marginTop: 2 }}>{booking.venueOrOrg}</div>
+          <div style={{ fontSize: 15, fontWeight: 700, color: booking.status === 'Spam' ? '#c04020' : '#e8ddd0' }}>{booking.fullName}</div>
+          <div style={{ fontSize: 12, color: '#8a7f70', marginTop: 2 }}>{booking.venueOrOrg || booking.email}</div>
         </div>
-        <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#5c5044', padding: 4 }}>
-          <X size={18} />
-        </button>
+        <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+          <button
+            onClick={handleDelete}
+            disabled={deleting}
+            title="Delete permanently"
+            style={{ background: 'rgba(192,64,32,0.12)', border: 'none', cursor: 'pointer', color: '#c04020', padding: '4px 8px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 4, fontSize: 12 }}
+          >
+            <Trash2 size={13} /> {deleting ? '…' : 'Delete'}
+          </button>
+          <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#5c5044', padding: 4 }}>
+            <X size={18} />
+          </button>
+        </div>
       </div>
 
       {/* Status row */}
@@ -421,7 +442,7 @@ function KanbanColumn({ status, bookings, onSelect }: {
               onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.05)')}
               onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.03)')}>
               <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 3 }}>
-                <div style={{ fontSize: 13, fontWeight: 600, color: '#e8ddd0' }}>{b.fullName}</div>
+                <div style={{ fontSize: 13, fontWeight: 600, color: b.status === 'Spam' ? '#c04020' : '#e8ddd0' }}>{b.fullName}</div>
                 <span title={`${freshness.label} — ${Math.floor(freshness.age)}d ago`}
                   style={{ width: 8, height: 8, borderRadius: '50%', background: freshness.color, flexShrink: 0, marginTop: 3, marginLeft: 6, boxShadow: `0 0 4px ${freshness.color}88` }} />
               </div>
@@ -462,6 +483,11 @@ export default function AdminBookings() {
   function handleUpdate(updated: BookingRequest) {
     setBookings(prev => prev.map(b => b.id === updated.id ? updated : b))
     setSelected(updated)
+  }
+
+  function handleDelete(id: string) {
+    setBookings(prev => prev.filter(b => b.id !== id))
+    setSelected(null)
   }
 
   const filtered = bookings.filter(b => {
@@ -585,7 +611,7 @@ export default function AdminBookings() {
 
       {/* Drawer */}
       {selected && (
-        <BookingDrawer booking={selected} onClose={() => setSelected(null)} onUpdate={handleUpdate} />
+        <BookingDrawer booking={selected} onClose={() => setSelected(null)} onUpdate={handleUpdate} onDelete={handleDelete} />
       )}
     </div>
   )

@@ -17,6 +17,7 @@ const STATUS_COLOR: Record<BookingStatus, string> = {
   'Completed': '#8a7f70',
   'Lost': '#c04020',
   'Archived': '#5c5044',
+  'Spam': '#6b2020',
 }
 
 const BOOKING_STATUSES: BookingStatus[] = ['New','Contacted','Quote Sent','Follow-up','Negotiating','Confirmed','Advance Sent','Paid','Completed','Lost','Archived']
