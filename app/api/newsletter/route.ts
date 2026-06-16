@@ -128,6 +128,15 @@ export async function POST(req: NextRequest) {
         }),
       }).catch(() => {/* non-blocking — subscriber still saved */})
     }
+
+    // Enroll in welcome drip (Day 3 + Day 7 follow-up emails)
+    const dripQueue = (store as any).subscriberDrip ?? []
+    const alreadyInDrip = dripQueue.some((e: { email: string }) => e.email.toLowerCase() === email.toLowerCase())
+    if (!alreadyInDrip) {
+      await writeContent({
+        subscriberDrip: [...dripQueue, { email: email.toLowerCase(), subscribedAt: new Date().toISOString(), day3Sent: false, day7Sent: false }],
+      } as any)
+    }
   }
 
   return NextResponse.json({ ok: true })
