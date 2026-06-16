@@ -57,13 +57,13 @@ const EMAIL_TEMPLATES = [
   {
     id: 'launch',
     label: 'Launch Blast',
-    sublabel: 'Send to ALL existing subscribers on Day 1 — BEFORE posting publicly on Facebook',
-    subject: `🎸 You get ${DISCOUNT} off — our merch store is live`,
+    sublabel: 'Send to ALL existing subscribers on Day 1 — BEFORE posting publicly on Facebook. They hear it first.',
+    subject: `You get ${DISCOUNT} off — Malachias merch is live 🎸`,
     body: `Hey,
 
-You've been following us. Today we're giving something back.
+You've been here. That matters.
 
-The official Malachias merch store is live — and as one of our subscribers, you're getting first access with ${DISCOUNT} off your entire first order.
+The official Malachias merch store is live — and as one of our subscribers, you get first access with ${DISCOUNT} off your entire first order.
 
 Use code ${COUPON} at checkout.
 
@@ -72,83 +72,51 @@ Use code ${COUPON} at checkout.
 🧢 Trucker Hat — $19.99
 👕 Premium Tee — from $34.99
 
-→ Shop now: ${MERCH_URL}
+→ ${MERCH_URL}
 
-No label. No middleman. Every purchase goes directly to live shows, recording the next album, and veteran outreach events.
+No label. No compromise. Faith, freedom, and music made the way it was meant to be made.
 
-Thank you for being part of this from the start.
+When you wear Malachias, you carry the mission with you.
+
+Thank you for being part of this.
 
 God bless,
-Malachias
-
-—
-
-Hola,
-
-Nos has estado siguiendo. Hoy te devolvemos algo.
-
-La tienda oficial de Malachias ya está disponible — y como suscriptor, tienes acceso exclusivo con ${DISCOUNT} de descuento en todo tu primer pedido.
-
-Usa el código ${COUPON} al pagar.
-
-☕ Support Mug — desde $8.95
-🧢 Warrior Hat — $19.99
-🧢 Trucker Hat — $19.99
-👕 Premium Tee — desde $34.99
-
-→ Ver la tienda: ${MERCH_URL}
-
-Sin disquera. Sin intermediarios. Cada compra va directamente a shows en vivo, grabar el próximo álbum y eventos para veteranos.
-
-Gracias por estar con nosotros desde el principio.
-
-Que Dios los bendiga,
 Malachias`,
   },
   {
     id: 'reminder',
     label: '3-Day Reminder',
-    sublabel: 'Send on Day 3 — short, no pressure, just a nudge',
-    subject: `The code still works — ${DISCOUNT} off at Malachias merch`,
+    sublabel: 'Send on Day 3. Short. No pressure. Just a reminder the code still works.',
+    subject: `Still here — your ${DISCOUNT} off code`,
     body: `Hey,
 
-Still thinking about it? Code is still valid.
+Still thinking about it? No rush.
 
-Use ${COUPON} at checkout → ${MERCH_URL}
+Code: ${COUPON} — ${DISCOUNT} off → ${MERCH_URL}
 
-The mug starts at $8.95. That's less than coffee out. Every purchase keeps the shows coming.
+The mug starts at $8.95. Take it or leave it — but the people who grabbed one haven't looked back.
 
 God bless,
-Malachias
-
-—
-
-¿Todavía lo estás pensando? El código sigue vigente.
-
-Usa ${COUPON} al pagar → ${MERCH_URL}
-
-El mug empieza en $8.95. Menos que un café afuera. Cada compra mantiene los shows.
-
-Que Dios los bendiga,
 Malachias`,
   },
   {
     id: 'auto',
     label: 'Welcome Email — AUTOMATIC (no action needed)',
     sublabel: 'Sent instantly by the system when anyone subscribes at malachiasmusic.com/promo or the homepage form',
-    subject: `[AUTO] Your ${DISCOUNT} OFF code → welcome to the Malachias family 🎸`,
+    subject: `[AUTO] Your ${DISCOUNT} off code — welcome to the mission 🎸`,
     body: `This email sends AUTOMATICALLY — you don't touch it.
 
 Triggered when someone subscribes at:
   • malachiasmusic.com/promo (campaign landing page)
   • malachiasmusic.com (homepage newsletter form)
 
-What the email delivers to the subscriber:
-  → Bilingual welcome (English + Spanish)
-  → Big gold box with code ${COUPON}
+What the subscriber receives:
+  → "You subscribed. Here's your code." (no pity angle — straight to value)
+  → Big gold coupon box: ${COUPON}
   → ${DISCOUNT} off entire first order
-  → Full product list with prices
-  → Direct link to ${MERCH_URL}
+  → "No label. No compromise. Faith, freedom, and music made the way it was meant to be made."
+  → Product list with prices
+  → Link to ${MERCH_URL}
   → CAN-SPAM compliant unsubscribe link
 
 To change the discount or code, contact your developer.`,
@@ -164,326 +132,206 @@ const CAMPAIGN_POSTS = [
     label: 'The Big Launch — ENGLISH',
     note: 'POST THIS FIRST. Pin it to the top of your page. Best time: Tuesday or Wednesday, 9–10am.',
     platform: 'Facebook / Instagram',
-    text: `We made merch.
+    text: `This is for you.
 
-Not because every band does it.
-Not because we needed another income stream.
+You've been following the music. Showing up to shows. Sharing songs with the right people at the right moment.
 
-Because shows cost money we don't have. Recording costs money we don't have. Getting free tickets to veterans who've never been to a live rock show — that costs money we don't have.
+You already know what this band is about.
 
-We're not on a label. Nobody's writing us checks. It's five guys, a shared mission, and whatever we can build between day jobs and late-night rehearsals.
+So we made something.
 
-So we made something you can hold. Something you can wear. Something that keeps the mission alive between shows.
-
-The official Malachias merch store is live.
+Official Malachias merch is live — and you get first access with 15% off your first order. Subscribe below and the code goes straight to your inbox.
 
 ☕ Support Mug — from $8.95
 🧢 Warrior Hat — $19.99
 🧢 Trucker Hat — $19.99
 👕 Premium Tee — from $34.99
 
-Subscribe at the link below and your 15% off code arrives in your inbox — our way of thanking you personally.
+No label. No compromise. Faith, freedom, and music made the way it was meant to be made.
 
-Every piece you buy keeps us on the road, in the studio, and at veterans events doing what we came here to do.
+Wear it. Let people ask.
 
-No label. No middleman. Just the mission.
-
-God bless.
+Thank you for being here.
 — Malachias
 
 → malachiasmusic.com/promo
 
-#MalachiasBand #WearTheMission #ChristianRock #VeteranMusic #SouthFlorida #FaithOnFire #IndependentArtist #HealingThroughMusic #SupportTheMission #MerchLaunch #VeteranOwned #NoLabel #MissionDrivenMusic #FaithAndFreedom`,
+#MalachiasBand #WearTheMission #ChristianRock #VeteranMusic #SouthFlorida #FaithOnFire #NoLabel #SupportTheMission #MerchLaunch #FaithAndFreedom`,
   },
   {
     id: 'p1_es',
     day: 'Day 1',
     label: 'The Big Launch — ESPAÑOL',
-    note: 'Publicar el mismo día, 1–2 horas después del post en inglés, o al mismo tiempo en otra plataforma.',
+    note: 'Post the same day, 1–2 hours after the English version.',
     platform: 'Facebook / Instagram',
-    text: `Hicimos merch.
+    text: `Esto es para ti.
 
-No porque toda banda lo hace.
-No porque necesitábamos otra fuente de ingresos.
+Has estado siguiendo la música. Apareciendo en los shows. Compartiendo canciones con las personas correctas en el momento correcto.
 
-Porque los shows cuestan dinero que no tenemos. Grabar cuesta dinero que no tenemos. Conseguir entradas gratis para veteranos que nunca han estado en un show de rock — eso cuesta dinero que no tenemos.
+Ya sabes de qué se trata esta banda.
 
-No estamos en una disquera. Nadie nos escribe cheques. Somos cinco tipos, una misión compartida, y lo que podemos construir entre trabajos y ensayos nocturnos.
+Así que hicimos algo.
 
-Entonces hicimos algo que puedes sostener. Algo que puedes usar. Algo que mantiene la misión viva entre shows.
-
-La tienda oficial de Malachias ya está disponible.
+La tienda oficial de Malachias ya está disponible — y tienes acceso primero con 15% de descuento en tu primer pedido. Suscríbete abajo y el código llega directo a tu correo.
 
 ☕ Support Mug — desde $8.95
 🧢 Warrior Hat — $19.99
 🧢 Trucker Hat — $19.99
 👕 Premium Tee — desde $34.99
 
-Suscríbete en el enlace de abajo y tu código de 15% de descuento llega a tu correo — nuestra forma de agradecerte personalmente.
+Sin disquera. Sin compromiso. Fe, libertad y música hecha como debe hacerse.
 
-Cada cosa que compras nos mantiene en la carretera, en el estudio, y en eventos para veteranos haciendo lo que vinimos a hacer.
+Úsalo. Deja que la gente pregunte.
 
-Sin disquera. Sin intermediarios. Solo la misión.
-
-Que Dios los bendiga.
+Gracias por estar aquí.
 — Malachias
 
 → malachiasmusic.com/promo
 
-#MalachiasBand #WearTheMission #RocaCristiana #MusicaVeterana #SouthFlorida #FeEnLlamas #ArtistaIndependiente #SanarConMusica #ApoyaLaMision #LanzamientoMerch #VeteranoFundador #SinDisquera #MisionMusical #FeYLibertad`,
+#MalachiasBand #WearTheMission #RocaCristiana #MusicaVeterana #SouthFlorida #FeEnLlamas #SinDisquera #ApoyaLaMision #LanzamientoMerch #FeYLibertad`,
   },
   {
     id: 'p2',
     day: 'Day 2',
-    label: 'The Mug — Bilingual (Entry Price)',
-    note: "The cheapest item. Great for people who want to support but can't spend $35. Daily habit angle.",
+    label: 'The Mug — Daily Habit (Entry Price)',
+    note: "Entry point at $8.95. Angle: how you start the day says something about what you're aligned with. Accessible for anyone.",
     platform: 'Facebook / Instagram',
-    text: `Every morning.
-Same cup.
-Same mission.
+    text: `How you start the day matters.
 
-🌅 The Malachias Support Mug — starting at $8.95.
+Start it on the right side of the mission.
 
-That's less than the coffee you put in it. And every morning when you pick it up, you remember what you're part of.
+☕ The Malachias Support Mug — from $8.95.
 
-A veteran-founded band. Five guys. No label. A mission to be on every stage that will have them — bars, churches, rock festivals, VFW halls — because the music finds people where they are.
+Less than the coffee you put in it. More than a reminder — a daily choice.
 
-One mug. One morning at a time.
+Every morning. Same cup. Same conviction.
 
 Subscribe and get 15% off → malachiasmusic.com/promo
 Code arrives in your inbox. Use it at checkout.
 
-—
-
-Cada mañana.
-La misma taza.
-La misma misión.
-
-☕ El Malachias Support Mug — desde $8.95.
-
-Eso es menos que el café que le pones adentro. Y cada mañana que lo agarras, recuerdas de qué eres parte.
-
-Una banda fundada por un veterano. Cinco tipos. Sin disquera. Con una misión de estar en cada escenario que los reciba — bares, iglesias, festivales de rock, salones VFW — porque la música encuentra a las personas donde están.
-
-Una taza. Una mañana a la vez.
-
-Suscríbete y obtén 15% de descuento → malachiasmusic.com/promo
-
-#MalachiasBand #SupportMug #WearTheMission #ChristianRock #RocaCristiana #VeteranMusic #MusicaVeterana #SouthFlorida #FaithOnFire #FeEnLlamas #SupportTheMission #ApoyaLaMision`,
+#MalachiasBand #WearTheMission #ChristianRock #VeteranMusic #SouthFlorida #FaithOnFire #SupportTheMission`,
   },
   {
     id: 'p3',
     day: 'Day 4',
-    label: 'The Mission Story — Bilingual (Most Shareable)',
-    note: 'NO product push in the opening. This is the WHY. Post on a weekend — people share emotional content on Sat/Sun. This is the post that reaches new people.',
+    label: 'The Mission Post (Most Shareable)',
+    note: 'No hard product push. Lead with who the band is and what it stands for — strength, not struggle. Post on a weekend when people have time to read and share. This is the one that reaches new people.',
     platform: 'Facebook / Instagram',
-    text: `A veteran picked up a guitar instead of a bottle.
+    text: `Some bands chase a deal.
 
-That's not poetry. That's what happened.
+We chase a mission.
 
-When PTSD was loud and everything else went quiet. When depression made the world feel like something happening to someone else. When suicidal ideation made it hard to find a reason to wake up in the morning.
+No label. No filter. No apologies for what we believe.
 
-Music was the thing that made sense. Not therapy. Not medication. Not a program. A guitar. A chord progression that somehow said what couldn't be said in words.
+Faith. Freedom. Music.
 
-The songs Malachias writes aren't performance. They're testimony.
+Not as a tagline — as a way of operating. Every show we play, every song we write, every stage we earn without anyone in a suit telling us what to do.
 
-And somewhere along the way, people started showing up. South Florida. Indiana. People who found us through an algorithm, at a show, or through a friend who said "you need to hear this." Something in the music said what they couldn't say.
+Five guys from South Florida who believe music still has something real to say. And who show up — to bars, churches, rock festivals, VFW halls, veteran events — because the music finds people where they are.
 
-We don't have a label telling us what to write. We don't have a PR team managing what we say. We have a mission — and we have you.
+If you've been part of this from the start, thank you. That means something.
+If you're just finding out what Malachias is — welcome.
 
-If this music has meant anything to you, the merch store is the most direct way to keep it going.
+The merch store is live. Wear the mission.
 
-And if you're going through something right now and the music is helping — reach out. That's exactly why we're here.
-
-→ malachiasmusic.com/promo (15% off your first order)
-→ malachiasmusic.com (our full story)
-
-Share this post if someone you know needs to hear it. It costs nothing. It might mean everything to someone.
+→ malachiasmusic.com/promo (15% off — subscribe, code hits your inbox)
 
 God bless.
 — Malachias
 
-—
-
-Un veterano agarró una guitarra en vez de una botella.
-
-Eso no es poesía. Eso fue lo que pasó.
-
-Cuando el PTSD estaba en su punto más alto y todo lo demás se quedó en silencio. Cuando la depresión hacía que el mundo se sintiera como algo que le estaba pasando a otra persona. Cuando los pensamientos suicidas hacían difícil encontrar una razón para despertar por la mañana.
-
-La música fue lo que tenía sentido. No la terapia. No los medicamentos. No un programa. Una guitarra. Una progresión de acordes que de alguna manera decía lo que no se podía decir con palabras.
-
-Las canciones que Malachias escribe no son actuación. Son testimonio.
-
-Y en algún punto, la gente empezó a aparecer. South Florida. Indiana. Personas que nos encontraron en el algoritmo, en un show, o a través de un amigo que dijo "tienes que escuchar esto." Algo en la música decía lo que ellos no podían decir.
-
-No tenemos una disquera que nos diga qué escribir. Tenemos una misión — y los tenemos a ustedes.
-
-Si esta música ha significado algo para ti, la tienda de merch es la forma más directa de mantenerla viva.
-
-Y si estás pasando por algo ahora mismo y la música te está ayudando — comunícate. Para eso exactamente estamos aquí.
-
-→ malachiasmusic.com/promo (15% de descuento en tu primer pedido)
-→ malachiasmusic.com (nuestra historia completa)
-
-Comparte este post si conoces a alguien que necesita escucharlo. No cuesta nada. Podría significar todo para alguien.
-
-Que Dios los bendiga.
-— Malachias
-
-#MalachiasBand #VeteranMusic #MusicaVeterana #HealingThroughMusic #SanarConMusica #ChristianRock #RocaCristiana #PTSDAwareness #PTSDConciencia #FaithOnFire #FeEnLlamas #SupportTheMission #ApoyaLaMision #NoLabel #SinDisquera #IndependentArtist #ArtistaIndependiente #SouthFlorida #MissionDrivenMusic #VeteransMentalHealth`,
+#MalachiasBand #WearTheMission #ChristianRock #VeteranMusic #SouthFlorida #FaithOnFire #NoLabel #IndependentArtist #MissionDrivenMusic #FaithAndFreedom #SupportTheMission`,
   },
   {
     id: 'p4',
     day: 'Day 5',
-    label: 'The Hats — Bilingual',
-    note: 'The hat is public & visible — someone sees it and asks. That organic conversation is marketing. Write to that angle.',
+    label: 'The Hats — Conversation Starter',
+    note: 'The hat is the most public item — it starts conversations. The angle is: you become a representative of the mission without having to say a word.',
     platform: 'Facebook / Instagram',
-    text: `Someone's going to ask you about this hat.
+    text: `Wear it. Let people ask.
 
-That's the point.
+You don't need to explain the whole thing upfront.
 
-You'll be in line somewhere — the grocery store, church, the gym, a job site — and someone's going to read "MALACHIAS" and ask what it is.
-
-And then you get to tell them.
-
-About a veteran-founded band from South Florida. About faith and rock and healing. About five guys who show up to every show like it's their last one. About music that says what's hard to say any other way.
-
-Let the hat start the conversation.
+Just wear the hat. And when someone sees "MALACHIAS" and wants to know — you'll know exactly what to say.
 
 🧢 Warrior Hat + Trucker Hat — $19.99 each.
+
+Faith. Freedom. Music. On your head. Everywhere you go.
+
 Subscribe and get 15% off → malachiasmusic.com/promo
 
-—
-
-Alguien te va a preguntar sobre este hat.
-
-Ese es el punto.
-
-Vas a estar en fila en algún lugar — el supermercado, la iglesia, el gym, en el trabajo — y alguien va a leer "MALACHIAS" y va a preguntar qué es.
-
-Y ahí es cuando puedes contarles.
-
-Sobre una banda fundada por un veterano en South Florida. Sobre la fe, el rock y la sanación. Sobre cinco tipos que se presentan a cada show como si fuera el último. Sobre música que dice lo que es difícil decir de otra manera.
-
-Que el hat empiece la conversación.
-
-🧢 Warrior Hat + Trucker Hat — $19.99 cada uno.
-Suscríbete y obtén 15% de descuento → malachiasmusic.com/promo
-
-#MalachiasBand #WarriorHat #TruckerHat #WearTheMission #ChristianRock #RocaCristiana #VeteranMusic #MusicaVeterana #SouthFlorida #FaithOnFire #FeEnLlamas #SupportTheMission #ApoyaLaMision #WearYourFaith #UsaTuFe`,
+#MalachiasBand #WarriorHat #WearTheMission #ChristianRock #VeteranMusic #SouthFlorida #FaithOnFire #SupportTheMission #WearYourFaith`,
   },
   {
     id: 'p5',
     day: 'Day 7',
-    label: 'The Premium Tee — Bilingual',
-    note: 'The statement piece. For people who are all-in on the mission. Three words: Faith. Freedom. Music.',
+    label: 'The Premium Tee — Identity Statement',
+    note: "The statement piece. Three words. Confidence over explanation. For people who are all-in.",
     platform: 'Facebook / Instagram',
-    text: `This is the one.
+    text: `Three words.
 
-Three words on the front.
 Faith. Freedom. Music.
 
-That's the entire mission in a shirt. No label. No compromise. No apologies for what we believe.
+If you know, you know.
 
-The Malachias Premium Tee — from $34.99.
+No label. No compromise. No explanation needed.
+
+👕 The Malachias Premium Tee — from $34.99.
 Subscribe and get 15% off → malachiasmusic.com/promo
 
-Carry the mission on your chest.
-
-—
-
-Esta es la pieza.
-
-Tres palabras al frente.
-Fe. Libertad. Música.
-
-Esa es toda la misión en una camiseta. Sin disquera. Sin compromiso. Sin disculpas por lo que creemos.
-
-La Malachias Premium Tee — desde $34.99.
-Suscríbete y obtén 15% de descuento → malachiasmusic.com/promo
-
-Lleva la misión en tu pecho.
-
-#MalachiasBand #PremiumTee #FaithFreedomMusic #FeLbertadMusica #WearTheMission #ChristianRock #RocaCristiana #VeteranMusic #MusicaVeterana #SouthFlorida #FaithOnFire #FeEnLlamas #SupportTheMission #ApoyaLaMision #NoLabel #SinDisquera`,
+#MalachiasBand #PremiumTee #FaithFreedomMusic #WearTheMission #ChristianRock #VeteranMusic #SouthFlorida #FaithOnFire #NoLabel #SupportTheMission`,
   },
   {
     id: 'p6',
     day: 'Day 10–14',
-    label: 'Final Urgency — Bilingual',
-    note: 'Short, direct. The people who were going to buy already have. This is for the ones still thinking.',
+    label: 'Final Post — Confident, Not Desperate',
+    note: 'Short and direct. No urgency pressure. The people ready to buy will. This is just a reminder that the code still works.',
     platform: 'Facebook / Instagram',
-    text: `Still thinking about it?
+    text: `The code still works.
 
-The mug is $8.95. The hats are $19.99. The code takes 15% off everything.
+MALACHIAS15 — 15% off your first order.
 
-Subscribe → code goes to your inbox → use it at checkout.
+The mug starts at $8.95. Subscribe, get the code, use it.
 
 → malachiasmusic.com/promo
 
 God bless.
-#MalachiasBand #MALACHIAS15 #WearTheMission #SupportTheMission #ChristianRock #VeteranMusic
-
-—
-
-¿Todavía lo estás pensando?
-
-El mug es $8.95. Los hats son $19.99. El código quita 15% de todo.
-
-Suscríbete → el código llega a tu correo → úsalo al pagar.
-
-→ malachiasmusic.com/promo
-
-Que Dios los bendiga.
-#MalachiasBand #MALACHIAS15 #WearTheMission #ApoyaLaMision #RocaCristiana #MusicaVeterana`,
+#MalachiasBand #MALACHIAS15 #WearTheMission #ChristianRock #VeteranMusic #SouthFlorida`,
   },
   {
     id: 'stories',
     day: 'All Week',
-    label: 'Facebook / Instagram Stories (3-slide script)',
-    note: 'Post as Stories throughout the campaign. Each slide = 1 screen. Use your band photo as background.',
+    label: 'Stories Script (Facebook / Instagram)',
+    note: 'Post all 3 slides as Stories the same day as the launch post. Stories hit a different audience than the feed.',
     platform: 'Facebook Stories / Instagram Stories',
-    text: `SLIDE 1:
-Background: Black or dark band photo
-Text overlay (big, gold or white):
-"OFFICIAL MERCH IS LIVE 🎸"
-Small text: "Faith. Freedom. Music."
+    text: `SLIDE 1 — The Hook
+Background: Dark band photo or black
+Text (large, gold or white): "OFFICIAL MERCH IS LIVE 🎸"
+Subtext: "Faith. Freedom. Music."
 
 ---
 
-SLIDE 2:
-Background: Product photo (mug, hat, or tee)
-Text overlay:
+SLIDE 2 — The Products
+Background: Product photo
+Text:
 "☕ Mug from $8.95"
 "🧢 Hats $19.99"
 "👕 Tee from $34.99"
-Smaller: "Subscribe → get 15% off"
+Bottom: "Subscribe → 15% off"
 
 ---
 
-SLIDE 3:
-Background: You / the band
-Text overlay (big):
-"MALACHIAS15"
-Smaller: "15% off · Link in bio"
-"malachiasmusic.com/promo"
-Sticker: Add a Link sticker pointing to malachiasmusic.com/promo
+SLIDE 3 — The CTA
+Background: Band photo (you, or the band together)
+Text (large): "No label. Our way."
+Smaller: "malachiasmusic.com/promo"
+Action: Add a Link sticker pointing to malachiasmusic.com/promo
 
 ---
 
-STORY 2 — Mission (1 slide):
-Background: Band performing live photo
-Text overlay:
-"A veteran picked up a guitar instead of a bottle."
-"That's why the music sounds like it does."
-Bottom: "→ malachiasmusic.com"
-
----
-
-STORY 3 — DM Reply (copy-paste when someone DMs asking about the code):
-"¡Aquí está tu código! 🎸 → MALACHIAS15
-Use it at checkout: malachiasmusic.com/merch
-God bless / Que Dios te bendiga 🙏"`,
+DM REPLY — When someone asks for the code in comments or DMs:
+"Here's your code 🎸 → MALACHIAS15
+Use it at: malachiasmusic.com/merch
+God bless."`,
   },
 ]
 
