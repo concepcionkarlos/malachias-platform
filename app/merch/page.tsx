@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { fetchFWProducts } from '@/lib/fourthwall';
 import MerchPageClient from './MerchPageClient';
 
-export const revalidate = 3600;  // Re-fetch Fourthwall catalog every hour
+export const revalidate = 300;  // Re-fetch Fourthwall catalog every 5 minutes
 
 export const metadata: Metadata = {
   title: 'Official Merch — MALACHIAS | Christian Rock Band South Florida',
