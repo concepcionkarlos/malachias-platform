@@ -25,10 +25,10 @@ function buildCouponEmail(email: string): string {
 
       <!-- Hero -->
       <tr><td style="background:#030202;padding:36px 40px 32px;text-align:center;">
-        <p style="margin:0 0 8px;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:rgba(201,168,76,0.65);">Thank you for supporting the mission</p>
-        <h1 style="margin:0 0 16px;font-size:32px;color:#ffffff;letter-spacing:2px;font-family:Georgia,serif;">YOUR ${DISCOUNT} OFF CODE</h1>
+        <p style="margin:0 0 8px;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:rgba(201,168,76,0.65);">You subscribed. Here's your code.</p>
+        <h1 style="margin:0 0 16px;font-size:32px;color:#ffffff;letter-spacing:2px;font-family:Georgia,serif;">${DISCOUNT} OFF — FOR YOU</h1>
         <p style="margin:0 0 28px;font-size:14px;color:rgba(232,221,208,0.60);line-height:1.7;">
-          You're now part of the Malachias family. Use this code at checkout<br>and get ${DISCOUNT} off your entire first order.
+          Thank you for being here. Use this code at checkout<br>and get ${DISCOUNT} off your entire first order.
         </p>
 
         <!-- Big coupon code box -->
@@ -46,18 +46,13 @@ function buildCouponEmail(email: string): string {
       <!-- Body -->
       <tr><td style="padding:36px 40px;">
         <p style="margin:0 0 16px;font-size:15px;color:#444444;line-height:1.75;">
-          We launched our official merch store and we want to celebrate it with the people who made it possible — <strong>you</strong>.
+          The official Malachias merch store is live. You got here first — that matters.
         </p>
         <p style="margin:0 0 16px;font-size:15px;color:#444444;line-height:1.75;">
-          Every purchase goes directly to:
+          No label. No compromise. Faith, freedom, and music made the way it was meant to be made.
         </p>
-        <ul style="margin:0 0 16px;padding:0 0 0 20px;">
-          <li style="font-size:15px;color:#444444;line-height:2.0;">Live shows &amp; touring across South Florida</li>
-          <li style="font-size:15px;color:#444444;line-height:2.0;">Recording original music (next album in the works)</li>
-          <li style="font-size:15px;color:#444444;line-height:2.0;">Veteran outreach events — free tickets, free merch for veterans</li>
-        </ul>
         <p style="margin:0 0 16px;font-size:15px;color:#444444;line-height:1.75;">
-          No label. No corporate backing. Just the band and people like you who believe in the mission.
+          When you wear Malachias, you carry the mission with you. Every show, every song, every stage we earn.
         </p>
 
         <!-- Divider -->
@@ -145,7 +140,7 @@ export async function POST(req: NextRequest) {
     body: JSON.stringify({
       from: 'Malachias <hello@malachiasmusic.com>',
       to: [email],
-      subject: `Your ${DISCOUNT} OFF code is here — thank you for supporting Malachias 🎸`,
+      subject: `Your ${DISCOUNT} off code — welcome to the mission 🎸`,
       html: buildCouponEmail(email),
     }),
   })

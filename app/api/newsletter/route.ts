@@ -22,13 +22,10 @@ function buildWelcomeEmail(email: string): string {
       </td></tr>
 
       <tr><td style="background:#030202;padding:36px 40px 32px;text-align:center;">
-        <p style="margin:0 0 8px;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:rgba(201,168,76,0.65);">Welcome to the family / Bienvenido a la familia</p>
-        <h1 style="margin:0 0 16px;font-size:28px;color:#ffffff;letter-spacing:2px;font-family:Georgia,serif;">YOUR ${DISCOUNT} OFF CODE</h1>
-        <p style="margin:0 0 8px;font-size:13px;color:rgba(232,221,208,0.55);line-height:1.7;">
-          Use this at checkout and get ${DISCOUNT} off your entire first order.
-        </p>
-        <p style="margin:0 0 24px;font-size:13px;color:rgba(232,221,208,0.40);line-height:1.7;">
-          Úsalo al pagar y obtén ${DISCOUNT} de descuento en tu primer pedido.
+        <p style="margin:0 0 8px;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:rgba(201,168,76,0.65);">You subscribed. Here's your code.</p>
+        <h1 style="margin:0 0 16px;font-size:28px;color:#ffffff;letter-spacing:2px;font-family:Georgia,serif;">${DISCOUNT} OFF — FOR YOU</h1>
+        <p style="margin:0 0 24px;font-size:13px;color:rgba(232,221,208,0.55);line-height:1.7;">
+          Thank you for being here. Use this code at checkout and get ${DISCOUNT} off your entire first order.
         </p>
 
         <div style="display:inline-block;background:#c9a84c;padding:20px 40px;margin:0 0 28px;">
@@ -43,17 +40,15 @@ function buildWelcomeEmail(email: string): string {
       </td></tr>
 
       <tr><td style="padding:36px 40px;">
-        <p style="margin:0 0 12px;font-size:15px;color:#444444;line-height:1.75;">
-          Thank you for joining the Malachias community. Every purchase goes directly to:
+        <p style="margin:0 0 16px;font-size:15px;color:#444444;line-height:1.75;">
+          The official Malachias merch store is live. You got here first — that matters.
         </p>
-        <p style="margin:0 0 12px;font-size:14px;color:#888888;font-style:italic;line-height:1.75;">
-          Gracias por unirte a la comunidad Malachias. Cada compra va directamente a:
+        <p style="margin:0 0 16px;font-size:15px;color:#444444;line-height:1.75;">
+          No label. No compromise. Faith, freedom, and music made the way it was meant to be made.
         </p>
-        <ul style="margin:0 0 20px;padding:0 0 0 20px;">
-          <li style="font-size:14px;color:#444444;line-height:2.0;">Live shows across South Florida / Shows en vivo en South Florida</li>
-          <li style="font-size:14px;color:#444444;line-height:2.0;">Recording original music / Grabación de música original</li>
-          <li style="font-size:14px;color:#444444;line-height:2.0;">Veteran outreach events / Eventos para veteranos</li>
-        </ul>
+        <p style="margin:0 0 20px;font-size:15px;color:#444444;line-height:1.75;">
+          When you wear Malachias, you carry the mission with you. Every show, every song, every stage we earn.
+        </p>
 
         <div style="border-top:1px solid #e8e0d5;margin:24px 0;"></div>
 
@@ -128,7 +123,7 @@ export async function POST(req: NextRequest) {
         body: JSON.stringify({
           from: 'Malachias <hello@malachiasmusic.com>',
           to: [email],
-          subject: `Your ${DISCOUNT} OFF code is here — welcome to the Malachias family 🎸`,
+          subject: `Your ${DISCOUNT} off code — welcome to the mission 🎸`,
           html: buildWelcomeEmail(email),
         }),
       }).catch(() => {/* non-blocking — subscriber still saved */})
