@@ -23,62 +23,56 @@ interface MerchProps {
 function ProductCard({ product, index }: { product: FWProduct; index: number }) {
   const img = fwFirstImage(product);
   const available = fwIsAvailable(product);
+  const price = fwPriceRange(product);
 
   return (
-    <motion.div
-      key={product.id}
-      {...fade(0.04 + index * 0.05)}
-      style={{ background: '#040404', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', transition: 'border-color 0.3s, transform 0.3s' }}
-      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(201,168,76,0.20)'; (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)'; }}
-      onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.05)'; (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; }}
-    >
-      {/* Image */}
-      <div style={{ position: 'relative', aspectRatio: '1/1', background: '#0a0a0a', overflow: 'hidden' }}>
-        {img ? (
-          <Image
-            src={img}
-            alt={product.name}
-            fill
-            className="object-cover"
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-            style={{ filter: 'brightness(0.92)' }}
-          />
-        ) : (
-          <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <ShoppingBag size={28} style={{ color: 'rgba(201,168,76,0.10)' }} />
+    <motion.div key={product.id} {...fade(0.04 + index * 0.05)}>
+      <Link href={`/merch/${product.slug}`} style={{ textDecoration: 'none', display: 'block' }}>
+        <div
+          style={{ background: '#040404', border: '1px solid rgba(201,168,76,0.12)', display: 'flex', flexDirection: 'column', cursor: 'pointer', transition: 'border-color 0.25s, transform 0.25s' }}
+          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(201,168,76,0.35)'; (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)'; }}
+          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(201,168,76,0.12)'; (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; }}
+        >
+          {/* Image */}
+          <div style={{ position: 'relative', aspectRatio: '1/1', background: '#0a0a0a', overflow: 'hidden' }}>
+            {img ? (
+              <Image
+                src={img}
+                alt={product.name}
+                fill
+                className="object-cover"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                style={{ filter: 'brightness(0.92)' }}
+              />
+            ) : (
+              <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <ShoppingBag size={28} style={{ color: 'rgba(201,168,76,0.10)' }} />
+              </div>
+            )}
           </div>
-        )}
-        <div style={{
-          position: 'absolute', top: '0.65rem', right: '0.65rem',
-          fontSize: '0.48rem', letterSpacing: '0.26em', textTransform: 'uppercase',
-          padding: '0.2rem 0.5rem', backdropFilter: 'blur(8px)',
-          background: available ? 'rgba(52,211,153,0.14)' : 'rgba(201,168,76,0.12)',
-          color: available ? '#34d399' : '#c9a84c',
-        }}>
-          {available ? 'Available' : 'Soon'}
-        </div>
-      </div>
 
-      {/* Info */}
-      <div style={{ padding: '1rem 1.1rem 1.2rem', display: 'flex', flexDirection: 'column', gap: '0.35rem', flex: 1 }}>
-        <span style={{ fontSize: '0.50rem', letterSpacing: '0.28em', color: 'rgba(201,168,76,0.38)', textTransform: 'uppercase' }}>
-          {fwCategory(product)}
-        </span>
-        <p className="font-display" style={{ fontSize: '1rem', letterSpacing: '0.04em', color: '#e8ddd0', lineHeight: 1.1 }}>
-          {product.name}
-        </p>
-        <div style={{ marginTop: 'auto', paddingTop: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <span style={{ fontSize: '0.80rem', color: 'var(--gold)', letterSpacing: '0.06em' }}>
-            {fwPriceRange(product)}
-          </span>
-          <Link
-            href={`/merch/${product.slug}`}
-            style={{ fontSize: '0.52rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(201,168,76,0.55)', textDecoration: 'none', borderBottom: '1px solid rgba(201,168,76,0.25)', paddingBottom: '1px' }}
-          >
-            View →
-          </Link>
+          {/* Info + BIG buy button */}
+          <div style={{ padding: '0.9rem 1rem 1rem', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+            <p className="font-display" style={{ margin: 0, fontSize: '0.95rem', letterSpacing: '0.04em', color: '#e8ddd0', lineHeight: 1.15 }}>
+              {product.name}
+            </p>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '0.2rem', gap: '0.5rem' }}>
+              <span style={{ fontSize: '1rem', color: '#c9a84c', letterSpacing: '0.06em', fontFamily: 'var(--font-display)' }}>
+                {price}
+              </span>
+              <span style={{
+                display: 'inline-block', padding: '0.45rem 1rem',
+                background: available ? '#c9a84c' : 'rgba(201,168,76,0.15)',
+                color: available ? '#030202' : '#c9a84c',
+                fontSize: '0.55rem', letterSpacing: '0.16em', textTransform: 'uppercase',
+                fontWeight: 700, fontFamily: 'var(--font-body)', whiteSpace: 'nowrap',
+              }}>
+                {available ? 'Buy Now' : 'Coming Soon'}
+              </span>
+            </div>
+          </div>
         </div>
-      </div>
+      </Link>
     </motion.div>
   );
 }
