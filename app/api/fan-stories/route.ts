@@ -19,12 +19,19 @@ export async function POST(req: NextRequest) {
   if (!story || story.trim().length < 10) {
     return NextResponse.json({ error: 'Story is required' }, { status: 400 })
   }
+  if (story.trim().length > 8000) return NextResponse.json({ error: 'Story is too long' }, { status: 400 })
+  if (name && String(name).length > 120) return NextResponse.json({ error: 'Name is too long' }, { status: 400 })
+  if (songTitle && String(songTitle).length > 200) return NextResponse.json({ error: 'Song title is too long' }, { status: 400 })
+  const emailStr = email ? String(email).trim() : undefined
+  if (emailStr && (emailStr.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailStr))) {
+    return NextResponse.json({ error: 'Invalid email address' }, { status: 400 })
+  }
   const entry: FanStory = {
     id: crypto.randomBytes(6).toString('hex'),
     name: (name ?? '').trim() || 'Anonymous',
-    email: email ?? undefined,
+    email: emailStr,
     story: story.trim(),
-    songTitle: songTitle ?? undefined,
+    songTitle: songTitle ? String(songTitle).trim() : undefined,
     status: 'pending',
     createdAt: new Date().toISOString(),
   }

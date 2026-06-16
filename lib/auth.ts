@@ -10,9 +10,13 @@ function hash(value: string): string {
 }
 
 function getExpectedToken(): string {
-  const password = process.env.ADMIN_PASSWORD ?? 'malachias-admin'
-  const secret = process.env.SESSION_SECRET ?? 'malachias-secret'
-  return hash(password + secret)
+  const password = process.env.ADMIN_PASSWORD
+  const secret = process.env.SESSION_SECRET
+  if (process.env.NODE_ENV === 'production' && (!password || !secret)) {
+    // Hard-fail in production rather than use guessable defaults
+    throw new Error('ADMIN_PASSWORD and SESSION_SECRET must be set in production')
+  }
+  return hash((password ?? 'malachias-admin') + (secret ?? 'malachias-secret'))
 }
 
 export async function setSession(): Promise<void> {
@@ -43,10 +47,11 @@ export function isAuthenticatedFromRequest(req: NextRequest): boolean {
 }
 
 export function verifyPassword(password: string): boolean {
+  if (!password) return false
   const expected = process.env.ADMIN_PASSWORD ?? 'malachias-admin'
   try {
-    const a = Buffer.from(password.padEnd(expected.length))
-    const b = Buffer.from(expected.padEnd(password.length))
+    const a = Buffer.from(password, 'utf8')
+    const b = Buffer.from(expected, 'utf8')
     if (a.length !== b.length) return false
     return crypto.timingSafeEqual(a, b)
   } catch {

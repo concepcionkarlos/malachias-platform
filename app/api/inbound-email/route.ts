@@ -1,15 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { addInboundEmail, getVenues } from '@/lib/venueStore'
 import { readContent } from '@/lib/store'
+import { verifyWebhookSecret } from '@/lib/webhookAuth'
 
-// Resend inbound email webhook — no auth required (validated by checking secret header)
 export async function POST(req: NextRequest) {
   const secret = process.env.RESEND_WEBHOOK_SECRET
-  if (secret) {
-    const sig = req.headers.get('svix-signature') ?? req.headers.get('webhook-signature')
-    if (!sig || !sig.includes(secret)) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
+  if (!secret) return NextResponse.json({ error: 'Webhook not configured' }, { status: 500 })
+  const authHeader = req.headers.get('authorization') ?? ''
+  const provided = authHeader.replace(/^Bearer\s+/i, '') || (req.headers.get('x-webhook-secret') ?? '')
+  if (!verifyWebhookSecret(provided, secret)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
   const payload = await req.json()

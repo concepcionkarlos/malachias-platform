@@ -98,8 +98,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Name, email, and message are required.' }, { status: 400 })
   }
 
-  // Email format
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+  // Email format + length cap (RFC 5321)
+  if (email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return NextResponse.json({ error: 'Please enter a valid email address.' }, { status: 400 })
   }
 
@@ -130,8 +130,8 @@ export async function POST(req: NextRequest) {
   await triggerAutoReply(booking).catch(() => {})
   await enrollInBookingDrip(booking).catch(() => {})
 
-  const adminEmail = process.env.ADMIN_NOTIFY_EMAIL ?? store.siteContent.contactEmail
-  await sendAdminNotification({
+  const adminEmail = process.env.ADMIN_NOTIFY_EMAIL
+  if (adminEmail) await sendAdminNotification({
     toEmail: adminEmail,
     subject: `New booking request from ${fullName}`,
     bodyHtml: `<p>New booking request received from <strong>${esc(fullName)}</strong> (${esc(email)}).</p>

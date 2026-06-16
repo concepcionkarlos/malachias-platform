@@ -114,7 +114,7 @@ export async function POST(req: NextRequest) {
   if (limited) return limited
 
   const { email } = await req.json().catch(() => ({}))
-  if (!email || !String(email).includes('@')) {
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email)) || String(email).length > 254) {
     return NextResponse.json({ error: 'Valid email required' }, { status: 400 })
   }
 
@@ -131,9 +131,12 @@ export async function POST(req: NextRequest) {
     await writeContent({
       subscribers: [...subscribers, { email: email.toLowerCase(), joinedAt: new Date().toISOString() }],
     })
+  } else {
+    // Don't send another coupon to existing subscribers — prevents email relay abuse
+    return NextResponse.json({ ok: true, code: COUPON_CODE })
   }
 
-  // Send coupon email via Resend
+  // Send coupon email via Resend (new subscribers only)
   const emailRes = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },

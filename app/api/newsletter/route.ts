@@ -101,7 +101,7 @@ export async function POST(req: NextRequest) {
   if (limited) return limited
 
   const { email } = await req.json()
-  if (!email || !email.includes('@')) {
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 254) {
     return NextResponse.json({ error: 'Valid email required' }, { status: 400 })
   }
 
@@ -132,7 +132,7 @@ export async function POST(req: NextRequest) {
     // Enroll in welcome drip (Day 3 + Day 7 follow-up emails)
     const dripQueue = (store as any).subscriberDrip ?? []
     const alreadyInDrip = dripQueue.some((e: { email: string }) => e.email.toLowerCase() === email.toLowerCase())
-    if (!alreadyInDrip) {
+    if (!alreadyInDrip && dripQueue.length < 5000) {
       await writeContent({
         subscriberDrip: [...dripQueue, { email: email.toLowerCase(), subscribedAt: new Date().toISOString(), day3Sent: false, day7Sent: false }],
       } as any)
