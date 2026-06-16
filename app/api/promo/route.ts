@@ -5,8 +5,8 @@ import { rateLimit } from '@/lib/rateLimit'
 export const dynamic = 'force-dynamic'
 
 const SITE_URL = 'https://www.malachiasmusic.com'
-const COUPON_CODE = 'MALACHIAS20'
-const DISCOUNT = '20%'
+const COUPON_CODE = 'MALACHIAS15'
+const DISCOUNT = '15%'
 
 function buildCouponEmail(email: string): string {
   const unsubUrl = `${SITE_URL}/api/newsletter/unsubscribe?email=${encodeURIComponent(email)}`

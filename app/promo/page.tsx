@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import PromoPageClient from './PromoPageClient'
 
 export const metadata: Metadata = {
-  title: '20% OFF Merch Launch — MALACHIAS',
-  description: 'Celebrate the official Malachias merch launch with 20% off your first order. Enter your email and get your code instantly.',
+  title: '15% OFF Merch — MALACHIAS | Subscribe & Save',
+  description: 'Subscribe and get 15% off your first Malachias merch order. Veteran-founded Christian rock band from South Florida. Code delivered by email.',
   alternates: { canonical: 'https://malachiasmusic.com/promo' },
   robots: { index: false },
 }
