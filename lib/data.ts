@@ -124,6 +124,7 @@ export type BookingStatus =
   | 'Completed'
   | 'Lost'
   | 'Archived'
+  | 'Spam'
 
 export interface BookingRequest {
   id: string

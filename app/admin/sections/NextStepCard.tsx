@@ -57,6 +57,7 @@ const BOOKING_TIPS: Record<BookingStatus, Tip[]> = {
     { action: 'Keep the contact — reach out in 6 months' },
   ],
   'Archived': [],
+  'Spam': [],
 }
 
 const VENUE_TIPS: Record<VenueStatus, Tip[]> = {

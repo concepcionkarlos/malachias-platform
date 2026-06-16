@@ -34,7 +34,7 @@ export default function Booking() {
   const [form, setForm] = useState({
     fullName: '', email: '', phone: '', venueOrOrg: '',
     eventDate: '', city: '', eventType: '', budgetRange: '',
-    guestCount: '', message: '',
+    guestCount: '', message: '', website: '',
   });
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -135,6 +135,17 @@ export default function Booking() {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
+                {/* Honeypot — hidden from humans, bots fill it */}
+                <input
+                  type="text"
+                  name="website"
+                  value={form.website}
+                  onChange={set('website')}
+                  tabIndex={-1}
+                  autoComplete="off"
+                  aria-hidden="true"
+                  style={{ position: 'absolute', left: '-9999px', width: 1, height: 1, opacity: 0 }}
+                />
                 <div className="grid grid-cols-2 gap-4">
                   <input
                     className="field"

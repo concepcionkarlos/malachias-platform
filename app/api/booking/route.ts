@@ -14,7 +14,10 @@ export async function POST(req: NextRequest) {
   const limited = rateLimit(req, 'booking', { limit: 5, windowMs: 60_000 })
   if (limited) return limited
   const body = await req.json()
-  const { fullName, venueOrOrg, email, phone, eventDate, city, eventType, budgetRange, guestCount, message } = body
+  const { fullName, venueOrOrg, email, phone, eventDate, city, eventType, budgetRange, guestCount, message, website } = body
+
+  // Honeypot — bots fill this, humans never see it
+  if (website) return NextResponse.json({ ok: true }, { status: 201 })
 
   if (!fullName || !email) {
     return NextResponse.json({ error: 'Name and email are required' }, { status: 400 })
