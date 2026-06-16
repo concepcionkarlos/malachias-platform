@@ -309,6 +309,102 @@ function ContactCard({
   )
 }
 
+// ── DM Templates ─────────────────────────────────────────────────────────────
+
+const DM_TEMPLATES = [
+  {
+    id: 'feedback',
+    label: 'Asking for feedback',
+    when: 'After replying to their comment — send this DM',
+    text: 'Hey [Name], I saw your comment — really appreciate it. Quick question: what did the music make you feel? Honest answer, good or bad. I use real feedback to make the next songs better. Thanks for being here.',
+  },
+  {
+    id: 'emotional',
+    label: 'Personal / emotional comment',
+    when: 'When they shared something personal in their comment',
+    text: 'Hey [Name], I saw what you wrote and I just wanted to say — thank you. That kind of honesty means a lot. If you ever want to share more, I\'m here. God bless.',
+  },
+  {
+    id: 'new_fan',
+    label: 'New fan / first-time commenter',
+    when: 'First time you see them engage',
+    text: 'Hey [Name], welcome — glad the music found you. How did you come across us? Always curious to know.',
+  },
+  {
+    id: 'merch_show',
+    label: 'Merch or show question',
+    when: 'They asked about buying merch or attending a show',
+    text: 'Hey [Name], saw your question — [answer their specific question]. Anything else I can help with? Appreciate you showing up.',
+  },
+  {
+    id: 'critical',
+    label: 'Critical or mixed feedback',
+    when: 'When someone leaves a critical comment — don\'t ignore these',
+    text: 'Hey [Name], I appreciate the honest feedback. Seriously — that\'s exactly what I need to hear. What would have made it better for you?',
+  },
+  {
+    id: 'shared',
+    label: 'They shared your music',
+    when: 'When you see someone shared or reposted your content',
+    text: 'Hey [Name], I noticed you shared [song/post] — that means more than you know. Thank you. What made you want to share it?',
+  },
+]
+
+function DmTemplates() {
+  const [open, setOpen] = useState<string | null>(null)
+  const [copied, setCopied] = useState<string | null>(null)
+
+  function copy(id: string, text: string) {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(id)
+      setTimeout(() => setCopied(null), 1800)
+    })
+  }
+
+  return (
+    <div style={{ marginTop: '2.5rem', borderTop: '1px solid rgba(255,255,255,0.04)', paddingTop: '2rem' }}>
+      <span style={{ fontSize: '0.52rem', letterSpacing: '0.28em', textTransform: 'uppercase' as const, color: '#3a2e26', display: 'block', marginBottom: '0.3rem' }}>
+        DM Templates
+      </span>
+      <p style={{ fontSize: '0.72rem', color: '#3a2e26', lineHeight: 1.6, margin: '0 0 1rem' }}>
+        Keep it short. Ask one real question. Never pitch merch in the first DM — let it come naturally.
+      </p>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+        {DM_TEMPLATES.map(t => (
+          <div key={t.id} style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: 6, overflow: 'hidden' }}>
+            <button
+              onClick={() => setOpen(o => o === t.id ? null : t.id)}
+              style={{
+                width: '100%', textAlign: 'left', background: 'none', border: 'none', cursor: 'pointer',
+                padding: '0.75rem 1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '0.5rem',
+              }}
+            >
+              <div>
+                <span style={{ fontSize: '0.75rem', color: '#e8ddd0', fontWeight: 600 }}>{t.label}</span>
+                <span style={{ display: 'block', fontSize: '0.62rem', color: '#3a2e26', marginTop: '0.15rem' }}>{t.when}</span>
+              </div>
+              <ChevronRight size={12} style={{ color: '#5c5044', transform: open === t.id ? 'rotate(90deg)' : 'none', transition: 'transform 0.15s', flexShrink: 0 }} />
+            </button>
+            {open === t.id && (
+              <div style={{ padding: '0 1rem 1rem' }}>
+                <p style={{ fontSize: '0.75rem', color: '#7a6a52', lineHeight: 1.75, margin: '0 0 0.65rem', fontStyle: 'italic', background: 'rgba(255,255,255,0.03)', padding: '0.75rem 0.9rem', borderRadius: 4 }}>
+                  &ldquo;{t.text}&rdquo;
+                </p>
+                <button
+                  onClick={() => copy(t.id, t.text)}
+                  style={{ ...S.btn(copied === t.id ? 'primary' : 'ghost'), fontSize: '0.65rem' }}
+                >
+                  {copied === t.id ? <><Check size={11} /> Copied!</> : 'Copy template'}
+                </button>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 // ── Main Component ────────────────────────────────────────────────────────────
 
 export default function AdminFanOutreach() {
@@ -454,20 +550,8 @@ export default function AdminFanOutreach() {
         </div>
       )}
 
-      {/* DM template */}
-      {contacts.length > 0 && (
-        <div style={{ marginTop: '2rem', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: 8, padding: '1rem 1.25rem' }}>
-          <span style={{ fontSize: '0.52rem', letterSpacing: '0.28em', textTransform: 'uppercase' as const, color: '#3a2e26', display: 'block', marginBottom: '0.5rem' }}>
-            DM Template — Asking for Feedback
-          </span>
-          <p style={{ fontSize: '0.75rem', color: '#7a6a52', lineHeight: 1.75, margin: '0 0 0.6rem', fontStyle: 'italic' }}>
-            "Hey [Name], I saw your comment — really appreciate it. Quick question: what did the music make you feel? Honest answer, good or bad. I use real feedback to make the next songs better. Thanks for being here."
-          </p>
-          <p style={{ fontSize: '0.65rem', color: '#3a2e26', margin: 0, lineHeight: 1.6 }}>
-            Keep it short. Ask one real question. Don&apos;t pitch the merch — if they respond, they&apos;re already a fan. The merch comes naturally.
-          </p>
-        </div>
-      )}
+      {/* DM Templates */}
+      <DmTemplates />
 
     </div>
   )
