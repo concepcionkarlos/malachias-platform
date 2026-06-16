@@ -186,7 +186,7 @@ async function fwFetch<T>(path: string): Promise<T | null> {
   const sep = path.includes('?') ? '&' : '?'
   const url = `${BASE}${path}${sep}storefront_token=${token}`
   try {
-    const res = await fetch(url, { next: { revalidate: 3600 } })
+    const res = await fetch(url, { next: { revalidate: 300 } })
     if (!res.ok) return null
     return res.json() as Promise<T>
   } catch {
