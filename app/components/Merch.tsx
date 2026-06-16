@@ -97,7 +97,14 @@ export default function Merch({ fourthwallProducts = [] }: MerchProps) {
       .catch(() => setLoaded(true));
   }, [fourthwallProducts.length]);
 
-  const products = fourthwallProducts.length > 0 ? fourthwallProducts.slice(0, 4) : [];
+  // Sort cheapest first so the $8.95 mug (entry point) leads
+  const products = fourthwallProducts.length > 0
+    ? [...fourthwallProducts].sort((a, b) => {
+        const aMin = a.variants.length ? Math.min(...a.variants.map(v => v.unitPrice.value)) : 0
+        const bMin = b.variants.length ? Math.min(...b.variants.map(v => v.unitPrice.value)) : 0
+        return aMin - bMin
+      }).slice(0, 4)
+    : [];
   const hasFourthwall = fourthwallProducts.length > 0;
 
   return (
@@ -149,9 +156,21 @@ export default function Merch({ fourthwallProducts = [] }: MerchProps) {
             {hasFourthwall ? 'Store Live' : 'Coming Soon'}
           </span>
           <span style={{ fontSize: '0.60rem', color: 'var(--text-3)', letterSpacing: '0.12em' }}>·</span>
-          <span style={{ fontSize: '0.62rem', color: 'var(--text-3)', letterSpacing: '0.14em' }}>
-            {hasFourthwall ? 'Official Malachias gear · Fulfillment by Fourthwall' : 'Supporters hear first when the drop lands'}
-          </span>
+          {hasFourthwall ? (
+            <>
+              <span style={{ fontSize: '0.62rem', color: 'var(--text-3)', letterSpacing: '0.14em' }}>
+                4 items · Starting at $8.95
+              </span>
+              <span style={{ fontSize: '0.60rem', color: 'var(--text-3)', letterSpacing: '0.12em' }}>·</span>
+              <span style={{ fontSize: '0.62rem', color: 'var(--text-3)', letterSpacing: '0.14em' }}>
+                Fulfilled by Fourthwall
+              </span>
+            </>
+          ) : (
+            <span style={{ fontSize: '0.62rem', color: 'var(--text-3)', letterSpacing: '0.14em' }}>
+              Supporters hear first when the drop lands
+            </span>
+          )}
         </motion.div>
 
         {/* Loading skeleton */}

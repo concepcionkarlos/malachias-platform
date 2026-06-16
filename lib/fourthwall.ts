@@ -127,7 +127,7 @@ export function fwCategory(product: FWProduct): string {
   const text = (product.name + ' ' + product.description).toLowerCase()
   if (text.includes('hoodie') || text.includes('tee') || text.includes('shirt') || text.includes('apparel') || text.includes('hat') || text.includes('cap') || text.includes('jacket')) return 'Apparel'
   if (text.includes('vinyl') || text.includes('cd') || text.includes('album') || text.includes('lp') || text.includes('ep')) return 'Music'
-  if (text.includes('patch') || text.includes('sticker') || text.includes('pin') || text.includes('poster') || text.includes('flag')) return 'Accessories'
+  if (text.includes('mug') || text.includes('cup') || text.includes('bottle') || text.includes('patch') || text.includes('sticker') || text.includes('pin') || text.includes('poster') || text.includes('flag')) return 'Accessories'
   return 'Merch'
 }
 
