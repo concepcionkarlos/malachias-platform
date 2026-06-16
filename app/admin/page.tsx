@@ -7,7 +7,7 @@ import {
   MapPin, Settings, Newspaper, BarChart2, StickyNote, CheckSquare,
   Music, BookOpen, Zap, ListMusic, Repeat, Target, BookMarked,
   Layers, CalendarDays, DollarSign, Send, TrendingUp,
-  Menu, X, ExternalLink, LogOut, ChevronRight, Heart, Video,
+  Menu, X, ExternalLink, LogOut, ChevronRight, Heart, Video, Megaphone,
 } from 'lucide-react'
 import AdminLogin from './AdminLogin'
 
@@ -32,6 +32,7 @@ const SECTIONS = {
   'content-cal':   { label: 'Content Calendar', icon: CalendarDays,    group: 'Content'     },
   'live-sessions': { label: 'Live Sessions',    icon: Video,           group: 'Content'     },
   finances:        { label: 'Finances',         icon: DollarSign,      group: 'Reports'     },
+  campaign:        { label: 'Campaign',         icon: Megaphone,       group: 'Outreach'    },
   'email-blast':   { label: 'Email Blast',      icon: Send,            group: 'Outreach'    },
   stats:           { label: 'Stats',            icon: TrendingUp,      group: 'Reports'     },
   'venue-finder':  { label: 'Venue Finder',     icon: MapPin,          group: 'Outreach'    },
@@ -68,6 +69,7 @@ const SectionComponents: Record<TabKey, React.ComponentType> = {
   'content-cal':     dynamic(() => import('./sections/AdminContentCalendar')),
   'live-sessions':   dynamic(() => import('./sections/AdminLiveSessions')),
   finances:          dynamic(() => import('./sections/AdminFinances')),
+  campaign:          dynamic(() => import('./sections/AdminCampaign')),
   'email-blast':     dynamic(() => import('./sections/AdminEmailBlast')),
   stats:             dynamic(() => import('./sections/AdminStats')),
   'venue-finder':    dynamic(() => import('./sections/AdminVenueFinder')),
