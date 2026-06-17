@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { isAuthenticated } from '@/lib/auth'
-import { updateRehearsal, getRehearsalByToken, getSongs } from '@/lib/venueStore'
+import { updateRehearsal, getRehearsalByToken, getSongs, addSentEmail } from '@/lib/venueStore'
 import crypto from 'crypto'
 
 export const dynamic = 'force-dynamic'
@@ -55,15 +55,15 @@ export async function POST(req: NextRequest) {
     const resend = new Resend(process.env.RESEND_API_KEY)
     const from = process.env.RESEND_FROM_EMAIL ?? 'Malachias <booking@malachiasmusic.com>'
 
+    const rehearsalSubject = `Rehearsal — ${updated.date}${updated.time ? ` at ${updated.time}` : ''}`
+    const sentAt = new Date().toISOString()
     for (const email of emails) {
       try {
-        await resend.emails.send({
-          from,
-          to: email,
-          subject: `Rehearsal — ${updated.date}${updated.time ? ` at ${updated.time}` : ''}`,
-          html,
-        })
-      } catch { /* best effort */ }
+        const result = await resend.emails.send({ from, to: email, subject: rehearsalSubject, html })
+        await addSentEmail({ toEmail: email, subject: rehearsalSubject, bodyHtml: html, sentAt, resendEmailId: result.data?.id, status: 'sent' }).catch(() => {})
+      } catch {
+        await addSentEmail({ toEmail: email, subject: rehearsalSubject, bodyHtml: html, sentAt, status: 'failed' }).catch(() => {})
+      }
     }
   }
 

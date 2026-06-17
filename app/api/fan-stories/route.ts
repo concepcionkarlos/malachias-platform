@@ -3,6 +3,7 @@ import crypto from 'crypto'
 import { readContent, writeContent } from '@/lib/store'
 import { isAuthenticated } from '@/lib/auth'
 import { rateLimit } from '@/lib/rateLimit'
+import { addSentEmail } from '@/lib/venueStore'
 import type { FanStory } from '@/lib/data'
 
 export async function GET() {
@@ -46,14 +47,8 @@ export async function POST(req: NextRequest) {
     if (apiKey) {
       const firstName = entry.name === 'Anonymous' ? 'Hey' : entry.name.split(' ')[0]
       const unsubUrl = `${siteUrl}/api/newsletter/unsubscribe?email=${encodeURIComponent(entry.email)}`
-      await fetch('https://api.resend.com/emails', {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          from: 'Malachias <hello@malachiasmusic.com>',
-          to: [entry.email],
-          subject: 'I read what you shared.',
-          html: `<!DOCTYPE html>
+      const fanStorySubject = 'I read what you shared.'
+      const fanStoryHtml = `<!DOCTYPE html>
 <html>
 <body style="margin:0;padding:0;background:#f0ede8;font-family:Arial,sans-serif;">
 <table width="100%" cellpadding="0" cellspacing="0">
@@ -88,9 +83,15 @@ export async function POST(req: NextRequest) {
 </td></tr>
 </table>
 </body>
-</html>`,
-        }),
-      }).catch(() => {/* non-blocking */})
+</html>`
+      const sentAt = new Date().toISOString()
+      const res = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ from: 'Malachias <hello@malachiasmusic.com>', to: [entry.email], subject: fanStorySubject, html: fanStoryHtml }),
+      }).catch(() => null)
+      const resData = res ? await res.json().catch(() => ({})) : {}
+      await addSentEmail({ toEmail: entry.email!, subject: fanStorySubject, bodyHtml: fanStoryHtml, sentAt, resendEmailId: resData?.id, status: res?.ok ? 'sent' : 'failed' }).catch(() => {})
     }
   }
 

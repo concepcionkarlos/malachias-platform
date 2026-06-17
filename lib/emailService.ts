@@ -7,6 +7,7 @@ import {
   addAutoReplyLog,
   updateAutoReplyLog,
   getTemplateBySlug,
+  addSentEmail,
 } from './venueStore'
 import { renderTemplate } from './templateUtils'
 
@@ -46,6 +47,7 @@ export async function triggerAutoReply(booking: BookingRequest): Promise<void> {
     const resend = new Resend(process.env.RESEND_API_KEY)
     const result = await resend.emails.send({ from: FROM, to: booking.email, bcc: BCC, subject, html: bodyHtml, scheduledAt })
     await updateAutoReplyLog(log.id, { resendEmailId: result.data?.id, status: 'scheduled', scheduledAt })
+    await addSentEmail({ toEmail: booking.email, subject, bodyHtml, sentAt: scheduledAt, resendEmailId: result.data?.id, status: 'sent' }).catch(() => {})
   } catch (err) {
     await updateAutoReplyLog(log.id, { status: 'failed', errorMessage: err instanceof Error ? err.message : String(err) })
   }
@@ -80,5 +82,6 @@ export async function sendOutreachEmail(opts: {
     html: opts.bodyHtml,
     ...(opts.replyTo ? { replyTo: opts.replyTo } : {}),
   })
+  await addSentEmail({ toEmail: opts.toEmail, subject: opts.subject, bodyHtml: opts.bodyHtml, sentAt: new Date().toISOString(), resendEmailId: result.data?.id, status: 'sent' }).catch(() => {})
   return { resendEmailId: result.data?.id }
 }
