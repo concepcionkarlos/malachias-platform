@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { isAuthenticated } from '@/lib/auth'
 import { readContent } from '@/lib/store'
+import { addSentEmail } from '@/lib/venueStore'
 
 export const dynamic = 'force-dynamic'
 
@@ -70,14 +71,33 @@ export async function POST(req: NextRequest) {
   const resend = new Resend(apiKey)
 
   const results: { email: string; ok: boolean }[] = []
+  const sentAt = new Date().toISOString()
 
   for (const email of subscribers) {
     const html = buildBlastHtml(subject, body, email)
     try {
-      await resend.emails.send({ from, to: email, subject, html })
+      const { data } = await resend.emails.send({ from, to: email, subject, html })
       results.push({ email, ok: true })
+      // Log to CRM sent emails
+      await addSentEmail({
+        toEmail: email,
+        subject,
+        bodyHtml: html,
+        bodyText: body,
+        sentAt,
+        resendEmailId: data?.id,
+        status: 'sent',
+      }).catch(() => {})
     } catch {
       results.push({ email, ok: false })
+      await addSentEmail({
+        toEmail: email,
+        subject,
+        bodyHtml: html,
+        bodyText: body,
+        sentAt,
+        status: 'failed',
+      }).catch(() => {})
     }
   }
 
