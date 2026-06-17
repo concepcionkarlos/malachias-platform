@@ -1,7 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { LogOut, Download, Info, Shield, Mail, Database, Image as ImageIcon, Map, Users, CheckCircle, XCircle, Send, RefreshCw } from 'lucide-react'
+import { LogOut, Download, Info, Shield, Mail, Database, Image as ImageIcon, Map, Users, CheckCircle, XCircle, Send, RefreshCw, ShieldAlert, Trash2, Square, CheckSquare } from 'lucide-react'
+import type { SubSpamCandidate } from '@/app/api/subscribers/scan-spam/route'
 
 const CARD: React.CSSProperties = { background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 8 }
 const LABEL: React.CSSProperties = { fontSize: 11, color: '#8a7f70', letterSpacing: '0.08em', display: 'block', marginBottom: 4 }
@@ -52,6 +53,192 @@ function InfoRow({ icon, label, note }: { icon: React.ReactNode; label: string; 
         <div style={{ fontSize: 12, color: '#8a7f70', lineHeight: 1.5 }}>{note}</div>
       </div>
     </div>
+  )
+}
+
+const SEV_COLOR = { high: '#c04020', medium: '#fb923c', low: '#c9a84c' }
+const SEV_BG   = { high: 'rgba(192,64,32,0.15)', medium: 'rgba(251,146,60,0.10)', low: 'rgba(201,168,76,0.10)' }
+
+function SubSpamScanner({ onDeleted }: { onDeleted: (removed: string[]) => void }) {
+  const [open, setOpen]           = useState(false)
+  const [tab, setTab]             = useState<'spam' | 'all'>('spam')
+  const [scanning, setScanning]   = useState(false)
+  const [candidates, setCandidates] = useState<SubSpamCandidate[] | null>(null)
+  const [allSubs, setAllSubs]     = useState<SubSpamCandidate[]>([])
+  const [total, setTotal]         = useState(0)
+  const [selected, setSelected]   = useState<Set<string>>(new Set())
+  const [deleting, setDeleting]   = useState(false)
+  const [msg, setMsg]             = useState('')
+
+  async function scan() {
+    setScanning(true); setMsg(''); setCandidates(null); setSelected(new Set())
+    try {
+      const res = await fetch('/api/subscribers/scan-spam')
+      const data = await res.json()
+      const cands: SubSpamCandidate[] = data.candidates ?? []
+      setCandidates(cands)
+      setAllSubs(data.all ?? [])
+      setTotal(data.total ?? 0)
+      // Auto-select HIGH severity
+      setSelected(new Set(cands.filter(c => c.severity === 'high').map(c => c.email)))
+    } catch { setMsg('Scan failed.') }
+    finally { setScanning(false) }
+  }
+
+  function toggle(email: string) {
+    setSelected(prev => { const n = new Set(prev); n.has(email) ? n.delete(email) : n.add(email); return n })
+  }
+
+  async function deleteSelected() {
+    if (selected.size === 0) return
+    if (!confirm(`Remove ${selected.size} subscriber(s) permanently?`)) return
+    setDeleting(true)
+    try {
+      const res = await fetch('/api/subscribers/scan-spam', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ emails: [...selected] }),
+      })
+      const data = await res.json()
+      if (data.ok) {
+        const removed = [...selected]
+        onDeleted(removed)
+        const emailSet = new Set(removed.map(e => e.toLowerCase()))
+        setCandidates(prev => prev?.filter(c => !emailSet.has(c.email.toLowerCase())) ?? [])
+        setAllSubs(prev => prev.filter(c => !emailSet.has(c.email.toLowerCase())))
+        setSelected(new Set())
+        setMsg(`Removed ${removed.length} subscriber${removed.length !== 1 ? 's' : ''}. ${data.remaining} remain.`)
+      } else { setMsg('Delete failed.') }
+    } catch { setMsg('Delete failed.') }
+    finally { setDeleting(false) }
+  }
+
+  const listToShow = tab === 'spam' ? (candidates ?? []) : allSubs
+
+  return (
+    <>
+      <button onClick={() => { setOpen(true); scan() }}
+        style={{ ...BTN, background: 'rgba(107,32,32,0.15)', color: '#c04020', border: '1px solid rgba(192,64,32,0.3)', fontSize: 12 }}>
+        <ShieldAlert size={13} /> Scan for Spam
+      </button>
+
+      {open && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.80)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
+          <div style={{ background: '#0e0e0e', border: '1px solid rgba(255,255,255,0.10)', borderRadius: 10, width: '100%', maxWidth: 600, maxHeight: '85vh', display: 'flex', flexDirection: 'column' }}>
+
+            {/* Header */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 20px', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <ShieldAlert size={15} style={{ color: '#c04020' }} />
+                <span style={{ fontSize: 14, fontWeight: 700, color: '#e8ddd0' }}>Brotherhood List — Spam Audit</span>
+                {!scanning && total > 0 && (
+                  <span style={{ fontSize: 11, color: '#5c5044' }}>{total} total</span>
+                )}
+              </div>
+              <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+                <button onClick={scan} disabled={scanning} title="Re-scan"
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#5c5044', padding: 4 }}>
+                  <RefreshCw size={13} style={{ animation: scanning ? 'spin 1s linear infinite' : 'none' }} />
+                </button>
+                <button onClick={() => setOpen(false)}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#5c5044', fontSize: 20, lineHeight: 1, padding: '0 4px' }}>×</button>
+              </div>
+            </div>
+
+            {/* Tabs */}
+            {!scanning && candidates !== null && (
+              <div style={{ display: 'flex', gap: 0, borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+                {([['spam', `Suspicious (${candidates.length})`], ['all', `All (${total})`]] as const).map(([t, label]) => (
+                  <button key={t} onClick={() => setTab(t)}
+                    style={{ flex: 1, padding: '9px 0', fontSize: 12, background: 'none', border: 'none', cursor: 'pointer', color: tab === t ? '#e8ddd0' : '#5c5044', fontWeight: tab === t ? 700 : 400, borderBottom: `2px solid ${tab === t ? '#c04020' : 'transparent'}`, fontFamily: 'var(--font-body)' }}>
+                    {label}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* Body */}
+            <div style={{ flex: 1, overflowY: 'auto', padding: '12px 20px' }}>
+              {scanning && (
+                <div style={{ color: '#5c5044', fontSize: 13, padding: '20px 0' }}>Scanning subscribers…</div>
+              )}
+
+              {!scanning && candidates !== null && tab === 'spam' && candidates.length === 0 && (
+                <div style={{ color: '#34d399', fontSize: 13, padding: '20px 0' }}>
+                  No suspicious subscribers detected in {total} total. List looks clean.
+                </div>
+              )}
+
+              {!scanning && candidates !== null && listToShow.length > 0 && (
+                <>
+                  {tab === 'spam' && (
+                    <div style={{ fontSize: 11, color: '#8a7f70', marginBottom: 10 }}>
+                      HIGH = auto-selected. Review and remove what you confirm is spam.
+                    </div>
+                  )}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                    {listToShow.map(c => {
+                      const isSelected = selected.has(c.email)
+                      const sev = c.severity ?? 'low'
+                      const color = SEV_COLOR[sev]
+                      const bg = SEV_BG[sev]
+                      return (
+                        <div key={c.email} onClick={() => toggle(c.email)}
+                          style={{ display: 'flex', gap: 10, alignItems: 'flex-start', padding: '9px 10px', borderRadius: 6, cursor: 'pointer', background: isSelected ? 'rgba(192,64,32,0.10)' : 'rgba(255,255,255,0.02)', border: `1px solid ${isSelected ? 'rgba(192,64,32,0.30)' : 'rgba(255,255,255,0.05)'}` }}>
+                          <div style={{ flexShrink: 0, marginTop: 1, color: isSelected ? '#c04020' : '#3a3228' }}>
+                            {isSelected ? <CheckSquare size={14} /> : <Square size={14} />}
+                          </div>
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8 }}>
+                              <span style={{ fontSize: 13, color: '#e8ddd0', fontFamily: 'monospace', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                {c.email}
+                              </span>
+                              {c.score > 0 && (
+                                <span style={{ fontSize: 10, fontWeight: 700, color, background: bg, padding: '2px 7px', borderRadius: 8, flexShrink: 0, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                  {sev} · {c.score}
+                                </span>
+                              )}
+                            </div>
+                            {c.flags.length > 0 && (
+                              <div style={{ marginTop: 5, display: 'flex', flexWrap: 'wrap', gap: 3 }}>
+                                {c.flags.map(f => (
+                                  <span key={f} style={{ fontSize: 10, color: '#fb923c', background: 'rgba(251,146,60,0.07)', padding: '1px 6px', borderRadius: 3 }}>{f}</span>
+                                ))}
+                              </div>
+                            )}
+                            <div style={{ fontSize: 10, color: '#3a3228', marginTop: 3 }}>
+                              Joined {new Date(c.joinedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                            </div>
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </>
+              )}
+
+              {msg && (
+                <div style={{ marginTop: 12, fontSize: 13, color: msg.includes('fail') ? '#c04020' : '#34d399' }}>{msg}</div>
+              )}
+            </div>
+
+            {/* Footer */}
+            {!scanning && (candidates?.length ?? 0) + allSubs.length > 0 && (
+              <div style={{ padding: '12px 20px', borderTop: '1px solid rgba(255,255,255,0.07)', display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+                <button onClick={deleteSelected} disabled={deleting || selected.size === 0}
+                  style={{ ...BTN, background: 'rgba(192,64,32,0.20)', color: '#c04020', border: '1px solid rgba(192,64,32,0.35)', opacity: (deleting || selected.size === 0) ? 0.45 : 1, fontSize: 12 }}>
+                  <Trash2 size={13} /> {deleting ? 'Removing…' : `Remove ${selected.size} selected`}
+                </button>
+                <button onClick={() => setSelected(new Set(listToShow.map(c => c.email)))}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#5c5044', fontSize: 12 }}>Select all</button>
+                <button onClick={() => setSelected(new Set())}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#5c5044', fontSize: 12 }}>Clear</button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </>
   )
 }
 
@@ -331,21 +518,26 @@ export default function AdminSettings() {
             ))}
           </div>
         )}
-        <button
-          onClick={() => {
-            const csv = 'Email,Joined\n' + subscribers.map(s => `${s.email},${s.joinedAt}`).join('\n')
-            const blob = new Blob([csv], { type: 'text/csv' })
-            const url = URL.createObjectURL(blob)
-            const a = document.createElement('a')
-            a.href = url; a.download = 'subscribers.csv'
-            document.body.appendChild(a); a.click()
-            document.body.removeChild(a); URL.revokeObjectURL(url)
-          }}
-          disabled={subscribers.length === 0}
-          style={{ ...BTN, marginTop: 14, background: 'rgba(255,255,255,0.04)', color: '#8a7f70', border: '1px solid rgba(255,255,255,0.08)', opacity: subscribers.length === 0 ? 0.4 : 1 }}
-        >
-          <Download size={13} /> Export CSV
-        </button>
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginTop: 14 }}>
+          <button
+            onClick={() => {
+              const csv = 'Email,Joined\n' + subscribers.map(s => `${s.email},${s.joinedAt}`).join('\n')
+              const blob = new Blob([csv], { type: 'text/csv' })
+              const url = URL.createObjectURL(blob)
+              const a = document.createElement('a')
+              a.href = url; a.download = 'subscribers.csv'
+              document.body.appendChild(a); a.click()
+              document.body.removeChild(a); URL.revokeObjectURL(url)
+            }}
+            disabled={subscribers.length === 0}
+            style={{ ...BTN, background: 'rgba(255,255,255,0.04)', color: '#8a7f70', border: '1px solid rgba(255,255,255,0.08)', opacity: subscribers.length === 0 ? 0.4 : 1 }}
+          >
+            <Download size={13} /> Export CSV
+          </button>
+          <SubSpamScanner onDeleted={(removed) => {
+            setSubscribers(prev => prev.filter(s => !removed.includes(s.email.toLowerCase())))
+          }} />
+        </div>
       </div>
 
       {/* Export */}
