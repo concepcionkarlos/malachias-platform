@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { readContent, writeContent } from '@/lib/store'
 import { isAuthenticated } from '@/lib/auth'
 import { rateLimit } from '@/lib/rateLimit'
+import { addSentEmail } from '@/lib/venueStore'
 
 const SITE_URL = 'https://www.malachiasmusic.com'
 const COUPON_CODE = 'MALACHIAS15'
@@ -117,16 +118,16 @@ export async function POST(req: NextRequest) {
     // Auto-send welcome email with coupon to every new subscriber
     const apiKey = process.env.RESEND_API_KEY
     if (apiKey) {
-      await fetch('https://api.resend.com/emails', {
+      const welcomeSubject = `Your ${DISCOUNT} off code — welcome to the mission 🎸`
+      const welcomeHtml = buildWelcomeEmail(email)
+      const res = await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          from: 'Malachias <hello@malachiasmusic.com>',
-          to: [email],
-          subject: `Your ${DISCOUNT} off code — welcome to the mission 🎸`,
-          html: buildWelcomeEmail(email),
-        }),
-      }).catch(() => {/* non-blocking — subscriber still saved */})
+        body: JSON.stringify({ from: 'Malachias <hello@malachiasmusic.com>', to: [email], subject: welcomeSubject, html: welcomeHtml }),
+      }).catch(() => null)
+      const sentAt = new Date().toISOString()
+      const resData = res ? await res.json().catch(() => ({})) : {}
+      await addSentEmail({ toEmail: email, subject: welcomeSubject, bodyHtml: welcomeHtml, sentAt, resendEmailId: resData?.id, status: res?.ok ? 'sent' : 'failed' }).catch(() => {})
     }
 
     // Enroll in welcome drip (Day 3 + Day 7 follow-up emails)

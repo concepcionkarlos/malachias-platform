@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { readContent, writeContent } from '@/lib/store'
 import { rateLimit } from '@/lib/rateLimit'
+import { addSentEmail } from '@/lib/venueStore'
 
 export const dynamic = 'force-dynamic'
 
@@ -137,16 +138,17 @@ export async function POST(req: NextRequest) {
   }
 
   // Send coupon email via Resend (new subscribers only)
+  const couponSubject = `Your ${DISCOUNT} off code — welcome to the mission 🎸`
+  const couponHtml = buildCouponEmail(email)
   const emailRes = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      from: 'Malachias <hello@malachiasmusic.com>',
-      to: [email],
-      subject: `Your ${DISCOUNT} off code — welcome to the mission 🎸`,
-      html: buildCouponEmail(email),
-    }),
+    body: JSON.stringify({ from: 'Malachias <hello@malachiasmusic.com>', to: [email], subject: couponSubject, html: couponHtml }),
   })
+
+  const sentAt = new Date().toISOString()
+  const resData = await emailRes.json().catch(() => ({}))
+  await addSentEmail({ toEmail: email, subject: couponSubject, bodyHtml: couponHtml, sentAt, resendEmailId: resData?.id, status: emailRes.ok ? 'sent' : 'failed' }).catch(() => {})
 
   if (!emailRes.ok) {
     return NextResponse.json({ error: 'Failed to send email' }, { status: 500 })
