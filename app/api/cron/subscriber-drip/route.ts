@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { readContent, writeContent } from '@/lib/store'
+import { addSentEmail } from '@/lib/venueStore'
 
 export const dynamic = 'force-dynamic'
 
@@ -129,32 +130,32 @@ export async function GET(req: NextRequest) {
 
     if (!entry.day3Sent && now >= enrolledMs + 3 * DAY) {
       const { subject, html } = buildDay3Email(entry.email)
+      const sentAt = new Date().toISOString()
       const res = await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          from: 'Malachias <hello@malachiasmusic.com>',
-          to: [entry.email],
-          subject,
-          html,
-        }),
+        body: JSON.stringify({ from: 'Malachias <hello@malachiasmusic.com>', to: [entry.email], subject, html }),
       })
-      if (res.ok) { entry = { ...entry, day3Sent: true }; sent++ }
+      if (res.ok) {
+        entry = { ...entry, day3Sent: true }; sent++
+        const data = await res.json().catch(() => ({}))
+        await addSentEmail({ toEmail: entry.email, subject, bodyHtml: html, sentAt, resendEmailId: data?.id, status: 'sent' }).catch(() => {})
+      }
     }
 
     if (!entry.day7Sent && now >= enrolledMs + 7 * DAY) {
       const { subject, html } = buildDay7Email(entry.email)
+      const sentAt = new Date().toISOString()
       const res = await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          from: 'Malachias <hello@malachiasmusic.com>',
-          to: [entry.email],
-          subject,
-          html,
-        }),
+        body: JSON.stringify({ from: 'Malachias <hello@malachiasmusic.com>', to: [entry.email], subject, html }),
       })
-      if (res.ok) { entry = { ...entry, day7Sent: true }; sent++ }
+      if (res.ok) {
+        entry = { ...entry, day7Sent: true }; sent++
+        const data = await res.json().catch(() => ({}))
+        await addSentEmail({ toEmail: entry.email, subject, bodyHtml: html, sentAt, resendEmailId: data?.id, status: 'sent' }).catch(() => {})
+      }
     }
 
     return entry
