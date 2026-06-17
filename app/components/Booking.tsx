@@ -145,6 +145,21 @@ export default function Booking() {
           {/* Left — info */}
           <div>
             <motion.div {...fade()}>
+              {/* Availability pulse */}
+              <motion.div
+                animate={{ opacity: [0.6, 1, 0.6] }}
+                transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '0.45rem', marginBottom: '0.9rem' }}
+              >
+                <motion.span
+                  animate={{ scale: [1, 1.5, 1], opacity: [0.5, 1, 0.5] }}
+                  transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+                  style={{ display: 'block', width: 7, height: 7, borderRadius: '50%', background: '#c9a84c', flexShrink: 0 }}
+                />
+                <span style={{ fontSize: '0.58rem', letterSpacing: '0.28em', color: 'rgba(201,168,76,0.65)', textTransform: 'uppercase', fontFamily: 'var(--font-body)' }}>
+                  Available to book
+                </span>
+              </motion.div>
               <p className="label-xs mb-3" style={{ color: 'var(--gold)', letterSpacing: '0.40em' }}>
                 Get in Touch
               </p>
@@ -333,14 +348,24 @@ export default function Booking() {
                 {error && (
                   <p style={{ color: '#c04020', fontSize: '0.82rem', lineHeight: 1.5 }}>{error}</p>
                 )}
-                <button
+                <motion.button
                   type="submit"
                   disabled={loading || !captcha}
                   className="btn btn-primary w-full justify-center"
+                  whileHover={(!loading && !!captcha) ? { scale: 1.015 } : {}}
+                  whileTap={(!loading && !!captcha) ? { scale: 0.98 } : {}}
+                  animate={(!loading && !!captcha) ? {
+                    boxShadow: [
+                      '0 0 0px rgba(201,168,76,0)',
+                      '0 0 18px rgba(201,168,76,0.28)',
+                      '0 0 0px rgba(201,168,76,0)',
+                    ],
+                  } : {}}
+                  transition={{ duration: 2.8, repeat: Infinity, ease: 'easeInOut' }}
                   style={{ letterSpacing: '0.16em', opacity: (loading || !captcha) ? 0.6 : 1 }}
                 >
                   {loading ? 'Sending…' : 'Send Booking Request'}
-                </button>
+                </motion.button>
               </form>
             )}
           </motion.div>

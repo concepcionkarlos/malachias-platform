@@ -102,7 +102,17 @@ export default function Merch({ fourthwallProducts = [] }: MerchProps) {
   const hasFourthwall = fourthwallProducts.length > 0;
 
   return (
-    <section id="merch" style={{ background: '#040404' }} className="section-pad relative overflow-hidden">
+    <section id="merch" style={{ background: '#040404', position: 'relative' }} className="section-pad overflow-hidden">
+
+      {/* Background glow */}
+      <motion.div
+        animate={{ opacity: [0.03, 0.09, 0.03] }}
+        transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+        style={{
+          position: 'absolute', inset: 0, pointerEvents: 'none',
+          background: 'radial-gradient(ellipse 70% 50% at 50% 0%, rgba(201,168,76,0.18) 0%, transparent 70%)',
+        }}
+      />
 
       {/* Ghost section numeral */}
       <div aria-hidden="true" className="ghost-num" style={{ position: 'absolute', bottom: '4%', right: '-1%' }}>05</div>
@@ -111,6 +121,21 @@ export default function Merch({ fourthwallProducts = [] }: MerchProps) {
 
         {/* Header */}
         <motion.div {...fade()} className="mb-14">
+          {/* Store live badge */}
+          <motion.div
+            animate={{ boxShadow: ['0 0 0px rgba(201,168,76,0)', '0 0 16px rgba(201,168,76,0.20)', '0 0 0px rgba(201,168,76,0)'] }}
+            transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.45rem', marginBottom: '1rem', background: 'rgba(201,168,76,0.07)', border: '1px solid rgba(201,168,76,0.20)', borderRadius: 999, padding: '0.35rem 0.9rem' }}
+          >
+            <motion.span
+              animate={{ scale: [1, 1.5, 1] }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+              style={{ display: 'block', width: 6, height: 6, borderRadius: '50%', background: '#c9a84c' }}
+            />
+            <span style={{ fontSize: '0.58rem', letterSpacing: '0.28em', color: '#c9a84c', textTransform: 'uppercase', fontFamily: 'var(--font-body)' }}>
+              Store Live
+            </span>
+          </motion.div>
           <p className="label-xs mb-3" style={{ color: 'var(--gold)', letterSpacing: '0.40em' }}>
             Support the Mission
           </p>
@@ -202,9 +227,15 @@ export default function Merch({ fourthwallProducts = [] }: MerchProps) {
               <p className="text-[0.82rem] leading-relaxed" style={{ color: 'var(--text-3)', maxWidth: '28rem' }}>
                 Every purchase keeps the mission alive. No middleman, no label — just you and the band.
               </p>
-              <Link href="/merch" className="btn btn-primary shrink-0" style={{ fontSize: '0.72rem', letterSpacing: '0.18em', padding: '0.75rem 2rem' }}>
-                Support the Band →
-              </Link>
+              <motion.div
+                animate={{ boxShadow: ['0 0 0px rgba(201,168,76,0)', '0 0 22px rgba(201,168,76,0.32)', '0 0 0px rgba(201,168,76,0)'] }}
+                transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+                className="shrink-0"
+              >
+                <Link href="/merch" className="btn btn-primary" style={{ fontSize: '0.72rem', letterSpacing: '0.18em', padding: '0.75rem 2rem', display: 'inline-block' }}>
+                  Support the Band →
+                </Link>
+              </motion.div>
             </>
           ) : (
             <>
