@@ -5,16 +5,17 @@ import { motion } from 'framer-motion';
 
 interface FooterLink { label: string; href: string; gold?: boolean }
 
+// "/#id" (not "#id") so footer links work from every page, not just home.
 const NAV_LINKS: FooterLink[] = [
-  { label: 'The Story',    href: '#about'      },
-  { label: 'The Sound',    href: '#music'      },
-  { label: 'The Field',    href: '#journal'    },
-  { label: 'The Store',    href: '/merch'      },
-  { label: 'The Mission',  href: '#mission'    },
-  { label: 'Press & EPK',  href: '#press'      },
-  { label: 'Book Us',      href: '#booking'    },
-  { label: 'Stay in Touch',href: '#newsletter' },
-  { label: '♥ Support',    href: '/support',   gold: true },
+  { label: 'The Story',    href: '/#about'      },
+  { label: 'The Sound',    href: '/#music'      },
+  { label: 'The Field',    href: '/#journal'    },
+  { label: 'The Store',    href: '/merch'       },
+  { label: 'The Mission',  href: '/#mission'    },
+  { label: 'Press & EPK',  href: '/#press'      },
+  { label: 'Book Us',      href: '/#booking'    },
+  { label: 'Stay in Touch',href: '/#newsletter' },
+  { label: '♥ Support',    href: '/support',    gold: true },
 ];
 
 const CONTACTS = [
@@ -104,7 +105,7 @@ export default function Footer() {
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
           >
-            <a href="#hero" className="group mb-5 inline-block">
+            <a href="/#hero" className="group mb-5 inline-block">
               <span className="font-display text-xl tracking-[0.22em] transition-colors duration-300 group-hover:text-[#c9a84c]"
                 style={{ color: '#e8ddd0' }}>
                 MALACHIAS

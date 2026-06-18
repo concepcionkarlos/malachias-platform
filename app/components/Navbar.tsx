@@ -7,13 +7,16 @@ import { Menu, X } from 'lucide-react';
 
 interface NavItem { label: string; href: string; gold?: boolean }
 
+// Section anchors are written as "/#id" (not "#id") so they work from ANY page,
+// not just the homepage — on /merch, /support, etc. a bare "#about" points at a
+// section that doesn't exist on that page and the tap goes nowhere.
 const NAV: NavItem[] = [
-  { label: 'The Story',   href: '#about'   },
-  { label: 'The Band',    href: '#band'    },
-  { label: 'The Sound',   href: '#music'   },
-  { label: 'The Field',   href: '#journal' },
-  { label: 'The Store',   href: '/merch'   },
-  { label: 'The Mission', href: '#mission' },
+  { label: 'The Story',   href: '/#about'   },
+  { label: 'The Band',    href: '/#band'    },
+  { label: 'The Sound',   href: '/#music'   },
+  { label: 'The Field',   href: '/#journal' },
+  { label: 'The Store',   href: '/merch'    },
+  { label: 'The Mission', href: '/#mission' },
   { label: 'Support',     href: '/support', gold: true },
 ];
 
@@ -91,7 +94,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-6 lg:px-10 h-[62px] grid grid-cols-[auto_1fr_auto] items-center gap-4">
 
         {/* LEFT — Wordmark only */}
-        <a href="#hero" className="group shrink-0" aria-label="Malachias home">
+        <a href="/#hero" className="group shrink-0" aria-label="Malachias home">
           <span className="font-display text-[1.12rem] tracking-[0.26em] transition-colors duration-300 group-hover:text-[#c9a84c]"
             style={{ color: '#e8ddd0' }}>
             MALACHIAS
@@ -146,7 +149,7 @@ export default function Navbar() {
 
           {/* Book Us CTA — desktop */}
           <a
-            href="#booking"
+            href="/#booking"
             className="hidden lg:inline-flex btn btn-ghost !py-2 !px-4 !text-[0.60rem] !tracking-[0.18em]"
           >
             Book Us
@@ -213,7 +216,7 @@ export default function Navbar() {
               </div>
 
               <a
-                href="#booking"
+                href="/#booking"
                 onClick={() => setOpen(false)}
                 className="btn btn-primary justify-center mt-1"
               >
