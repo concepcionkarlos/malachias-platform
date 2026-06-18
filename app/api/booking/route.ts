@@ -4,6 +4,7 @@ import { readContent, writeContent } from '@/lib/store'
 import { triggerAutoReply, sendAdminNotification } from '@/lib/emailService'
 import { enrollInBookingDrip } from '@/lib/venueStore'
 import { rateLimit } from '@/lib/rateLimit'
+import { verifyChallenge, consumeChallengeNonce } from '@/lib/captcha'
 import type { BookingRequest } from '@/lib/data'
 
 function esc(s: string): string {
@@ -63,34 +64,30 @@ function validateMessage(msg: string): string | null {
   return null
 }
 
-function validateCaptcha(a: unknown, b: unknown, answer: unknown): boolean {
-  const na = parseInt(String(a))
-  const nb = parseInt(String(b))
-  const ans = parseInt(String(answer))
-  if (isNaN(na) || isNaN(nb) || isNaN(ans)) return false
-  if (na < 1 || na > 9 || nb < 1 || nb > 9) return false // must be in expected range
-  return ans === na + nb
-}
-
 // ── Route ────────────────────────────────────────────────────────────────────
 
 export async function POST(req: NextRequest) {
-  const limited = rateLimit(req, 'booking', { limit: 5, windowMs: 60_000 })
+  const limited = await rateLimit(req, 'booking', { limit: 5, windowMs: 60_000 })
   if (limited) return limited
 
   const body = await req.json()
   const {
     fullName, venueOrOrg, email, phone, eventDate, city,
     eventType, budgetRange, guestCount, message,
-    website, captchaA, captchaB, captchaAnswer,
+    website, captchaToken, captchaAnswer,
   } = body
 
   // Honeypot — bots fill this, humans never see it
   if (website) return NextResponse.json({ ok: true }, { status: 201 })
 
-  // Human verification
-  if (!validateCaptcha(captchaA, captchaB, captchaAnswer)) {
-    return NextResponse.json({ error: 'Verification failed. Please solve the math question.' }, { status: 400 })
+  // Human verification — the challenge is server-issued and signed, so the
+  // answer alone can't be forged, and each token can only be used once.
+  const captcha = verifyChallenge(captchaToken, captchaAnswer)
+  if (!captcha.ok) {
+    return NextResponse.json({ error: 'Verification failed. Please reload and solve the math question.' }, { status: 400 })
+  }
+  if (captcha.nonce && !(await consumeChallengeNonce(captcha.nonce))) {
+    return NextResponse.json({ error: 'This form was already submitted. Please reload and try again.' }, { status: 400 })
   }
 
   // Required fields

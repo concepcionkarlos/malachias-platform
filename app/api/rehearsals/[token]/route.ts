@@ -5,7 +5,7 @@ import { rateLimit } from '@/lib/rateLimit'
 export const dynamic = 'force-dynamic'
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ token: string }> }) {
-  const limited = rateLimit(req, 'rehearsal-token', { limit: 20, windowMs: 60_000 })
+  const limited = await rateLimit(req, 'rehearsal-token', { limit: 20, windowMs: 60_000 })
   if (limited) return limited
   const { token } = await params
   const rehearsal = await getRehearsalByToken(token)
@@ -16,7 +16,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ toke
 }
 
 export async function POST(req: NextRequest, { params }: { params: Promise<{ token: string }> }) {
-  const limited = rateLimit(req, 'rehearsal-rsvp', { limit: 5, windowMs: 60_000 })
+  const limited = await rateLimit(req, 'rehearsal-rsvp', { limit: 5, windowMs: 60_000 })
   if (limited) return limited
 
   const { token } = await params

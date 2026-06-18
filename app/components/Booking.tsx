@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 
 const fade = (delay = 0) => ({
@@ -73,18 +73,25 @@ export default function Booking() {
     eventDate: '', city: '', eventType: '', budgetRange: '',
     guestCount: '', message: '', website: '',
   });
-  const [captcha, setCaptcha] = useState<{ a: number; b: number; answer: string } | null>(null);
+  const [captcha, setCaptcha] = useState<{ a: number; b: number; token: string; answer: string } | null>(null);
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    setCaptcha({
-      a: Math.floor(Math.random() * 9) + 1,
-      b: Math.floor(Math.random() * 9) + 1,
-      answer: '',
-    });
+  // The challenge is issued and signed by the server — the browser no longer
+  // makes up its own numbers, so a bot can't pre-compute a valid submission.
+  const loadCaptcha = useCallback(async () => {
+    try {
+      const res = await fetch('/api/booking/captcha');
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      setCaptcha({ a: data.a, b: data.b, token: data.token, answer: '' });
+    } catch {
+      setCaptcha(null);
+    }
   }, []);
+
+  useEffect(() => { loadCaptcha(); }, [loadCaptcha]);
 
   const set = (k: keyof typeof form) =>
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
@@ -117,8 +124,7 @@ export default function Booking() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...form,
-          captchaA: captcha.a,
-          captchaB: captcha.b,
+          captchaToken: captcha.token,
           captchaAnswer: captcha.answer,
         }),
       });
@@ -129,8 +135,8 @@ export default function Booking() {
       setSent(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong. Please try again or email us directly.');
-      // Regenerate captcha on failure
-      setCaptcha({ a: Math.floor(Math.random() * 9) + 1, b: Math.floor(Math.random() * 9) + 1, answer: '' });
+      // Fetch a fresh signed challenge on failure (the previous token is now spent)
+      loadCaptcha();
     } finally {
       setLoading(false);
     }
