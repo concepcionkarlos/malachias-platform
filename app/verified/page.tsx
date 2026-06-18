@@ -1,12 +1,11 @@
 import Link from 'next/link'
 
-export default function VerifiedPage({
+export default async function VerifiedPage({
   searchParams,
 }: {
-  searchParams: { email?: string; error?: string }
+  searchParams: Promise<{ email?: string; error?: string }>
 }) {
-  const error = searchParams.error
-  const email = searchParams.email
+  const { error, email } = await searchParams
 
   if (error) {
     const messages: Record<string, string> = {

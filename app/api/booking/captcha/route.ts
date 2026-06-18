@@ -10,5 +10,9 @@ export async function GET(req: NextRequest) {
   if (limited) return limited
 
   const { a, b, token } = issueChallenge()
-  return NextResponse.json({ a, b, token })
+  // Each token is single-use, so the browser/CDN must never serve a cached one.
+  return NextResponse.json(
+    { a, b, token },
+    { headers: { 'Cache-Control': 'no-store, no-cache, must-revalidate' } }
+  )
 }
