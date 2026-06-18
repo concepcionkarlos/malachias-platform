@@ -159,13 +159,15 @@ export default function PromoPageClient() {
               What&apos;s in the store
             </p>
             {[
-              { name: '☕ Support Mug',  price: 'From $8.95 → $7.61 with code' },
-              { name: '🧢 Warrior Hat',  price: '$19.99 → $16.99 with code' },
-              { name: '🧢 Trucker Hat',  price: '$19.99 → $16.99 with code' },
-              { name: '👕 Premium Tee',  price: 'From $34.99 → $29.74 with code' },
+              { name: 'Support Mug',  price: 'From $8.95 → $7.61 with code' },
+              { name: 'Warrior Hat',  price: '$19.99 → $16.99 with code' },
+              { name: 'Trucker Hat',  price: '$19.99 → $16.99 with code' },
+              { name: 'Premium Tee',  price: 'From $34.99 → $29.74 with code' },
             ].map(item => (
               <div key={item.name} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', padding: '0.6rem 0', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-                <span style={{ fontSize: '0.85rem', color: 'rgba(232,221,208,0.65)' }}>{item.name}</span>
+                <span style={{ fontSize: '0.85rem', color: 'rgba(232,221,208,0.65)' }}>
+                  <span style={{ color: GOLD, marginRight: 9, fontSize: '0.66rem' }}>▸</span>{item.name}
+                </span>
                 <span style={{ fontSize: '0.72rem', color: GOLD, letterSpacing: '0.04em' }}>{item.price}</span>
               </div>
             ))}

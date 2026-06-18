@@ -3,20 +3,14 @@
 import { useEffect, useState } from 'react'
 import type { LiveSession } from '@/lib/data'
 
+// Fallbacks for when an admin doesn't supply an explicit platformUrl — point at
+// the band's verified, real profiles (same URLs used in Navbar/Footer/EPK).
 const PLATFORM_URLS: Record<string, string> = {
-  tiktok: 'https://tiktok.com/@malachiasmusic',
-  instagram: 'https://instagram.com/malachiasmusic',
-  youtube: 'https://youtube.com/@malachias',
-  facebook: 'https://facebook.com/malachiasmusic',
-  twitch: 'https://twitch.tv/malachias',
-}
-
-const PLATFORM_ICONS: Record<string, string> = {
-  tiktok: '🎵',
-  instagram: '📸',
-  youtube: '▶️',
-  facebook: 'f',
-  twitch: '🎮',
+  tiktok: 'https://www.tiktok.com/@malachiasmusic',
+  instagram: 'https://www.instagram.com/malachiasmusic',
+  youtube: 'https://www.youtube.com/channel/UCboGsplcNdd9Pha-n83mZYA',
+  facebook: 'https://www.facebook.com/share/17s554A9qA/?mibextid=wwXIfr',
+  twitch: 'https://www.twitch.tv/malachiasmusic',
 }
 
 function Countdown({ to }: { to: string }) {
@@ -95,12 +89,12 @@ export default function LiveSessionBanner() {
           <span style={{ marginRight: 8, fontWeight: 900, letterSpacing: '0.12em' }}>● LIVE NOW</span>
           <span>{session.title}</span>
           <span style={{ margin: '0 8px', opacity: 0.6 }}>·</span>
-          <span style={{ fontWeight: 700 }}>{PLATFORM_ICONS[session.platform]} Watch →</span>
+          <span style={{ fontWeight: 700 }}>Watch →</span>
         </>
       ) : (
         <>
           <span style={{ color: '#c9a84c', fontWeight: 700, marginRight: 8 }}>
-            {PLATFORM_ICONS[session.platform]} Going Live
+            Going Live
           </span>
           <span>{session.title}</span>
           <span style={{ margin: '0 8px', opacity: 0.4 }}>·</span>
