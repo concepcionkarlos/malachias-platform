@@ -23,12 +23,18 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ tok
   const rehearsal = await getRehearsalByToken(token)
   if (!rehearsal) return NextResponse.json({ error: 'Not found' }, { status: 404 })
   const body = await req.json()
-  const { name, email, status } = body
+  const { name, email, status, instrument, readySongs, readyItems, note } = body
   if (!name || !status) return NextResponse.json({ error: 'name and status required' }, { status: 400 })
   if (String(name).length > 120) return NextResponse.json({ error: 'Name too long' }, { status: 400 })
   if (email && String(email).length > 254) return NextResponse.json({ error: 'Email too long' }, { status: 400 })
+  if (note && String(note).length > 600) return NextResponse.json({ error: 'Note too long' }, { status: 400 })
   const updated = await addRehearsalConfirmation(rehearsal.id, {
-    name, email, status, respondedAt: new Date().toISOString(),
+    name, email,
+    instrument: instrument ? String(instrument).slice(0, 60) : undefined,
+    status, readySongs: Array.isArray(readySongs) ? readySongs.slice(0, 30) : undefined,
+    readyItems: Array.isArray(readyItems) ? readyItems.slice(0, 10) : undefined,
+    note: note ? String(note).slice(0, 600) : undefined,
+    respondedAt: new Date().toISOString(),
   })
   return NextResponse.json(updated)
 }

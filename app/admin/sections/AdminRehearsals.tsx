@@ -197,20 +197,75 @@ export default function AdminRehearsals() {
 
                     {/* Confirmations */}
                     {(r.confirmations ?? []).length > 0 && (
-                      <div style={{ marginBottom: 12, padding: '10px 12px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 6 }}>
-                        <div style={{ fontSize: 10, letterSpacing: '0.14em', color: '#3a2e26', marginBottom: 6 }}>RSVPS</div>
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-                          {confirmed.map(c => (
-                            <span key={c.name} style={{ fontSize: 11, padding: '2px 8px', borderRadius: 99, background: 'rgba(52,211,153,0.10)', border: '1px solid rgba(52,211,153,0.20)', color: '#34d399' }}>
-                              {c.name} ✓
-                            </span>
-                          ))}
-                          {declined.map(c => (
-                            <span key={c.name} style={{ fontSize: 11, padding: '2px 8px', borderRadius: 99, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', color: '#5c5044' }}>
-                              {c.name} ✗
-                            </span>
-                          ))}
+                      <div style={{ marginBottom: 12 }}>
+                        {/* Summary bar */}
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
+                          <span style={{ fontSize: 10, letterSpacing: '0.14em', color: '#3a2e26' }}>RESPONSES</span>
+                          <span style={{ fontSize: 11, color: '#34d399' }}>{confirmed.length} going</span>
+                          {declined.length > 0 && <span style={{ fontSize: 11, color: '#5c5044' }}>{declined.length} can't make it</span>}
                         </div>
+
+                        {/* Confirmed — detailed cards */}
+                        {confirmed.length > 0 && (
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 8 }}>
+                            {confirmed.map(c => {
+                              const songNames = (c.readySongs ?? []).map(id => songs.find(s => s.id === id)?.title).filter(Boolean)
+                              return (
+                                <div key={c.name} style={{ background: 'rgba(52,211,153,0.05)', border: '1px solid rgba(52,211,153,0.15)', borderRadius: 6, padding: '10px 12px' }}>
+                                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: songNames.length > 0 || (c.readyItems ?? []).length > 0 || c.note ? 8 : 0 }}>
+                                    <span style={{ fontSize: 12, color: '#34d399', fontWeight: 700 }}>{c.name} ✓</span>
+                                    {c.instrument && (
+                                      <span style={{ fontSize: 10, padding: '1px 7px', borderRadius: 99, background: 'rgba(201,168,76,0.12)', border: '1px solid rgba(201,168,76,0.25)', color: '#c9a84c' }}>
+                                        {c.instrument}
+                                      </span>
+                                    )}
+                                    <span style={{ fontSize: 10, color: '#3a2e26', marginLeft: 'auto' }}>
+                                      {new Date(c.respondedAt).toLocaleDateString()}
+                                    </span>
+                                  </div>
+                                  {songNames.length > 0 && (
+                                    <div style={{ marginBottom: 6 }}>
+                                      <div style={{ fontSize: 10, letterSpacing: '0.12em', color: '#3a2e26', marginBottom: 4, fontFamily: 'var(--font-body)' }}>SONGS READY</div>
+                                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+                                        {songNames.map(name => (
+                                          <span key={name} style={{ fontSize: 10, padding: '2px 8px', borderRadius: 99, background: 'rgba(52,211,153,0.10)', border: '1px solid rgba(52,211,153,0.18)', color: '#34d399' }}>{name}</span>
+                                        ))}
+                                      </div>
+                                    </div>
+                                  )}
+                                  {(c.readyItems ?? []).length > 0 && (
+                                    <div style={{ marginBottom: 6 }}>
+                                      <div style={{ fontSize: 10, letterSpacing: '0.12em', color: '#3a2e26', marginBottom: 4, fontFamily: 'var(--font-body)' }}>COMMITMENTS</div>
+                                      <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                                        {(c.readyItems ?? []).map(item => (
+                                          <div key={item} style={{ fontSize: 10, color: '#5c5044', display: 'flex', alignItems: 'center', gap: 5 }}>
+                                            <span style={{ color: '#34d399' }}>✓</span> {item}
+                                          </div>
+                                        ))}
+                                      </div>
+                                    </div>
+                                  )}
+                                  {c.note && (
+                                    <div style={{ fontSize: 11, color: '#8a7f70', fontStyle: 'italic', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: 6, marginTop: 4 }}>
+                                      "{c.note}"
+                                    </div>
+                                  )}
+                                </div>
+                              )
+                            })}
+                          </div>
+                        )}
+
+                        {/* Declined */}
+                        {declined.length > 0 && (
+                          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                            {declined.map(c => (
+                              <span key={c.name} style={{ fontSize: 11, padding: '2px 8px', borderRadius: 99, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', color: '#5c5044' }}>
+                                {c.name} ✗{c.instrument ? ` · ${c.instrument}` : ''}
+                              </span>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     )}
 

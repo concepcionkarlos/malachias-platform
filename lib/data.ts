@@ -524,7 +524,11 @@ export type RehearsalStatus = 'upcoming' | 'completed' | 'cancelled'
 export interface RehearsalConfirmation {
   name: string
   email?: string
+  instrument?: string
   status: 'confirmed' | 'declined'
+  readySongs?: string[]   // song IDs committed as practiced
+  readyItems?: string[]   // general readiness checkboxes
+  note?: string
   respondedAt: string
 }
 
