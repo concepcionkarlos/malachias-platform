@@ -35,14 +35,18 @@ function validateName(name: string): string | null {
   if (/^\d+$/.test(trimmed)) return 'Name cannot be only numbers.'
   // All the same character
   if (new Set(trimmed.toLowerCase().replace(/\s/g, '').split('')).size <= 1) return 'Please enter a real name.'
-  // Keyboard row mashing (asdfghjkl, qwerty, etc.)
+  // Keyboard-row mashing (asdf, qwerty, hjkl…): flag a run of 4+ letters that
+  // appear CONSECUTIVELY in a keyboard row (forward or reversed). The previous
+  // check counted any letters that merely belonged to the row, which rejected
+  // real names like "Tyler Powers" or "Pastor Williams" (e,r,t,y,u,i,o,p are
+  // common letters that all live on the top row).
   const rows = ['qwertyuiop', 'asdfghjkl', 'zxcvbnm']
-  const lower = trimmed.toLowerCase().replace(/\s/g, '')
+  const lower = trimmed.toLowerCase().replace(/[^a-z]/g, '')
   for (const row of rows) {
-    let streak = 0
-    for (const ch of lower) {
-      streak = row.includes(ch) ? streak + 1 : 0
-      if (streak >= 4) return 'Name contains invalid characters.'
+    const rev = [...row].reverse().join('')
+    for (let i = 0; i + 4 <= lower.length; i++) {
+      const seg = lower.slice(i, i + 4)
+      if (row.includes(seg) || rev.includes(seg)) return 'Please enter a real name.'
     }
   }
   return null

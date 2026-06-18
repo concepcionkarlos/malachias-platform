@@ -48,11 +48,16 @@ function nameError(name: string): string | null {
   if (trimmed.length < 2) return 'Please enter your name.'
   if (/^\d+$/.test(trimmed)) return 'Name can\'t be only numbers.'
   if (new Set(trimmed.toLowerCase().replace(/\s/g, '').split('')).size <= 1) return 'Please enter a real name.'
+  // Keyboard-row mashing: a run of 4+ letters consecutive in a row (fwd/rev).
+  // (Mirrors the server check in app/api/booking/route.ts.)
   const rows = ['qwertyuiop', 'asdfghjkl', 'zxcvbnm']
-  const lower = trimmed.toLowerCase().replace(/\s/g, '')
+  const lower = trimmed.toLowerCase().replace(/[^a-z]/g, '')
   for (const row of rows) {
-    let streak = 0
-    for (const ch of lower) { streak = row.includes(ch) ? streak + 1 : 0; if (streak >= 4) return 'That doesn\'t look like a real name.' }
+    const rev = [...row].reverse().join('')
+    for (let i = 0; i + 4 <= lower.length; i++) {
+      const seg = lower.slice(i, i + 4)
+      if (row.includes(seg) || rev.includes(seg)) return 'That doesn\'t look like a real name.'
+    }
   }
   return null
 }
