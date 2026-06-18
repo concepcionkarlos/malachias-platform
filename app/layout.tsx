@@ -121,7 +121,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             inset: 0,
             zIndex: 9999,
             pointerEvents: 'none',
-            opacity: 0.044,
+            opacity: 0.065,
             willChange: 'auto',
           }}
         />
