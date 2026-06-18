@@ -6,6 +6,7 @@ import Link from 'next/link'
 export default function PromoPageClient() {
   const [email, setEmail] = useState('')
   const [state, setState] = useState<'idle' | 'loading' | 'done' | 'error'>('idle')
+  const [already, setAlready] = useState(false)
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -16,7 +17,10 @@ export default function PromoPageClient() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
       })
+      const data = await res.json().catch(() => ({}))
       if (!res.ok) throw new Error()
+      // pending === false means they were already a confirmed subscriber.
+      setAlready(data.pending === false)
       setState('done')
     } catch {
       setState('error')
@@ -55,7 +59,7 @@ export default function PromoPageClient() {
 
         <p style={{ textAlign: 'center', fontSize: '0.90rem', color: 'rgba(232,221,208,0.50)', lineHeight: 1.75, margin: '0 0 2.5rem' }}>
           To celebrate our official merch launch, we&apos;re giving the community 15% off every order.
-          Subscribe below — your code arrives instantly in your inbox.
+          Drop your email below — confirm it with one click and your code lands in your inbox.
         </p>
 
         <div style={{ width: '3rem', height: '1px', background: `linear-gradient(to right, ${GOLD}, transparent)`, margin: '0 auto 2.5rem' }} />
@@ -115,11 +119,17 @@ export default function PromoPageClient() {
                 fontFamily: 'var(--font-display)', fontSize: '1.6rem', color: '#ffffff',
                 letterSpacing: '0.06em', margin: '0 0 0.75rem',
               }}>
-                Check your inbox!
+                {already ? "You're already in!" : 'Confirm your email'}
               </h2>
               <p style={{ fontSize: '0.88rem', color: 'rgba(232,221,208,0.60)', lineHeight: 1.75, margin: 0 }}>
-                We sent your 15% OFF code to <strong style={{ color: '#e8ddd0' }}>{email}</strong>.
-                Check your inbox — and spam folder just in case.
+                {already ? (
+                  <>You&apos;re already on the list — your 15% code was sent when you first joined.
+                  Check your inbox, or just use it at checkout.</>
+                ) : (
+                  <>We sent a confirmation link to <strong style={{ color: '#e8ddd0' }}>{email}</strong>.
+                  Click it to confirm — your 15% OFF code arrives right after.
+                  Check your spam folder just in case.</>
+                )}
               </p>
             </div>
 

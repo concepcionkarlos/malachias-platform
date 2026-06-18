@@ -53,7 +53,7 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
-  const limited = rateLimit(req, 'newsletter', { limit: 3, windowMs: 60_000 })
+  const limited = await rateLimit(req, 'newsletter', { limit: 3, windowMs: 60_000 })
   if (limited) return limited
 
   const { email } = await req.json()

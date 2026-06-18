@@ -8,7 +8,7 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
-  const limited = rateLimit(req, 'admin-login', { limit: 5, windowMs: 15 * 60_000 })
+  const limited = await rateLimit(req, 'admin-login', { limit: 5, windowMs: 15 * 60_000 })
   if (limited) return limited
 
   const { password } = await req.json()
