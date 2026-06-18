@@ -1,12 +1,13 @@
 'use client';
 
 import Link from 'next/link';
+import { Shirt, Music, Calendar, Mail } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
 const WAYS = [
   {
-    icon: '🎽',
+    icon: Shirt,
     title: 'Wear the Mission',
     subtitle: 'Buy official Malachias gear',
     body: 'Every piece you buy funds studio time, live shows, and veteran outreach. No middleman. Direct to the band.',
@@ -15,7 +16,7 @@ const WAYS = [
     highlight: true,
   },
   {
-    icon: '🎵',
+    icon: Music,
     title: 'Stream & Share',
     subtitle: 'Free — costs you nothing',
     body: 'Follow on Spotify and Apple Music. Add songs to your playlists. Every stream and share puts the mission in front of new ears.',
@@ -24,7 +25,7 @@ const WAYS = [
     highlight: false,
   },
   {
-    icon: '📅',
+    icon: Calendar,
     title: 'Book the Band',
     subtitle: 'Bring the mission to your stage',
     body: 'Churches, bars, military events, festivals — if you have a stage and a crowd, we have a show. Every booking sustains the mission.',
@@ -33,7 +34,7 @@ const WAYS = [
     highlight: false,
   },
   {
-    icon: '✉️',
+    icon: Mail,
     title: 'Spread the Word',
     subtitle: 'Share with someone who needs it',
     body: 'Know someone dealing with PTSD, depression, or searching for faith? Share a song. A share costs nothing and can change everything.',
@@ -200,7 +201,7 @@ export default function SupportPageClient() {
                 gap: '0.6rem',
               }}
             >
-              <span style={{ fontSize: '1.5rem', lineHeight: 1 }}>{w.icon}</span>
+              <w.icon size={22} strokeWidth={1.5} style={{ color: '#c9a84c' }} aria-hidden="true" />
               <p style={{ fontSize: '0.50rem', letterSpacing: '0.30em', textTransform: 'uppercase', color: 'rgba(201,168,76,0.50)', fontWeight: 700 }}>
                 {w.subtitle}
               </p>

@@ -789,7 +789,7 @@ export const siteContent: SiteContent = {
     "The band is now based in South Florida — bringing the mission to new stages, new cities, and wherever the music can reach.",
   ],
   serviceArea: 'South Florida',
-  footerTagline: 'South Florida. Faith. Two tours. One mission.',
+  footerTagline: 'Fort Wayne roots. South Florida based. Two tours. One mission.',
   ctaPrimaryLabel: 'Book Malachias',
   ctaSecondaryLabel: 'View Press Kit',
   contactEmail: 'booking@malachiasmusic.com',

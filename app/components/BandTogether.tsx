@@ -42,7 +42,7 @@ export default function BandTogether() {
         transform: visible ? 'translateY(0)' : 'translateY(8px)',
         transition: 'opacity 0.8s ease, transform 0.8s ease',
       }}>
-        South Florida · Miami
+        Fort Wayne → South Florida
       </div>
 
       {/* Photo with gold frame */}

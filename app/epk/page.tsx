@@ -2,6 +2,7 @@ export const dynamic = 'force-dynamic'
 
 import Link from 'next/link'
 import { readContent } from '@/lib/store'
+import { BAND_ROSTER } from '@/lib/bandRoster'
 
 export async function generateMetadata() {
   return {
@@ -42,9 +43,9 @@ const SECTION_LABEL: React.CSSProperties = {
 }
 
 export default async function EpkPage() {
-  const { epkContent, siteContent, bandMembers } = await readContent()
+  const { epkContent, siteContent } = await readContent()
 
-  const founder = bandMembers.find(m => m.visible !== false)
+  const founder = BAND_ROSTER[0]
   const bio = siteContent.aboutText ?? []
 
   const techSpecs = epkContent.techSpecs.length > 0 ? epkContent.techSpecs : [
@@ -206,10 +207,39 @@ export default async function EpkPage() {
                 Music cracked me open again. Faith came through the crack.&rdquo;
               </p>
               <p style={{ fontSize: '0.60rem', letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(201,168,76,0.30)', marginTop: '0.6rem' }}>
-                — {founder.name}{founder.branch ? ` · ${founder.branch}` : ''}{founder.tours ? ` · ${founder.tours}` : ''}
+                — {founder.name} · {founder.origin}
               </p>
             </div>
           )}
+        </div>
+
+        <hr style={RULE} />
+
+        {/* ── Lineup ─── */}
+        <div style={{ marginBottom: '3rem' }}>
+          <p style={SECTION_LABEL}>The Lineup</p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
+            {BAND_ROSTER.map(m => (
+              <div key={m.name}>
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '0.3rem' }}>
+                  <span style={{ fontFamily: 'var(--font-display)', fontSize: '1.05rem', letterSpacing: '0.06em', color: '#ede5d8' }}>
+                    {m.name}
+                  </span>
+                  <span style={{ fontSize: '0.60rem', letterSpacing: '0.20em', textTransform: 'uppercase', color: m.tagColor }}>
+                    {m.role}
+                  </span>
+                </div>
+                {m.origin && (
+                  <p style={{ fontSize: '0.56rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(201,168,76,0.40)', fontStyle: 'italic', marginBottom: '0.5rem' }}>
+                    {m.origin}
+                  </p>
+                )}
+                <p style={{ fontSize: '0.82rem', lineHeight: 1.7, color: 'rgba(220,210,196,0.60)' }}>
+                  {m.bio}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
 
         <hr style={RULE} />
