@@ -1,5 +1,9 @@
 'use client';
 
+// Homepage "The Mission" section — states why the band plays (reducing suicidal
+// ideation, lifting depression, healing PTSD), with Faith/Service/Healing values and
+// a Book Us CTA. Static copy over a crimson glow with ambient embers.
+
 import { motion } from 'framer-motion';
 import Embers from './Embers';
 

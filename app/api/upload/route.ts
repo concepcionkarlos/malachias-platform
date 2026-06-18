@@ -1,3 +1,6 @@
+// Admin API for file uploads to Vercel Blob storage (auth required).
+// POST: accepts a multipart 'file', validates the extension against an image/audio/video/pdf
+// allowlist, stores it under a randomized sanitized name with public access, and returns its URL.
 import { NextRequest, NextResponse } from 'next/server'
 import crypto from 'crypto'
 import path from 'path'

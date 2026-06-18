@@ -1,3 +1,7 @@
+// API route: inbound-email webhook (e.g. Resend).
+// POST authenticates via a shared webhook secret (Bearer or x-webhook-secret
+// header), parses the incoming email, attempts to match the sender to a known
+// booking request or venue by email, and stores it as an unread inbound message.
 import { NextRequest, NextResponse } from 'next/server'
 import { addInboundEmail, getVenues } from '@/lib/venueStore'
 import { readContent } from '@/lib/store'

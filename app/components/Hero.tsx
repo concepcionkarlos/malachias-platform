@@ -1,5 +1,9 @@
 'use client';
 
+// Homepage hero — full-screen atmospheric landing with the Malachias emblem, layered
+// fog/glow/vignette, rising embers, the "WE PLAY FOR THE ONES WHO NEED IT MOST" headline,
+// scripture anchor, and Listen/Book/Press CTAs. Uses scroll-linked parallax and fade.
+
 import { useRef, useEffect, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';

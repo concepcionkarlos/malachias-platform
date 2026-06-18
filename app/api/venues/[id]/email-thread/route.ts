@@ -1,3 +1,6 @@
+// Admin API returning the full email thread for a single venue (auth required).
+// GET: fetches outreach logs sent to the venue plus inbound emails filtered to this venue,
+// returning { sent, received }.
 import { NextRequest, NextResponse } from 'next/server'
 import { isAuthenticated } from '@/lib/auth'
 import { getOutreachLogsForVenue, getInboundEmails } from '@/lib/venueStore'

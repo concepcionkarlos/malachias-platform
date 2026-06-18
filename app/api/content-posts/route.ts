@@ -1,3 +1,7 @@
+// CRUD API route for content posts (force-dynamic, no caching).
+// All methods require an authenticated session. GET: list all posts. POST: create a post
+// from the request body. PATCH: update the post identified by body.id with the remaining
+// fields. DELETE: remove the post identified by body.id. Backed by venueStore.
 import { NextRequest, NextResponse } from 'next/server'
 import { isAuthenticated } from '@/lib/auth'
 import { getContentPosts, addContentPost, updateContentPost, deleteContentPost } from '@/lib/venueStore'

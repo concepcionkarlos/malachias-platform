@@ -1,3 +1,7 @@
+// Cron endpoint: GET-only, authorized via Bearer CRON_SECRET (500 if unset, 401 if mismatch); also requires RESEND_API_KEY.
+// Reads the subscriberDrip queue from content store and, per entry, sends the day-3 and day-7
+// newsletter onboarding emails directly through the Resend API once their delays elapse.
+// Logs each successful send, marks the step sent, removes fully-completed entries, and persists the queue.
 import { NextRequest, NextResponse } from 'next/server'
 import { readContent, writeContent } from '@/lib/store'
 import { addSentEmail } from '@/lib/venueStore'

@@ -1,5 +1,9 @@
 'use client'
 
+// Admin section — Rehearsals manager: schedules rehearsals with songs/notes, emails
+// invite links so members can RSVP, tracks confirmed/declined responses and their
+// ready songs, and marks rehearsals completed (with a summary) or cancelled.
+
 import { useState, useEffect } from 'react'
 import { Plus, Trash2, CheckCircle, Clock, XCircle, ChevronDown, ChevronUp, Link, Mail, Users } from 'lucide-react'
 import type { Rehearsal, RehearsalStatus, Song } from '@/lib/data'

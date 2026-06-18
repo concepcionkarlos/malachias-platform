@@ -1,3 +1,7 @@
+// Admin API for a single fan-outreach contact, keyed by [id]. All handlers
+// require an authenticated admin session (401 otherwise) and persist via the
+// content store. PATCH merges partial updates into the contact (refreshing
+// updatedAt; 404 if missing); DELETE removes the contact from fanOutreach.
 import { NextRequest, NextResponse } from 'next/server'
 import { readContent, writeContent } from '@/lib/store'
 import { isAuthenticated } from '@/lib/auth'

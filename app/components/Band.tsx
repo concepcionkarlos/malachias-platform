@@ -1,5 +1,9 @@
 'use client';
 
+// Homepage "The Band" section — member-by-member roster from lib/bandRoster, each
+// with switchable photos, bio, role and pull quote, closing with the band credo.
+// Layout flips left/right per member and collapses to a single column on mobile.
+
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';

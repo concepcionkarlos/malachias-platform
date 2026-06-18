@@ -1,3 +1,5 @@
+// Page — /gallery: server shell that renders the page header and delegates the
+// interactive photo grid + lightbox to the GalleryClient component.
 import type { Metadata } from 'next';
 import GalleryClient from './GalleryClient';
 

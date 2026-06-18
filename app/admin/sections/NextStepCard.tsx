@@ -1,5 +1,9 @@
 'use client'
 
+// Admin shared component — Next Step Card: shows status-specific, numbered "what to do next"
+// guidance for a booking or venue based on its current pipeline status (e.g. New, Sent,
+// Confirmed), with optional detail text and links. Used in the booking and venue drawers.
+
 import { Lightbulb, ExternalLink } from 'lucide-react'
 import type { BookingStatus, VenueStatus } from '@/lib/data'
 

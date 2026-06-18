@@ -1,3 +1,7 @@
+// Public rehearsal RSVP endpoint, addressed by invite token (rate-limited per client).
+// GET (20/min): looks up the rehearsal by token and returns it plus its songs (404 if not found).
+// POST (5/min): records an attendance confirmation (name + status required, with length
+// limits on name/email/note and caps on readySongs/readyItems) and returns the updated rehearsal.
 import { NextRequest, NextResponse } from 'next/server'
 import { getRehearsalByToken, addRehearsalConfirmation, getSongs } from '@/lib/venueStore'
 import { rateLimit } from '@/lib/rateLimit'

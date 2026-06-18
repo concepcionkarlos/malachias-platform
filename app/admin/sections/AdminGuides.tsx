@@ -1,5 +1,8 @@
 'use client'
 
+// Admin section — Playbook: static, collapsible how-to guides for finding gigs,
+// outreach/pitching, social media growth, and booking/business, with external links.
+
 import { useState } from 'react'
 import { ChevronDown, ChevronUp, ExternalLink } from 'lucide-react'
 

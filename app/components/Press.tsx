@@ -1,5 +1,9 @@
 'use client';
 
+// Homepage "Press & EPK" section for event organizers — what-to-expect points, a list
+// of press assets (press kit, stage plot, rider, photos — available on request), and
+// CTAs to the booking form and the full /epk page.
+
 import { motion } from 'framer-motion';
 import { Download } from 'lucide-react';
 

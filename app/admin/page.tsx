@@ -1,4 +1,7 @@
 'use client'
+// Admin section — Main dashboard shell: the single-page admin app. Checks auth via
+// /api/admin/login (showing AdminLogin if needed), renders the grouped sidebar nav,
+// and lazy-loads the active section component based on the ?tab= query param.
 import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'

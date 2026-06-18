@@ -1,3 +1,8 @@
+// Newsletter subscription API backed by the content store.
+// GET: auth-gated (401 otherwise) — returns the confirmed subscribers list.
+// POST: public, rate-limited (3 requests / 60s); validates the email, and for new
+// addresses stores a pending subscriber with a verification token and sends a
+// double opt-in confirmation email via Resend (logged through addSentEmail).
 import { NextRequest, NextResponse } from 'next/server'
 import { readContent, writeContent } from '@/lib/store'
 import { isAuthenticated } from '@/lib/auth'

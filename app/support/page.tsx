@@ -1,3 +1,5 @@
+// Page — /support: sets SEO/Open Graph metadata and renders the SupportPageClient
+// that lays out all the ways to support the band.
 import type { Metadata } from 'next';
 import SupportPageClient from './SupportPageClient';
 

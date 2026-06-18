@@ -1,3 +1,9 @@
+// Public booking-request intake API. POST is rate-limited (5 req/min per
+// client) and protected by a honeypot field plus a signed, single-use captcha
+// (verified up front but only consumed after all validation passes). It
+// validates name/email/phone/message quality, persists the new booking to the
+// content store, then fires the applicant auto-reply, booking drip enrollment,
+// and an admin notification email (all best-effort). Returns 201 with the id.
 import { NextRequest, NextResponse } from 'next/server'
 import crypto from 'crypto'
 import { readContent, writeContent } from '@/lib/store'

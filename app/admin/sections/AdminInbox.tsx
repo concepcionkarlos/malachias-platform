@@ -1,5 +1,9 @@
 'use client'
 
+// Admin section — Inbox: lists inbound emails with unread counts, renders HTML bodies
+// in a sandboxed iframe, links messages to bookings/venues, and supports mark-read
+// (single or all) and delete.
+
 import { useEffect, useState, useRef } from 'react'
 import { Trash2, CheckCheck, Mail, MailOpen } from 'lucide-react'
 import type { InboundEmail } from '@/lib/data'

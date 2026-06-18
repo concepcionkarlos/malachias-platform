@@ -1,3 +1,5 @@
+// Global 404 page (Next.js not-found boundary): renders a noindex "Page Not Found"
+// screen with a link back to the home page for any unmatched route.
 import type { Metadata } from 'next'
 import Link from 'next/link'
 

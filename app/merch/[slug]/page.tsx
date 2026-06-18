@@ -1,3 +1,6 @@
+// Page — /merch/[slug]: single-product page. Server-fetches one Fourthwall
+// product (statically pre-rendered per slug, revalidated hourly), builds its SEO
+// metadata, 404s on unknown slugs, and renders the ProductDetailClient.
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { fetchFWProduct, fetchFWProducts, fwPriceRange, fwFirstImage } from '@/lib/fourthwall';

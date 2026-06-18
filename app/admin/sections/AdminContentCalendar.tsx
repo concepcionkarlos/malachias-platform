@@ -1,5 +1,9 @@
 'use client'
 
+// Admin section — Content Calendar: plans social media posts via /api/content-posts.
+// Add/edit/delete posts with platform, status, schedule date, caption, hashtags, and
+// media notes; filter by status and advance posts through idea → draft → scheduled → posted.
+
 import { useState, useEffect } from 'react'
 import { Plus, Trash2, Edit2, X, Check } from 'lucide-react'
 import type { ContentPost, ContentPlatform, ContentStatus } from '@/lib/data'

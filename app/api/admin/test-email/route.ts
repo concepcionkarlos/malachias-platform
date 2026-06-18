@@ -1,3 +1,7 @@
+// Admin email-test API. POST (requires an authenticated admin session; 401
+// otherwise) takes a toEmail and sends a test email via Resend. Returns 400 if
+// toEmail is missing or RESEND_API_KEY is unconfigured (dev mode), and 500 on
+// send failure; on success returns the Resend message id and from address.
 import { NextRequest, NextResponse } from 'next/server'
 import { isAuthenticated } from '@/lib/auth'
 

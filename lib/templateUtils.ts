@@ -1,3 +1,7 @@
+// Email template helpers — renders {{var}} placeholders in a template's subject
+// and body against a values map, and extracts the unique variable names a
+// template references (used for the email/CRM template tooling).
+
 import type { EmailTemplate } from './data'
 
 export function renderTemplate(

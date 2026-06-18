@@ -1,5 +1,8 @@
 'use client'
 
+// Client component for /rehearsal/[token]: the band-member RSVP flow. Walks through
+// identity -> preparation commitment (per-song + general readiness checklist + notes)
+// -> done, and POSTs the confirmed/declined response to /api/rehearsals/[token].
 import { useState } from 'react'
 import type { Rehearsal, Song } from '@/lib/data'
 

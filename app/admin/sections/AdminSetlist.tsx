@@ -1,5 +1,9 @@
 'use client'
 
+// Admin section — Set List manager: CRUD for the band's songs (originals vs covers),
+// tracks per-song readiness status (ready/learning/shelved), and stores structure,
+// chords, and lyrics in an expandable detail view. Persists via /api/songs.
+
 import { useState, useEffect } from 'react'
 import { Plus, Trash2, Music, Mic, ChevronDown, ChevronUp, Edit2, X, Check } from 'lucide-react'
 import type { Song, SongStatus } from '@/lib/data'

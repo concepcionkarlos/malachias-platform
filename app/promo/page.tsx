@@ -1,3 +1,5 @@
+// Page — /promo: noindex landing for the 15%-off merch subscribe offer; sets SEO
+// metadata and renders the PromoPageClient capture form.
 import type { Metadata } from 'next'
 import PromoPageClient from './PromoPageClient'
 

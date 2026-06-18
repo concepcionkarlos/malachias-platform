@@ -1,3 +1,6 @@
+// Page — / (home): the main single-page site. Assembles the full marketing
+// narrative in order (hero, mission, about, music, testimonies, band, shows, etc.)
+// and server-fetches Fourthwall products + CMS content for the merch and metadata.
 import type { Metadata } from 'next';
 import { readContent } from '@/lib/store';
 import { fetchFWProducts } from '@/lib/fourthwall';

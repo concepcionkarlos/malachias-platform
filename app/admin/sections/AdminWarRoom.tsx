@@ -1,5 +1,9 @@
 'use client'
 
+// Admin section — War Room: posts and manages the band's Daily Reflection (a dated
+// scripture verse, written reflection, and optional suggested song). One entry per day,
+// newest marked LIVE, with delete and history. Persists via dailyReflections in /api/content.
+
 import { useState, useEffect } from 'react'
 import type { DailyReflection } from '@/lib/data'
 

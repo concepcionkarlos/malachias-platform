@@ -1,5 +1,9 @@
 'use client'
 
+// Admin section — Live Sessions: schedules and manages livestream events (TikTok,
+// Instagram, YouTube, etc.) with status tracking, auto-generated social captions,
+// stream/recording links, and optional set lists.
+
 import { useState, useEffect, useCallback } from 'react'
 import { Plus, Video, Radio, CheckCircle, XCircle, Clock, ExternalLink, Trash2, Edit2, Copy, X, Save } from 'lucide-react'
 import type { LiveSession, LivePlatform, LiveSessionStatus, Song } from '@/lib/data'

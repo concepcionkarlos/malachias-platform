@@ -1,5 +1,9 @@
 'use client';
 
+// Homepage "The Sound" section — embedded Apple Music and Spotify players, an optional
+// admin-managed YouTube video grid (from /api/public/content), plus streaming-platform
+// and social-follow link rows.
+
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import type { MediaItem } from '@/lib/data';

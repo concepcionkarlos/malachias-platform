@@ -1,3 +1,6 @@
+// Page — /verified: landing shown after a subscriber clicks the email-confirm link;
+// renders success ("you're in" + 15% off code prompt) or an error state
+// (missing/invalid/expired) based on the query string.
 import Link from 'next/link'
 
 export default async function VerifiedPage({

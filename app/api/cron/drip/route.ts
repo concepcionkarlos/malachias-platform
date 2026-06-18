@@ -1,3 +1,7 @@
+// Cron endpoint: GET-only, authorized via Bearer CRON_SECRET (500 if unset, 401 if mismatch).
+// Processes active drip enrollments against their campaign steps, rendering each due step's
+// template and sending it via the outreach email service, logging each send as a booking email.
+// Marks completed steps and flips enrollments to 'completed' when all steps are done; returns a run summary.
 import { NextRequest, NextResponse } from 'next/server'
 import { getActiveDripEnrollments, getDripCampaigns, getTemplateBySlug, updateDripEnrollment, addBookingEmailLog } from '@/lib/venueStore'
 import { sendOutreachEmail } from '@/lib/emailService'

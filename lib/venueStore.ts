@@ -1,3 +1,9 @@
+// CRM / band-ops data layer — persists everything beyond the public site content:
+// venues, outreach & email logs, email templates (with built-in defaults), drip
+// campaigns, songs/setlists, rehearsals, goals, content calendar, finances, band
+// stats, and live sessions. KV-backed in production, local JSON in dev, and it
+// also defines the default email templates and song catalog used to seed the store.
+
 import fs from 'fs'
 import path from 'path'
 import crypto from 'crypto'

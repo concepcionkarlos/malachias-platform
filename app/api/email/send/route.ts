@@ -1,3 +1,7 @@
+// API route: send a single branded email.
+// POST (admin-auth required) builds a styled HTML + plain-text email from
+// {toEmail, subject, bodyText}, sends it via Resend (BCC'd to booking@), and
+// logs the result (sent/failed) to the CRM sent-emails store.
 import { NextRequest, NextResponse } from 'next/server'
 import { isAuthenticated } from '@/lib/auth'
 import { addSentEmail } from '@/lib/venueStore'

@@ -1,3 +1,6 @@
+// Page — /journal/[slug]: individual journal ("field notes") article. Statically
+// pre-rendered per entry from JOURNAL_ENTRIES; renders the post body and 404s on
+// unknown slugs.
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { JOURNAL_ENTRIES } from '@/lib/journalEntries'

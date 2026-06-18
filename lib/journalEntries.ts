@@ -1,3 +1,6 @@
+// Journal/blog content — static, hand-authored long-form entries (origin story,
+// service, and mission) shown on the journal listing and individual entry pages.
+
 export interface JournalEntry {
   slug: string
   tag: string

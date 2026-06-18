@@ -1,3 +1,8 @@
+// API route: fan-story spam scanning.
+// GET (admin-auth via request header) heuristically scores every fan story for
+// spam (disposable domains, suspicious TLDs, keyboard mashing, promo language,
+// gibberish, etc.) and returns flagged candidates sorted by score. DELETE
+// (admin-auth required) bulk-removes stories by an {ids} array.
 import { NextRequest, NextResponse } from 'next/server'
 import { readContent, writeContent } from '@/lib/store'
 import { isAuthenticatedFromRequest } from '@/lib/auth'

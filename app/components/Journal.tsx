@@ -1,5 +1,8 @@
 'use client';
 
+// Homepage "From the Field" / Latest section — a three-card grid of journal entries
+// from lib/journalEntries, each linking through to its /journal/[slug] article page.
+
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { JOURNAL_ENTRIES } from '@/lib/journalEntries';

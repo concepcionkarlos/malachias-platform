@@ -1,3 +1,7 @@
+// Public newsletter double-opt-in confirmation endpoint (no auth; validated by token).
+// GET: looks up the ?token in pendingSubscribers, enforcing a 48h TTL; on valid token it
+// promotes the email to subscribers, enrolls it in the drip queue, and sends a welcome/coupon
+// email via Resend, then redirects to /verified (with email or an error code).
 import { NextRequest, NextResponse } from 'next/server'
 import { readContent, writeContent } from '@/lib/store'
 import { addSentEmail } from '@/lib/venueStore'

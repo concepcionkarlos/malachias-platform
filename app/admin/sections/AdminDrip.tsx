@@ -1,5 +1,10 @@
 'use client'
 
+// Admin section — Drip Campaigns: manages automated multi-step email sequences. Shows
+// each campaign's trigger/steps with an active/paused toggle, lists enrollments with
+// completed steps and next-send timing, lets the band pause/resume/unsubscribe people,
+// and exposes a manual "Run Now" trigger for the daily drip cron.
+
 import { useState, useEffect } from 'react'
 import { Mail, Play, Pause, XCircle, RefreshCw } from 'lucide-react'
 import type { DripEnrollment, DripCampaign } from '@/lib/data'

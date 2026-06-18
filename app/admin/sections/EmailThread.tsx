@@ -1,5 +1,9 @@
 'use client'
 
+// Admin shared component — Email Thread: renders a chronological conversation of sent and
+// received messages as expandable cards, showing direction, subject, counterparty, status,
+// and the email body (HTML in a sandboxed iframe, or plain text). Used by the Venue drawer.
+
 import { useState } from 'react'
 import { ArrowUpRight, ArrowDownLeft, ChevronDown, ChevronUp, AlertCircle, Mail } from 'lucide-react'
 

@@ -1,5 +1,9 @@
 'use client'
 
+// Admin section — Dashboard overview: pulls /api/content to show top-line stat cards
+// (total/upcoming/new-this-month/pending bookings, subscribers), an editable monthly
+// booking goal with progress bar, and recent bookings table plus an activity feed.
+
 import { useEffect, useState } from 'react'
 import { Pencil, Check, X } from 'lucide-react'
 import type { BookingRequest, BookingStatus } from '@/lib/data'

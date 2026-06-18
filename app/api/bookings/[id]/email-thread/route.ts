@@ -1,3 +1,7 @@
+// API route for a booking's full email thread.
+// GET: requires an authenticated session; returns { sent, received } for the booking
+// matching the [id] path param — sent outbound logs plus inbound emails filtered to
+// this booking entity (read-only).
 import { NextRequest, NextResponse } from 'next/server'
 import { isAuthenticated } from '@/lib/auth'
 import { getBookingEmailLogs, getInboundEmails } from '@/lib/venueStore'

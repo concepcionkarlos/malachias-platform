@@ -1,3 +1,6 @@
+// Admin API for the live sessions collection (auth-gated via isAuthenticated; 401 otherwise).
+// GET: returns all live sessions from the venue store.
+// POST: creates a new live session from the JSON body and returns it with status 201.
 import { NextRequest, NextResponse } from 'next/server'
 import { isAuthenticated } from '@/lib/auth'
 import { getLiveSessions, addLiveSession } from '@/lib/venueStore'

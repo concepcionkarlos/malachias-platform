@@ -1,5 +1,9 @@
 'use client';
 
+// Homepage "What Happened" / Voices from the Room section — static testimonial quotes
+// from veterans, attendees, and family, presented as text floating in the dark with
+// giant ghost quote marks and tag labels. No data fetching.
+
 import { motion } from 'framer-motion';
 
 const VOICES = [

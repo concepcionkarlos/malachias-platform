@@ -1,5 +1,9 @@
 'use client';
 
+// Dismissible fixed top banner for the next upcoming show — pulls shows from
+// /api/public/content, picks the soonest future date, and displays date/venue/city
+// with a tickets link. Per-show dismissal is remembered in localStorage.
+
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import type { Show } from '@/lib/data';

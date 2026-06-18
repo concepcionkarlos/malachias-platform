@@ -1,3 +1,6 @@
+// Rehearsals CRUD endpoint (admin-only; every method requires authentication).
+// GET: list all rehearsals. POST: create a rehearsal from the request body.
+// PATCH: update the rehearsal with the given id. DELETE: remove the rehearsal by id.
 import { NextRequest, NextResponse } from 'next/server'
 import { isAuthenticated } from '@/lib/auth'
 import { getRehearsals, addRehearsal, updateRehearsal, deleteRehearsal } from '@/lib/venueStore'

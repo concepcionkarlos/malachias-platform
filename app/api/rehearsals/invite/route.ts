@@ -1,3 +1,8 @@
+// Rehearsal invite sender (admin-only; requires authentication).
+// POST: assigns/reuses an invite token for the given rehearsal, builds the invite URL,
+// and — when emails are provided and RESEND_API_KEY is set — emails each recipient an
+// invite (date/time/location, song list, notes, confirm link) via Resend, logging each
+// send via addSentEmail. Returns the token, invite URL, and updated rehearsal.
 import { NextRequest, NextResponse } from 'next/server'
 import { isAuthenticated } from '@/lib/auth'
 import { updateRehearsal, getRehearsalByToken, getSongs, addSentEmail } from '@/lib/venueStore'

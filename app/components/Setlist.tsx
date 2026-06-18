@@ -1,5 +1,9 @@
 'use client'
 
+// Homepage "What We Play" live-set section — fetches songs from /api/songs, keeps only
+// performance-ready ones, and lists them in two columns (Originals and Covers, covers
+// showing the original artist). Hidden entirely when no ready songs exist.
+
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import type { Song } from '@/lib/data'

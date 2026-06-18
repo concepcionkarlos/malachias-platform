@@ -1,5 +1,9 @@
 'use client'
 
+// Homepage "War Room" daily-reflection section — fetches reflections from
+// /api/public/content, shows today's verse + reflection + suggested song, an expandable
+// archive of previous entries, and a newsletter subscribe CTA. Hidden when there are none.
+
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { DailyReflection } from '@/lib/data'

@@ -1,3 +1,8 @@
+// Core domain model — the canonical TypeScript types and seed/default data for
+// the entire site (shows, merch, band members, EPK, bookings, songs, venues,
+// emails, finances, and more). Other modules import these interfaces and the
+// exported default content/song-stories/site-content as their starting point.
+
 // ── Show ─────────────────────────────────────────────────────────────────────
 
 export type ShowStatus = 'Confirmed' | 'Pending' | 'Hold' | 'Cancelled'

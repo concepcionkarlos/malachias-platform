@@ -1,3 +1,7 @@
+// API route: goals CRUD (all methods admin-auth required, force-dynamic).
+// GET returns goals, optionally filtered by a ?date query param. POST adds a
+// goal from the JSON body. PATCH updates a goal by {id, ...patch}. DELETE
+// removes a goal by {id}.
 import { NextRequest, NextResponse } from 'next/server'
 import { isAuthenticated } from '@/lib/auth'
 import { getGoals, addGoal, updateGoal, deleteGoal } from '@/lib/venueStore'

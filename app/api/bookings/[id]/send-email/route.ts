@@ -1,3 +1,8 @@
+// API route that sends a templated email to a booking's client.
+// POST: requires an authenticated session; looks up the booking by [id], renders the
+// provided EmailTemplate with booking/site vars, sends it via Resend (sendOutreachEmail),
+// and records the result as a booking email log. Returns 404 if booking missing, 500 on
+// send failure (still logging the failed attempt).
 import { NextRequest, NextResponse } from 'next/server'
 import { isAuthenticated } from '@/lib/auth'
 import { readContent } from '@/lib/store'

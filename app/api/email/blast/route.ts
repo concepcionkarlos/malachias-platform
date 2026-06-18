@@ -1,3 +1,7 @@
+// API route: newsletter blast to all subscribers.
+// POST (admin-auth required, force-dynamic) sends a branded HTML email — built
+// per-recipient with an unsubscribe link — to every stored subscriber via
+// Resend, logging each send to the CRM. Returns sent/total counts and per-email results.
 import { NextRequest, NextResponse } from 'next/server'
 import { isAuthenticated } from '@/lib/auth'
 import { readContent } from '@/lib/store'

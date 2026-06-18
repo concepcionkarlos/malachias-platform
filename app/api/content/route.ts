@@ -1,3 +1,8 @@
+// API route for the site content store.
+// Both methods require an authenticated session. GET: return the entire content store.
+// PATCH: merge the request body into the store. Special-cases a { bookingRequests:
+// 'merge-item', item } sentinel to update one booking in place (and pause its drip when
+// it transitions to a terminal status), preventing the sentinel from corrupting the store.
 import { NextRequest, NextResponse } from 'next/server'
 import { isAuthenticated } from '@/lib/auth'
 import { readContent, writeContent } from '@/lib/store'

@@ -1,5 +1,8 @@
 'use client';
 
+// Client component for /support: the "ways to support the band" page. Renders the
+// hero, a "where your support goes" checklist, the four support paths (merch,
+// stream, book, share), and a direct-contact strip, wrapped in Navbar/Footer.
 import Link from 'next/link';
 import { Shirt, Music, Calendar, Mail } from 'lucide-react';
 import Navbar from '../components/Navbar';

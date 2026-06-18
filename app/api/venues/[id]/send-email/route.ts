@@ -1,3 +1,7 @@
+// Admin API to send an outreach email to a venue (auth required).
+// POST: takes { template, vars, replyTo }, renders the template with venue/band context,
+// sends via the email service to the venue's contact email, logs the attempt (sent/failed),
+// and on success updates the venue's lastContactedAt, status, and activity log.
 import { NextRequest, NextResponse } from 'next/server'
 import { isAuthenticated } from '@/lib/auth'
 import { getVenues, updateVenue, addOutreachLog } from '@/lib/venueStore'

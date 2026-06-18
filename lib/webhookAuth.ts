@@ -1,3 +1,7 @@
+// Webhook authentication — constant-time comparison of an incoming webhook
+// secret against the expected value, used to verify inbound webhook requests
+// without leaking timing information.
+
 import crypto from 'crypto'
 
 export function verifyWebhookSecret(provided: string, expected: string): boolean {

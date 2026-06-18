@@ -1,3 +1,6 @@
+// API route for a single booking's sent-email logs.
+// GET: requires an authenticated session; returns the list of outbound email logs
+// recorded for the booking matching the [id] path param (read-only).
 import { NextRequest, NextResponse } from 'next/server'
 import { isAuthenticated } from '@/lib/auth'
 import { getBookingEmailLogs } from '@/lib/venueStore'

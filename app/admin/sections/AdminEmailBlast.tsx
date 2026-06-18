@@ -1,5 +1,9 @@
 'use client'
 
+// Admin section — Email Blast: composes a plain-text newsletter (subject + body with a
+// live preview) and sends it to every newsletter subscriber via /api/email/blast,
+// showing the live subscriber count and a sent/total result.
+
 import { useState, useEffect } from 'react'
 import { Send, Users } from 'lucide-react'
 

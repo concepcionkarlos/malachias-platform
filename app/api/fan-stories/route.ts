@@ -1,3 +1,8 @@
+// API route: fan-story submissions.
+// GET (admin-auth required) lists all fan stories. POST is public but
+// rate-limited (3/min per client) and validates/sanitizes input, saving a new
+// 'pending' story (no auto-reply email is sent, by design). PATCH (admin-auth
+// required) updates a story's moderation status by {id, status}.
 import { NextRequest, NextResponse } from 'next/server'
 import crypto from 'crypto'
 import { readContent, writeContent } from '@/lib/store'

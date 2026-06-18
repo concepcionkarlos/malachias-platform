@@ -1,5 +1,8 @@
 'use client'
 
+// Admin section — Fan Stories moderation: reviews fan-submitted stories, filtered by
+// status (pending/approved/rejected), and lets the band approve or reject each one.
+
 import { useState, useEffect, useCallback } from 'react'
 import { Check, X, Clock, RefreshCw } from 'lucide-react'
 import type { FanStory } from '@/lib/data'

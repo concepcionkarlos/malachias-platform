@@ -1,3 +1,7 @@
+// Admin authentication — single-password login for the band's private dashboard.
+// Issues/verifies a signed, expiring session cookie (HMAC over issuedAt+random,
+// keyed on the admin password + secret) and exposes isAuthenticated helpers used
+// to gate every admin API route.
 import crypto from 'crypto'
 import { cookies } from 'next/headers'
 import { NextRequest } from 'next/server'

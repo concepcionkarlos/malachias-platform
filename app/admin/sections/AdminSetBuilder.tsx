@@ -1,5 +1,8 @@
 'use client'
 
+// Admin section — Set Builder: picks a show, then builds and saves an ordered set list
+// for it by adding songs and reordering them (move up/down) or removing them.
+
 import { useState, useEffect } from 'react'
 import { GripVertical, Plus, Trash2, ChevronDown, ChevronUp } from 'lucide-react'
 import type { Show, Song, ShowSetList, ShowSetListItem } from '@/lib/data'

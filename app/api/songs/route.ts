@@ -1,3 +1,6 @@
+// Songs CRUD endpoint (admin-only; every method requires authentication).
+// GET: list all songs. POST: create a song from the request body.
+// PATCH: update the song with the given id. DELETE: remove the song by id.
 import { NextRequest, NextResponse } from 'next/server'
 import { isAuthenticated } from '@/lib/auth'
 import { getSongs, addSong, updateSong, deleteSong } from '@/lib/venueStore'

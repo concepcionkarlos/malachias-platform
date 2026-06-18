@@ -1,3 +1,7 @@
+// Admin diagnostics API. GET (requires an authenticated admin session; 401
+// otherwise) reports the presence of critical env vars (Resend, KV, cron
+// secret, Fourthwall), probes the content store by reading it and counting
+// booking/subscriber records, and returns the storage backend and email mode.
 import { NextResponse } from 'next/server'
 import { isAuthenticated } from '@/lib/auth'
 import { readContent } from '@/lib/store'

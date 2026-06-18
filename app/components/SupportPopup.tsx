@@ -1,5 +1,9 @@
 'use client'
 
+// Timed bottom-right "Support the Band" toast — appears after 12s (re-shown every 3 days
+// via localStorage), suppressed on /merch and /support pages. Links to the /support page
+// to drive direct, no-middleman support of shows, music, and veteran outreach.
+
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import Link from 'next/link'

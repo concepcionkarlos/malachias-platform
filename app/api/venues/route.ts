@@ -1,3 +1,5 @@
+// Admin API for the venues collection (auth required on all methods).
+// GET: returns all venues. POST: creates a venue from the request body and returns it (201).
 import { NextRequest, NextResponse } from 'next/server'
 import { isAuthenticated } from '@/lib/auth'
 import { getVenues, addVenue } from '@/lib/venueStore'

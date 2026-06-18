@@ -1,5 +1,9 @@
 'use client'
 
+// Admin section — Fan Outreach CRM: logs social-media fan contacts and moves them
+// through a 5-stage pipeline (New → Replied → DM Sent → Responded → Supporter),
+// with per-contact notes and copyable DM templates for engaging fans.
+
 import { useState, useEffect, useCallback } from 'react'
 import { Plus, ChevronRight, ChevronLeft, Trash2, MessageCircle, Star, X, Check } from 'lucide-react'
 import type { FanContact } from '@/app/api/admin/fan-outreach/route'

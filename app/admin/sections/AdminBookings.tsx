@@ -1,5 +1,10 @@
 'use client'
 
+// Admin section — Bookings CRM: shows incoming booking requests in a kanban or list
+// view with search, status filters, and freshness/overdue indicators. A detail drawer
+// edits CRM fields, changes status, sends templated emails, views the email thread, and
+// deletes; includes a heuristic spam scanner for bulk-removing suspicious requests.
+
 import { useEffect, useState, useRef } from 'react'
 import { X, ChevronRight, Mail, Clock, Search, List, Columns, Send, Trash2, ShieldAlert, CheckSquare, Square } from 'lucide-react'
 import type { BookingRequest, BookingStatus, EmailTemplate, BookingEmailLog, InboundEmail } from '@/lib/data'

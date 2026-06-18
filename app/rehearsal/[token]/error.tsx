@@ -1,5 +1,7 @@
 'use client'
 
+// Error boundary for /rehearsal/[token]: catches render/data failures and shows a
+// fallback with the error message, optional digest ref, and a retry button.
 export default function RehearsalError({
   error,
   unstable_retry,

@@ -1,5 +1,9 @@
 'use client'
 
+// Top-of-page live-stream banner — fetches /api/live-sessions and, if a session is
+// live (or the next one is upcoming), shows a clickable bar linking to the platform,
+// with a live "● LIVE NOW" state or a countdown to the scheduled start. Hidden otherwise.
+
 import { useEffect, useState } from 'react'
 import type { LiveSession } from '@/lib/data'
 

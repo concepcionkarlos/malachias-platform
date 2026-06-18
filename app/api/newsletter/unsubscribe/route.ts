@@ -1,3 +1,6 @@
+// Newsletter unsubscribe endpoint (public, rate-limited at 5 requests / 60s; 429 otherwise).
+// GET: removes the ?email= subscriber from the content store (case-insensitive) and
+// returns an HTML confirmation page; 400 if the email parameter is missing.
 import { NextRequest, NextResponse } from 'next/server'
 import { readContent, writeContent } from '@/lib/store'
 import { rateLimit } from '@/lib/rateLimit'

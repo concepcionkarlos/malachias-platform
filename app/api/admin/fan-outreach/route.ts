@@ -1,3 +1,8 @@
+// Admin API for the fan-outreach (social CRM) contact list. Both handlers
+// require an authenticated admin session (401 otherwise) and read/write the
+// fanOutreach array in the content store. GET returns all contacts; POST
+// validates a required name, creates a new contact (random hex id, stage
+// 'new', timestamps) and returns it with 201. Also exports the FanContact type.
 import { NextRequest, NextResponse } from 'next/server'
 import crypto from 'crypto'
 import { readContent, writeContent } from '@/lib/store'

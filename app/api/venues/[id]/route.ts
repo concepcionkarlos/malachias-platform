@@ -1,3 +1,6 @@
+// Admin CRUD API for a single venue by id (auth required on all methods).
+// GET: returns the venue or 404. PATCH: applies a partial update and returns it (404 if missing).
+// DELETE: removes the venue and returns { ok: true }.
 import { NextRequest, NextResponse } from 'next/server'
 import { isAuthenticated } from '@/lib/auth'
 import { getVenues, updateVenue, deleteVenue } from '@/lib/venueStore'
