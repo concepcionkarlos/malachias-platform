@@ -81,13 +81,12 @@ export async function POST(req: NextRequest) {
   if (website) return NextResponse.json({ ok: true }, { status: 201 })
 
   // Human verification — the challenge is server-issued and signed, so the
-  // answer alone can't be forged, and each token can only be used once.
+  // answer alone can't be forged. We verify the signature/answer here but only
+  // CONSUME the single-use token at the very end, so a fixable validation error
+  // (bad phone, short message…) doesn't burn the captcha and trap the user.
   const captcha = verifyChallenge(captchaToken, captchaAnswer)
   if (!captcha.ok) {
     return NextResponse.json({ error: 'Verification failed. Please reload and solve the math question.' }, { status: 400 })
-  }
-  if (captcha.nonce && !(await consumeChallengeNonce(captcha.nonce))) {
-    return NextResponse.json({ error: 'This form was already submitted. Please reload and try again.' }, { status: 400 })
   }
 
   // Required fields
@@ -109,6 +108,11 @@ export async function POST(req: NextRequest) {
 
   const msgErr = validateMessage(message)
   if (msgErr) return NextResponse.json({ error: msgErr }, { status: 400 })
+
+  // All checks passed — now spend the single-use captcha token (anti-replay).
+  if (captcha.nonce && !(await consumeChallengeNonce(captcha.nonce))) {
+    return NextResponse.json({ error: 'This form was already submitted. Please reload and try again.' }, { status: 400 })
+  }
 
   const now = new Date().toISOString()
   const booking: BookingRequest = {

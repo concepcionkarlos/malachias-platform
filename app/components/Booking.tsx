@@ -74,21 +74,30 @@ export default function Booking() {
     guestCount: '', message: '', website: '',
   });
   const [captcha, setCaptcha] = useState<{ a: number; b: number; token: string; answer: string } | null>(null);
+  const [captchaError, setCaptchaError] = useState(false);
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   // The challenge is issued and signed by the server — the browser no longer
   // makes up its own numbers, so a bot can't pre-compute a valid submission.
+  // `no-store` keeps the browser/CDN from serving a stale single-use token, and
+  // we retry a couple of times so a transient hiccup never leaves a dead button.
   const loadCaptcha = useCallback(async () => {
-    try {
-      const res = await fetch('/api/booking/captcha');
-      if (!res.ok) throw new Error();
-      const data = await res.json();
-      setCaptcha({ a: data.a, b: data.b, token: data.token, answer: '' });
-    } catch {
-      setCaptcha(null);
+    setCaptchaError(false);
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        const res = await fetch('/api/booking/captcha', { cache: 'no-store' });
+        if (!res.ok) throw new Error();
+        const data = await res.json();
+        setCaptcha({ a: data.a, b: data.b, token: data.token, answer: '' });
+        return;
+      } catch {
+        if (attempt < 2) await new Promise(r => setTimeout(r, 1000));
+      }
     }
+    setCaptcha(null);
+    setCaptchaError(true);
   }, []);
 
   useEffect(() => { loadCaptcha(); }, [loadCaptcha]);
@@ -323,7 +332,7 @@ export default function Booking() {
                   onChange={set('message')}
                 />
 
-                {/* Human verification — math captcha */}
+                {/* Human verification — server-issued math captcha */}
                 {captcha && (
                   <div style={{
                     display: 'flex', alignItems: 'center', gap: '0.75rem',
@@ -348,6 +357,32 @@ export default function Booking() {
                       placeholder="?"
                       style={{ maxWidth: 72, textAlign: 'center' }}
                     />
+                  </div>
+                )}
+
+                {/* Verification failed to load — give a clear way out instead of a dead button */}
+                {!captcha && captchaError && (
+                  <div style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.75rem',
+                    padding: '0.75rem 1rem',
+                    background: 'rgba(192,64,32,0.06)',
+                    border: '1px solid rgba(192,64,32,0.25)',
+                    borderRadius: 6,
+                  }}>
+                    <span style={{ fontSize: '0.78rem', color: 'var(--text-2)', lineHeight: 1.5 }}>
+                      Couldn&apos;t load the human check.
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => loadCaptcha()}
+                      style={{
+                        fontSize: '0.68rem', letterSpacing: '0.14em', textTransform: 'uppercase',
+                        color: 'var(--gold)', background: 'none', border: '1px solid rgba(201,168,76,0.4)',
+                        padding: '0.45rem 0.9rem', cursor: 'pointer', whiteSpace: 'nowrap',
+                      }}
+                    >
+                      Try again
+                    </button>
                   </div>
                 )}
 
