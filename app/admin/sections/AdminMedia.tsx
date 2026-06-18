@@ -1,5 +1,8 @@
 'use client'
 
+// Admin section — Media manager: upload photos and add video URLs (YouTube/Vimeo),
+// edit captions, and toggle each item's featured/visible flags across photo/video tabs.
+
 import { useEffect, useState, useRef } from 'react'
 import { Trash2, Upload, Star, Eye, EyeOff, Plus, Image as ImageIcon, Film } from 'lucide-react'
 import type { MediaItem } from '@/lib/data'

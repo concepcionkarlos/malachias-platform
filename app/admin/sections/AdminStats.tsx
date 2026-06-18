@@ -1,5 +1,9 @@
 'use client'
 
+// Admin section — Band Stats editor: form to manually enter and save streaming/social
+// metrics (Spotify, Instagram, Facebook, YouTube, TikTok) plus free-form notes.
+// Loads and persists via /api/stats.
+
 import { useState, useEffect } from 'react'
 import { Save, TrendingUp } from 'lucide-react'
 import type { BandStats } from '@/lib/data'

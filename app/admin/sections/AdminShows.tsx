@@ -1,5 +1,9 @@
 'use client'
 
+// Admin section — Shows manager: lists booked/upcoming shows in a table and provides a
+// modal to add/edit/delete them, capturing logistics (date, venue, times, guarantee/payout,
+// contacts, status, featured/visible flags). Persists via the shows array in /api/content.
+
 import { useEffect, useState, useRef } from 'react'
 import { Plus, Pencil, Trash2, X, Check } from 'lucide-react'
 import type { Show, ShowStatus } from '@/lib/data'

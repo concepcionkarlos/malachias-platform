@@ -1,3 +1,5 @@
+// Admin drip campaign detail API (auth-gated; returns 401 if unauthenticated).
+// PATCH: applies a partial update to the drip campaign identified by the [id] route param and returns the updated record.
 import { NextRequest, NextResponse } from 'next/server'
 import { isAuthenticated } from '@/lib/auth'
 import { updateDripCampaign } from '@/lib/venueStore'

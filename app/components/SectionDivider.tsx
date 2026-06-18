@@ -1,5 +1,9 @@
 'use client';
 
+// Reusable decorative divider between sections — a horizontal rule with a centered
+// cross ornament, diamond ticks, glow halo, and optional label. Accepts a gold or
+// crimson accent.
+
 import { motion } from 'framer-motion';
 
 interface SectionDividerProps {

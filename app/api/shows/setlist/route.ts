@@ -1,3 +1,6 @@
+// Show set list endpoint (admin-only; every method requires authentication).
+// GET: returns the set list for the show given by the showId query param (400 if missing).
+// POST: saves the provided set list items for the given showId and returns the result.
 import { NextRequest, NextResponse } from 'next/server'
 import { isAuthenticated } from '@/lib/auth'
 import { getShowSetList, saveShowSetList } from '@/lib/venueStore'

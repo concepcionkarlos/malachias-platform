@@ -1,5 +1,10 @@
 'use client'
 
+// Admin section — Settings: shows live system status (KV storage, Resend email,
+// cron secret, Fourthwall), sends test emails, displays setup instructions, manages
+// the subscriber ("Brotherhood") list with CSV export and a spam scanner, exports a
+// full JSON data snapshot, and handles admin logout.
+
 import { useState, useEffect } from 'react'
 import { LogOut, Download, Info, Shield, Mail, Database, Image as ImageIcon, Map, Users, CheckCircle, XCircle, Send, RefreshCw, ShieldAlert, Trash2, Square, CheckSquare } from 'lucide-react'
 import type { SubSpamCandidate } from '@/app/api/subscribers/scan-spam/route'

@@ -1,5 +1,9 @@
 'use client'
 
+// Admin section — Email Templates manager: create, edit, and delete reusable email
+// templates via /api/email-templates. Edits name/subject/HTML body with a live iframe
+// preview and detected {{variables}}; system templates are protected from deletion.
+
 import { useEffect, useState, useRef } from 'react'
 import { Plus, Trash2, Save, Lock, Eye } from 'lucide-react'
 import type { EmailTemplate } from '@/lib/data'

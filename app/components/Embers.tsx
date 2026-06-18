@@ -1,5 +1,9 @@
 'use client';
 
+// Decorative floating-embers background effect — renders a deterministic (SSR-safe)
+// set of glowing particles that drift upward via the emberFloat CSS keyframe.
+// Reused as ambient atmosphere in the Hero and Mission sections.
+
 import { useMemo } from 'react';
 
 interface Ember {

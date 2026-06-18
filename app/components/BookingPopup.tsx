@@ -1,5 +1,9 @@
 'use client'
 
+// Timed "Bring Us To Your Community" booking modal — appears after a 4s delay,
+// suppressed for 7 days via localStorage. Its CTA scrolls to the #booking section;
+// includes scroll-lock, Escape-to-close, and backdrop dismiss.
+
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'

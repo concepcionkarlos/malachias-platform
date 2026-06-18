@@ -1,4 +1,6 @@
 'use client'
+// Admin section — Login gate: password-only form that POSTs to /api/admin/login,
+// shows an inline error on failure, and calls onLogin() to unlock the dashboard.
 import { useState } from 'react'
 
 export default function AdminLogin({ onLogin }: { onLogin: () => void }) {

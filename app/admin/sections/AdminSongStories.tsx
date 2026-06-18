@@ -1,5 +1,9 @@
 'use client'
 
+// Admin section — "Behind the Song" stories editor: CRUD for song narratives that pair a
+// scripture verse with the backstory, a moment, and streaming links (Spotify/Apple/YouTube).
+// Supports ordering and per-story visibility. Persists via songStories in /api/content.
+
 import { useState, useEffect } from 'react'
 import type { SongStory } from '@/lib/data'
 

@@ -1,3 +1,7 @@
+// Admin authentication API. GET reports whether the current session is
+// authenticated. POST is rate-limited (5 attempts / 15 min) and verifies the
+// submitted password, setting the admin session cookie on success (401 on bad
+// password). DELETE clears the session (logout).
 import { NextRequest, NextResponse } from 'next/server'
 import { verifyPassword, setSession, clearSession, isAuthenticated } from '@/lib/auth'
 import { rateLimit } from '@/lib/rateLimit'

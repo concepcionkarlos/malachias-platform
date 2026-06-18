@@ -1,3 +1,6 @@
+// Admin API to add a video media item (auth required).
+// POST: takes { url, caption }, derives a YouTube ID/poster thumbnail when applicable,
+// appends a new visible 'video' MediaItem to the content store, and returns it (201).
 import { NextRequest, NextResponse } from 'next/server'
 import crypto from 'crypto'
 import { isAuthenticated } from '@/lib/auth'

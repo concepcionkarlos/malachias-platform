@@ -1,5 +1,8 @@
 'use client'
 
+// "One Band, One Mission" interstitial — a single gold-framed group photo
+// (/together.png) with band name and tagline, revealed on scroll via IntersectionObserver.
+
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 

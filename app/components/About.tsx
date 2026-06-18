@@ -1,5 +1,9 @@
 'use client';
 
+// Homepage "The Story" / Origin section — the founder's veteran-and-faith narrative.
+// Renders default paragraphs but hydrates from /api/public/content (siteContent.aboutText)
+// so an admin can edit the bio; animated with framer-motion scroll reveals.
+
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 

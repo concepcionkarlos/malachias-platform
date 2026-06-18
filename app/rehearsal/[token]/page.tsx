@@ -1,3 +1,6 @@
+// Page — /rehearsal/[token]: server entry for a rehearsal invite. Looks up the
+// rehearsal + its songs by token (dynamic, no caching); shows a "link not found"
+// fallback for invalid/expired tokens, otherwise renders the RehearsalRSVP form.
 import Link from 'next/link'
 import RehearsalRSVP from './RehearsalRSVP'
 import { getRehearsalByToken, getSongs } from '@/lib/venueStore'

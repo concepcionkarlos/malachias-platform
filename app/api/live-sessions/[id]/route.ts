@@ -1,3 +1,6 @@
+// Admin API for a single live session by id (auth-gated via isAuthenticated; 401 otherwise).
+// PATCH: applies the JSON body as a partial update and returns the updated session.
+// DELETE: removes the live session from the venue store.
 import { NextRequest, NextResponse } from 'next/server'
 import { isAuthenticated } from '@/lib/auth'
 import { updateLiveSession, deleteLiveSession } from '@/lib/venueStore'

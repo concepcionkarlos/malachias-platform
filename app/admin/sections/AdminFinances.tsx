@@ -1,5 +1,8 @@
 'use client'
 
+// Admin section — Finances tracker: records categorized income and expense entries,
+// shows running income/expense/net totals, and supports adding and deleting entries.
+
 import { useState, useEffect } from 'react'
 import { Plus, Trash2, TrendingUp, TrendingDown, DollarSign } from 'lucide-react'
 import type { FinanceEntry, FinanceCategory } from '@/lib/data'

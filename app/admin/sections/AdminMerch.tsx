@@ -1,5 +1,8 @@
 'use client'
 
+// Admin section — Merch manager: create/edit/delete merch items (price, category,
+// image upload, stock, description/story, specs) and toggle availability/visibility.
+
 import { useEffect, useState, useRef } from 'react'
 import { Plus, Pencil, Trash2, X, Check, Upload, Package } from 'lucide-react'
 import type { MerchItem } from '@/lib/data'

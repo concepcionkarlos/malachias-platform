@@ -1,5 +1,9 @@
 'use client'
 
+// Admin section — Analytics: pulls bookings and shows from /api/content and renders
+// summary KPIs (conversion rate, avg quote, revenue), bookings by status/month bar
+// charts, a shows breakdown, and a per-show guarantee/payout/merch revenue tracker.
+
 import { useEffect, useState } from 'react'
 import type { BookingRequest, BookingStatus, Show } from '@/lib/data'
 

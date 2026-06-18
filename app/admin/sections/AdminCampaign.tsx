@@ -1,5 +1,10 @@
 'use client'
 
+// Admin section — Merch Campaign hub: a self-serve, bilingual (EN/ES) outreach toolkit
+// for the MALACHIAS15 merch launch. Tabs provide a step-by-step launch guide, copy-paste
+// Facebook/Instagram posts, email templates, hashtag banks, and tips, plus a live
+// subscriber count and one-click coupon copy.
+
 import { useState, useEffect, useCallback } from 'react'
 import { Copy, Check, ExternalLink, Users, Tag, BookOpen, Mail, Share2, Lightbulb, RefreshCw, Hash, CalendarDays } from 'lucide-react'
 

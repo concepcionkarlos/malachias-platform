@@ -1,5 +1,9 @@
 'use client';
 
+// Homepage "Wear the Mission" merch teaser — shows up to four Fourthwall products
+// (passed in from the server, cheapest first) as cards linking to /merch/[slug],
+// with a "Store Live" badge, impact bullets, loading skeleton, and coming-soon fallback.
+
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';

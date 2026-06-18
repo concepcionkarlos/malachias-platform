@@ -1,5 +1,9 @@
 'use client'
 
+// Admin section — Site Content editor: edits the public site's copy and settings via
+// /api/content — hero text, about paragraphs, group photo (with upload), service area,
+// contact email, footer, CTA labels, social links, and SEO/meta fields.
+
 import { useEffect, useState, useRef } from 'react'
 import { Check, Plus, Trash2, Upload } from 'lucide-react'
 import type { SiteContent } from '@/lib/data'

@@ -1,5 +1,10 @@
 'use client'
 
+// Admin section — Venue Finder: searches Google Places for venues and adds them to a CRM.
+// A per-venue drawer tracks pipeline status/notes/follow-ups, sends templated outreach
+// emails, and shows the full sent/received email thread. Uses /api/places, /api/venues,
+// /api/email-templates, plus per-venue email-thread and send-email endpoints.
+
 import { useEffect, useState } from 'react'
 import { Search, Plus, X, Trash2, Star, Send, Globe, Phone } from 'lucide-react'
 import type { Venue, VenueStatus, EmailTemplate, PlaceSearchResult, OutreachLog, InboundEmail } from '@/lib/data'

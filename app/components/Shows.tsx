@@ -1,5 +1,9 @@
 'use client';
 
+// Homepage "Upcoming Shows" section — fetches shows from /api/public/content and lists
+// them with date block, venue/city/time, status badge, and ticket links. Renders a
+// loading skeleton while fetching and hides the whole section when there are no shows.
+
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import type { Show } from '@/lib/data';

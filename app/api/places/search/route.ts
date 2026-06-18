@@ -1,3 +1,7 @@
+// Google Places text-search proxy (auth-gated via isAuthenticated; 401 otherwise).
+// GET: requires the ?q= query (optional ?location=), calls the Google Places Text Search
+// API with GOOGLE_PLACES_API_KEY, and returns up to 20 mapped PlaceSearchResult items.
+// Responds 400 if q is missing, 503 if the API key is unset, and 502 on upstream errors.
 import { NextRequest, NextResponse } from 'next/server'
 import { isAuthenticated } from '@/lib/auth'
 import type { PlaceSearchResult } from '@/lib/data'

@@ -1,5 +1,9 @@
 'use client';
 
+// Site-wide fixed top navigation — wordmark, section/page links, social icons, and
+// Support/Book Us CTAs. Background turns opaque on scroll; collapses to a hamburger
+// drawer on mobile. Anchors use "/#id" so they resolve from any page.
+
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';

@@ -1,3 +1,6 @@
+// Page — /epk: electronic press kit for bookers. Server-renders band bio, lineup,
+// repertoire, technical requirements, optional setlists/press quotes, social links,
+// and booking contacts from the CMS store (dynamic, no caching).
 export const dynamic = 'force-dynamic'
 
 import Link from 'next/link'

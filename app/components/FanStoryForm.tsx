@@ -1,5 +1,9 @@
 'use client'
 
+// "Tell Us How It Hit You" fan-story submission form — lets visitors share how the
+// music/a show affected them (optional song, name, email) and POSTs to /api/fan-stories.
+// Shows a thank-you confirmation once submitted.
+
 import { useState, FormEvent } from 'react'
 
 export default function FanStoryForm() {

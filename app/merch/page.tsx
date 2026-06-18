@@ -1,3 +1,5 @@
+// Page — /merch: store landing. Server-fetches the Fourthwall product catalog
+// (revalidated every 5 min) and hands it to the MerchPageClient for display.
 import type { Metadata } from 'next';
 import { fetchFWProducts } from '@/lib/fourthwall';
 import MerchPageClient from './MerchPageClient';

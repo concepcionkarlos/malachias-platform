@@ -1,5 +1,9 @@
 'use client'
 
+// Admin section — Task Board: a kanban (To Do / In Progress / Done) for band tasks with
+// priority, category, and due-date tracking (flags overdue items), category filtering, and
+// stat counts. Add/move/delete tasks; persists via the tasks array in /api/content.
+
 import { useState, useEffect } from 'react'
 import { Plus, Check, Trash2, Calendar, AlertCircle, X } from 'lucide-react'
 import type { BandTask, TaskStatus, TaskPriority, TaskCategory } from '@/lib/data'

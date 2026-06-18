@@ -1,5 +1,9 @@
 'use client'
 
+// Admin section — Electronic Press Kit (EPK) editor: edits the band's press kit content
+// via /api/content — tagline, booker intro, repertoire, tech specs, press quotes, and
+// setlists (each with editable song lists), with add/remove controls per section.
+
 import { useEffect, useState } from 'react'
 import { Plus, Trash2, Check } from 'lucide-react'
 import type { EpkContent } from '@/lib/data'

@@ -1,3 +1,6 @@
+// Root layout for the whole site: loads display/body fonts, sets default SEO
+// metadata + Open Graph/Twitter tags, injects MusicGroup JSON-LD, and wraps every
+// page in the <html>/<body> shell with the global film-grain overlay.
 import type { Metadata } from 'next';
 import { Bebas_Neue, Inter } from 'next/font/google';
 import Script from 'next/script';

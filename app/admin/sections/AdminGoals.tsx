@@ -1,5 +1,8 @@
 'use client'
 
+// Admin section — Daily Goals: per-day to-do list with categories (booking, music,
+// social, admin, other), check-off progress bar, and per-category completion counts.
+
 import { useState, useEffect, useCallback } from 'react'
 import { Plus, Check, Trash2 } from 'lucide-react'
 import type { Goal, GoalCategory } from '@/lib/data'

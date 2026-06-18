@@ -1,3 +1,5 @@
+// sitemap.ts — generates /sitemap.xml: lists the home, merch, support, and EPK
+// routes plus dynamic entries for each Fourthwall product and journal post.
 import type { MetadataRoute } from 'next'
 import { fetchFWProducts } from '@/lib/fourthwall'
 import { JOURNAL_ENTRIES } from '@/lib/journalEntries'

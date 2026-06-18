@@ -1,3 +1,8 @@
+// API route for spam triage of booking requests.
+// GET: requires an authenticated session; heuristically scores each booking (name/phone/
+// message/email checks) and returns flagged candidates sorted by score, plus total count.
+// DELETE: requires an authenticated session; bulk-deletes bookings by an array of ids and
+// returns deleted/remaining counts.
 import { NextRequest, NextResponse } from 'next/server'
 import { readContent, writeContent } from '@/lib/store'
 import { isAuthenticated } from '@/lib/auth'

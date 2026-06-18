@@ -1,3 +1,7 @@
+// Inbound-email webhook for incoming replies (force-dynamic; auth via shared webhook secret
+// in Bearer/x-webhook-secret header). POST: parses Google Apps Script (JSON), Resend (JSON
+// envelope), or Mailgun (form-data) payloads, extracts sender/recipient/subject/body, and
+// records the message via addInboundEmail.
 import { NextRequest, NextResponse } from 'next/server'
 import { addInboundEmail } from '@/lib/venueStore'
 import { verifyWebhookSecret } from '@/lib/webhookAuth'

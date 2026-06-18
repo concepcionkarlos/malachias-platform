@@ -1,3 +1,6 @@
+// API route for a single booking request resource.
+// DELETE: requires an authenticated session; removes the booking matching the [id]
+// path param from the content store and persists the filtered list.
 import { NextRequest, NextResponse } from 'next/server'
 import { readContent, writeContent } from '@/lib/store'
 import { isAuthenticated } from '@/lib/auth'

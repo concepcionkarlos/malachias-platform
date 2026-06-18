@@ -1,5 +1,9 @@
 'use client'
 
+// Homepage "Behind the Song" section — an accordion list of song stories (from
+// /api/public/content) where each row expands to reveal its scripture verse, the
+// narrative behind the song, and Spotify/Apple Music links. Hidden when there are none.
+
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { SongStory } from '@/lib/data'

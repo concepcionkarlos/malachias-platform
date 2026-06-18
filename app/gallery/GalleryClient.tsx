@@ -1,5 +1,7 @@
 'use client';
 
+// Client component for /gallery: renders the photo grid and a keyboard-navigable
+// lightbox (arrow keys + Escape) with prev/next controls and body-scroll locking.
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';

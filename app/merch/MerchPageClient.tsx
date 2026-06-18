@@ -1,5 +1,8 @@
 'use client';
 
+// Client component for /merch: the store front. Renders the product grid with
+// search + category filtering (sorted cheapest-first), an impact/"where it goes"
+// strip, and empty/no-products fallbacks; links each card to its detail page.
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';

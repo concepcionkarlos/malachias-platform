@@ -1,3 +1,8 @@
+// Content store — the app's primary data layer. Reads/writes the whole editable
+// site content blob (shows, merch, band members, EPK, bookings, subscribers,
+// fan stories, etc.) to Vercel KV in production or a local JSON file in dev,
+// always merging persisted data with the defaults from lib/data.ts.
+
 import fs from 'fs'
 import path from 'path'
 import type { Show, MerchItem, BandMember, SiteContent, MediaItem, EpkContent, BookingRequest, AdminNote, Subscriber, BandTask, SongStory, DailyReflection, FanStory } from './data'

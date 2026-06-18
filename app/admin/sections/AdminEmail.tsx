@@ -1,5 +1,9 @@
 'use client'
 
+// Admin section — Email client: a Gmail-style inbox/sent mailbox for booking@malachiasmusic.com.
+// Reads inbound and sent mail from the API, lets you read messages (sandboxed iframe body),
+// mark read / mark-all-read, delete, compose new mail, and reply; includes deep links to Gmail.
+
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { Mail, MailOpen, Send, Trash2, Pencil, X, RefreshCw, Inbox, CheckCheck, ExternalLink } from 'lucide-react'
 import type { InboundEmail, SentEmail } from '@/lib/data'

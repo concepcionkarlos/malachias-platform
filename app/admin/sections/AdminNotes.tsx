@@ -1,5 +1,8 @@
 'use client'
 
+// Admin section — Admin Notes: a simple to-do/checklist with normal/high priority,
+// split into active and completed lists, with add, check-off, and delete actions.
+
 import { useEffect, useState } from 'react'
 import { Plus, Trash2, AlertCircle } from 'lucide-react'
 import type { AdminNote, AdminNotePriority } from '@/lib/data'

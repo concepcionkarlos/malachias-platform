@@ -1,5 +1,9 @@
 'use client'
 
+// Homepage "Join the Brotherhood" newsletter section — email capture form that POSTs
+// to /api/newsletter (double opt-in) and renders idle/loading/pending/already-subscribed
+// states, with cycling benefit lines and animated gold glow accents.
+
 import { useState, useEffect, useRef } from 'react'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { Mail, CheckCircle, ArrowRight } from 'lucide-react'

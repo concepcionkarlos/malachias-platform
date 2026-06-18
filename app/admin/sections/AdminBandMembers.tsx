@@ -1,5 +1,9 @@
 'use client'
 
+// Admin section — Band Members manager: lists members as cards and lets the band
+// add, edit, and delete them (name, role, bio, branch/tours, email, photo with upload),
+// toggle public visibility, and persist changes to /api/content.
+
 import { useEffect, useState, useRef } from 'react'
 import { Plus, Pencil, Trash2, X, Check, Upload, User } from 'lucide-react'
 import type { BandMember } from '@/lib/data'

@@ -1,5 +1,9 @@
 'use client';
 
+// Homepage "Book Us" section — the booking enquiry form that POSTs to /api/booking.
+// Includes client-side name/phone/message validation (mirroring the server), a honeypot
+// field, and a server-issued math captcha for spam protection; shows a thank-you on success.
+
 import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 

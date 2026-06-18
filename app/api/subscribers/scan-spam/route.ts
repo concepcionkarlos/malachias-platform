@@ -1,3 +1,7 @@
+// Admin API for detecting spam/bot newsletter subscribers (auth required on all methods).
+// GET: scores every subscriber email against disposable/placeholder domains, suspicious TLDs,
+// bot prefixes, keyboard-mash and numeric/random patterns; returns ranked candidates with severity.
+// DELETE: bulk-removes subscribers by an array of emails from the content store.
 import { NextRequest, NextResponse } from 'next/server'
 import { readContent, writeContent } from '@/lib/store'
 import { isAuthenticatedFromRequest } from '@/lib/auth'

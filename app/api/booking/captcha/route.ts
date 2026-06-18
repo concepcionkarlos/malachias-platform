@@ -1,3 +1,7 @@
+// Public booking-form captcha API. GET (rate-limited to 30 req/min per client)
+// issues a fresh, signed, single-use math challenge (a, b, token). Marked
+// force-dynamic and served with no-store headers so the single-use token is
+// never cached by the browser or CDN.
 import { NextRequest, NextResponse } from 'next/server'
 import { rateLimit } from '@/lib/rateLimit'
 import { issueChallenge } from '@/lib/captcha'

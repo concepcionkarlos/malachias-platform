@@ -1,3 +1,6 @@
+// API route: CRM sent-emails log.
+// GET (admin-auth required) returns all logged sent emails. DELETE (admin-auth
+// required) removes one entry by {id}.
 import { NextRequest, NextResponse } from 'next/server'
 import { isAuthenticated } from '@/lib/auth'
 import { getSentEmails, deleteSentEmail } from '@/lib/venueStore'

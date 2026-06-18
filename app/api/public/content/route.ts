@@ -1,3 +1,8 @@
+// Public site content endpoint (no auth).
+// GET: reads the content store and returns only front-end-safe data — site content,
+// visible band members, visible upcoming shows (sorted by date), visible merch, visible
+// media items, EPK content, visible song stories (sorted by order), and daily reflections
+// (newest first). Private data such as bookings and subscribers is never exposed.
 import { NextResponse } from 'next/server'
 import { readContent } from '@/lib/store'
 

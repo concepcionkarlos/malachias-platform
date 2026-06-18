@@ -1,3 +1,8 @@
+// Promo / merch-discount signup endpoint (public, rate-limited: 3/min per client).
+// POST: validates an email, and if it's neither an existing subscriber nor already
+// pending, stores it as a pending subscriber with a confirmation token and sends a
+// double opt-in verification email via Resend. The 15% off code is delivered only
+// after the recipient confirms via /api/verify-email. Logs each send via addSentEmail.
 import { NextRequest, NextResponse } from 'next/server'
 import { readContent, writeContent } from '@/lib/store'
 import { rateLimit } from '@/lib/rateLimit'

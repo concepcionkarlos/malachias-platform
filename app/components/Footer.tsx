@@ -1,5 +1,9 @@
 'use client';
 
+// Site-wide footer — brand blurb, social icons, sitewide navigation links, contact
+// emails (booking/press/general), a Support CTA, scripture line, and bottom copyright
+// strip. Includes animated smoke blobs and a faint cross watermark.
+
 import { motion } from 'framer-motion';
 
 

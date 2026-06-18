@@ -1,5 +1,8 @@
 'use client';
 
+// Client component for /merch/[slug]: the product detail view. Handles image
+// gallery/thumbnails, color + size variant selection with stock checks, and the
+// Fourthwall buy-now link; sanitizes the product description before rendering.
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';

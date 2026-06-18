@@ -1,5 +1,8 @@
 'use client'
 
+// Client component for /promo: the "15% off merch" capture form. Posts the email
+// to /api/promo, then shows a "confirm your email" or "you're already in" state
+// depending on subscription status, plus an error fallback.
 import { useState } from 'react'
 import Link from 'next/link'
 
