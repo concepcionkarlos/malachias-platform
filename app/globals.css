@@ -111,6 +111,38 @@ input:-webkit-autofill, input:-webkit-autofill:focus {
   50%       { transform: translateY(8px); }
 }
 
+/* Gold metallic shimmer — luxury text treatment */
+@keyframes goldShimmer {
+  0%   { background-position: -300% center; }
+  100% { background-position:  300% center; }
+}
+
+/* Continuous shimmer sweep for luxury CTA buttons */
+@keyframes btnGoldSweep {
+  0%   { left: -120%; opacity: 0; }
+  15%  { opacity: 1; }
+  100% { left: 160%; opacity: 0; }
+}
+
+/* Gold metallic shimmer class — wrap text in a span */
+.shimmer-gold {
+  background: linear-gradient(
+    90deg,
+    #7a5f18 0%,
+    #c9a84c 18%,
+    #e8c55a 30%,
+    #f5e898 45%,
+    #e8c55a 60%,
+    #c9a84c 75%,
+    #7a5f18 100%
+  );
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: goldShimmer 6s linear infinite;
+}
+
 /* Text flicker — for distressed neon feeling */
 @keyframes flicker {
   0%, 100% { opacity: 1; }
@@ -303,16 +335,19 @@ input:-webkit-autofill, input:-webkit-autofill:focus {
 .btn:hover::after { left: 150%; }
 
 .btn-primary {
-  background: linear-gradient(135deg, rgba(201,168,76,0.07) 0%, rgba(160,110,28,0.11) 100%);
-  border: 1px solid rgba(201,168,76,0.48);
+  background: linear-gradient(135deg, rgba(201,168,76,0.06) 0%, rgba(160,110,28,0.10) 100%);
+  border: 1px solid rgba(201,168,76,0.55);
+  border-top-color: rgba(201,168,76,0.75);
   color: var(--gold);
-  box-shadow: 0 2px 20px rgba(0,0,0,0.55), inset 0 1px 0 rgba(201,168,76,0.09);
+  box-shadow: 0 2px 24px rgba(0,0,0,0.60), inset 0 1px 0 rgba(201,168,76,0.14), 0 0 0 0 rgba(201,168,76,0);
+  letter-spacing: 0.16em;
 }
 .btn-primary:hover {
-  background: linear-gradient(135deg, rgba(201,168,76,0.90) 0%, rgba(185,138,38,1.0) 100%);
+  background: linear-gradient(135deg, rgba(201,168,76,0.92) 0%, rgba(185,138,38,1.0) 100%);
   border-color: var(--gold);
+  border-top-color: #f5e090;
   color: #000;
-  box-shadow: 0 4px 32px rgba(201,168,76,0.22), inset 0 1px 0 rgba(255,255,255,0.14);
+  box-shadow: 0 4px 36px rgba(201,168,76,0.26), inset 0 1px 0 rgba(255,255,255,0.18);
 }
 
 .btn-danger {
