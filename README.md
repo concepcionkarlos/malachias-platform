@@ -1,36 +1,70 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Malachias Platform
 
-## Getting Started
+The website and back office for the band Malachias — [malachias.com](https://malachias.com).
 
-First, run the development server:
+Public site, booking pipeline and an admin area, built as one Next.js application. Everything
+a promoter, a fan or the band itself needs goes through here: enquiring about a show, joining
+the mailing list, reading the journal, buying merch, or running the band's own rehearsal prep.
+
+**Live:** [malachias.com](https://malachias.com) · **Stack:** Next.js 16, React 19,
+TypeScript, Tailwind 4, Vercel KV, Resend
+
+---
+
+## What it does
+
+| Area | Route | Purpose |
+|---|---|---|
+| Home and gallery | `/`, `/gallery` | Public face of the band |
+| EPK | `/epk` | Press kit for promoters: bio, lineup, media |
+| Journal | `/journal/[slug]` | Long-form posts |
+| Merch | `/merch` | Store front |
+| Promo | `/promo` | Campaign landing pages |
+| Rehearsal | `/rehearsal/[token]` | Per-member prep, reached by a private token link |
+| Verified | `/verified` | Landing page for confirmed mailing-list opt-ins |
+| Admin | `/admin/bookings`, `/admin/content`, `/admin/sections`, `/admin/settings` | Back office |
+
+The API layer covers bookings and booking captcha, venues, places, songs, goals, fan stories,
+email templates, a drip sequence, inbound email handling and the admin and content endpoints.
+
+---
+
+## Engineering notes
+
+The parts that took real work were not the pages. They were the things that stop a public
+form from becoming a liability.
+
+**Booking cannot be used as a spam relay.** Every path that sends mail sits behind double
+opt-in, KV-backed rate limiting and a signed captcha. Signing the captcha rather than storing
+it means a replayed or already-spent token is rejected without a round trip, so a cached page
+cannot resurrect one.
+
+**Admin sessions are not a shared password.** Each login mints a random signed token with a
+server-side expiry, so revoking access does not mean rotating a secret everyone knows.
+
+**The public routes fail softly.** Error boundaries and a real not-found fallback, because a
+promoter hitting a stack trace on the way to booking a show is a lost show.
+
+**Validation matches reality, not a regex.** The booking form's name field was quietly
+rejecting legitimate names; it now accepts what people are actually called.
+
+---
+
+## Running it
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Environment variables are not committed. The app expects credentials for Vercel KV and
+Resend, configured in the deployment environment.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## License
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+None. Published as a portfolio piece: the source is here to be read, not reused.
+All rights reserved.
