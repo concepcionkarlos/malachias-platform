@@ -22,7 +22,7 @@ TypeScript, Tailwind 4, Vercel KV, Resend
 | Promo | `/promo` | Campaign landing pages |
 | Rehearsal | `/rehearsal/[token]` | Per-member prep, reached by a private token link |
 | Verified | `/verified` | Landing page for confirmed mailing-list opt-ins |
-| Admin | `/admin/bookings`, `/admin/content`, `/admin/sections`, `/admin/settings` | Back office |
+| Admin | `/admin` | Back office: bookings, content, media, merch, events, email |
 
 The API layer covers bookings and booking captcha, venues, places, songs, goals, fan stories,
 email templates, a drip sequence, inbound email handling and the admin and content endpoints.
@@ -42,8 +42,8 @@ cannot resurrect one.
 **Admin sessions are not a shared password.** Each login mints a random signed token with a
 server-side expiry, so revoking access does not mean rotating a secret everyone knows.
 
-**The public routes fail softly.** Error boundaries and a real not-found fallback, because a
-promoter hitting a stack trace on the way to booking a show is a lost show.
+**The rehearsal route fails softly.** It carries an error boundary and there is a real
+not-found fallback, because a member hitting a stack trace on a token link has no way back.
 
 **Validation matches reality, not a regex.** The booking form's name field was quietly
 rejecting legitimate names; it now accepts what people are actually called.
