@@ -59,7 +59,7 @@ export default function Journal() {
                 </span>
                 <span style={{ fontSize: '0.60rem', color: 'var(--text-3)' }}>·</span>
                 <span style={{ fontSize: '0.60rem', letterSpacing: '0.10em', color: 'var(--text-3)' }}>
-                  {e.date}
+                  {e.kicker}
                 </span>
               </div>
 

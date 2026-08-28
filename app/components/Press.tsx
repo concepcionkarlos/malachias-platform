@@ -1,11 +1,10 @@
 'use client';
 
-// Homepage "Press & EPK" section for event organizers — what-to-expect points, a list
-// of press assets (press kit, stage plot, rider, photos — available on request), and
-// CTAs to the booking form and the full /epk page.
+// Homepage "Press & EPK" section for event organizers — what-to-expect points, the
+// quick facts a booker checks first (set length, setup, stage, power, base), and CTAs
+// to the booking form and the full /epk page. Files are sent on request by email.
 
 import { motion } from 'framer-motion';
-import { Download } from 'lucide-react';
 
 const fade = (delay = 0) => ({
   initial: { opacity: 0, y: 22 },
@@ -33,11 +32,14 @@ const WHAT_TO_EXPECT = [
   },
 ];
 
-const ASSETS = [
-  { label: 'Press Kit (PDF)',      note: 'Band bio, photos, links'           },
-  { label: 'Stage Plot',           note: '2025 — standard configuration'     },
-  { label: 'Technical Rider',      note: 'Sound, lights, load-in requirements'},
-  { label: 'Hi-Res Promo Photos',  note: '4 images, print-ready'             },
+// Mirrors the defaults in app/epk/page.tsx — the EPK is the full version.
+const QUICK_FACTS = [
+  { label: 'Set length',  value: '45 min · 1 hr · full set' },
+  { label: 'Setup',       value: '90 min before · 30 min soundcheck' },
+  { label: 'PA',          value: 'Self-contained or house PA' },
+  { label: 'Stage',       value: '12 ft × 10 ft minimum · 2 × 20A' },
+  { label: 'Based in',    value: 'Coral Springs, FL · travels statewide' },
+  { label: 'Plays',       value: 'Bars, festivals, churches, VFW halls, military events' },
 ];
 
 export default function Press() {
@@ -106,41 +108,32 @@ export default function Press() {
               className="label-xs mb-5"
               style={{ color: 'var(--text-3)', letterSpacing: '0.28em' }}
             >
-              Press Assets
+              Quick Facts
             </p>
-            <div className="space-y-px" style={{ background: 'rgba(255,255,255,0.04)' }}>
-              {ASSETS.map((a, i) => (
+            <dl className="space-y-px" style={{ background: 'rgba(255,255,255,0.04)', margin: 0 }}>
+              {QUICK_FACTS.map(f => (
                 <div
-                  key={a.label}
+                  key={f.label}
                   style={{
                     background: '#050505',
-                    padding: '1rem 1.25rem',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
+                    padding: '0.85rem 1.25rem',
+                    display: 'grid',
+                    gridTemplateColumns: '5.5rem 1fr',
                     gap: '1rem',
-                    transition: 'background 0.25s',
-                    cursor: 'not-allowed',
-                    opacity: 0.7,
+                    alignItems: 'baseline',
                   }}
-                  title="Available when backend is connected"
-                  onMouseEnter={e => ((e.currentTarget as HTMLElement).style.background = '#0a0a0a')}
-                  onMouseLeave={e => ((e.currentTarget as HTMLElement).style.background = '#050505')}
                 >
-                  <div>
-                    <div style={{ fontSize: '0.80rem', color: '#8a7f70', marginBottom: '0.2rem' }}>{a.label}</div>
-                    <div style={{ fontSize: '0.68rem', color: 'var(--text-3)' }}>{a.note}</div>
-                  </div>
-                  <Download size={14} style={{ color: 'var(--text-3)', flexShrink: 0 }} />
+                  <dt style={{ fontSize: '0.62rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(201,168,76,0.65)' }}>{f.label}</dt>
+                  <dd style={{ fontSize: '0.82rem', color: '#a89880', margin: 0, lineHeight: 1.5 }}>{f.value}</dd>
                 </div>
               ))}
-            </div>
+            </dl>
 
             <p
-              className="text-[0.65rem] tracking-wider mt-4 leading-relaxed"
+              className="text-[0.72rem] tracking-wider mt-4 leading-relaxed"
               style={{ color: 'var(--text-3)' }}
             >
-              Assets available upon request. Email{' '}
+              Stage plot, rider and hi-res photos sent on request. Email{' '}
               <a
                 href="mailto:press@malachiasmusic.com"
                 style={{ color: 'var(--text-2)', textDecoration: 'none', transition: 'color 0.2s' }}

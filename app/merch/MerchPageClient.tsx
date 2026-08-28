@@ -86,7 +86,7 @@ function ProductCard({ product, index }: { product: FWProduct; index: number }) 
             {/* Availability badge */}
             <div style={{
               position: 'absolute', top: '0.75rem', left: '0.75rem',
-              fontSize: '0.48rem', letterSpacing: '0.28em', textTransform: 'uppercase',
+              fontSize: '0.62rem', letterSpacing: '0.22em', textTransform: 'uppercase',
               padding: '0.25rem 0.6rem',
               background: available ? 'rgba(52,211,153,0.15)' : 'rgba(201,168,76,0.12)',
               color: available ? '#34d399' : GOLD,
@@ -98,7 +98,7 @@ function ProductCard({ product, index }: { product: FWProduct; index: number }) 
             {/* Category badge */}
             <div style={{
               position: 'absolute', top: '0.75rem', right: '0.75rem',
-              fontSize: '0.46rem', letterSpacing: '0.24em', textTransform: 'uppercase',
+              fontSize: '0.62rem', letterSpacing: '0.20em', textTransform: 'uppercase',
               padding: '0.22rem 0.55rem',
               background: 'rgba(0,0,0,0.55)',
               color: 'rgba(201,168,76,0.55)',

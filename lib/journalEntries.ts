@@ -4,7 +4,7 @@
 export interface JournalEntry {
   slug: string
   tag: string
-  date: string
+  kicker: string   // place or era the entry belongs to — shown where a date would go
   title: string
   excerpt: string
   body: string   // full text for individual page
@@ -14,7 +14,7 @@ export const JOURNAL_ENTRIES: JournalEntry[] = [
   {
     slug: 'why-this-started-here',
     tag: 'Origin',
-    date: 'Fort Wayne, Indiana',
+    kicker: 'Fort Wayne, Indiana',
     title: 'Why this started here.',
     excerpt: "Fort Wayne is home. The Guard unit was here. The decision to enlist was made here. When I came back from Iraq the second time — as a bandsman, of all things — I came back here. Malachias started in Fort Wayne because everything that made it necessary happened in Fort Wayne.",
     body: `Fort Wayne, Indiana. That's where this started.
@@ -30,7 +30,7 @@ The band is now in South Florida. But Fort Wayne is where it was born. And that 
   {
     slug: 'two-deployments-two-different-men',
     tag: 'Service',
-    date: 'Iraq · 2006–2014',
+    kicker: 'Iraq · 2006–2014',
     title: 'Two deployments. Two different men.',
     excerpt: "First tour as a medic. Second tour as an Army bandsman. I went over there holding people together with my hands. I came back the second time holding a guitar. Those aren't as different as they sound. Both are about being present when someone needs something real.",
     body: `First tour as a medic. Second tour as an Army bandsman.
@@ -46,7 +46,7 @@ Malachias is what happened when the medic and the musician finally figured out t
   {
     slug: 'the-mission',
     tag: 'Mission',
-    date: 'The reason we play',
+    kicker: 'The reason we play',
     title: "Reduce suicidal ideation. That's the mission.",
     excerpt: "That's not a general statement. That's the specific reason Malachias exists. Veterans carrying things nobody talks about. People whose faith got worn down by years of hard living. Anyone who's at the bottom and not sure what's on the other side. That's who this music is for.",
     body: `Reduce suicidal ideation. Lift people from depression. Help heal and lessen the triggers PTSD leaves behind.

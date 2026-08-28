@@ -21,6 +21,7 @@ const nextConfig: NextConfig = {
     minimumCacheTTL: 2592000,
     dangerouslyAllowSVG: false,
     remotePatterns: [
+      { protocol: "https", hostname: "**.mzstatic.com" },
       { protocol: "https", hostname: "**.public.blob.vercel-storage.com" },
       { protocol: "https", hostname: "img.youtube.com" },
       { protocol: "https", hostname: "**.fourthwall.com" },

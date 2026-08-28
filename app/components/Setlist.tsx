@@ -1,12 +1,13 @@
 'use client'
 
-// Homepage "What We Play" live-set section — fetches songs from /api/songs, keeps only
-// performance-ready ones, and lists them in two columns (Originals and Covers, covers
+// Homepage "What We Play" live-set section — receives performance-ready songs from the
+// server (page.tsx strips lyrics/chords/notes before passing them down) and lists them in two columns (Originals and Covers, covers
 // showing the original artist). Hidden entirely when no ready songs exist.
 
-import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import type { Song } from '@/lib/data'
+
+export type PublicSong = Pick<Song, 'id' | 'title' | 'type' | 'originalArtist'>
 
 const fade = (delay = 0) => ({
   initial: { opacity: 0, y: 18 },
@@ -15,20 +16,11 @@ const fade = (delay = 0) => ({
   transition: { duration: 0.65, delay, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] },
 })
 
-export default function Setlist() {
-  const [songs, setSongs] = useState<Song[] | null>(null)
+export default function Setlist({ songs }: { songs: PublicSong[] }) {
+  if (songs.length === 0) return null
 
-  useEffect(() => {
-    fetch('/api/songs')
-      .then(r => r.json())
-      .then((d: Song[]) => setSongs(d.filter(s => s.status === 'ready')))
-      .catch(() => setSongs([]))
-  }, [])
-
-  if (songs !== null && songs.length === 0) return null
-
-  const originals = songs?.filter(s => s.type === 'original') ?? []
-  const covers    = songs?.filter(s => s.type === 'cover')    ?? []
+  const originals = songs.filter(s => s.type === 'original')
+  const covers    = songs.filter(s => s.type === 'cover')
 
   return (
     <section id="setlist" style={{ background: '#030202', borderTop: '1px solid rgba(255,255,255,0.04)' }} className="section-pad">
@@ -46,7 +38,7 @@ export default function Setlist() {
           </h2>
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginTop: '1rem', flexWrap: 'wrap' }}>
             <div style={{ width: '3rem', height: '1px', background: 'linear-gradient(to right, rgba(201,168,76,0.60), transparent)' }} />
-            {songs && (
+            {(
               <span style={{ fontSize: '0.75rem', color: '#5c5044', letterSpacing: '0.18em', textTransform: 'uppercase' }}>
                 {songs.length} songs performance ready
               </span>

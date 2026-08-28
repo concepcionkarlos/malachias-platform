@@ -1,16 +1,16 @@
 'use client';
 
 // Homepage "Wear the Mission" merch teaser — shows up to four Fourthwall products
-// (passed in from the server, cheapest first) as cards linking to /merch/[slug],
-// with a "Store Live" badge, impact bullets, loading skeleton, and coming-soon fallback.
+// (passed in from the server, cheapest first) as cards linking to /merch/[slug].
+// Item count and starting price come from the catalog itself. Renders nothing when
+// the store has no products, so the page never says "Store Live" next to "Coming Soon".
 
-import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ShoppingBag } from 'lucide-react';
 import type { FWProduct } from '@/lib/fourthwall';
-import { fwPriceRange, fwIsAvailable, fwFirstImage, fwCategory } from '@/lib/fourthwall';
+import { fwPriceRange, fwIsAvailable, fwFirstImage, fwMinPrice, fwFormatPrice } from '@/lib/fourthwall';
 
 const fade = (delay = 0) => ({
   initial: { opacity: 0, y: 22 },
@@ -82,38 +82,22 @@ function ProductCard({ product, index }: { product: FWProduct; index: number }) 
 }
 
 export default function Merch({ fourthwallProducts = [] }: MerchProps) {
-  // Fallback: fetch legacy items if no Fourthwall products passed
-  const [legacyItems, setLegacyItems] = useState<FWProduct[]>([]);
-  const [loaded, setLoaded] = useState(false);
+  if (fourthwallProducts.length === 0) return null;
 
-  useEffect(() => {
-    if (fourthwallProducts.length > 0) { setLoaded(true); return; }
-    // No Fourthwall products from server — try legacy content
-    fetch('/api/public/content')
-      .then(r => r.json())
-      .then(() => setLoaded(true))
-      .catch(() => setLoaded(true));
-  }, [fourthwallProducts.length]);
-
-  // Sort cheapest first so the $8.95 mug (entry point) leads
-  const products = fourthwallProducts.length > 0
-    ? [...fourthwallProducts].sort((a, b) => {
-        const aMin = a.variants.length ? Math.min(...a.variants.map(v => v.unitPrice.value)) : 0
-        const bMin = b.variants.length ? Math.min(...b.variants.map(v => v.unitPrice.value)) : 0
-        return aMin - bMin
-      }).slice(0, 4)
-    : [];
-  const hasFourthwall = fourthwallProducts.length > 0;
+  // Cheapest first so the entry-point item leads
+  const sorted = [...fourthwallProducts].sort((a, b) => fwMinPrice(a) - fwMinPrice(b));
+  const products = sorted.slice(0, 4);
+  const startingAt = fwFormatPrice(fwMinPrice(sorted[0]));
+  const count = fourthwallProducts.length;
 
   return (
     <section id="merch" style={{ background: '#040404', position: 'relative' }} className="section-pad overflow-hidden">
 
       {/* Background glow */}
-      <motion.div
-        animate={{ opacity: [0.03, 0.09, 0.03] }}
-        transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+      <div
+        aria-hidden="true"
         style={{
-          position: 'absolute', inset: 0, pointerEvents: 'none',
+          position: 'absolute', inset: 0, pointerEvents: 'none', opacity: 0.06,
           background: 'radial-gradient(ellipse 70% 50% at 50% 0%, rgba(201,168,76,0.18) 0%, transparent 70%)',
         }}
       />
@@ -126,20 +110,14 @@ export default function Merch({ fourthwallProducts = [] }: MerchProps) {
         {/* Header */}
         <motion.div {...fade()} className="mb-14">
           {/* Store live badge */}
-          <motion.div
-            animate={{ boxShadow: ['0 0 0px rgba(201,168,76,0)', '0 0 16px rgba(201,168,76,0.20)', '0 0 0px rgba(201,168,76,0)'] }}
-            transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+          <div
             style={{ display: 'inline-flex', alignItems: 'center', gap: '0.45rem', marginBottom: '1rem', background: 'rgba(201,168,76,0.07)', border: '1px solid rgba(201,168,76,0.20)', borderRadius: 999, padding: '0.35rem 0.9rem' }}
           >
-            <motion.span
-              animate={{ scale: [1, 1.5, 1] }}
-              transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-              style={{ display: 'block', width: 6, height: 6, borderRadius: '50%', background: '#c9a84c' }}
-            />
-            <span style={{ fontSize: '0.58rem', letterSpacing: '0.28em', color: '#c9a84c', textTransform: 'uppercase', fontFamily: 'var(--font-body)' }}>
+            <span style={{ display: 'block', width: 6, height: 6, borderRadius: '50%', background: '#c9a84c', animation: 'glowPulse 2s ease-in-out infinite' }} />
+            <span style={{ fontSize: '0.62rem', letterSpacing: '0.28em', color: '#c9a84c', textTransform: 'uppercase', fontFamily: 'var(--font-body)' }}>
               Store Live
             </span>
-          </motion.div>
+          </div>
           <p className="label-xs mb-3" style={{ color: 'var(--gold)', letterSpacing: '0.40em' }}>
             Support the Mission
           </p>
@@ -176,81 +154,33 @@ export default function Merch({ fourthwallProducts = [] }: MerchProps) {
         >
           <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.62rem', letterSpacing: '0.22em', color: '#c9a84c', textTransform: 'uppercase' }}>
             <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#c9a84c', animation: 'glowPulse 2s ease-in-out infinite' }} />
-            {hasFourthwall ? 'Store Live' : 'Coming Soon'}
+            Store Live
           </span>
           <span style={{ fontSize: '0.60rem', color: 'var(--text-3)', letterSpacing: '0.12em' }}>·</span>
-          {hasFourthwall ? (
-            <>
-              <span style={{ fontSize: '0.62rem', color: 'var(--text-3)', letterSpacing: '0.14em' }}>
-                4 items · Starting at $8.95
-              </span>
-              <span style={{ fontSize: '0.60rem', color: 'var(--text-3)', letterSpacing: '0.12em' }}>·</span>
-              <span style={{ fontSize: '0.62rem', color: 'var(--text-3)', letterSpacing: '0.14em' }}>
-                Fulfilled by Fourthwall
-              </span>
-            </>
-          ) : (
-            <span style={{ fontSize: '0.62rem', color: 'var(--text-3)', letterSpacing: '0.14em' }}>
-              Supporters hear first when the drop lands
-            </span>
-          )}
+          <span style={{ fontSize: '0.62rem', color: 'var(--text-3)', letterSpacing: '0.14em' }}>
+            {count} {count === 1 ? 'item' : 'items'} · Starting at {startingAt}
+          </span>
+          <span style={{ fontSize: '0.60rem', color: 'var(--text-3)', letterSpacing: '0.12em' }}>·</span>
+          <span style={{ fontSize: '0.62rem', color: 'var(--text-3)', letterSpacing: '0.14em' }}>
+            Fulfilled by Fourthwall
+          </span>
         </motion.div>
 
-        {/* Loading skeleton */}
-        {!loaded && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px mb-12" style={{ background: 'rgba(255,255,255,0.04)' }}>
-            {[0, 1, 2, 3].map(i => (
-              <div key={i} style={{ background: '#040404', padding: '1.5rem', height: 240, opacity: 0.3 + i * 0.05 }} />
-            ))}
-          </div>
-        )}
-
-        {/* Fourthwall products grid */}
-        {loaded && products.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
-            {products.map((p, i) => (
-              <ProductCard key={p.id} product={p} index={i} />
-            ))}
-          </div>
-        )}
-
-        {/* Coming soon state */}
-        {loaded && products.length === 0 && (
-          <motion.div {...fade(0.08)} style={{ textAlign: 'center', padding: '3rem 0' }} className="mb-12">
-            <ShoppingBag size={28} style={{ color: 'rgba(201,168,76,0.15)', margin: '0 auto 1rem' }} />
-            <p style={{ color: 'var(--text-3)', fontSize: '0.85rem', letterSpacing: '0.08em' }}>
-              First drop incoming. Join the list to hear first.
-            </p>
-          </motion.div>
-        )}
+        {/* Products */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
+          {products.map((p, i) => (
+            <ProductCard key={p.id} product={p} index={i} />
+          ))}
+        </div>
 
         {/* CTA */}
         <motion.div {...fade(0.22)} className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
-          {hasFourthwall ? (
-            <>
-              <p className="text-[0.82rem] leading-relaxed" style={{ color: 'var(--text-3)', maxWidth: '28rem' }}>
-                Every purchase keeps the mission alive. No middleman, no label — just you and the band.
-              </p>
-              <motion.div
-                animate={{ boxShadow: ['0 0 0px rgba(201,168,76,0)', '0 0 22px rgba(201,168,76,0.32)', '0 0 0px rgba(201,168,76,0)'] }}
-                transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
-                className="shrink-0"
-              >
-                <Link href="/merch" className="btn btn-primary" style={{ fontSize: '0.72rem', letterSpacing: '0.18em', padding: '0.75rem 2rem', display: 'inline-block' }}>
-                  Support the Band →
-                </Link>
-              </motion.div>
-            </>
-          ) : (
-            <>
-              <p className="text-[0.82rem] leading-relaxed" style={{ color: 'var(--text-3)', maxWidth: '28rem' }}>
-                No store yet. When the first drop is ready, supporters hear first.
-              </p>
-              <Link href="#newsletter" className="btn btn-primary shrink-0">
-                Join the List
-              </Link>
-            </>
-          )}
+          <p className="text-[0.82rem] leading-relaxed" style={{ color: 'var(--text-3)', maxWidth: '28rem' }}>
+            Every purchase keeps the mission alive. No middleman, no label — just you and the band.
+          </p>
+          <Link href="/merch" className="btn btn-primary shrink-0" style={{ fontSize: '0.72rem', letterSpacing: '0.18em', padding: '0.75rem 2rem', display: 'inline-block' }}>
+            Support the Band →
+          </Link>
         </motion.div>
 
       </div>

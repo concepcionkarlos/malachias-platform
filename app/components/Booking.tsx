@@ -87,6 +87,7 @@ export default function Booking() {
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [moreOpen, setMoreOpen] = useState(false);
 
   // The challenge is issued and signed by the server — the browser no longer
   // makes up its own numbers, so a bot can't pre-compute a valid submission.
@@ -280,58 +281,76 @@ export default function Booking() {
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
-                  <input
-                    className="field"
-                    type="tel"
-                    placeholder="Phone (optional)"
-                    autoComplete="tel"
-                    value={form.phone}
-                    onChange={set('phone')}
-                  />
-                  <input
-                    className="field"
-                    type="text"
-                    placeholder="Venue or organization"
-                    value={form.venueOrOrg}
-                    onChange={set('venueOrOrg')}
-                  />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <input
-                    className="field"
-                    type="date"
-                    placeholder="Event date"
-                    value={form.eventDate}
-                    onChange={set('eventDate')}
-                  />
-                  <input
-                    className="field"
-                    type="text"
-                    placeholder="City / Location"
-                    value={form.city}
-                    onChange={set('city')}
-                  />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
                   <select className="field" aria-label="Event type" value={form.eventType} onChange={set('eventType')}>
                     <option value="">Event type…</option>
                     {EVENT_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
                   </select>
                   <input
                     className="field"
-                    type="text"
-                    placeholder="Guest count (approx)"
-                    value={form.guestCount}
-                    onChange={set('guestCount')}
+                    type="date"
+                    aria-label="Event date"
+                    value={form.eventDate}
+                    onChange={set('eventDate')}
                   />
                 </div>
-                <input
-                  className="field"
-                  type="text"
-                  placeholder="Budget range (optional)"
-                  value={form.budgetRange}
-                  onChange={set('budgetRange')}
-                />
+
+                {/* Everything else is optional — ask for it only if they want to give it */}
+                <button
+                  type="button"
+                  onClick={() => setMoreOpen(v => !v)}
+                  aria-expanded={moreOpen}
+                  style={{
+                    background: 'none', border: 'none', cursor: 'pointer', padding: 0,
+                    fontSize: '0.66rem', letterSpacing: '0.18em', textTransform: 'uppercase',
+                    color: 'rgba(201,168,76,0.75)', fontFamily: 'var(--font-body)',
+                  }}
+                >
+                  {moreOpen ? '− Fewer details' : '+ Add venue, city, phone, guest count, budget'}
+                </button>
+                {moreOpen && (
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <input
+                        className="field"
+                        type="text"
+                        placeholder="Venue or organization"
+                        value={form.venueOrOrg}
+                        onChange={set('venueOrOrg')}
+                      />
+                      <input
+                        className="field"
+                        type="text"
+                        placeholder="City / Location"
+                        value={form.city}
+                        onChange={set('city')}
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <input
+                        className="field"
+                        type="tel"
+                        placeholder="Phone (optional)"
+                        autoComplete="tel"
+                        value={form.phone}
+                        onChange={set('phone')}
+                      />
+                      <input
+                        className="field"
+                        type="text"
+                        placeholder="Guest count (approx)"
+                        value={form.guestCount}
+                        onChange={set('guestCount')}
+                      />
+                    </div>
+                    <input
+                      className="field"
+                      type="text"
+                      placeholder="Budget range (optional)"
+                      value={form.budgetRange}
+                      onChange={set('budgetRange')}
+                    />
+                  </div>
+                )}
                 <textarea
                   className="field resize-none"
                   rows={5}

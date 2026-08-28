@@ -4,6 +4,7 @@
 import type { Metadata } from 'next';
 import { Bebas_Neue, Inter } from 'next/font/google';
 import Script from 'next/script';
+import { Analytics } from '@vercel/analytics/next';
 import './globals.css';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://malachiasmusic.com'
@@ -60,18 +61,24 @@ const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'MusicGroup',
   name: 'Malachias',
-  description: 'Christian rock band based in South Florida, founded by a U.S. Army veteran. Music that heals PTSD, depression, and suicidal ideation through faith. Available for bars, festivals, churches, and military events.',
+  description: 'Christian rock band based in Coral Springs, South Florida, founded by a U.S. Army veteran. Music that heals PTSD, depression, and suicidal ideation through faith. Available for bars, festivals, churches, and military events.',
   genre: ['Christian Rock', 'Rock', 'Hard Rock', 'Faith Rock'],
   foundingDate: '2014',
+  // Started in Fort Wayne (the founder's story); the band lives and plays out of Coral Springs.
   foundingLocation: {
     '@type': 'Place',
-    name: 'South Florida',
-    address: { '@type': 'PostalAddress', addressLocality: 'Miami', addressRegion: 'FL', addressCountry: 'US' },
+    name: 'Fort Wayne, Indiana',
+    address: { '@type': 'PostalAddress', addressLocality: 'Fort Wayne', addressRegion: 'IN', addressCountry: 'US' },
+  },
+  location: {
+    '@type': 'Place',
+    name: 'Coral Springs, Florida',
+    address: { '@type': 'PostalAddress', addressLocality: 'Coral Springs', addressRegion: 'FL', addressCountry: 'US' },
   },
   areaServed: {
     '@type': 'Place',
     name: 'South Florida',
-    address: { '@type': 'PostalAddress', addressLocality: 'Miami', addressRegion: 'FL', addressCountry: 'US' },
+    address: { '@type': 'PostalAddress', addressLocality: 'Coral Springs', addressRegion: 'FL', addressCountry: 'US' },
   },
   member: [
     { '@type': 'Person', name: 'Malachias', roleName: 'Vocals, Guitar, Founder' },
@@ -128,6 +135,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           }}
         />
         {children}
+        <Analytics />
       </body>
     </html>
   );

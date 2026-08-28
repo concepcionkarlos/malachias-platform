@@ -1,11 +1,13 @@
 'use client'
 
-// Top-of-page live-stream banner — fetches /api/live-sessions and, if a session is
+// Top-of-page live-stream banner — receives sessions from the server and, if one is
 // live (or the next one is upcoming), shows a clickable bar linking to the platform,
 // with a live "● LIVE NOW" state or a countdown to the scheduled start. Hidden otherwise.
 
 import { useEffect, useState } from 'react'
 import type { LiveSession } from '@/lib/data'
+
+export type PublicLiveSession = Pick<LiveSession, 'id' | 'title' | 'description' | 'platform' | 'scheduledAt' | 'status' | 'platformUrl'>
 
 // Fallbacks for when an admin doesn't supply an explicit platformUrl — point at
 // the band's verified, real profiles (same URLs used in Navbar/Footer/EPK).
@@ -45,22 +47,12 @@ function Countdown({ to }: { to: string }) {
   )
 }
 
-export default function LiveSessionBanner() {
-  const [session, setSession] = useState<LiveSession | null>(null)
-
-  useEffect(() => {
-    fetch('/api/live-sessions')
-      .then(r => r.ok ? r.json() : [])
-      .then((sessions: LiveSession[]) => {
-        const live = sessions.find(s => s.status === 'live')
-        if (live) { setSession(live); return }
-        const upcoming = sessions
-          .filter(s => s.status === 'planned' && new Date(s.scheduledAt) > new Date())
-          .sort((a, b) => a.scheduledAt.localeCompare(b.scheduledAt))[0]
-        setSession(upcoming ?? null)
-      })
-      .catch(() => {})
-  }, [])
+export default function LiveSessionBanner({ sessions }: { sessions: PublicLiveSession[] }) {
+  const live = sessions.find(s => s.status === 'live')
+  const upcoming = sessions
+    .filter(s => s.status === 'planned' && new Date(s.scheduledAt) > new Date())
+    .sort((a, b) => a.scheduledAt.localeCompare(b.scheduledAt))[0]
+  const session = live ?? upcoming ?? null
 
   if (!session) return null
 

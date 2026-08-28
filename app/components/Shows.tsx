@@ -1,10 +1,9 @@
 'use client';
 
-// Homepage "Upcoming Shows" section — fetches shows from /api/public/content and lists
-// them with date block, venue/city/time, status badge, and ticket links. Renders a
-// loading skeleton while fetching and hides the whole section when there are no shows.
+// Homepage "Upcoming Shows" section — receives visible upcoming shows from the server
+// (page.tsx) and lists them with date block, venue/city/time, status badge, and ticket
+// links. Renders nothing when there are no shows, so the page never shifts.
 
-import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import type { Show } from '@/lib/data';
 import { formatDate } from '@/lib/data';
@@ -23,18 +22,8 @@ const STATUS_COLOR: Record<string, string> = {
   Cancelled:  '#5c5044',
 };
 
-export default function Shows() {
-  const [shows, setShows] = useState<Show[] | null>(null);
-
-  useEffect(() => {
-    fetch('/api/public/content')
-      .then(r => r.json())
-      .then(d => { if (Array.isArray(d.shows)) setShows(d.shows); })
-      .catch(() => setShows([]));
-  }, []);
-
-  // Don't render the section at all until we know if there are shows
-  if (shows !== null && shows.length === 0) return null;
+export default function Shows({ shows }: { shows: Show[] }) {
+  if (shows.length === 0) return null;
 
   return (
     <section id="shows" style={{ background: '#060606' }} className="section-pad">
@@ -59,17 +48,8 @@ export default function Shows() {
           />
         </motion.div>
 
-        {/* Loading skeleton */}
-        {shows === null && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', background: 'rgba(255,255,255,0.04)' }}>
-            {[0, 1, 2].map(i => (
-              <div key={i} style={{ height: 72, background: '#060606', opacity: 0.5 }} />
-            ))}
-          </div>
-        )}
-
         {/* Show list */}
-        {shows && shows.length > 0 && (
+        {(
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', background: 'rgba(255,255,255,0.04)' }}>
             {shows.map((show, i) => {
               const d = formatDate(show.date);

@@ -39,7 +39,7 @@ export default function FanStoryForm() {
   }
 
   return (
-    <section style={{ background: '#080808', padding: '5rem 1.5rem' }}>
+    <section id="fanstory" style={{ background: '#080808', padding: '5rem 1.5rem' }}>
       <div style={{ maxWidth: '640px', margin: '0 auto' }}>
         {/* Label */}
         <p style={{

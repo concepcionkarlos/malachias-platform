@@ -39,7 +39,7 @@ export default async function JournalEntryPage({ params }: Props) {
         <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginBottom: '2rem' }}>
           <span style={{ fontSize: '0.58rem', letterSpacing: '0.30em', textTransform: 'uppercase', color: '#c9a84c' }}>{entry.tag}</span>
           <span style={{ fontSize: '0.58rem', color: 'rgba(201,168,76,0.30)' }}>·</span>
-          <span style={{ fontSize: '0.58rem', letterSpacing: '0.16em', color: '#7a6e5e' }}>{entry.date}</span>
+          <span style={{ fontSize: '0.58rem', letterSpacing: '0.16em', color: '#7a6e5e' }}>{entry.kicker}</span>
         </div>
 
         {/* Headline */}

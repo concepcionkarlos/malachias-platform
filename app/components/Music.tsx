@@ -1,12 +1,15 @@
 'use client';
 
-// Homepage "The Sound" section — embedded Apple Music and Spotify players, an optional
-// admin-managed YouTube video grid (from /api/public/content), plus streaming-platform
-// and social-follow link rows.
+// Homepage "The Sound" section. Everything here arrives as props from the server
+// (page.tsx) — no client fetches. Order: the featured (newest) release with an
+// embedded player, the full discography newest-first, the Spotify artist embed,
+// videos (admin-added items first, otherwise the newest releases' YouTube
+// uploads), then streaming and social link rows. Embeds load lazily.
 
-import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import type { MediaItem } from '@/lib/data';
+import { ARTIST, appleEmbedUrl, featuredRelease, formatReleaseDate, spotifySearchUrl, youtubeWatchUrl, type Release } from '@/lib/releases';
 
 const fade = (delay = 0) => ({
   initial: { opacity: 0, y: 22 },
@@ -15,37 +18,26 @@ const fade = (delay = 0) => ({
   transition: { duration: 0.75, delay, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] },
 });
 
+const APPLE_ICON = (
+  <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor" aria-hidden="true">
+    <path d="M23.994 6.124a9.23 9.23 0 00-.24-2.19c-.317-1.31-1.062-2.31-2.18-3.043a5.022 5.022 0 00-1.877-.726 10.496 10.496 0 00-1.564-.15c-.04-.003-.083-.01-.124-.013H5.986c-.152.01-.303.017-.455.026C4.786.07 4.043.15 3.34.428 2.1.958 1.284 1.846.736 3.01a4.97 4.97 0 00-.272.788 12.158 12.158 0 00-.19 1.396c-.013.148-.018.298-.026.447v11.718c.008.15.013.298.026.447.04.535.11 1.07.272 1.589.536 1.745 1.73 2.87 3.51 3.354a8.28 8.28 0 001.65.248c.585.03 1.172.04 1.758.043H17.542a11.59 11.59 0 001.649-.166c1.015-.195 1.913-.608 2.651-1.279 1.034-.934 1.553-2.117 1.729-3.46.04-.312.07-.626.07-.94L24 6.124z"/>
+  </svg>
+);
+const SPOTIFY_ICON = (
+  <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor" aria-hidden="true">
+    <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
+  </svg>
+);
+const YOUTUBE_ICON = (
+  <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor" aria-hidden="true">
+    <path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+  </svg>
+);
+
 const STREAMING = [
-  {
-    name: 'Apple Music',
-    href: 'https://music.apple.com/us/artist/malachias/937313536',
-    color: '#fc3c44',
-    icon: (
-      <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor" aria-hidden="true">
-        <path d="M23.994 6.124a9.23 9.23 0 00-.24-2.19c-.317-1.31-1.062-2.31-2.18-3.043a5.022 5.022 0 00-1.877-.726 10.496 10.496 0 00-1.564-.15c-.04-.003-.083-.01-.124-.013H5.986c-.152.01-.303.017-.455.026C4.786.07 4.043.15 3.34.428 2.1.958 1.284 1.846.736 3.01a4.97 4.97 0 00-.272.788 12.158 12.158 0 00-.19 1.396c-.013.148-.018.298-.026.447v11.718c.008.15.013.298.026.447.04.535.11 1.07.272 1.589.536 1.745 1.73 2.87 3.51 3.354a8.28 8.28 0 001.65.248c.585.03 1.172.04 1.758.043H17.542a11.59 11.59 0 001.649-.166c1.015-.195 1.913-.608 2.651-1.279 1.034-.934 1.553-2.117 1.729-3.46.04-.312.07-.626.07-.94L24 6.124z"/>
-      </svg>
-    ),
-  },
-  {
-    name: 'Spotify',
-    href: 'https://open.spotify.com/artist/2YSqk7Skh7jsm5fR0uU3vl',
-    color: '#1DB954',
-    icon: (
-      <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor" aria-hidden="true">
-        <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
-      </svg>
-    ),
-  },
-  {
-    name: 'YouTube',
-    href: 'https://www.youtube.com/channel/UCboGsplcNdd9Pha-n83mZYA',
-    color: '#FF0000',
-    icon: (
-      <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor" aria-hidden="true">
-        <path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-      </svg>
-    ),
-  },
+  { name: 'Apple Music', href: ARTIST.appleArtistUrl,   color: '#fc3c44', icon: APPLE_ICON },
+  { name: 'Spotify',     href: ARTIST.spotifyArtistUrl, color: '#1DB954', icon: SPOTIFY_ICON },
+  { name: 'YouTube',     href: ARTIST.youtubeUrl,       color: '#FF0000', icon: YOUTUBE_ICON },
 ];
 
 const SOCIAL = [
@@ -76,25 +68,61 @@ function youtubeId(url: string): string | null {
   return m ? m[1] : null
 }
 
-export default function Music() {
-  const [videos, setVideos] = useState<MediaItem[]>([]);
+interface VideoCard { key: string; href: string; thumb: string | null; caption: string }
 
-  useEffect(() => {
-    fetch('/api/public/content')
-      .then(r => r.json())
-      .then(d => {
-        if (Array.isArray(d.mediaItems)) {
-          setVideos(d.mediaItems.filter((m: MediaItem) => m.type === 'video'));
-        }
-      })
-      .catch(() => {});
-  }, []);
+function PlatformLink({ href, color, icon, label }: { href: string; color: string; icon: React.ReactNode; label: string }) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="tac-box group flex items-center gap-2.5 px-4 py-2.5 transition-all duration-300"
+      style={{ textDecoration: 'none' }}
+    >
+      <span style={{ color }}>{icon}</span>
+      <span className="font-display text-[0.8rem] tracking-[0.14em] text-[var(--text-3)] group-hover:text-white transition-colors duration-300">
+        {label}
+      </span>
+    </a>
+  );
+}
+
+interface MusicProps {
+  releases: Release[];
+  mediaItems?: MediaItem[];
+}
+
+export default function Music({ releases, mediaItems = [] }: MusicProps) {
+  const featured = featuredRelease(releases);
+  const own = releases.filter(r => r.primary);
+  const catalog = own.filter(r => r.id !== featured?.id);
+  const featuredOn = releases.filter(r => !r.primary);
+
+  const adminVideos: VideoCard[] = mediaItems
+    .filter(m => m.type === 'video')
+    .map(v => {
+      const id = youtubeId(v.url);
+      return {
+        key: v.id,
+        href: id ? `https://www.youtube.com/watch?v=${id}` : v.url,
+        thumb: v.poster ?? (id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : null),
+        caption: v.caption ?? '',
+      };
+    });
+  const videos: VideoCard[] = adminVideos.length > 0
+    ? adminVideos
+    : own.filter(r => r.youtubeId).slice(0, 4).map(r => ({
+        key: r.id,
+        href: `https://www.youtube.com/watch?v=${r.youtubeId}`,
+        thumb: `https://img.youtube.com/vi/${r.youtubeId}/hqdefault.jpg`,
+        caption: r.credits ? `${r.title} (${r.credits})` : r.title,
+      }));
 
   return (
     <section id="music" style={{ background: '#0a0a0a' }} className="section-pad">
       <div className="max-w-5xl mx-auto px-6">
 
-        {/* Section marker — left-aligned */}
+        {/* Section marker */}
         <motion.div {...fade()} className="mb-12">
           <p className="label-xs mb-3" style={{ color: 'var(--gold)', letterSpacing: '0.40em' }}>
             Listen
@@ -107,34 +135,133 @@ export default function Music() {
           </h2>
           <div
             className="mt-4"
-            style={{
-              width: '3rem',
-              height: '1px',
-              background: 'linear-gradient(to right, rgba(201,168,76,0.60), transparent)',
-            }}
+            style={{ width: '3rem', height: '1px', background: 'linear-gradient(to right, rgba(201,168,76,0.60), transparent)' }}
           />
         </motion.div>
 
-        {/* Apple Music embed */}
-        <motion.div {...fade(0.08)} className="mb-10">
-          <div className="tac-box overflow-hidden">
-            <div className="px-5 pt-4 pb-2 flex items-center gap-2">
-              <span style={{ color: '#fc3c44', fontSize: '0.7rem' }}>▸</span>
-              <p className="tac-label" style={{ color: 'var(--text-3)' }}>Apple Music</p>
-            </div>
-            <iframe
-              allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write"
-              frameBorder="0"
-              style={{ width: '100%', height: 'clamp(300px, 70vw, 450px)', overflow: 'hidden', background: 'transparent', display: 'block' }}
-              sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation"
-              src="https://embed.music.apple.com/us/artist/malachias/937313536"
-              title="Malachias on Apple Music"
-            />
-          </div>
-        </motion.div>
+        {/* ── Featured release: newest single with an embedded player ── */}
+        {featured && (
+          <motion.div {...fade(0.06)} id="latest" className="mb-12">
+            <div className="tac-box overflow-hidden">
+              <div className="grid md:grid-cols-[minmax(0,15rem)_1fr] gap-0">
+                {/* Cover */}
+                <div style={{ position: 'relative', aspectRatio: '1/1', background: '#050505' }}>
+                  {featured.artwork && (
+                    <Image
+                      src={featured.artwork}
+                      alt={`${featured.title} — cover art`}
+                      fill
+                      sizes="(max-width: 767px) 100vw, 240px"
+                      className="object-cover"
+                      priority={false}
+                    />
+                  )}
+                </div>
 
-        {/* Spotify embed */}
-        <motion.div {...fade(0.10)} className="mb-10">
+                {/* Copy + links */}
+                <div className="px-6 py-6 md:py-7 flex flex-col justify-center gap-4">
+                  <div>
+                    <p style={{ fontSize: '0.62rem', letterSpacing: '0.36em', textTransform: 'uppercase', color: '#c9a84c', fontWeight: 700, marginBottom: '0.6rem' }}>
+                      {featured.type === 'album' ? 'New album' : 'New single'} · Out {formatReleaseDate(featured.releaseDate)}
+                    </p>
+                    <p className="font-display" style={{ fontSize: 'clamp(1.8rem, 4.5vw, 2.8rem)', lineHeight: 0.95, letterSpacing: '0.04em', color: '#ede5d8' }}>
+                      {featured.title}
+                    </p>
+                    {featured.credits && (
+                      <p style={{ marginTop: '0.4rem', fontSize: '0.8rem', letterSpacing: '0.08em', color: 'rgba(232,221,208,0.55)' }}>
+                        {featured.credits}
+                      </p>
+                    )}
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    <PlatformLink href={featured.appleUrl} color="#fc3c44" icon={APPLE_ICON} label="Apple Music" />
+                    <PlatformLink href={spotifySearchUrl(featured)} color="#1DB954" icon={SPOTIFY_ICON} label="Spotify" />
+                    <PlatformLink href={youtubeWatchUrl(featured)} color="#FF0000" icon={YOUTUBE_ICON} label="YouTube" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Player — lazy so it never blocks first paint */}
+              <iframe
+                allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write"
+                frameBorder="0"
+                loading="lazy"
+                style={{ width: '100%', height: 175, overflow: 'hidden', background: 'transparent', display: 'block', borderTop: '1px solid rgba(201,168,76,0.10)' }}
+                sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation"
+                src={appleEmbedUrl(featured)}
+                title={`${featured.title} — play on Apple Music`}
+              />
+            </div>
+          </motion.div>
+        )}
+
+        {/* ── Discography ── */}
+        {catalog.length > 0 && (
+          <motion.div {...fade(0.10)} className="mb-12">
+            <p className="text-[0.62rem] tracking-[0.30em] uppercase mb-4" style={{ color: 'var(--text-3)' }}>
+              Discography · {own.length} releases
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+              {catalog.map(r => (
+                <a
+                  key={r.id}
+                  href={r.appleUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="tac-box group overflow-hidden"
+                  style={{ display: 'block', textDecoration: 'none' }}
+                >
+                  <div style={{ position: 'relative', aspectRatio: '1/1', background: '#050505', overflow: 'hidden' }}>
+                    {r.artwork && (
+                      <Image
+                        src={r.artwork}
+                        alt={`${r.title} — cover art`}
+                        fill
+                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 200px"
+                        className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                        style={{ opacity: 0.9 }}
+                      />
+                    )}
+                  </div>
+                  <div style={{ padding: '0.7rem 0.8rem 0.8rem' }}>
+                    <p className="font-display" style={{ fontSize: '0.92rem', letterSpacing: '0.05em', color: '#e8ddd0', lineHeight: 1.1 }}>
+                      {r.title}
+                    </p>
+                    <p style={{ marginTop: '0.3rem', fontSize: '0.64rem', letterSpacing: '0.12em', color: 'var(--text-3)', textTransform: 'uppercase' }}>
+                      {r.type === 'album' ? 'Album' : 'Single'} · {r.releaseDate.slice(0, 4)}
+                    </p>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
+        {/* ── Guest features — the collaborators' audiences are the band's too ── */}
+        {featuredOn.length > 0 && (
+          <motion.div {...fade(0.11)} className="mb-12">
+            <p className="text-[0.62rem] tracking-[0.30em] uppercase mb-3" style={{ color: 'var(--text-3)' }}>
+              Also featured on
+            </p>
+            <div className="flex flex-wrap gap-x-5 gap-y-2">
+              {featuredOn.map(r => (
+                <a
+                  key={r.id}
+                  href={r.appleUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ fontSize: '0.8rem', color: 'rgba(232,221,208,0.6)', textDecoration: 'none', borderBottom: '1px solid rgba(201,168,76,0.18)', paddingBottom: 1 }}
+                >
+                  <span style={{ color: '#e8ddd0' }}>{r.title}</span>
+                  <span style={{ color: 'var(--text-3)' }}> — {r.artist} · {r.releaseDate.slice(0, 4)}</span>
+                </a>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
+        {/* ── Spotify artist embed ── */}
+        <motion.div {...fade(0.12)} className="mb-12">
           <div className="tac-box overflow-hidden">
             <div className="px-5 pt-4 pb-2 flex items-center gap-2">
               <span style={{ color: '#1DB954', fontSize: '0.7rem' }}>▸</span>
@@ -153,70 +280,63 @@ export default function Music() {
           </div>
         </motion.div>
 
-        {/* YouTube videos — only shown if the admin has added any */}
+        {/* ── Videos ── */}
         {videos.length > 0 && (
-          <motion.div {...fade(0.14)} className="mb-10">
-            <p className="text-[0.58rem] tracking-[0.30em] uppercase mb-4" style={{ color: 'var(--text-3)' }}>
+          <motion.div {...fade(0.14)} className="mb-12">
+            <p className="text-[0.62rem] tracking-[0.30em] uppercase mb-4" style={{ color: 'var(--text-3)' }}>
               Videos
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {videos.map(v => {
-                const ytId = youtubeId(v.url);
-                const thumb = v.poster ?? (ytId ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` : null);
-                const href = ytId ? `https://www.youtube.com/watch?v=${ytId}` : v.url;
-                return (
-                  <a
-                    key={v.id}
-                    href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="tac-box group overflow-hidden"
-                    style={{ display: 'block', textDecoration: 'none' }}
-                  >
-                    <div style={{ position: 'relative', aspectRatio: '16/9', background: '#0a0a0a', overflow: 'hidden' }}>
-                      {thumb && (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img
-                          src={thumb}
-                          alt={v.caption}
-                          style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.75, transition: 'opacity 0.3s' }}
-                          onMouseEnter={e => ((e.currentTarget as HTMLImageElement).style.opacity = '0.90')}
-                          onMouseLeave={e => ((e.currentTarget as HTMLImageElement).style.opacity = '0.75')}
-                        />
-                      )}
-                      {/* Play button */}
-                      <div style={{
-                        position: 'absolute', inset: 0,
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      }}>
-                        <div style={{
+              {videos.map(v => (
+                <a
+                  key={v.key}
+                  href={v.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="tac-box group overflow-hidden"
+                  style={{ display: 'block', textDecoration: 'none' }}
+                >
+                  <div style={{ position: 'relative', aspectRatio: '16/9', background: '#0a0a0a', overflow: 'hidden' }}>
+                    {v.thumb && (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={v.thumb}
+                        alt={v.caption || 'Malachias video'}
+                        loading="lazy"
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.75, transition: 'opacity 0.3s' }}
+                        onMouseEnter={e => ((e.currentTarget as HTMLImageElement).style.opacity = '0.90')}
+                        onMouseLeave={e => ((e.currentTarget as HTMLImageElement).style.opacity = '0.75')}
+                      />
+                    )}
+                    <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <div
+                        className="group-hover:border-[rgba(201,168,76,0.70)]"
+                        style={{
                           width: 48, height: 48, borderRadius: '50%',
                           background: 'rgba(0,0,0,0.65)',
                           border: '1px solid rgba(201,168,76,0.35)',
                           display: 'flex', alignItems: 'center', justifyContent: 'center',
                           transition: 'border-color 0.25s, background 0.25s',
                         }}
-                          className="group-hover:border-[rgba(201,168,76,0.70)]"
-                        >
-                          <svg viewBox="0 0 24 24" fill="currentColor" style={{ width: 18, height: 18, color: '#c9a84c', marginLeft: 2 }}>
-                            <path d="M8 5v14l11-7z" />
-                          </svg>
-                        </div>
+                      >
+                        <svg viewBox="0 0 24 24" fill="currentColor" style={{ width: 18, height: 18, color: '#c9a84c', marginLeft: 2 }} aria-hidden="true">
+                          <path d="M8 5v14l11-7z" />
+                        </svg>
                       </div>
                     </div>
-                    {v.caption && (
-                      <p style={{ padding: '0.65rem 1rem 0.75rem', fontSize: '0.76rem', color: 'var(--text-3)', letterSpacing: '0.04em' }}>
-                        {v.caption}
-                      </p>
-                    )}
-                  </a>
-                );
-              })}
+                  </div>
+                  {v.caption && (
+                    <p style={{ padding: '0.65rem 1rem 0.75rem', fontSize: '0.78rem', color: 'var(--text-3)', letterSpacing: '0.04em' }}>
+                      {v.caption}
+                    </p>
+                  )}
+                </a>
+              ))}
             </div>
           </motion.div>
         )}
 
-        {/* Streaming platforms */}
+        {/* ── Streaming platforms ── */}
         <motion.div {...fade(0.18)} className="flex flex-wrap gap-3 mb-4">
           {STREAMING.map(p => (
             <a
@@ -234,9 +354,9 @@ export default function Music() {
           ))}
         </motion.div>
 
-        {/* Social links — separated from streaming */}
+        {/* ── Social ── */}
         <motion.div {...fade(0.18)} className="flex flex-wrap gap-3">
-          <p className="w-full text-[0.58rem] tracking-[0.30em] uppercase mb-1" style={{ color: 'var(--text-3)' }}>
+          <p className="w-full text-[0.62rem] tracking-[0.30em] uppercase mb-1" style={{ color: 'var(--text-3)' }}>
             Follow
           </p>
           {SOCIAL.map(p => (

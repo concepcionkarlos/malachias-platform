@@ -1,10 +1,10 @@
 'use client';
 
 // Homepage "The Story" / Origin section — the founder's veteran-and-faith narrative.
-// Renders default paragraphs but hydrates from /api/public/content (siteContent.aboutText)
-// so an admin can edit the bio; animated with framer-motion scroll reveals.
+// Paragraphs come from the CMS (siteContent.aboutText) via page.tsx, with the defaults
+// below as a fallback; animated with framer-motion scroll reveals. Also carries the
+// founder's book — the strongest proof of the mission the site has.
 
-import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 const fade = (delay = 0) => ({
@@ -22,19 +22,14 @@ const DEFAULT_PARAGRAPHS = [
   "The band is now based in South Florida — bringing the mission to new stages, new cities, and wherever the music can reach.",
 ];
 
-export default function About() {
-  const [paragraphs, setParagraphs] = useState<string[]>(DEFAULT_PARAGRAPHS);
+const BOOK = {
+  title: "A Warrior's Garden",
+  subtitle: 'A Therapeutic Guide to Living with PTSD',
+  href: 'https://www.amazon.com/dp/1944781420',
+};
 
-  useEffect(() => {
-    fetch('/api/public/content')
-      .then(r => r.json())
-      .then(d => {
-        if (Array.isArray(d.siteContent?.aboutText) && d.siteContent.aboutText.length > 0) {
-          setParagraphs(d.siteContent.aboutText);
-        }
-      })
-      .catch(() => {});
-  }, []);
+export default function About({ aboutText }: { aboutText?: string[] }) {
+  const paragraphs = aboutText && aboutText.length > 0 ? aboutText : DEFAULT_PARAGRAPHS;
 
   return (
     <section id="about" className="section-pad relative overflow-hidden" style={{ background: '#050505' }}>
@@ -127,6 +122,28 @@ export default function About() {
             >
               Indiana · Iraq · Faith
             </p>
+
+            {/* The book — written by the founder, about the same road */}
+            <a
+              href={BOOK.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="tac-box block mt-10 p-5 transition-colors duration-300"
+              style={{ textDecoration: 'none' }}
+            >
+              <p className="label-xs mb-2" style={{ color: 'var(--gold)', letterSpacing: '0.34em' }}>
+                The Book
+              </p>
+              <p className="font-display" style={{ fontSize: '1.35rem', letterSpacing: '0.05em', color: '#e8ddd0', lineHeight: 1.05 }}>
+                {BOOK.title}
+              </p>
+              <p className="text-[0.78rem] leading-relaxed mt-2" style={{ color: 'var(--text-3)' }}>
+                {BOOK.subtitle}. Written by the founder about the road home — music, a garden, and faith.
+              </p>
+              <p className="text-[0.62rem] tracking-[0.20em] uppercase mt-3" style={{ color: 'rgba(201,168,76,0.70)' }}>
+                Read it on Amazon →
+              </p>
+            </a>
           </motion.div>
 
         </div>

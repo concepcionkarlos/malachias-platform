@@ -1,8 +1,9 @@
 'use client'
 
-// Homepage "War Room" daily-reflection section — fetches reflections from
-// /api/public/content, shows today's verse + reflection + suggested song, an expandable
-// archive of previous entries, and a newsletter subscribe CTA. Hidden when there are none.
+// Homepage "War Room" reflection section — reflections come from the server (page.tsx);
+// shows the latest verse + reflection + suggested song, an expandable archive, and a
+// newsletter CTA. The date stamp only appears while the entry is fresh (≤ 14 days) so an
+// old entry never advertises itself as stale. Hidden when there are none.
 
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -14,18 +15,12 @@ function formatDisplayDate(iso: string): string {
   return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).toUpperCase()
 }
 
-export default function WarRoom() {
-  const [reflections, setReflections] = useState<DailyReflection[]>([])
+const FRESH_DAYS = 14
+
+export default function WarRoom({ reflections }: { reflections: DailyReflection[] }) {
   const [showArchive, setShowArchive] = useState(false)
   const ref = useRef<HTMLElement>(null)
   const [visible, setVisible] = useState(false)
-
-  useEffect(() => {
-    fetch('/api/public/content')
-      .then(r => r.json())
-      .then(d => { if (Array.isArray(d.dailyReflections)) setReflections(d.dailyReflections) })
-      .catch(() => {})
-  }, [])
 
   useEffect(() => {
     const el = ref.current
@@ -40,6 +35,7 @@ export default function WarRoom() {
   const today = new Date().toISOString().split('T')[0]
   const current = reflections.find(r => r.date <= today) ?? reflections[0]
   const archive = reflections.filter(r => r.id !== current.id).slice(0, 6)
+  const fresh = (Date.parse(today) - Date.parse(current.date)) / 86_400_000 <= FRESH_DAYS
 
   return (
     <section
@@ -81,13 +77,13 @@ export default function WarRoom() {
         }}>
           <p style={{
             fontFamily: 'var(--font-display)',
-            fontSize: '0.55rem',
+            fontSize: '0.62rem',
             letterSpacing: '0.50em',
             color: 'rgba(192,64,32,0.70)',
             textTransform: 'uppercase',
             marginBottom: '0.5rem',
           }}>
-            Daily Reflection
+            Word for the Road
           </p>
           <h2
             className="font-display"
@@ -112,10 +108,10 @@ export default function WarRoom() {
           animate={visible ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 1.0, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
         >
-          {/* Date stamp */}
-          <p style={{
+          {/* Date stamp — only while the entry is fresh */}
+          {fresh && <p style={{
             fontFamily: 'var(--font-body)',
-            fontSize: '0.52rem',
+            fontSize: '0.62rem',
             letterSpacing: '0.35em',
             color: 'rgba(201,168,76,0.30)',
             textTransform: 'uppercase',
@@ -123,7 +119,7 @@ export default function WarRoom() {
             marginBottom: '2.5rem',
           }}>
             {formatDisplayDate(current.date)}
-          </p>
+          </p>}
 
           {/* Verse — the centerpiece */}
           <blockquote style={{ textAlign: 'center', marginBottom: '1.25rem' }}>
@@ -139,7 +135,7 @@ export default function WarRoom() {
               {current.verse}
             </p>
             <p style={{
-              fontSize: '0.55rem',
+              fontSize: '0.62rem',
               letterSpacing: '0.32em',
               textTransform: 'uppercase',
               color: 'rgba(201,168,76,0.35)',
@@ -169,7 +165,7 @@ export default function WarRoom() {
 
           <p style={{
             textAlign: 'center',
-            fontSize: '0.54rem',
+            fontSize: '0.62rem',
             letterSpacing: '0.26em',
             textTransform: 'uppercase',
             color: 'rgba(201,168,76,0.28)',
@@ -190,7 +186,7 @@ export default function WarRoom() {
               transform: 'translateX(-50%)',
             }}>
               <p style={{
-                fontSize: '0.50rem',
+                fontSize: '0.62rem',
                 letterSpacing: '0.35em',
                 textTransform: 'uppercase',
                 color: 'rgba(201,168,76,0.35)',
@@ -216,7 +212,7 @@ export default function WarRoom() {
               className="btn btn-ghost"
               style={{ fontSize: '0.60rem', letterSpacing: '0.20em', padding: '0.65rem 1.6rem' }}
             >
-              Subscribe · Get the Daily Reflection
+              Subscribe · Get the next one first
             </a>
           </div>
 
@@ -232,10 +228,10 @@ export default function WarRoom() {
                   padding: '0.5rem 0',
                 }}
               >
-                <span style={{ fontSize: '0.52rem', letterSpacing: '0.35em', textTransform: 'uppercase', color: 'rgba(201,168,76,0.35)' }}>
+                <span style={{ fontSize: '0.62rem', letterSpacing: '0.35em', textTransform: 'uppercase', color: 'rgba(201,168,76,0.35)' }}>
                   Previous Reflections
                 </span>
-                <span style={{ fontSize: '0.52rem', color: 'rgba(201,168,76,0.30)' }}>
+                <span style={{ fontSize: '0.62rem', color: 'rgba(201,168,76,0.30)' }}>
                   {showArchive ? '▲' : '▼'}
                 </span>
               </button>
@@ -256,7 +252,7 @@ export default function WarRoom() {
                           paddingLeft: '1.25rem',
                         }}>
                           <p style={{
-                            fontSize: '0.48rem',
+                            fontSize: '0.62rem',
                             letterSpacing: '0.28em',
                             textTransform: 'uppercase',
                             color: 'rgba(201,168,76,0.28)',
@@ -276,7 +272,7 @@ export default function WarRoom() {
                             {r.verse.length > 120 ? r.verse.slice(0, 120) + '…' : r.verse}
                           </p>
                           <p style={{
-                            fontSize: '0.48rem',
+                            fontSize: '0.62rem',
                             letterSpacing: '0.22em',
                             textTransform: 'uppercase',
                             color: 'rgba(201,168,76,0.22)',

@@ -8,8 +8,9 @@ import { useRef, useEffect, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
 import Embers from './Embers';
+import type { Release } from '@/lib/releases';
 
-export default function Hero() {
+export default function Hero({ release }: { release?: Release }) {
   const ref = useRef<HTMLElement>(null);
   const { scrollY } = useScroll();
   const [mobile, setMobile] = useState(false);
@@ -195,9 +196,9 @@ export default function Hero() {
             <span style={{
               fontSize: '0.50rem', letterSpacing: '0.42em',
               color: 'rgba(201,168,76,0.42)', textTransform: 'uppercase',
-              fontFamily: 'var(--font-body)', whiteSpace: 'nowrap',
+              fontFamily: 'var(--font-body)', lineHeight: 1.8,
             }}>
-              Christian Rock · South Florida · Faith on Fire
+              {mobile ? 'Christian Rock · Coral Springs, FL' : 'Christian Rock · Coral Springs, FL · Faith on Fire'}
             </span>
             <div style={{ width: '1.8rem', height: 1, background: 'linear-gradient(to left, transparent, rgba(201,168,76,0.45))' }} />
           </motion.div>
@@ -262,6 +263,39 @@ export default function Hero() {
             For anyone still fighting their way back.
           </motion.p>
 
+          {/* Newest release — one tap to the on-page player */}
+          {release && (
+            <motion.a
+              href="#latest"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1.0, delay: 1.40, ease: [0.22, 1, 0.36, 1] as [number,number,number,number] }}
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: '0.9rem',
+                padding: '0.55rem 1rem 0.55rem 0.55rem', marginBottom: '1.6rem', maxWidth: '100%',
+                border: '1px solid rgba(201,168,76,0.28)', background: 'rgba(8,6,4,0.72)',
+                backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)', textDecoration: 'none',
+              }}
+            >
+              <span style={{ position: 'relative', width: 52, height: 52, flexShrink: 0, overflow: 'hidden', background: '#111' }}>
+                {release.artwork && (
+                  <Image src={release.artwork} alt="" fill sizes="52px" className="object-cover" />
+                )}
+              </span>
+              <span style={{ minWidth: 0 }}>
+                <span style={{ display: 'block', fontSize: '0.6rem', letterSpacing: '0.30em', textTransform: 'uppercase', color: '#c9a84c', fontWeight: 700, fontFamily: 'var(--font-body)' }}>
+                  {release.type === 'album' ? 'New album' : 'New single'} · Out now
+                </span>
+                <span className="font-display" style={{ display: 'block', fontSize: '1.15rem', letterSpacing: '0.05em', color: '#ede5d8', lineHeight: 1.1, marginTop: 2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                  {release.title}{release.credits ? ` · ${release.credits}` : ''}
+                </span>
+              </span>
+              <span style={{ fontSize: '0.62rem', letterSpacing: '0.2em', color: 'rgba(201,168,76,0.85)', textTransform: 'uppercase', flexShrink: 0, fontFamily: 'var(--font-body)' }}>
+                ▶ Play
+              </span>
+            </motion.a>
+          )}
+
           {/* CTAs — horizontal row */}
           <motion.div
             initial={{ opacity: 0, y: 12 }}
@@ -270,9 +304,7 @@ export default function Hero() {
             className="flex flex-row flex-wrap items-center gap-3 mb-8"
           >
             <motion.a
-              href="https://music.apple.com/us/artist/malachias/937313536"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="#latest"
               className="btn btn-primary"
               animate={{
                 boxShadow: [
@@ -292,7 +324,7 @@ export default function Hero() {
             <a
               href="/epk"
               className="btn btn-ghost"
-              style={{ opacity: 0.50, fontSize: '0.62rem', letterSpacing: '0.22em', padding: '0.55rem 1rem' }}
+              style={{ opacity: 0.85, fontSize: '0.62rem', letterSpacing: '0.22em', padding: '0.55rem 1rem' }}
             >
               Press Kit
             </a>

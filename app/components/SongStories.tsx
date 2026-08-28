@@ -1,7 +1,7 @@
 'use client'
 
-// Homepage "Behind the Song" section — an accordion list of song stories (from
-// /api/public/content) where each row expands to reveal its scripture verse, the
+// Homepage "Behind the Song" section — an accordion list of song stories (passed in
+// from the server) where each row expands to reveal its scripture verse, the
 // narrative behind the song, and Spotify/Apple Music links. Hidden when there are none.
 
 import { useState, useEffect, useRef } from 'react'
@@ -71,7 +71,7 @@ function StoryRow({ story, index, open, onToggle }: {
         {/* Number */}
         <span style={{
           fontFamily: 'var(--font-display)',
-          fontSize: '0.58rem',
+          fontSize: '0.62rem',
           color: 'rgba(201,168,76,0.30)',
           letterSpacing: '0.2em',
           minWidth: '1.8rem',
@@ -93,7 +93,7 @@ function StoryRow({ story, index, open, onToggle }: {
             {story.title}
           </p>
           <p style={{
-            fontSize: '0.55rem',
+            fontSize: '0.62rem',
             letterSpacing: '0.30em',
             color: 'rgba(201,168,76,0.45)',
             textTransform: 'uppercase',
@@ -105,7 +105,7 @@ function StoryRow({ story, index, open, onToggle }: {
         {/* Moment tag */}
         {story.moment && (
           <span style={{
-            fontSize: '0.52rem',
+            fontSize: '0.62rem',
             letterSpacing: '0.18em',
             color: 'rgba(232,221,208,0.20)',
             textTransform: 'uppercase',
@@ -119,7 +119,7 @@ function StoryRow({ story, index, open, onToggle }: {
 
         {/* Toggle label */}
         <span style={{
-          fontSize: '0.52rem',
+          fontSize: '0.62rem',
           letterSpacing: '0.28em',
           textTransform: 'uppercase',
           color: open ? '#c9a84c' : 'rgba(201,168,76,0.40)',
@@ -160,7 +160,7 @@ function StoryRow({ story, index, open, onToggle }: {
                   {story.verse}
                 </p>
                 <p style={{
-                  fontSize: '0.55rem',
+                  fontSize: '0.62rem',
                   letterSpacing: '0.30em',
                   textTransform: 'uppercase',
                   color: 'rgba(201,168,76,0.40)',
@@ -188,7 +188,7 @@ function StoryRow({ story, index, open, onToggle }: {
               <div style={{ marginTop: '1.8rem', display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
                 {story.moment && (
                   <span style={{
-                    fontSize: '0.52rem',
+                    fontSize: '0.62rem',
                     letterSpacing: '0.22em',
                     textTransform: 'uppercase',
                     color: 'rgba(201,168,76,0.28)',
@@ -199,7 +199,7 @@ function StoryRow({ story, index, open, onToggle }: {
                 )}
                 {story.spotifyUrl && (
                   <a href={story.spotifyUrl} target="_blank" rel="noopener noreferrer"
-                    style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.52rem', letterSpacing: '0.20em', textTransform: 'uppercase', color: '#1DB954', textDecoration: 'none', opacity: 0.8 }}
+                    style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.62rem', letterSpacing: '0.20em', textTransform: 'uppercase', color: '#1DB954', textDecoration: 'none', opacity: 0.8 }}
                     onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
                     onMouseLeave={e => (e.currentTarget.style.opacity = '0.8')}
                   >
@@ -208,7 +208,7 @@ function StoryRow({ story, index, open, onToggle }: {
                 )}
                 {story.appleUrl && (
                   <a href={story.appleUrl} target="_blank" rel="noopener noreferrer"
-                    style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.52rem', letterSpacing: '0.20em', textTransform: 'uppercase', color: '#fc3c44', textDecoration: 'none', opacity: 0.8 }}
+                    style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.62rem', letterSpacing: '0.20em', textTransform: 'uppercase', color: '#fc3c44', textDecoration: 'none', opacity: 0.8 }}
                     onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
                     onMouseLeave={e => (e.currentTarget.style.opacity = '0.8')}
                   >
@@ -224,18 +224,10 @@ function StoryRow({ story, index, open, onToggle }: {
   )
 }
 
-export default function SongStories() {
-  const [stories, setStories] = useState<SongStory[]>([])
+export default function SongStories({ stories }: { stories: SongStory[] }) {
   const [openId, setOpenId] = useState<string | null>(null)
   const headerRef = useRef<HTMLDivElement>(null)
   const [headerVisible, setHeaderVisible] = useState(false)
-
-  useEffect(() => {
-    fetch('/api/public/content')
-      .then(r => r.json())
-      .then(d => { if (Array.isArray(d.songStories) && d.songStories.length > 0) setStories(d.songStories) })
-      .catch(() => {})
-  }, [])
 
   useEffect(() => {
     const el = headerRef.current

@@ -6,6 +6,7 @@ export const dynamic = 'force-dynamic'
 import Link from 'next/link'
 import { readContent } from '@/lib/store'
 import { BAND_ROSTER } from '@/lib/bandRoster'
+import { fetchReleases } from '@/lib/releases'
 
 export async function generateMetadata() {
   return {
@@ -46,7 +47,7 @@ const SECTION_LABEL: React.CSSProperties = {
 }
 
 export default async function EpkPage() {
-  const { epkContent, siteContent } = await readContent()
+  const [{ epkContent, siteContent }, releases] = await Promise.all([readContent(), fetchReleases()])
 
   const founder = BAND_ROSTER[0]
   const bio = siteContent.aboutText ?? []
@@ -245,6 +246,40 @@ export default async function EpkPage() {
           </div>
         </div>
 
+        <hr style={RULE} />
+
+        {/* ── Releases ─── */}
+        {releases.length > 0 && (
+          <div style={{ marginBottom: '2.5rem' }}>
+            <p style={SECTION_LABEL}>Releases</p>
+            <div style={{ display: 'grid', gap: '1px', background: 'rgba(201,168,76,0.08)' }}>
+              {releases.filter(r => r.primary).slice(0, 8).map(r => (
+                <a
+                  key={r.id}
+                  href={r.appleUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: 'grid', gridTemplateColumns: '2.5rem 1fr auto', gap: '1rem', alignItems: 'center',
+                    padding: '0.6rem 0.75rem', background: '#060504', textDecoration: 'none', color: 'inherit',
+                  }}
+                >
+                  {r.artwork
+                    // eslint-disable-next-line @next/next/no-img-element
+                    ? <img src={r.artwork} alt="" width={40} height={40} loading="lazy" style={{ display: 'block', width: 40, height: 40, objectFit: 'cover' }} />
+                    : <span style={{ width: 40, height: 40, background: '#111', display: 'block' }} />}
+                  <span style={{ minWidth: 0 }}>
+                    <span style={{ display: 'block', fontFamily: 'var(--font-display)', fontSize: '1rem', letterSpacing: '0.05em', color: '#ede5d8' }}>{r.title}</span>
+                    {r.credits && <span style={{ display: 'block', fontSize: '0.72rem', color: 'rgba(232,221,208,0.5)' }}>{r.credits}</span>}
+                  </span>
+                  <span style={{ fontSize: '0.62rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(201,168,76,0.6)', whiteSpace: 'nowrap' }}>
+                    {r.type === 'album' ? 'Album' : 'Single'} · {r.releaseDate.slice(0, 4)}
+                  </span>
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
         <hr style={RULE} />
 
         {/* ── Repertoire ─── */}

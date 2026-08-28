@@ -1,7 +1,7 @@
 'use client';
 
-// Dismissible fixed top banner for the next upcoming show — pulls shows from
-// /api/public/content, picks the soonest future date, and displays date/venue/city
+// Dismissible fixed top banner for the next upcoming show — receives visible shows
+// from the server, picks the soonest future date, and displays date/venue/city
 // with a tickets link. Per-show dismissal is remembered in localStorage.
 
 import { useState, useEffect } from 'react';
@@ -29,22 +29,12 @@ function todayISO(): string {
   return `${y}-${m}-${day}`;
 }
 
-export default function NextShowBanner() {
-  const [show, setShow] = useState<Show | null | undefined>(undefined); // undefined = loading
+export default function NextShowBanner({ shows }: { shows: Show[] }) {
   const [dismissed, setDismissed] = useState(false);
-
-  useEffect(() => {
-    fetch('/api/public/content')
-      .then(r => r.json())
-      .then((d: { shows?: Show[] }) => {
-        const today = todayISO();
-        const upcoming = (d.shows ?? [])
-          .filter(s => s.date >= today)
-          .sort((a, b) => a.date.localeCompare(b.date));
-        setShow(upcoming[0] ?? null);
-      })
-      .catch(() => setShow(null));
-  }, []);
+  const today = todayISO();
+  const show: Show | null = shows
+    .filter(s => s.date >= today)
+    .sort((a, b) => a.date.localeCompare(b.date))[0] ?? null;
 
   // Check localStorage dismissal once we know the show id
   useEffect(() => {
@@ -62,8 +52,7 @@ export default function NextShowBanner() {
     setDismissed(true);
   };
 
-  // Not ready yet or no show
-  if (show === undefined || show === null || dismissed) return null;
+  if (show === null || dismissed) return null;
 
   return (
     <>
