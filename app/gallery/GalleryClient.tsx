@@ -19,8 +19,6 @@ const PHOTOS: GalleryPhoto[] = [
   { src: '/Efrain Rhytms 2.PNG',  caption: 'Efrain'                      },
   { src: '/Gabe Bass.PNG',        caption: 'Gabe'                        },
   { src: '/Gabe Bass 2.PNG',      caption: 'Gabe'                        },
-  { src: '/Henry Drums.PNG',      caption: 'Henry'                       },
-  { src: '/Henry Drums 2.PNG',    caption: 'Henry'                       },
   { src: '/JC Concepcion.PNG',    caption: 'JC Concepcion'               },
   { src: '/JC Concepcion 2.PNG',  caption: 'JC Concepcion'               },
 ];

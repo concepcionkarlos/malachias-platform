@@ -78,7 +78,6 @@ const jsonLd = {
     { '@type': 'Person', name: 'JC Concepcion', roleName: 'Lead Guitar' },
     { '@type': 'Person', name: 'Efrain Sierra', roleName: 'Rhythm Guitar' },
     { '@type': 'Person', name: 'Gabe Grantham', roleName: 'Bass' },
-    { '@type': 'Person', name: 'Henry', roleName: 'Drums' },
   ],
   url: SITE_URL,
   email: 'booking@malachiasmusic.com',

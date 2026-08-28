@@ -357,7 +357,7 @@ export default function Band() {
               color: 'rgba(237,229,216,0.12)',
             }}
           >
-            Five stories.
+            Four stories.
             <br />
             <span style={{ color: 'rgba(201,168,76,0.30)' }}>One God.</span>
             <br />

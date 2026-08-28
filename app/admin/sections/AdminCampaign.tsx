@@ -232,7 +232,7 @@ Faith. Freedom. Music.
 
 Not as a tagline — as a way of operating. Every show we play, every song we write, every stage we earn without anyone in a suit telling us what to do.
 
-Five guys from South Florida who believe music still has something real to say. And who show up — to bars, churches, rock festivals, VFW halls, veteran events — because the music finds people where they are.
+Four guys from South Florida who believe music still has something real to say. And who show up — to bars, churches, rock festivals, VFW halls, veteran events — because the music finds people where they are.
 
 If you've been part of this from the start, thank you. That means something.
 If you're just finding out what Malachias is — welcome.
