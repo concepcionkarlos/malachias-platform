@@ -10,6 +10,11 @@ import Image from 'next/image';
 import Embers from './Embers';
 import type { Release } from '@/lib/releases';
 
+// Mobile layout: the emblem sits in its own band at the top and the text starts
+// right under it, so the two never overlap however tall the text block gets.
+const MOBILE_LOGO_TOP = '76px'      // just below the 62px navbar
+const MOBILE_LOGO_WIDTH = '66vw'
+
 export default function Hero({ release }: { release?: Release }) {
   const ref = useRef<HTMLElement>(null);
   const { scrollY } = useScroll();
@@ -25,7 +30,11 @@ export default function Hero({ release }: { release?: Release }) {
 
   const logoY   = useTransform(scrollY, [0, 700], [0, -72]);
   const textY   = useTransform(scrollY, [0, 700], [0, -24]);
-  const masterO = useTransform(scrollY, [0, 420], [1,  0]);
+  // The text fades as you scroll; on phones the hero is taller and the text sits
+  // lower, so it needs a longer runway or the CTAs vanish while still on screen.
+  const fadeDesktop = useTransform(scrollY, [0, 420], [1, 0]);
+  const fadeMobile  = useTransform(scrollY, [260, 1100], [1, 0]);
+  const masterO = mobile ? fadeMobile : fadeDesktop;
 
   return (
     <section
@@ -75,14 +84,15 @@ export default function Hero({ release }: { release?: Release }) {
         style={{ y: logoY, zIndex: 2 }}
         className="absolute inset-0 pointer-events-none"
       >
-        {/* Positioning wrapper — mobile: centered upper half; desktop: center-right */}
+        {/* Positioning wrapper — mobile: stacked above the text (never behind it);
+            desktop: center-right beside the text */}
         <div
           style={mobile ? {
             position: 'absolute',
-            top: '14%',
+            top: MOBILE_LOGO_TOP,
             left: '50%',
             transform: 'translateX(-50%)',
-            width: '82vw',
+            width: MOBILE_LOGO_WIDTH,
             aspectRatio: '1 / 1',
           } : {
             position: 'absolute',
@@ -102,12 +112,12 @@ export default function Hero({ release }: { release?: Release }) {
               position: 'relative',
               width: '100%',
               height: '100%',
-              opacity: mobile ? 0.68 : 0.62,
+              opacity: mobile ? 0.92 : 0.62,
               WebkitMaskImage: mobile
-                ? `radial-gradient(ellipse 82% 82% at 50% 46%, black 22%, rgba(0,0,0,.85) 46%, rgba(0,0,0,.35) 66%, transparent 82%)`
+                ? `radial-gradient(ellipse 88% 88% at 50% 50%, black 40%, rgba(0,0,0,.9) 62%, rgba(0,0,0,.4) 78%, transparent 92%)`
                 : `radial-gradient(ellipse 80% 80% at 52% 50%, black 14%, rgba(0,0,0,.92) 38%, rgba(0,0,0,.48) 58%, rgba(0,0,0,.12) 74%, transparent 86%)`,
               maskImage: mobile
-                ? `radial-gradient(ellipse 82% 82% at 50% 46%, black 22%, rgba(0,0,0,.85) 46%, rgba(0,0,0,.35) 66%, transparent 82%)`
+                ? `radial-gradient(ellipse 88% 88% at 50% 50%, black 40%, rgba(0,0,0,.9) 62%, rgba(0,0,0,.4) 78%, transparent 92%)`
                 : `radial-gradient(ellipse 80% 80% at 52% 50%, black 14%, rgba(0,0,0,.92) 38%, rgba(0,0,0,.48) 58%, rgba(0,0,0,.12) 74%, transparent 86%)`,
             }}
           >
@@ -150,9 +160,9 @@ export default function Hero({ release }: { release?: Release }) {
         {/* Bottom fade — stronger on mobile to protect text */}
         <div style={{
           position: 'absolute', bottom: 0, left: 0, right: 0,
-          height: mobile ? '50%' : '35%',
+          height: mobile ? '40%' : '35%',
           background: mobile
-            ? 'linear-gradient(to top, rgba(2,2,2,0.98) 0%, rgba(2,2,2,0.85) 30%, rgba(2,2,2,0.40) 65%, transparent 100%)'
+            ? 'linear-gradient(to top, rgba(2,2,2,0.98) 0%, rgba(2,2,2,0.70) 40%, transparent 100%)'
             : 'linear-gradient(to top, rgba(2,2,2,0.88) 0%, transparent 100%)',
         }} />
       </div>
@@ -180,8 +190,10 @@ export default function Hero({ release }: { release?: Release }) {
 
       {/* ─── Text — emotional statement ──────────────────────────────── */}
       <motion.div
-        style={{ y: textY, opacity: masterO, zIndex: 10 }}
-        className="absolute inset-x-0 bottom-0 px-6 lg:px-16 pb-[11vh]"
+        style={mobile
+          ? { y: textY, opacity: masterO, zIndex: 10, position: 'relative', paddingTop: `calc(${MOBILE_LOGO_TOP} + ${MOBILE_LOGO_WIDTH} + 1.25rem)`, paddingBottom: '4rem' }
+          : { y: textY, opacity: masterO, zIndex: 10 }}
+        className={mobile ? 'px-6' : 'absolute inset-x-0 bottom-0 px-6 lg:px-16 pb-[11vh]'}
       >
         <div style={{ maxWidth: mobile ? '90vw' : 'min(46rem, 54vw)' }}>
 
@@ -192,15 +204,15 @@ export default function Hero({ release }: { release?: Release }) {
             transition={{ duration: 2.0, delay: 0.65 }}
             style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.4rem' }}
           >
-            <div style={{ width: '1.8rem', height: 1, background: 'linear-gradient(to right, transparent, rgba(201,168,76,0.45))' }} />
+            {!mobile && <div style={{ width: '1.8rem', height: 1, background: 'linear-gradient(to right, transparent, rgba(201,168,76,0.45))' }} />}
             <span style={{
-              fontSize: '0.50rem', letterSpacing: '0.42em',
+              fontSize: '0.50rem', letterSpacing: mobile ? '0.26em' : '0.42em', whiteSpace: mobile ? 'nowrap' : 'normal',
               color: 'rgba(201,168,76,0.42)', textTransform: 'uppercase',
               fontFamily: 'var(--font-body)', lineHeight: 1.8,
             }}>
               {mobile ? 'Christian Rock · Coral Springs, FL' : 'Christian Rock · Coral Springs, FL · Faith on Fire'}
             </span>
-            <div style={{ width: '1.8rem', height: 1, background: 'linear-gradient(to left, transparent, rgba(201,168,76,0.45))' }} />
+            {!mobile && <div style={{ width: '1.8rem', height: 1, background: 'linear-gradient(to left, transparent, rgba(201,168,76,0.45))' }} />}
           </motion.div>
 
           {/* Emotional statement */}
