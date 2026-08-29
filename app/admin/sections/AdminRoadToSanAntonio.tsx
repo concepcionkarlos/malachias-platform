@@ -7,7 +7,8 @@
 // Persists through /api/content (PATCH) like every other admin section.
 
 import { useEffect, useState } from 'react'
-import { Check, Plus, Trash2, ExternalLink } from 'lucide-react'
+import { Check, Plus, Trash2, ExternalLink, Copy } from 'lucide-react'
+import { OUTREACH_TEMPLATES, SOCIAL_TEMPLATES, type Template } from '@/lib/campaignOutreach'
 import {
   CAMPAIGN, SPONSOR_TIERS, SPONSOR_CATEGORIES, campaignMath, usd,
   type CampaignOverrides, type CampaignStatus, type Sponsor, type CampaignUpdate, type SponsorInquiry, type SponsorTierId,
@@ -35,6 +36,25 @@ interface StoreSlice {
 }
 
 const rid = () => Math.random().toString(36).slice(2, 10)
+
+function TemplateList({ items, copiedKey, onCopy }: { items: Template[]; copiedKey: string | null; onCopy: (t: Template) => void }) {
+  return (
+    <div style={{ display: 'grid', gap: 8 }}>
+      {items.map(t => (
+        <details key={t.id} style={{ border: '1px solid rgba(255,255,255,0.06)', borderRadius: 6, padding: '8px 12px' }}>
+          <summary style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, fontSize: 13, color: '#e8ddd0' }}>
+            <span>{t.title} <span style={{ color: '#8a7f70', fontSize: 11 }}>· {t.channel}</span></span>
+            <button type="button" style={BTN_SM} onClick={e => { e.preventDefault(); onCopy(t) }}>
+              {copiedKey === t.id ? <><Check size={12} /> Copied</> : <><Copy size={12} /> Copy</>}
+            </button>
+          </summary>
+          {t.subject && <p style={{ fontSize: 12, color: '#c9a84c', margin: '8px 0 4px' }}>Subject: {t.subject}</p>}
+          <pre style={{ whiteSpace: 'pre-wrap', fontFamily: 'var(--font-body)', fontSize: 12, color: '#a89880', margin: '6px 0 4px', lineHeight: 1.6 }}>{t.body}</pre>
+        </details>
+      ))}
+    </div>
+  )
+}
 const today = () => new Date().toISOString().slice(0, 10)
 
 export default function AdminRoadToSanAntonio() {
@@ -46,6 +66,14 @@ export default function AdminRoadToSanAntonio() {
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const [error, setError] = useState('')
+  const [copiedKey, setCopiedKey] = useState<string | null>(null)
+
+  function copyTemplate(t: Template) {
+    const text = t.subject ? `Subject: ${t.subject}\n\n${t.body}` : t.body
+    navigator.clipboard.writeText(text).catch(() => {})
+    setCopiedKey(t.id)
+    setTimeout(() => setCopiedKey(null), 2500)
+  }
 
   useEffect(() => {
     fetch('/api/content').then(r => r.json()).then((d: StoreSlice) => {
@@ -207,6 +235,18 @@ export default function AdminRoadToSanAntonio() {
             </select>
           </div>
         ))}
+      </div>
+
+      {/* ── Outreach templates ── */}
+      <div style={CARD}>
+        <p style={HDR}>SPONSOR OUTREACH — COPY &amp; SEND BY HAND</p>
+        <p style={{ fontSize: 12, color: '#8a7f70', marginTop: 0 }}>Fill the [brackets], send from your own email or DMs. Nothing is sent automatically. Full text also in docs/road-to-san-antonio/OUTREACH.md.</p>
+        <TemplateList items={OUTREACH_TEMPLATES} copiedKey={copiedKey} onCopy={copyTemplate} />
+      </div>
+
+      <div style={CARD}>
+        <p style={HDR}>SOCIAL POSTS — FACEBOOK / INSTAGRAM / STORIES</p>
+        <TemplateList items={SOCIAL_TEMPLATES} copiedKey={copiedKey} onCopy={copyTemplate} />
       </div>
 
       <button style={BTN} onClick={() => save()} disabled={saving}>{saved ? <><Check size={14} /> Saved</> : saving ? 'Saving…' : 'Save everything'}</button>

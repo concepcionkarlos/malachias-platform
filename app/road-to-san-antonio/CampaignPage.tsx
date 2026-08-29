@@ -71,16 +71,16 @@ export default function CampaignPage({ config, qrReady, sponsors, updates, produ
 
             <motion.dl {...fade(0.15)} className="mt-7 flex flex-wrap gap-x-8 gap-y-3" style={{ margin: '1.75rem 0 0' }}>
               <div>
-                <dt className="label-xs" style={{ color: 'var(--text-3)', letterSpacing: '0.28em' }}>Date</dt>
+                <dt className="label-xs" style={{ color: 'var(--text-2)', letterSpacing: '0.28em' }}>Date</dt>
                 <dd className="font-display" style={{ fontSize: '1.5rem', letterSpacing: '0.05em', color: '#ede5d8', margin: 0 }}>{eventDate}</dd>
               </div>
               <div>
-                <dt className="label-xs" style={{ color: 'var(--text-3)', letterSpacing: '0.28em' }}>Where</dt>
+                <dt className="label-xs" style={{ color: 'var(--text-2)', letterSpacing: '0.28em' }}>Where</dt>
                 <dd className="font-display" style={{ fontSize: '1.5rem', letterSpacing: '0.05em', color: '#ede5d8', margin: 0 }}>{config.eventVenue ? `${config.eventVenue} · ` : ''}{config.eventCity}</dd>
               </div>
               {live && math.daysToEvent > 0 && (
                 <div>
-                  <dt className="label-xs" style={{ color: 'var(--text-3)', letterSpacing: '0.28em' }}>Countdown</dt>
+                  <dt className="label-xs" style={{ color: 'var(--text-2)', letterSpacing: '0.28em' }}>Countdown</dt>
                   <dd className="font-display" style={{ fontSize: '1.5rem', letterSpacing: '0.05em', color: '#c9a84c', margin: 0 }}>{math.daysToEvent} days</dd>
                 </div>
               )}
@@ -106,7 +106,7 @@ export default function CampaignPage({ config, qrReady, sponsors, updates, produ
         <motion.div {...fade()} className="max-w-6xl mx-auto tac-box" style={{ padding: 'clamp(1.25rem, 3vw, 2rem)' }}>
           <div className="flex flex-wrap items-baseline justify-between gap-3">
             <p className="label-xs" style={{ color: '#c9a84c', letterSpacing: '0.36em' }}>{config.title} · {copy.label}</p>
-            {config.raisedAsOf && <p style={{ fontSize: '0.66rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--text-3)' }}>Updated {formatEventDate(config.raisedAsOf)}</p>}
+            {config.raisedAsOf && <p style={{ fontSize: '0.66rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--text-2)' }}>Updated {formatEventDate(config.raisedAsOf)}</p>}
           </div>
 
           <div className="mt-5 grid grid-cols-2 sm:grid-cols-4 gap-4">
@@ -122,7 +122,7 @@ export default function CampaignPage({ config, qrReady, sponsors, updates, produ
             </div>
             <div className="mt-2 flex justify-between" aria-hidden="true">
               {MILESTONES.map(m => (
-                <span key={m.at} style={{ fontSize: '0.58rem', letterSpacing: '0.14em', color: math.percent >= m.at ? '#c9a84c' : 'var(--text-3)' }}>{m.at}%</span>
+                <span key={m.at} style={{ fontSize: '0.58rem', letterSpacing: '0.14em', color: math.percent >= m.at ? '#c9a84c' : 'var(--text-2)' }}>{m.at}%</span>
               ))}
             </div>
           </div>
@@ -222,11 +222,11 @@ export default function CampaignPage({ config, qrReady, sponsors, updates, produ
             {config.budgetLines.map((b, i) => (
               <motion.li key={b.label} {...fade(0.05 + i * 0.03)} className="tac-box" style={{ padding: '1rem 1.1rem' }}>
                 <p className="font-display" style={{ fontSize: '1.15rem', letterSpacing: '0.05em', color: '#ede5d8' }}>{b.label}</p>
-                <p className="text-[0.78rem] mt-1" style={{ color: 'var(--text-3)' }}>{b.note}</p>
+                <p className="text-[0.78rem] mt-1" style={{ color: 'var(--text-2)' }}>{b.note}</p>
               </motion.li>
             ))}
           </ul>
-          <p className="mt-5 text-[0.76rem]" style={{ color: 'var(--text-3)' }}>
+          <p className="mt-5 text-[0.76rem]" style={{ color: 'var(--text-2)' }}>
             If the campaign raises more than the trip costs, the difference goes to the next mission — free veteran outreach shows in South Florida.
           </p>
         </div>
@@ -288,9 +288,9 @@ export default function CampaignPage({ config, qrReady, sponsors, updates, produ
           <h2 className="font-display leading-[0.92] tracking-[0.06em] text-white" style={{ fontSize: 'clamp(2rem, 5vw, 3.2rem)' }}>SEND THE ROAD TO SOMEONE</h2>
           <p className="mt-3 text-[0.9rem] leading-relaxed" style={{ color: 'var(--text-2)', maxWidth: '36rem' }}>{config.shareText}</p>
           <div className="mt-5"><ShareBar url={url} text={config.shareText} /></div>
-          <p className="mt-5 text-[0.78rem]" style={{ color: 'var(--text-3)' }}>
-            Questions about the campaign? <a href={`mailto:${config.sponsorEmail}`} style={{ color: '#c9a84c' }}>{config.sponsorEmail}</a>
-            &ensp;·&ensp;<a href={config.cashApp.url} target="_blank" rel="noopener noreferrer" style={{ color: '#c9a84c', display: 'inline-flex', alignItems: 'center', gap: 4 }}>Cash App {config.cashApp.cashtag} <ExternalLink size={11} aria-hidden="true" /></a>
+          <p className="mt-5 text-[0.78rem]" style={{ color: 'var(--text-2)' }}>
+            Questions about the campaign? <a href={`mailto:${config.sponsorEmail}`} style={{ color: '#c9a84c', textDecoration: 'underline', textUnderlineOffset: 3 }}>{config.sponsorEmail}</a>
+            &ensp;·&ensp;<a href={config.cashApp.url} target="_blank" rel="noopener noreferrer" style={{ color: '#c9a84c', display: 'inline-flex', alignItems: 'center', gap: 4, textDecoration: 'underline', textUnderlineOffset: 3 }}>Cash App {config.cashApp.cashtag} <ExternalLink size={11} aria-hidden="true" /></a>
           </p>
         </div>
       </section>
@@ -303,7 +303,7 @@ export default function CampaignPage({ config, qrReady, sponsors, updates, produ
 function Stat({ label, value, accent = false }: { label: string; value: string; accent?: boolean }) {
   return (
     <div>
-      <p className="label-xs" style={{ color: 'var(--text-3)', letterSpacing: '0.28em' }}>{label}</p>
+      <p className="label-xs" style={{ color: 'var(--text-2)', letterSpacing: '0.28em' }}>{label}</p>
       <p className="font-display" style={{ fontSize: 'clamp(1.7rem, 4.5vw, 2.6rem)', letterSpacing: '0.04em', color: accent ? '#c9a84c' : '#ede5d8', lineHeight: 1.05, fontVariantNumeric: 'tabular-nums' }}>{value}</p>
     </div>
   )

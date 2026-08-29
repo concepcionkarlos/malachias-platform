@@ -43,11 +43,11 @@ export default function CampaignSection({ config, math }: Props) {
         <motion.div {...fade(0.1)} className="tac-box" style={{ padding: '1.5rem' }}>
           <div className="flex items-baseline justify-between gap-4">
             <div>
-              <p className="label-xs" style={{ color: 'var(--text-3)', letterSpacing: '0.28em' }}>Raised</p>
+              <p className="label-xs" style={{ color: 'var(--text-2)', letterSpacing: '0.28em' }}>Raised</p>
               <p className="font-display" style={{ fontSize: '2.4rem', color: '#c9a84c', letterSpacing: '0.04em', lineHeight: 1, fontVariantNumeric: 'tabular-nums' }}>{usd(math.raised)}</p>
             </div>
             <div style={{ textAlign: 'right' }}>
-              <p className="label-xs" style={{ color: 'var(--text-3)', letterSpacing: '0.28em' }}>Goal</p>
+              <p className="label-xs" style={{ color: 'var(--text-2)', letterSpacing: '0.28em' }}>Goal</p>
               <p className="font-display" style={{ fontSize: '1.6rem', color: '#ede5d8', letterSpacing: '0.04em', lineHeight: 1, fontVariantNumeric: 'tabular-nums' }}>{usd(math.goal)}</p>
             </div>
           </div>
@@ -56,7 +56,7 @@ export default function CampaignSection({ config, math }: Props) {
               <div style={{ height: '100%', width: `${math.percent}%`, background: 'linear-gradient(90deg, #8b6e3a, #c9a84c)' }} />
             </div>
           </div>
-          <div className="mt-3 flex justify-between" style={{ fontSize: '0.66rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--text-3)' }}>
+          <div className="mt-3 flex justify-between" style={{ fontSize: '0.66rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--text-2)' }}>
             <span>{math.percent}% funded</span>
             {math.daysToEvent > 0 && <span>{math.daysToEvent} days to go</span>}
           </div>

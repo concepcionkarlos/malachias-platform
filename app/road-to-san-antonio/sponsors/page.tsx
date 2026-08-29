@@ -31,7 +31,7 @@ export default async function SponsorKitPage() {
   return (
     <div className="kit" style={{ minHeight: '100vh', background: '#060504', color: '#e8ddd0', fontFamily: 'var(--font-body)' }}>
       <style>{`
-        .kit a { color: #c9a84c; }
+        .kit a { color: #c9a84c; text-decoration: underline; text-underline-offset: 3px; }
         @media print {
           .kit { background: #fff !important; color: #111 !important; }
           .kit * { color: #111 !important; border-color: #999 !important; background: transparent !important; box-shadow: none !important; }

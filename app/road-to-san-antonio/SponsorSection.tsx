@@ -36,7 +36,7 @@ export default function SponsorSection({ config, sponsors }: Props) {
         {/* ── Current sponsors ── */}
         {sponsors.length > 0 && (
           <div className="mt-10">
-            <p className="label-xs mb-4" style={{ color: 'var(--text-3)', letterSpacing: '0.30em' }}>On the road with us</p>
+            <p className="label-xs mb-4" style={{ color: 'var(--text-2)', letterSpacing: '0.30em' }}>On the road with us</p>
             <ul className="flex flex-wrap gap-3" style={{ listStyle: 'none', margin: 0, padding: 0 }}>
               {sponsors.map(s => {
                 const featured = s.tier === 'gold' || s.tier === 'presenting'
@@ -92,16 +92,16 @@ export default function SponsorSection({ config, sponsors }: Props) {
 
         {/* ── Named categories ── */}
         <div className="mt-8">
-          <p className="label-xs mb-3" style={{ color: 'var(--text-3)', letterSpacing: '0.30em' }}>Specific sponsorships</p>
+          <p className="label-xs mb-3" style={{ color: 'var(--text-2)', letterSpacing: '0.30em' }}>Specific sponsorships</p>
           <ul className="flex flex-wrap gap-2" style={{ listStyle: 'none', margin: 0, padding: 0 }}>
             {SPONSOR_CATEGORIES.map(c => (
               <li key={c} style={{ fontSize: '0.66rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: '#a89880', border: '1px solid rgba(201,168,76,0.22)', padding: '0.4rem 0.8rem' }}>{c}</li>
             ))}
           </ul>
-          <p className="mt-4 text-[0.8rem] leading-relaxed" style={{ color: 'var(--text-3)', maxWidth: '40rem' }}>
+          <p className="mt-4 text-[0.8rem] leading-relaxed" style={{ color: 'var(--text-2)', maxWidth: '40rem' }}>
             Covering a flight, hotel nights, ground transportation, gear or meals directly counts as sponsorship at the
             matching level. Sponsor information sheet:{' '}
-            <Link href="/road-to-san-antonio/sponsors" style={{ color: '#c9a84c' }} onClick={() => trackCampaign('sponsor_click', { tier: 'kit' })}>
+            <Link href="/road-to-san-antonio/sponsors" style={{ color: '#c9a84c', textDecoration: 'underline', textUnderlineOffset: 3 }} onClick={() => trackCampaign('sponsor_click', { tier: 'kit' })}>
               view or print the sponsorship overview →
             </Link>
           </p>
@@ -164,7 +164,7 @@ function SponsorForm({ config }: { config: CampaignConfig }) {
     }
   }
 
-  const label: React.CSSProperties = { display: 'block', fontSize: '0.62rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--text-3)', marginBottom: 6 }
+  const label: React.CSSProperties = { display: 'block', fontSize: '0.62rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--text-2)', marginBottom: 6 }
 
   return (
     <div id="sponsor-form" className="mt-12 grid lg:grid-cols-[2fr_3fr] gap-10" style={{ scrollMarginTop: 90 }}>
@@ -175,7 +175,7 @@ function SponsorForm({ config }: { config: CampaignConfig }) {
         </h3>
         <p className="mt-4 text-[0.9rem] leading-relaxed" style={{ color: 'var(--text-2)' }}>
           Tell us who you are and the level you have in mind. We reply personally, usually within two days.
-          Prefer email? <a href={`mailto:${config.sponsorEmail}?subject=${encodeURIComponent('Road to San Antonio sponsorship')}`} style={{ color: '#c9a84c' }}>{config.sponsorEmail}</a>
+          Prefer email? <a href={`mailto:${config.sponsorEmail}?subject=${encodeURIComponent('Road to San Antonio sponsorship')}`} style={{ color: '#c9a84c', textDecoration: 'underline', textUnderlineOffset: 3 }}>{config.sponsorEmail}</a>
         </p>
       </div>
 
@@ -211,7 +211,7 @@ function SponsorForm({ config }: { config: CampaignConfig }) {
 
           {captcha && (
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem 1rem', background: 'rgba(201,168,76,0.04)', border: '1px solid rgba(201,168,76,0.15)', borderRadius: 6 }}>
-              <label htmlFor="sp-captcha" style={{ fontSize: '0.72rem', letterSpacing: '0.12em', color: 'rgba(201,168,76,0.6)', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>Human check</label>
+              <label htmlFor="sp-captcha" style={{ fontSize: '0.72rem', letterSpacing: '0.12em', color: 'rgba(201,168,76,0.9)', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>Human check</label>
               <span style={{ fontSize: '0.9rem', color: 'var(--text-2)', whiteSpace: 'nowrap' }}>{captcha.a} + {captcha.b} =</span>
               <input id="sp-captcha" type="number" inputMode="numeric" required className="field" placeholder="?" style={{ maxWidth: 72, textAlign: 'center' }} value={captcha.answer} onChange={e => setCaptcha(c => c ? { ...c, answer: e.target.value } : c)} />
             </div>

@@ -50,14 +50,14 @@ export default function DonateSection({ config, qrReady }: Props) {
           {/* ── Identity + direct actions (first on phones) ── */}
           <div className="p-6 md:p-8 flex flex-col gap-6 order-1">
             <div>
-              <p className="label-xs mb-2" style={{ color: 'var(--text-3)', letterSpacing: '0.30em' }}>Recipient</p>
+              <p className="label-xs mb-2" style={{ color: 'var(--text-2)', letterSpacing: '0.30em' }}>Recipient</p>
               <p className="font-display" style={{ fontSize: 'clamp(1.7rem, 4vw, 2.3rem)', letterSpacing: '0.04em', color: '#ede5d8', lineHeight: 1 }}>
                 {cashApp.displayName}
               </p>
               <p className="mt-2 font-mono" style={{ fontSize: '1.15rem', color: '#c9a84c', letterSpacing: '0.02em' }}>
                 {cashApp.cashtag}
               </p>
-              <p className="mt-2 text-[0.78rem]" style={{ color: 'var(--text-3)' }}>
+              <p className="mt-2 text-[0.78rem]" style={{ color: 'var(--text-2)' }}>
                 Check that the name and $cashtag in Cash App match the ones above before you send.
               </p>
             </div>
@@ -88,20 +88,20 @@ export default function DonateSection({ config, qrReady }: Props) {
 
             {/* Suggested amounts — anchors, not buttons that preload anything */}
             <div>
-              <p className="label-xs mb-3" style={{ color: 'var(--text-3)', letterSpacing: '0.30em' }}>Suggested amounts</p>
+              <p className="label-xs mb-3" style={{ color: 'var(--text-2)', letterSpacing: '0.30em' }}>Suggested amounts</p>
               <ul className="grid grid-cols-3 gap-2" style={{ listStyle: 'none', margin: 0, padding: 0 }}>
                 {DONATION_LEVELS.map(l => (
                   <li key={l.amount} className="tac-box" style={{ padding: '0.7rem 0.6rem', textAlign: 'center' }}>
                     <span className="font-display block" style={{ fontSize: '1.35rem', color: '#ede5d8', letterSpacing: '0.04em' }}>{usd(l.amount)}</span>
-                    <span className="block" style={{ fontSize: '0.6rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--text-3)', marginTop: 2 }}>{l.label}</span>
+                    <span className="block" style={{ fontSize: '0.6rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--text-2)', marginTop: 2 }}>{l.label}</span>
                   </li>
                 ))}
                 <li className="tac-box" style={{ padding: '0.7rem 0.6rem', textAlign: 'center' }}>
                   <span className="font-display block" style={{ fontSize: '1.35rem', color: '#c9a84c', letterSpacing: '0.04em' }}>Any</span>
-                  <span className="block" style={{ fontSize: '0.6rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--text-3)', marginTop: 2 }}>Custom</span>
+                  <span className="block" style={{ fontSize: '0.6rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--text-2)', marginTop: 2 }}>Custom</span>
                 </li>
               </ul>
-              <p className="mt-3 text-[0.72rem]" style={{ color: 'var(--text-3)' }}>
+              <p className="mt-3 text-[0.72rem]" style={{ color: 'var(--text-2)' }}>
                 Type the amount in Cash App — these are suggestions, not fixed levels.
               </p>
             </div>
@@ -112,7 +112,7 @@ export default function DonateSection({ config, qrReady }: Props) {
             className="order-2 flex flex-col items-center justify-center gap-4 p-6 md:p-8"
             style={{ background: '#0a0806', borderTop: '1px solid rgba(201,168,76,0.10)' }}
           >
-            <p className="label-xs md:hidden" style={{ color: 'var(--text-3)', letterSpacing: '0.30em' }}>Scanning from another device?</p>
+            <p className="label-xs md:hidden" style={{ color: 'var(--text-2)', letterSpacing: '0.30em' }}>Scanning from another device?</p>
             {qrReady ? (
               <div style={{ background: '#ffffff', padding: 14, borderRadius: 18, width: 'min(100%, 300px)' }}>
                 <Image
@@ -132,18 +132,18 @@ export default function DonateSection({ config, qrReady }: Props) {
               >
                 <QrCode size={36} style={{ color: 'rgba(201,168,76,0.5)' }} aria-hidden="true" />
                 <p className="mt-3 text-[0.8rem]" style={{ color: 'var(--text-2)' }}>Cash App QR code coming soon.</p>
-                <p className="mt-1 text-[0.72rem]" style={{ color: 'var(--text-3)' }}>Use the Open Cash App button or the $cashtag above.</p>
+                <p className="mt-1 text-[0.72rem]" style={{ color: 'var(--text-2)' }}>Use the Open Cash App button or the $cashtag above.</p>
               </div>
             )}
             <div className="text-center">
               <p className="font-display" style={{ fontSize: '1.2rem', letterSpacing: '0.05em', color: '#ede5d8' }}>{cashApp.displayName}</p>
               <p className="font-mono" style={{ fontSize: '0.95rem', color: '#c9a84c' }}>{cashApp.cashtag}</p>
-              <p className="mt-1" style={{ fontSize: '0.66rem', letterSpacing: '0.24em', textTransform: 'uppercase', color: 'var(--text-3)' }}>Scan with Cash App</p>
+              <p className="mt-1" style={{ fontSize: '0.66rem', letterSpacing: '0.24em', textTransform: 'uppercase', color: 'var(--text-2)' }}>Scan with Cash App</p>
             </div>
           </div>
         </div>
 
-        <p className="mt-6 text-[0.78rem] leading-relaxed" style={{ color: 'var(--text-3)', maxWidth: '44rem' }}>
+        <p className="mt-6 text-[0.78rem] leading-relaxed" style={{ color: 'var(--text-2)', maxWidth: '44rem' }}>
           Contributions go to {cashApp.displayName} via Cash App and are applied to the Road to San Antonio travel budget.
           The amount raised shown on this page is updated by the band after reconciling contributions — it is not a live feed.
         </p>

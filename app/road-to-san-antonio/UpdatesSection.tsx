@@ -89,15 +89,15 @@ export default function UpdatesSection({ config, updates }: { config: CampaignCo
           </div>
 
           <aside className="tac-box" style={{ padding: '1.25rem 1.4rem' }}>
-            <p className="label-xs mb-3" style={{ color: 'var(--text-3)', letterSpacing: '0.30em' }}>The road ahead</p>
+            <p className="label-xs mb-3" style={{ color: 'var(--text-2)', letterSpacing: '0.30em' }}>The road ahead</p>
             <ol className="flex flex-col gap-2" style={{ margin: 0, paddingLeft: 0, listStyle: 'none' }}>
               {config.plannedEpisodes.map((t, i) => {
                 const n = i + 1
                 const done = publishedEpisodes.has(n)
                 return (
                   <li key={t} style={{ display: 'grid', gridTemplateColumns: '2rem 1fr', gap: '0.5rem', alignItems: 'baseline' }}>
-                    <span className="font-display" style={{ fontSize: '0.9rem', letterSpacing: '0.1em', color: done ? '#c9a84c' : 'rgba(201,168,76,0.35)' }}>{String(n).padStart(2, '0')}</span>
-                    <span style={{ fontSize: '0.86rem', color: done ? '#ede5d8' : 'var(--text-3)' }}>{t}</span>
+                    <span className="font-display" style={{ fontSize: '0.9rem', letterSpacing: '0.1em', color: done ? '#c9a84c' : 'rgba(201,168,76,0.75)' }}>{String(n).padStart(2, '0')}</span>
+                    <span style={{ fontSize: '0.86rem', color: done ? '#ede5d8' : 'var(--text-2)' }}>{t}</span>
                   </li>
                 )
               })}

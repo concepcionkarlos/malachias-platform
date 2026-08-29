@@ -168,7 +168,7 @@ export default function Footer() {
             </a>
 
             {/* Scripture */}
-            <p className="text-[0.65rem] tracking-[0.12em] italic leading-relaxed" style={{ color: 'var(--text-ghost)' }}>
+            <p className="text-[0.65rem] tracking-[0.12em] italic leading-relaxed" style={{ color: 'var(--text-2)' }}>
               Malachi 3:1 — &ldquo;See, I will send my messenger&rdquo;
             </p>
           </motion.div>
@@ -246,12 +246,12 @@ export default function Footer() {
 
         <div className="max-w-6xl mx-auto px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 relative z-10">
           {/* Copyright */}
-          <p className="text-[0.66rem] tracking-wider" style={{ color: 'var(--text-ghost)' }}>
+          <p className="text-[0.66rem] tracking-wider" style={{ color: 'var(--text-2)' }}>
             &copy; {new Date().getFullYear()} Malachias. All rights reserved.
           </p>
 
           {/* Center — One Nation Under God */}
-          <p className="text-[0.66rem] tracking-[0.22em] uppercase font-semibold" style={{ color: 'var(--text-ghost)', fontFamily: 'var(--font-display)' }}>
+          <p className="text-[0.66rem] tracking-[0.22em] uppercase font-semibold" style={{ color: 'var(--text-2)', fontFamily: 'var(--font-display)' }}>
             One Nation Under God
           </p>
 
@@ -259,7 +259,7 @@ export default function Footer() {
           <a
             href="mailto:hello@malachiasmusic.com"
             className="text-[0.66rem] tracking-wider transition-colors duration-300"
-            style={{ color: 'var(--text-ghost)' }}
+            style={{ color: 'var(--text-2)' }}
             onMouseEnter={e => (e.currentTarget.style.color = 'rgba(201,168,76,0.55)')}
             onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-ghost)')}
           >
