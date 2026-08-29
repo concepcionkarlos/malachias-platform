@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait"
+  data-composition-variables='[
+    {"id":"eye1","type":"string","label":"Open eyebrow","default":"Malachias · Coral Springs, Florida"},
+    {"id":"t1a","type":"string","label":"Open title 1","default":"VOICE LESSONS"},
+    {"id":"t1b","type":"string","label":"Open title 2","default":"WITH MALACHIAS"},
+    {"id":"eye2","type":"string","label":"Scene 2 eyebrow","default":"Vocal · Style · Stage presence"},
+    {"id":"t2a","type":"string","label":"Scene 2 title 1","default":"LEARN TO SING"},
+    {"id":"t2b","type":"string","label":"Scene 2 title 2","default":"LIKE YOU MEAN IT."},
+    {"id":"b2","type":"string","label":"Scene 2 body","default":"International touring artist. Former Nashville recording artist. Over 30 years on stage."},
+    {"id":"cap2","type":"string","label":"Scene 2 caption","default":"Malachias · Iraq · Kuwait · Dubai · China · Ireland"},
+    {"id":"t3","type":"string","label":"Scene 3 title","default":"THIRTY YEARS OF STAGES."},
+    {"id":"b3","type":"string","label":"Scene 3 body","default":"From VFW halls to overseas bases. He learned from the best in the industry — now he teaches it."},
+    {"id":"eye4","type":"string","label":"Scene 4 eyebrow","default":"What you work on"},
+    {"id":"t4a","type":"string","label":"Scene 4 title 1","default":"VOICE. STYLE."},
+    {"id":"t4b","type":"string","label":"Scene 4 title 2","default":"THE ROOM."},
+    {"id":"p1t","type":"string","label":"Focus 1","default":"VOCAL TECHNIQUE"},
+    {"id":"p1s","type":"string","label":"Focus 1 sub","default":"Breath, range, tone, control"},
+    {"id":"p2t","type":"string","label":"Focus 2","default":"STYLE"},
+    {"id":"p2s","type":"string","label":"Focus 2 sub","default":"Rock, country, worship — sound like you"},
+    {"id":"p3t","type":"string","label":"Focus 3","default":"STAGE PRESENCE"},
+    {"id":"p3s","type":"string","label":"Focus 3 sub","default":"Your hands, your eyes, the room"},
+    {"id":"eye5","type":"string","label":"Offer eyebrow","default":"Lessons"},
+    {"id":"price","type":"string","label":"Price line","default":"$80 / 50 MIN"},
+    {"id":"o1","type":"string","label":"Offer line 1","default":"In person — Broward, Palm Beach, Miami-Dade"},
+    {"id":"o2","type":"string","label":"Offer line 2","default":"Or via Zoom, anywhere"},
+    {"id":"o3","type":"string","label":"Offer line 3","default":"Discounts for veterans and packages"},
+    {"id":"cta","type":"string","label":"End CTA","default":"SIGN UP TODAY"},
+    {"id":"bar","type":"string","label":"Bottom bar","default":"Voice Lessons with Malachias"}
+  ]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Voice Lessons with Malachias — Reel</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700&display=swap" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+      body { font-family: "Inter", system-ui, sans-serif; color: #e8ddd0; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; }
+      .clip { position: absolute; inset: 0; overflow: hidden; }
+      .bg { position: absolute; inset: 0; background: linear-gradient(160deg, #020202 0%, #0a0602 55%, #030202 100%); }
+      .photo { position: absolute; inset: -6%; width: 112%; height: 112%; object-fit: cover; object-position: center 30%; filter: contrast(1.05) saturate(0.7) brightness(0.7); }
+      .shade { position: absolute; inset: 0; background: linear-gradient(to top, rgba(3,2,2,0.98) 0%, rgba(3,2,2,0.75) 38%, rgba(3,2,2,0.15) 70%, rgba(3,2,2,0.6) 100%); }
+      .glow { position: absolute; left: 50%; top: 42%; width: 900px; height: 900px; transform: translate(-50%, -50%); border-radius: 50%; background: radial-gradient(circle, rgba(120,60,10,0.45) 0%, rgba(120,60,10,0) 68%); }
+      .display { font-family: "Bebas Neue", sans-serif; font-weight: 400; letter-spacing: 0.04em; line-height: 1; color: #ede5d8; }
+      .gold { color: #c9a84c; }
+      .eyebrow { font-family: "Inter", sans-serif; font-weight: 700; font-size: 30px; letter-spacing: 0.36em; text-transform: uppercase; color: #c9a84c; }
+      .body { font-family: "Inter", sans-serif; font-size: 40px; line-height: 1.5; color: #c7bba9; }
+      .stack { position: absolute; left: 90px; right: 90px; }
+      .line { display: block; }
+      .card { position: absolute; left: 50%; width: 700px; height: 740px; transform: translateX(-50%); overflow: hidden; border: 1px solid rgba(201,168,76,0.35); background: #0a0806; }
+      .card img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; filter: contrast(1.06) saturate(0.75) brightness(0.9); }
+      .card .cap { position: absolute; left: 0; right: 0; bottom: 0; padding: 22px 26px; background: linear-gradient(to top, rgba(3,2,2,0.95), rgba(3,2,2,0)); font-family: "Inter", sans-serif; font-weight: 700; font-size: 22px; letter-spacing: 0.22em; text-transform: uppercase; color: #c9a84c; }
+      .bar { position: absolute; left: 0; right: 0; bottom: 0; height: 120px; display: flex; align-items: center; justify-content: center; gap: 22px; border-top: 1px solid rgba(201,168,76,0.28); background: rgba(2,2,2,0.82); }
+      .bar span { font-family: "Inter", sans-serif; font-weight: 700; font-size: 26px; letter-spacing: 0.32em; text-transform: uppercase; color: #c9a84c; }
+      .bar i { width: 6px; height: 6px; border-radius: 50%; background: #c9a84c; display: block; }
+      .path { display: grid; grid-template-columns: 90px 1fr; align-items: center; gap: 26px; padding: 26px 0; border-top: 1px solid rgba(201,168,76,0.22); }
+      .path .n { font-family: "Bebas Neue", sans-serif; font-size: 84px; color: rgba(201,168,76,0.55); line-height: 1; }
+      .path .t { font-family: "Bebas Neue", sans-serif; font-size: 78px; letter-spacing: 0.05em; color: #ede5d8; line-height: 1; }
+      .path .s { font-family: "Inter", sans-serif; font-size: 30px; color: #a89880; margin-top: 8px; }
+      .offer { font-family: "Inter", sans-serif; font-size: 38px; color: #c7bba9; display: grid; grid-template-columns: 24px 1fr; gap: 20px; align-items: baseline; padding: 18px 0; border-top: 1px solid rgba(201,168,76,0.22); }
+      .offer i { display: block; width: 12px; height: 12px; border-radius: 50%; background: #c9a84c; transform: translateY(-4px); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="30" data-width="1080" data-height="1920">
+
+      <!-- 1 · open (0–3.5) -->
+      <section id="s1" class="clip" data-track-index="1" data-start="0" data-duration="3.5">
+        <div class="bg"></div>
+        <div id="s1-glow" class="glow"></div>
+        <div id="s1-emblem" style="position:absolute; left:50%; top:30%; width:760px; height:507px; transform:translate(-50%,-50%);">
+          <img src="assets/emblem.png" alt="" style="width:100%; height:100%; object-fit:contain; display:block; mix-blend-mode:screen;" />
+        </div>
+        <div class="stack" style="top:1080px; text-align:center;">
+          <div id="s1-eye" class="eyebrow" data-var-text="eye1">Malachias · Coral Springs, Florida</div>
+          <div id="s1-title" class="display" data-layout-allow-overlap style="font-size:160px; margin-top:26px;">
+            <span class="line" data-var-text="t1a">VOICE LESSONS</span>
+            <span class="line gold" data-var-text="t1b">WITH MALACHIAS</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2 · the coach (3.5–9) -->
+      <section id="s2" class="clip" data-track-index="2" data-start="3.5" data-duration="5.5">
+        <div class="bg"></div>
+        <div class="glow" style="top:34%; opacity:0.8;"></div>
+        <div id="s2-card" class="card" style="top:190px;">
+          <img src="assets/founder-card.jpg" alt="" />
+          <div class="cap" data-var-text="cap2">Malachias · Iraq · Kuwait · Dubai · China · Ireland</div>
+        </div>
+        <div class="stack" style="top:1040px;">
+          <div id="s2-eye" class="eyebrow" data-var-text="eye2">Vocal · Style · Stage presence</div>
+          <div id="s2-title" class="display" data-layout-allow-overlap style="font-size:138px; margin-top:26px;">
+            <span class="line" data-var-text="t2a">LEARN TO SING</span>
+            <span class="line gold" data-var-text="t2b">LIKE YOU MEAN IT.</span>
+          </div>
+          <div id="s2-body" class="body" data-var-text="b2" style="margin-top:30px; max-width:880px;">International touring artist. Former Nashville recording artist. Over 30 years on stage.</div>
+        </div>
+      </section>
+
+      <!-- 3 · live (9–13.5) -->
+      <section id="s3" class="clip" data-track-index="3" data-start="9" data-duration="4.5">
+        <div class="bg"></div>
+        <img id="s3-photo" class="photo" data-layout-allow-overflow src="assets/founder-card-2.jpg" alt="" />
+        <div class="shade"></div>
+        <div class="stack" style="top:1080px;">
+          <div id="s3-title" class="display" data-var-text="t3" style="font-size:132px;">THIRTY YEARS OF STAGES.</div>
+          <div id="s3-body" class="body" data-var-text="b3" style="margin-top:30px; max-width:880px;">From VFW halls to overseas bases. He learned from the best in the industry — now he teaches it.</div>
+        </div>
+      </section>
+
+      <!-- 4 · what you work on (13.5–19.5) -->
+      <section id="s4" class="clip" data-track-index="4" data-start="13.5" data-duration="6">
+        <div class="bg"></div>
+        <div class="glow" style="top:30%; opacity:0.7;"></div>
+        <div class="stack" style="top:300px;">
+          <div id="s4-eye" class="eyebrow" data-var-text="eye4">What you work on</div>
+          <div id="s4-title" class="display" data-layout-allow-overlap style="font-size:150px; margin-top:26px;">
+            <span class="line" data-var-text="t4a">VOICE. STYLE.</span>
+            <span class="line gold" data-var-text="t4b">THE ROOM.</span>
+          </div>
+          <div style="margin-top:70px;">
+            <div id="s4-p1" class="path"><div class="n">1</div><div><div class="t" data-var-text="p1t">VOCAL TECHNIQUE</div><div class="s" data-var-text="p1s">Breath, range, tone, control</div></div></div>
+            <div id="s4-p2" class="path"><div class="n">2</div><div><div class="t" data-var-text="p2t">STYLE</div><div class="s" data-var-text="p2s">Rock, country, worship — sound like you</div></div></div>
+            <div id="s4-p3" class="path" style="border-bottom:1px solid rgba(201,168,76,0.22);"><div class="n">3</div><div><div class="t" data-var-text="p3t">STAGE PRESENCE</div><div class="s" data-var-text="p3s">Your hands, your eyes, the room</div></div></div>
+          </div>
+        </div>
+        <div class="bar"><i></i><span data-var-text="bar">Voice Lessons with Malachias</span><i></i></div>
+      </section>
+
+      <!-- 5 · the offer (19.5–25) -->
+      <section id="s5" class="clip" data-track-index="5" data-start="19.5" data-duration="5.5">
+        <div class="bg"></div>
+        <div class="glow" style="top:30%; opacity:0.8;"></div>
+        <div class="stack" style="top:360px;">
+          <div id="s5-eye" class="eyebrow" data-var-text="eye5">Lessons</div>
+          <div id="s5-price" class="display gold" data-var-text="price" style="font-size:180px; margin-top:20px; white-space:nowrap;">$80 / 50 MIN</div>
+          <div style="margin-top:60px;">
+            <div id="s5-o1" class="offer"><i></i><span data-var-text="o1">In person — Broward, Palm Beach, Miami-Dade</span></div>
+            <div id="s5-o2" class="offer"><i></i><span data-var-text="o2">Or via Zoom, anywhere</span></div>
+            <div id="s5-o3" class="offer" style="border-bottom:1px solid rgba(201,168,76,0.22);"><i></i><span data-var-text="o3">Discounts for veterans and packages</span></div>
+          </div>
+        </div>
+        <div class="bar"><i></i><span data-var-text="bar">Voice Lessons with Malachias</span><i></i></div>
+      </section>
+
+      <!-- 6 · end card (25–30) -->
+      <section id="s6" class="clip" data-track-index="6" data-start="25" data-duration="5">
+        <div class="bg"></div>
+        <div class="glow" style="top:40%;"></div>
+        <div id="s6-emblem" style="position:absolute; left:50%; top:330px; width:640px; height:427px; transform:translateX(-50%);">
+          <img src="assets/emblem-end.png" alt="" style="width:100%; height:100%; object-fit:contain; display:block; mix-blend-mode:screen;" />
+        </div>
+        <div class="stack" style="top:900px; text-align:center;">
+          <div id="s6-cta" class="display" data-var-text="cta" style="font-size:150px;">SIGN UP TODAY</div>
+          <div id="s6-url" class="body" style="margin-top:40px; font-size:42px; color:#e8ddd0; font-weight:600; white-space:nowrap;">malachiasmusic.com/voice-lessons</div>
+          <div id="s6-mail" class="eyebrow" style="margin-top:26px; letter-spacing:0.2em; text-transform:none;">booking@malachiasmusic.com</div>
+        </div>
+        <div class="bar"><i></i><span data-var-text="bar">Voice Lessons with Malachias</span><i></i></div>
+      </section>
+
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      const E = "power3.out";
+      // 1
+      tl.fromTo("#s1-emblem", { opacity: 0, scale: 0.86 }, { opacity: 1, scale: 1, duration: 1.8, ease: E }, 0.1);
+      tl.fromTo("#s1-glow", { opacity: 0 }, { opacity: 1, duration: 2.0, ease: "sine.out" }, 0);
+      tl.fromTo("#s1-eye", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8, ease: E }, 0.8);
+      tl.fromTo("#s1-title .line", { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.9, ease: E, stagger: 0.18 }, 1.0);
+      tl.to(["#s1-emblem", "#s1-eye", "#s1-title"], { opacity: 0, duration: 0.45, ease: "sine.in" }, 3.05);
+      tl.set(["#s1-emblem", "#s1-eye", "#s1-title"], { opacity: 0 }, 3.5);
+      // 2
+      tl.fromTo("#s2-card", { opacity: 0, y: 40, scale: 0.96 }, { opacity: 1, y: 0, scale: 1, duration: 1.0, ease: E }, 3.6);
+      tl.fromTo("#s2-eye", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.7, ease: E }, 4.0);
+      tl.fromTo("#s2-title .line", { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.9, ease: E, stagger: 0.18 }, 4.2);
+      tl.fromTo("#s2-body", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.8, ease: E }, 5.0);
+      // 3
+      tl.fromTo("#s3-photo", { scale: 1.0 }, { scale: 1.08, duration: 4.5, ease: "none" }, 9);
+      tl.fromTo("#s3-title", { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.9, ease: E }, 9.3);
+      tl.fromTo("#s3-body", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.8, ease: E }, 9.9);
+      // 4
+      tl.fromTo("#s4-eye", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.7, ease: E }, 13.7);
+      tl.fromTo("#s4-title .line", { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.9, ease: E, stagger: 0.18 }, 13.9);
+      tl.fromTo(["#s4-p1", "#s4-p2", "#s4-p3"], { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.8, ease: E, stagger: 0.5 }, 14.8);
+      // 5
+      tl.fromTo("#s5-eye", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.7, ease: E }, 19.7);
+      tl.fromTo("#s5-price", { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.9, ease: E }, 19.9);
+      tl.fromTo(["#s5-o1", "#s5-o2", "#s5-o3"], { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.8, ease: E, stagger: 0.45 }, 20.7);
+      // 6
+      tl.fromTo("#s6-emblem", { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 1.0, ease: E }, 25.1);
+      tl.fromTo("#s6-cta", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.9, ease: E }, 25.5);
+      tl.fromTo(["#s6-url", "#s6-mail"], { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8, ease: E, stagger: 0.2 }, 26.1);
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
