@@ -1,5 +1,31 @@
 <!doctype html>
-<html lang="en" data-resolution="portrait">
+<html lang="en" data-resolution="portrait"
+  data-composition-variables='[
+    {"id":"eye1","type":"string","label":"Open eyebrow","default":"Malachias \u00b7 Veterans Day 2026"},
+    {"id":"eye2","type":"string","label":"Scene 2 eyebrow","default":"San Antonio, Texas"},
+    {"id":"t2a","type":"string","label":"Scene 2 title line 1","default":"WE GOT THE"},
+    {"id":"t2b","type":"string","label":"Scene 2 title line 2","default":"INVITATION."},
+    {"id":"b2","type":"string","label":"Scene 2 body","default":"A Veterans Day stage \u2014 for the ones who need it most."},
+    {"id":"cap2","type":"string","label":"Scene 2 caption","default":"Malachias \u00b7 Founder \u00b7 Two tours in Iraq"},
+    {"id":"eye3","type":"string","label":"Scene 3 eyebrow","default":"November 12, 2026"},
+    {"id":"t3a","type":"string","label":"Scene 3 title line 1","default":"ROAD TO"},
+    {"id":"t3b","type":"string","label":"Scene 3 title line 2","default":"SAN ANTONIO"},
+    {"id":"b3","type":"string","label":"Scene 3 body","default":"Now we build the road to bring the full band there."},
+    {"id":"t3c","type":"string","label":"Scene 3b title","default":"TWO TOURS. ONE MISSION."},
+    {"id":"b3c","type":"string","label":"Scene 3b body","default":"Music for the ones still fighting their way back."},
+    {"id":"eye4","type":"string","label":"Scene 4 eyebrow","default":"Help us bring the full band"},
+    {"id":"t4a","type":"string","label":"Scene 4 title line 1","default":"THREE WAYS"},
+    {"id":"t4b","type":"string","label":"Scene 4 title line 2","default":"TO WALK IT"},
+    {"id":"p1t","type":"string","label":"Path 1 title","default":"DONATE"},
+    {"id":"p1s","type":"string","label":"Path 1 sub","default":"Cash App \u00b7 Warfighter Gardens \u00b7 $AWarriorsGarden"},
+    {"id":"p2t","type":"string","label":"Path 2 title","default":"BUY MERCH"},
+    {"id":"p2s","type":"string","label":"Path 2 sub","default":"Wear the mission \u2014 every piece moves the road"},
+    {"id":"p3t","type":"string","label":"Path 3 title","default":"SPONSOR"},
+    {"id":"p3s","type":"string","label":"Path 3 sub","default":"Businesses, churches, veteran-owned companies"},
+    {"id":"eye5","type":"string","label":"End eyebrow","default":"Support through Cash App"},
+    {"id":"date5","type":"string","label":"End date line","default":"November 12 \u00b7 San Antonio, TX"},
+    {"id":"bar","type":"string","label":"Bottom bar","default":"Road to San Antonio"}
+  ]'>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
@@ -23,6 +49,9 @@
       .rule { width: 180px; height: 3px; background: linear-gradient(90deg, #c9a84c, rgba(201,168,76,0)); transform-origin: left center; }
       .stack { position: absolute; left: 90px; right: 90px; }
       .line { display: block; }
+      .card { position: absolute; left: 50%; width: 700px; height: 740px; transform: translateX(-50%); overflow: hidden; border: 1px solid rgba(201,168,76,0.35); background: #0a0806; }
+      .card img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; filter: contrast(1.06) saturate(0.75) brightness(0.9); }
+      .card .cap { position: absolute; left: 0; right: 0; bottom: 0; padding: 22px 26px; background: linear-gradient(to top, rgba(3,2,2,0.95), rgba(3,2,2,0)); font-family: "Inter", sans-serif; font-weight: 700; font-size: 24px; letter-spacing: 0.26em; text-transform: uppercase; color: #c9a84c; }
       .bar { position: absolute; left: 0; right: 0; bottom: 0; height: 120px; display: flex; align-items: center; justify-content: center; gap: 22px; border-top: 1px solid rgba(201,168,76,0.28); background: rgba(2,2,2,0.82); }
       .bar span { font-family: "Inter", sans-serif; font-weight: 700; font-size: 26px; letter-spacing: 0.32em; text-transform: uppercase; color: #c9a84c; }
       .bar i { width: 6px; height: 6px; border-radius: 50%; background: #c9a84c; display: block; }
@@ -38,68 +67,86 @@
     <div id="root" data-composition-id="main" data-start="0" data-duration="30" data-width="1080" data-height="1920">
 
       <!-- ── 1 · emblem open (0–4s) ─────────────────────────────── -->
-      <section id="s1" class="clip" data-track-index="1" data-start="0" data-duration="4">
+      <section id="s1" class="clip" data-track-index="1" data-start="0" data-duration="3.5">
         <div class="bg"></div>
         <div id="s1-glow" class="glow"></div>
         <div id="s1-emblem" style="position:absolute; left:50%; top:44%; width:880px; height:587px; transform:translate(-50%,-50%);">
           <img src="assets/emblem.png" alt="" style="width:100%; height:100%; object-fit:contain; display:block; mix-blend-mode:screen;" />
         </div>
-        <div id="s1-eyebrow" class="eyebrow" style="position:absolute; left:0; right:0; top:1290px; text-align:center;">Malachias · Veterans Day 2026</div>
+        <div id="s1-eyebrow" class="eyebrow" data-var-text="eye1" style="position:absolute; left:0; right:0; top:1290px; text-align:center;">Malachias · Veterans Day 2026</div>
       </section>
 
       <!-- ── 2 · we got the invitation (4–9s) ──────────────────── -->
-      <section id="s2" class="clip" data-track-index="2" data-start="4" data-duration="5">
+      <section id="s2" class="clip" data-track-index="2" data-start="3.5" data-duration="5">
         <div class="bg"></div>
-        <img id="s2-photo" class="photo" data-layout-allow-overflow src="assets/jc-concepcion.jpg" alt="" />
-        <div class="shade"></div>
-        <div class="stack" style="top:1080px;">
-          <div id="s2-eye" class="eyebrow">San Antonio, Texas</div>
-          <div id="s2-title" class="display" data-layout-allow-overlap style="font-size:170px; margin-top:28px;">
-            <span class="line">WE GOT THE</span>
-            <span class="line gold">INVITATION.</span>
+        <div class="glow" style="top:34%; opacity:0.8;"></div>
+        <div id="s2-card" class="card" style="top:190px;">
+          <img src="assets/founder-card.jpg" alt="" />
+          <div class="cap" data-var-text="cap2">Malachias · Founder · Two tours in Iraq</div>
+        </div>
+        <div class="stack" style="top:1040px;">
+          <div id="s2-eye" class="eyebrow" data-var-text="eye2">San Antonio, Texas</div>
+          <div id="s2-title" class="display" data-layout-allow-overlap style="font-size:150px; margin-top:26px;">
+            <span class="line" data-var-text="t2a">WE GOT THE</span>
+            <span class="line gold" data-var-text="t2b">INVITATION.</span>
           </div>
-          <div id="s2-body" class="body" style="margin-top:34px; max-width:860px;">A Veterans Day stage — for the ones who need it most.</div>
+          <div id="s2-body" class="body" data-var-text="b2" style="margin-top:30px; max-width:880px;">A Veterans Day stage — for the ones who need it most.</div>
         </div>
       </section>
 
       <!-- ── 3 · road to San Antonio (9–15s) ───────────────────── -->
-      <section id="s3" class="clip" data-track-index="3" data-start="9" data-duration="6">
+      <section id="s3" class="clip" data-track-index="3" data-start="8.5" data-duration="6">
         <div class="bg"></div>
-        <img id="s3-photo-a" class="photo" data-layout-allow-overflow src="assets/efrain-rhytms.jpg" alt="" />
-        <img id="s3-photo-b" class="photo" data-layout-allow-overflow src="assets/gabe-bass.jpg" alt="" />
+        <img id="s3-photo-a" class="photo" data-layout-allow-overflow src="assets/band-2026.jpg" alt="" style="object-position: center 35%;" />
+        <img id="s3-photo-b" class="photo" data-layout-allow-overflow src="assets/jc-concepcion.jpg" alt="" />
+        <img id="s3-photo-c" class="photo" data-layout-allow-overflow src="assets/efrain-rhytms.jpg" alt="" />
         <div class="shade"></div>
         <div class="stack" style="top:980px;">
-          <div id="s3-eye" class="eyebrow">November 12, 2026</div>
+          <div id="s3-eye" class="eyebrow" data-var-text="eye3">November 12, 2026</div>
           <div id="s3-title" class="display" data-layout-allow-overlap style="font-size:210px; margin-top:24px;">
-            <span class="line">ROAD TO</span>
-            <span class="line gold">SAN ANTONIO</span>
+            <span class="line" data-var-text="t3a">ROAD TO</span>
+            <span class="line gold" data-var-text="t3b">SAN ANTONIO</span>
           </div>
           <div id="s3-rule" class="rule" style="margin-top:36px;"></div>
-          <div id="s3-body" class="body" style="margin-top:30px; max-width:880px;">Now we build the road to bring the full band there.</div>
+          <div id="s3-body" class="body" data-var-text="b3" style="margin-top:30px; max-width:880px;">Now we build the road to bring the full band there.</div>
         </div>
+      </section>
+
+      <!-- ── 3b · two tours, one mission — live shot (14.5–17.5s) ── -->
+      <section id="s3b" class="clip" data-track-index="4" data-start="14.5" data-duration="3">
+        <div class="bg"></div>
+        <div class="glow" style="top:34%; opacity:0.8;"></div>
+        <div id="s3b-card" class="card" style="top:190px; height:700px;">
+          <img src="assets/founder-card-2.jpg" alt="" style="object-position: center 30%;" />
+        </div>
+        <div class="stack" style="top:1000px; text-align:center;">
+          <div id="s3b-title" class="display" data-var-text="t3c" style="font-size:118px;">TWO TOURS. ONE MISSION.</div>
+          <div id="s3b-body" class="body" data-var-text="b3c" style="margin-top:26px;">Music for the ones still fighting their way back.</div>
+        </div>
+        <div class="bar"><i></i><span data-var-text="bar">Road to San Antonio</span><i></i></div>
       </section>
 
       <!-- ── 4 · three ways (15–22s) ───────────────────────────── -->
-      <section id="s4" class="clip" data-track-index="4" data-start="15" data-duration="7">
+      <section id="s4" class="clip" data-track-index="5" data-start="17.5" data-duration="6">
         <div class="bg"></div>
         <div class="glow" style="top:30%; opacity:0.7;"></div>
         <div class="stack" style="top:300px;">
-          <div id="s4-eye" class="eyebrow">Help us bring the full band</div>
+          <div id="s4-eye" class="eyebrow" data-var-text="eye4">Help us bring the full band</div>
           <div id="s4-title" class="display" data-layout-allow-overlap style="font-size:150px; margin-top:26px;">
-            <span class="line">THREE WAYS</span>
-            <span class="line gold">TO WALK IT</span>
+            <span class="line" data-var-text="t4a">THREE WAYS</span>
+            <span class="line gold" data-var-text="t4b">TO WALK IT</span>
           </div>
           <div style="margin-top:70px;">
-            <div id="s4-p1" class="path"><div class="n">1</div><div><div class="t">DONATE</div><div class="s">Cash App · Warfighter Gardens · $AWarriorsGarden</div></div></div>
-            <div id="s4-p2" class="path"><div class="n">2</div><div><div class="t">BUY MERCH</div><div class="s">Wear the mission — every piece moves the road</div></div></div>
-            <div id="s4-p3" class="path" style="border-bottom:1px solid rgba(201,168,76,0.22);"><div class="n">3</div><div><div class="t">SPONSOR</div><div class="s">Businesses, churches, veteran-owned companies</div></div></div>
+            <div id="s4-p1" class="path"><div class="n">1</div><div><div class="t" data-var-text="p1t">DONATE</div><div class="s" data-var-text="p1s">Cash App · Warfighter Gardens · $AWarriorsGarden</div></div></div>
+            <div id="s4-p2" class="path"><div class="n">2</div><div><div class="t" data-var-text="p2t">BUY MERCH</div><div class="s" data-var-text="p2s">Wear the mission — every piece moves the road</div></div></div>
+            <div id="s4-p3" class="path" style="border-bottom:1px solid rgba(201,168,76,0.22);"><div class="n">3</div><div><div class="t" data-var-text="p3t">SPONSOR</div><div class="s" data-var-text="p3s">Businesses, churches, veteran-owned companies</div></div></div>
           </div>
         </div>
-        <div class="bar"><i></i><span>Road to San Antonio</span><i></i></div>
+        <div class="bar"><i></i><span data-var-text="bar">Road to San Antonio</span><i></i></div>
       </section>
 
       <!-- ── 5 · end card (22–30s) ─────────────────────────────── -->
-      <section id="s5" class="clip" data-track-index="5" data-start="22" data-duration="8">
+      <section id="s5" class="clip" data-track-index="6" data-start="23.5" data-duration="6.5">
         <div class="bg"></div>
         <div class="glow" style="top:36%;"></div>
         <div id="s5-emblem" style="position:absolute; left:50%; top:150px; width:520px; height:347px; transform:translateX(-50%);">
@@ -109,13 +156,13 @@
           <img src="assets/cashapp-qr.jpg" alt="" />
         </div>
         <div class="stack" style="top:1140px; text-align:center;">
-          <div id="s5-eye" class="eyebrow">Support through Cash App</div>
+          <div id="s5-eye" class="eyebrow" data-var-text="eye5">Support through Cash App</div>
           <div id="s5-name" class="display" style="font-size:96px; margin-top:22px;">WARFIGHTER GARDENS</div>
           <div id="s5-tag" style="font-family:'JetBrains Mono', monospace; font-size:56px; color:#c9a84c; margin-top:10px;">$AWarriorsGarden</div>
           <div id="s5-url" class="body" style="margin-top:56px; font-size:38px; color:#e8ddd0; font-weight:600; white-space:nowrap;">malachiasmusic.com/road-to-san-antonio</div>
-          <div id="s5-date" class="eyebrow" style="margin-top:28px; letter-spacing:0.24em;">November 12 · San Antonio, TX</div>
+          <div id="s5-date" class="eyebrow" data-var-text="date5" style="margin-top:28px; letter-spacing:0.24em;">November 12 · San Antonio, TX</div>
         </div>
-        <div class="bar"><i></i><span>Road to San Antonio</span><i></i></div>
+        <div class="bar"><i></i><span data-var-text="bar">Road to San Antonio</span><i></i></div>
       </section>
 
     </div>
@@ -125,40 +172,48 @@
       const tl = gsap.timeline({ paused: true });
       const E = "power3.out";
 
-      // 1 · emblem
-      tl.fromTo("#s1-emblem", { opacity: 0, scale: 0.86 }, { opacity: 1, scale: 1, duration: 2.2, ease: E }, 0.1);
-      tl.fromTo("#s1-glow", { opacity: 0 }, { opacity: 1, duration: 2.5, ease: "sine.out" }, 0);
-      tl.fromTo("#s1-eyebrow", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 1.0, ease: E }, 1.2);
-      tl.to("#s1-emblem", { scale: 1.06, duration: 1.6, ease: "sine.inOut" }, 2.4);
-      tl.to(["#s1-emblem", "#s1-eyebrow"], { opacity: 0, duration: 0.5, ease: "sine.in" }, 3.5);
-      tl.set(["#s1-emblem", "#s1-eyebrow"], { opacity: 0 }, 4.0);
+      // 1 · emblem (0–3.5)
+      tl.fromTo("#s1-emblem", { opacity: 0, scale: 0.86 }, { opacity: 1, scale: 1, duration: 2.0, ease: E }, 0.1);
+      tl.fromTo("#s1-glow", { opacity: 0 }, { opacity: 1, duration: 2.2, ease: "sine.out" }, 0);
+      tl.fromTo("#s1-eyebrow", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.9, ease: E }, 1.0);
+      tl.to("#s1-emblem", { scale: 1.06, duration: 1.4, ease: "sine.inOut" }, 2.0);
+      tl.to(["#s1-emblem", "#s1-eyebrow"], { opacity: 0, duration: 0.45, ease: "sine.in" }, 3.05);
+      tl.set(["#s1-emblem", "#s1-eyebrow"], { opacity: 0 }, 3.5);
 
-      // 2 · invitation (clip starts at 4)
-      tl.fromTo("#s2-photo", { scale: 1.0 }, { scale: 1.08, duration: 5, ease: "none" }, 4);
-      tl.fromTo("#s2-eye", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.7, ease: E }, 4.2);
-      tl.fromTo("#s2-title .line", { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.9, ease: E, stagger: 0.18 }, 4.45);
-      tl.fromTo("#s2-body", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.8, ease: E }, 5.3);
+      // 2 · founder card (3.5–8.5)
+      tl.fromTo("#s2-card", { opacity: 0, y: 40, scale: 0.96 }, { opacity: 1, y: 0, scale: 1, duration: 1.0, ease: E }, 3.6);
+      tl.fromTo("#s2-eye", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.7, ease: E }, 4.0);
+      tl.fromTo("#s2-title .line", { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.9, ease: E, stagger: 0.18 }, 4.2);
+      tl.fromTo("#s2-body", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.8, ease: E }, 5.0);
 
-      // 3 · road to San Antonio (clip starts at 9)
-      tl.fromTo("#s3-photo-a", { scale: 1.0 }, { scale: 1.08, duration: 3.2, ease: "none" }, 9);
-      tl.fromTo("#s3-photo-b", { opacity: 0, scale: 1.0 }, { opacity: 1, scale: 1.0, duration: 0.9, ease: "sine.inOut" }, 12);
-      tl.to("#s3-photo-b", { scale: 1.08, duration: 3.0, ease: "none" }, 12);
-      tl.to("#s3-photo-a", { opacity: 0, duration: 0.9, ease: "sine.inOut" }, 12);
-      tl.fromTo("#s3-eye", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.7, ease: E }, 9.2);
-      tl.fromTo("#s3-title .line", { opacity: 0, y: 70 }, { opacity: 1, y: 0, duration: 1.0, ease: E, stagger: 0.2 }, 9.45);
-      tl.fromTo("#s3-rule", { scaleX: 0 }, { scaleX: 1, duration: 1.0, ease: E }, 10.2);
-      tl.fromTo("#s3-body", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.8, ease: E }, 10.5);
+      // 3 · the band (8.5–14.5) — three photos, two seconds each
+      tl.fromTo("#s3-photo-a", { scale: 1.0 }, { scale: 1.07, duration: 2.6, ease: "none" }, 8.5);
+      tl.fromTo("#s3-photo-b", { opacity: 0 }, { opacity: 1, duration: 0.7, ease: "sine.inOut" }, 10.4);
+      tl.fromTo("#s3-photo-b", { scale: 1.0 }, { scale: 1.07, duration: 2.6, ease: "none" }, 10.4);
+      tl.to("#s3-photo-a", { opacity: 0, duration: 0.7, ease: "sine.inOut" }, 10.4);
+      tl.fromTo("#s3-photo-c", { opacity: 0 }, { opacity: 1, duration: 0.7, ease: "sine.inOut" }, 12.4);
+      tl.fromTo("#s3-photo-c", { scale: 1.0 }, { scale: 1.07, duration: 2.2, ease: "none" }, 12.4);
+      tl.to("#s3-photo-b", { opacity: 0, duration: 0.7, ease: "sine.inOut" }, 12.4);
+      tl.fromTo("#s3-eye", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.7, ease: E }, 8.7);
+      tl.fromTo("#s3-title .line", { opacity: 0, y: 70 }, { opacity: 1, y: 0, duration: 1.0, ease: E, stagger: 0.2 }, 8.95);
+      tl.fromTo("#s3-rule", { scaleX: 0 }, { scaleX: 1, duration: 1.0, ease: E }, 9.7);
+      tl.fromTo("#s3-body", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.8, ease: E }, 10.0);
 
-      // 4 · three ways (clip starts at 15)
-      tl.fromTo("#s4-eye", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.7, ease: E }, 15.2);
-      tl.fromTo("#s4-title .line", { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.9, ease: E, stagger: 0.18 }, 15.4);
-      tl.fromTo(["#s4-p1", "#s4-p2", "#s4-p3"], { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.8, ease: E, stagger: 0.55 }, 16.4);
+      // 3b · live shot (14.5–17.5)
+      tl.fromTo("#s3b-card", { opacity: 0, scale: 0.96 }, { opacity: 1, scale: 1, duration: 0.9, ease: E }, 14.6);
+      tl.fromTo("#s3b-title", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.8, ease: E }, 14.9);
+      tl.fromTo("#s3b-body", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.7, ease: E }, 15.3);
 
-      // 5 · end card (clip starts at 22)
-      tl.fromTo("#s5-emblem", { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 1.0, ease: E }, 22.1);
-      tl.fromTo("#s5-qr", { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.9, ease: E }, 22.5);
-      tl.fromTo(["#s5-eye", "#s5-name", "#s5-tag"], { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.8, ease: E, stagger: 0.18 }, 23.0);
-      tl.fromTo(["#s5-url", "#s5-date"], { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8, ease: E, stagger: 0.2 }, 24.0);
+      // 4 · three ways (17.5–23.5)
+      tl.fromTo("#s4-eye", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.7, ease: E }, 17.7);
+      tl.fromTo("#s4-title .line", { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.9, ease: E, stagger: 0.18 }, 17.9);
+      tl.fromTo(["#s4-p1", "#s4-p2", "#s4-p3"], { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.8, ease: E, stagger: 0.5 }, 18.8);
+
+      // 5 · end card (23.5–30)
+      tl.fromTo("#s5-emblem", { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 1.0, ease: E }, 23.6);
+      tl.fromTo("#s5-qr", { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.9, ease: E }, 24.0);
+      tl.fromTo(["#s5-eye", "#s5-name", "#s5-tag"], { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.8, ease: E, stagger: 0.18 }, 24.5);
+      tl.fromTo(["#s5-url", "#s5-date"], { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8, ease: E, stagger: 0.2 }, 25.5);
 
       window.__timelines["main"] = tl;
     </script>
