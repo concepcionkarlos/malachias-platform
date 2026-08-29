@@ -137,8 +137,8 @@ export const CAMPAIGN: CampaignConfig = {
   ],
 }
 
-// Suggested contribution anchors. They are not products and they do not preload
-// Cash App — the copy on the page says so.
+// Suggested contribution anchors. Each one links to `cash.app/$cashtag/<amount>`
+// (see cashAppPayUrl); Cash App fills the amount in where the app supports it.
 export const DONATION_LEVELS = [
   { amount: 10,  label: 'Supporter' },
   { amount: 25,  label: 'Road Crew' },
@@ -248,6 +248,12 @@ export const usd = (n: number) =>
 export function formatEventDate(iso: string): string {
   const [y, m, d] = iso.split('-').map(Number)
   return new Date(Date.UTC(y, m - 1, d)).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' })
+}
+
+/** Public pay link; with an amount, Cash App's `$cashtag/<amount>` form (the app fills the amount in where supported). */
+export function cashAppPayUrl(cashApp: Pick<CashAppInfo, 'url'>, amount?: number): string {
+  const base = cashApp.url.replace(/\/$/, '')
+  return amount && amount > 0 ? `${base}/${Math.round(amount)}` : base
 }
 
 export function campaignUrl(siteUrl: string): string {
