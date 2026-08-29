@@ -2,6 +2,8 @@
 // (revalidated every 5 min) and hands it to the MerchPageClient for display.
 import type { Metadata } from 'next';
 import { fetchFWProducts } from '@/lib/fourthwall';
+import { getCampaign, getCampaignProducts } from '@/lib/campaignServer';
+import { campaignMath } from '@/lib/campaign';
 import MerchPageClient from './MerchPageClient';
 
 export const revalidate = 300;  // Re-fetch Fourthwall catalog every 5 minutes
@@ -19,6 +21,11 @@ export const metadata: Metadata = {
 };
 
 export default async function MerchPage() {
-  const products = await fetchFWProducts();
-  return <MerchPageClient products={products} />;
+  const [products, campaign] = await Promise.all([fetchFWProducts(), getCampaign()]);
+  const stats = campaignMath(campaign.config);
+  const live = stats.effectiveStatus === 'active' || stats.effectiveStatus === 'funded';
+  const strip = live
+    ? { name: campaign.config.title, eyebrow: campaign.config.eyebrow, path: campaign.config.path, products: await getCampaignProducts(campaign.config) }
+    : undefined;
+  return <MerchPageClient products={products} campaign={strip} />;
 }

@@ -2,7 +2,8 @@
 
 // Client component for /merch: the store front. Renders the product grid with
 // search + category filtering (sorted cheapest-first), an impact/"where it goes"
-// strip, and empty/no-products fallbacks; links each card to its detail page.
+// strip, an optional campaign strip (Road to San Antonio collection, or a link to
+// the campaign while the collection is empty), and empty/no-products fallbacks.
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
@@ -138,7 +139,9 @@ function ProductCard({ product, index }: { product: FWProduct; index: number }) 
   );
 }
 
-export default function MerchPageClient({ products }: { products: FWProduct[] }) {
+export interface CampaignStrip { name: string; eyebrow: string; path: string; products: FWProduct[] }
+
+export default function MerchPageClient({ products, campaign }: { products: FWProduct[]; campaign?: CampaignStrip }) {
   const [query, setQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState('All');
 
@@ -230,6 +233,34 @@ export default function MerchPageClient({ products }: { products: FWProduct[] })
             </div>
           ))}
         </motion.div>
+
+        {/* ── Campaign strip — Road to San Antonio ───────────────────── */}
+        {campaign && (
+          <motion.section
+            {...fade(0.08)}
+            id="road-to-san-antonio"
+            aria-label={campaign.name}
+            style={{ marginBottom: '3.5rem', border: '1px solid rgba(201,168,76,0.30)', padding: '1.4rem 1.5rem', background: 'rgba(201,168,76,0.04)', scrollMarginTop: 80 }}
+          >
+            <p style={{ margin: '0 0 0.35rem', fontSize: '0.6rem', letterSpacing: '0.36em', color: GOLD, textTransform: 'uppercase' }}>{campaign.eyebrow}</p>
+            <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'baseline', justifyContent: 'space-between', gap: '0.75rem' }}>
+              <h2 className="font-display" style={{ margin: 0, fontSize: 'clamp(1.6rem, 4vw, 2.4rem)', letterSpacing: '0.05em', color: '#e8ddd0', lineHeight: 1 }}>
+                {campaign.products.length > 0 ? 'LIMITED ROAD TO SAN ANTONIO MERCH' : 'WEAR THE MISSION — ROAD TO SAN ANTONIO'}
+              </h2>
+              <Link href={campaign.path} style={{ fontSize: '0.64rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: GOLD, textDecoration: 'none' }}>The campaign →</Link>
+            </div>
+            <p style={{ margin: '0.6rem 0 0', fontSize: '0.86rem', color: '#8a7f70', lineHeight: 1.7, maxWidth: '40rem' }}>
+              {campaign.products.length > 0
+                ? "Every purchase helps support Malachias' journey to Veterans Day 2026 in San Antonio."
+                : "Limited campaign pieces are in production. Until they drop, every purchase below helps support the journey to Veterans Day 2026 in San Antonio."}
+            </p>
+            {campaign.products.length > 0 && (
+              <div className="grid grid-cols-2 sm:grid-cols-4" style={{ gap: '0.75rem', marginTop: '1.25rem' }}>
+                {campaign.products.slice(0, 4).map((p, i) => <ProductCard key={p.id} product={p} index={i} />)}
+              </div>
+            )}
+          </motion.section>
+        )}
 
         {hasProducts ? (
           <>
