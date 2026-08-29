@@ -138,7 +138,7 @@ export const CAMPAIGN: CampaignConfig = {
 }
 
 // Suggested contribution anchors. Each one links to `cash.app/$cashtag/<amount>`
-// (see cashAppPayUrl); Cash App fills the amount in where the app supports it.
+// (see cashAppPayUrl); Cash App opens with the amount filled in (verified on iPhone, 2026-08-29).
 export const DONATION_LEVELS = [
   { amount: 10,  label: 'Supporter' },
   { amount: 25,  label: 'Road Crew' },
@@ -250,7 +250,7 @@ export function formatEventDate(iso: string): string {
   return new Date(Date.UTC(y, m - 1, d)).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' })
 }
 
-/** Public pay link; with an amount, Cash App's `$cashtag/<amount>` form (the app fills the amount in where supported). */
+/** Public pay link; with an amount, Cash App's `$cashtag/<amount>` form — the app opens with that amount filled in. */
 export function cashAppPayUrl(cashApp: Pick<CashAppInfo, 'url'>, amount?: number): string {
   const base = cashApp.url.replace(/\/$/, '')
   return amount && amount > 0 ? `${base}/${Math.round(amount)}` : base

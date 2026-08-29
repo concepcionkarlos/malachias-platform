@@ -132,7 +132,7 @@ export default function DonateSection({ config, qrReady }: Props) {
                 </li>
               </ul>
               <p className="mt-3 text-[0.72rem]" style={{ color: 'var(--text-2)' }}>
-                Each amount opens Cash App with that amount in the link. If Cash App doesn&apos;t fill it in on your phone, type it — any amount helps.
+                Each amount opens Cash App with that amount ready to send — just confirm. Any amount helps.
               </p>
             </div>
           </div>
