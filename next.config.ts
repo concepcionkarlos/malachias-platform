@@ -13,6 +13,10 @@ const nextConfig: NextConfig = {
   async headers() {
     return [{ source: '/(.*)', headers: SECURITY_HEADERS }]
   },
+  async redirects() {
+    // Both campaign names resolve to the one page
+    return [{ source: '/veterans-day-2026', destination: '/road-to-san-antonio', permanent: false }]
+  },
   reactCompiler: true,
   poweredByHeader: false,
   compress: true,

@@ -236,6 +236,17 @@ export async function fetchFWProduct(slugOrId: string): Promise<FWProduct | null
   return { ...raw, url: buildProductUrl(shop, raw.slug) }
 }
 
+/** Products in one collection by slug — [] when the collection doesn't exist yet. */
+export async function fetchFWCollectionProducts(slug: string): Promise<FWProduct[]> {
+  if (!slug) return []
+  const [page, shop] = await Promise.all([
+    fwFetch<{ results: FWProduct[]; paging: FWPaging }>(`/v1/collections/${encodeURIComponent(slug)}/products?limit=100`),
+    fetchShop(),
+  ])
+  if (!page) return []
+  return page.results.map(p => ({ ...p, url: buildProductUrl(shop, p.slug) }))
+}
+
 export async function fetchFWCollections(): Promise<FWCollection[]> {
   const data = await fwFetch<{ results: FWCollection[] }>('/v1/collections')
   return data?.results ?? []

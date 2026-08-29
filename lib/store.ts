@@ -6,6 +6,7 @@
 import fs from 'fs'
 import path from 'path'
 import type { Show, MerchItem, BandMember, SiteContent, MediaItem, EpkContent, BookingRequest, AdminNote, Subscriber, BandTask, SongStory, DailyReflection, FanStory } from './data'
+import type { CampaignOverrides, Sponsor, CampaignUpdate, SponsorInquiry } from './campaign'
 import {
   shows as defaultShows,
   merch as defaultMerch,
@@ -35,6 +36,11 @@ export interface ContentStore {
   fanStories: FanStory[]
   adminNotes?: AdminNote[]
   monthlyGoal?: { month: string; bookingTarget: number; revenueTarget: number }
+  // Road to San Antonio (Veterans Day 2026) — defaults live in lib/campaign.ts
+  campaign?: CampaignOverrides
+  campaignSponsors?: Sponsor[]
+  campaignUpdates?: CampaignUpdate[]
+  sponsorInquiries?: SponsorInquiry[]
 }
 
 const DATA_PATH = path.join(process.cwd(), 'data', 'content.json')
