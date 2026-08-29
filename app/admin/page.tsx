@@ -10,7 +10,7 @@ import {
   MapPin, Settings, Newspaper, BarChart2, StickyNote, CheckSquare,
   Music, BookOpen, Zap, ListMusic, Repeat, Target, BookMarked,
   Layers, CalendarDays, DollarSign, Send, TrendingUp,
-  Menu, X, ExternalLink, LogOut, ChevronRight, Heart, Video, Megaphone, UserCheck,
+  Menu, X, ExternalLink, LogOut, ChevronRight, Heart, Video, Megaphone, UserCheck, Flag,
 } from 'lucide-react'
 import AdminLogin from './AdminLogin'
 
@@ -36,6 +36,7 @@ const SECTIONS = {
   'live-sessions': { label: 'Live Sessions',    icon: Video,           group: 'Content'     },
   finances:        { label: 'Finances',         icon: DollarSign,      group: 'Reports'     },
   campaign:        { label: 'Campaign',         icon: Megaphone,       group: 'Outreach'    },
+  'road-to-san-antonio': { label: 'Road to San Antonio', icon: Flag,   group: 'Outreach'    },
   'fan-outreach':  { label: 'Fan Outreach',     icon: UserCheck,       group: 'Outreach'    },
   'email-blast':   { label: 'Email Blast',      icon: Send,            group: 'Outreach'    },
   stats:           { label: 'Stats',            icon: TrendingUp,      group: 'Reports'     },
@@ -74,6 +75,7 @@ const SectionComponents: Record<TabKey, React.ComponentType> = {
   'live-sessions':   dynamic(() => import('./sections/AdminLiveSessions')),
   finances:          dynamic(() => import('./sections/AdminFinances')),
   campaign:          dynamic(() => import('./sections/AdminCampaign')),
+  'road-to-san-antonio': dynamic(() => import('./sections/AdminRoadToSanAntonio')),
   'fan-outreach':    dynamic(() => import('./sections/AdminFanOutreach')),
   'email-blast':     dynamic(() => import('./sections/AdminEmailBlast')),
   stats:             dynamic(() => import('./sections/AdminStats')),
