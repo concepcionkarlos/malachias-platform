@@ -29,6 +29,7 @@ import Booking      from './components/Booking';
 import Newsletter   from './components/Newsletter';
 import Footer       from './components/Footer';
 import SectionDivider from './components/SectionDivider';
+import BandTogether   from './components/BandTogether';
 import SongStories    from './components/SongStories';
 import WarRoom        from './components/WarRoom';
 import Setlist, { type PublicSong } from './components/Setlist';
@@ -142,9 +143,8 @@ export default async function Home() {
       <Testimonies stories={fanStories} />
 
       {/* ── 6. THE PEOPLE — humanize the band ────────────────────── */}
-      {/* BandTogether (group photo) is out until a photo of the current
-          four-piece exists — the old one still shows the former drummer. */}
       <Band />
+      <BandTogether />
 
       {/* ── 7. DEEP DIVE — story chapters for the invested visitor ─── */}
       <SongStories stories={songStories} />

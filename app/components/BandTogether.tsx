@@ -1,7 +1,7 @@
 'use client'
 
 // "One Band, One Mission" interstitial — a single gold-framed group photo
-// (/together.png) with band name and tagline, revealed on scroll via IntersectionObserver.
+// (/band-2026.jpg) with band name and tagline, revealed on scroll via IntersectionObserver.
 
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
@@ -74,7 +74,7 @@ export default function BandTogether() {
         }} />
 
         <Image
-          src="/together.png"
+          src="/band-2026.jpg"
           alt="Malachias — the full band together"
           width={360}
           height={360}

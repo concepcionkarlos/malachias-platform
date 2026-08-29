@@ -12,6 +12,7 @@ interface GalleryPhoto {
 }
 
 const PHOTOS: GalleryPhoto[] = [
+  { src: '/band-2026.jpg',         caption: 'Malachias — 2026'          },
   { src: '/Malachias 1.jpeg',     caption: 'Malachias — Press Photo'     },
   { src: '/malachias 2.jpeg',     caption: 'Malachias — Press Photo II'  },
   { src: '/Efrain Rhytms.PNG',    caption: 'Efrain'                      },
