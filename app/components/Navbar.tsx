@@ -24,6 +24,7 @@ const NAV: NavItem[] = [
   { label: 'Lessons',     href: '/voice-lessons' },
   { label: 'Support',     href: '/support' },
   { label: 'San Antonio', href: '/road-to-san-antonio', gold: true },
+  { label: 'ES',          href: '/es' },
 ];
 
 const SOCIAL_ICONS = [

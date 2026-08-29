@@ -48,6 +48,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: c.ogTitle ?? 'MALACHIAS — Christian Rock. Veteran Spirit. South Florida.',
     description: c.metaDescription ?? 'Malachias is a Christian rock band based in Coral Springs, South Florida, founded by a U.S. Army veteran. Bars, festivals, churches, military events — music with a mission: healing suicidal ideation, depression, and PTSD through faith.',
     keywords: c.metaKeywords ?? 'Christian rock band, veteran music, faith rock, South Florida band, Coral Springs band, Miami rock band, PTSD healing, Malachias',
+    alternates: { canonical: SITE_URL, languages: { en: SITE_URL, es: `${SITE_URL}/es` } },
     openGraph: {
       title: c.ogTitle ?? c.heroHeadline,
       description: c.ogDescription ?? c.metaDescription,
