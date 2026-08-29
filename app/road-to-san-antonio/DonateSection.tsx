@@ -68,7 +68,7 @@ export default function DonateSection({ config, qrReady }: Props) {
                 </p>
               </a>
               <p className="mt-2 text-[0.78rem]" style={{ color: 'var(--text-2)' }}>
-                Check that the name and $cashtag in Cash App match the ones above before you send.
+                {cashApp.displayName} is the Cash App account Malachias uses for this campaign. Check that the name and $cashtag in Cash App match the ones above before you send.
               </p>
             </div>
 

@@ -8,7 +8,7 @@
 
 import { useEffect, useState } from 'react'
 import { Check, Plus, Trash2, ExternalLink, Copy } from 'lucide-react'
-import { OUTREACH_TEMPLATES, SOCIAL_TEMPLATES, SOCIAL_TEMPLATES_ES, type Template } from '@/lib/campaignOutreach'
+import { OUTREACH_TEMPLATES, SOCIAL_TEMPLATES, SOCIAL_TEMPLATES_ES, DONOR_TEMPLATES, type Template } from '@/lib/campaignOutreach'
 import {
   CAMPAIGN, SPONSOR_TIERS, SPONSOR_CATEGORIES, campaignMath, usd,
   type CampaignOverrides, type CampaignStatus, type Sponsor, type CampaignUpdate, type SponsorInquiry, type SponsorTierId,
@@ -235,6 +235,13 @@ export default function AdminRoadToSanAntonio() {
             </select>
           </div>
         ))}
+      </div>
+
+      {/* ── Donor replies ── */}
+      <div style={CARD}>
+        <p style={HDR}>DONOR REPLIES — ANSWER WITHIN THE DAY</p>
+        <p style={{ fontSize: 12, color: '#8a7f70', marginTop: 0 }}>Cash App shows who sent it. Thank them by name (Cash App note, DM or text), then ask them to share. Larger gifts get the personal note.</p>
+        <TemplateList items={DONOR_TEMPLATES} copiedKey={copiedKey} onCopy={copyTemplate} />
       </div>
 
       {/* ── Outreach templates ── */}

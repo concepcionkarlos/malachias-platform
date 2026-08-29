@@ -163,6 +163,20 @@ Negocios e iglesias: todavía hay lugar en el camino → ${SHEET}
     body: `Ayuda a Malachias a llevar a toda la banda a San Antonio para el Día de los Veteranos 2026. ${URL}` },
 ]
 
+// Replies to donors — Cash App shows the sender's name; answer within the day.
+export const DONOR_TEMPLATES: Template[] = [
+  { id: 'donor-thanks', title: 'Thank a donor (EN)', channel: 'Cash App note / DM / text',
+    body: `[Name] — thank you. Your gift just moved the Road to San Antonio forward. Every dollar goes to getting the full band to that Veterans Day stage on November 12. We'll post the progress at ${URL}. God bless. — Malachias` },
+  { id: 'donor-thanks-es', title: 'Agradecer a un donante (ES)', channel: 'Nota de Cash App / DM / texto',
+    body: `[Nombre] — gracias. Tu aporte acaba de mover el Road to San Antonio. Cada dólar va a llevar a toda la banda a ese escenario del Día de los Veteranos el 12 de noviembre. Vamos publicando el progreso en ${URL}. Dios te bendiga. — Malachias` },
+  { id: 'donor-share', title: 'Ask a donor to share (EN)', channel: 'DM / text',
+    body: `One more thing, if you're willing: sharing the campaign reaches people we can't. Here's the link and a line you can paste — "Help Malachias bring the full band to San Antonio for Veterans Day 2026. ${URL}". Thank you again.` },
+  { id: 'donor-share-es', title: 'Pedir a un donante que comparta (ES)', channel: 'DM / texto',
+    body: `Una cosa más, si puedes: compartir la campaña llega a gente a la que nosotros no llegamos. Aquí va el enlace y una frase para pegar — "Ayuda a Malachias a llevar a toda la banda a San Antonio para el Día de los Veteranos 2026. ${URL}". Gracias de nuevo.` },
+  { id: 'donor-big', title: 'Larger gift ($100+) — personal note (EN)', channel: 'Email / call',
+    body: `[Name], I saw your gift come through and I wanted to write to you myself. That's not a small thing, and it's not going unnoticed — it covers [a flight / a night of lodging / the instrument baggage] on this trip. If you'd like your name on the campaign page as a supporter, just say the word. Thank you for believing in what we do. — Malachias` },
+]
+
 export const SOCIAL_TEMPLATES: Template[] = [
   { id: 'announce', title: 'Campaign announcement', channel: 'Facebook / Instagram',
     body: `WE'RE GOING TO SAN ANTONIO.

@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Road to San Antonio — milestone card</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700&display=swap">
+<style>
+  /* Rendered to PNG at 1080×1080 (body.square) or 1080×1920 (body.story).
+     Query string: ?pct=25&raised=3000&goal=12000&days=60&lang=es&size=story */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #030202; color: #ede5d8; font-family: Inter, Arial, sans-serif; }
+  body.square .frame { width: 1080px; height: 1080px; padding: 72px; }
+  body.story .frame { width: 1080px; height: 1920px; padding: 110px 90px; }
+  body.story .z { justify-content: center; }
+  body.story .foot { margin-top: 140px; }
+  .frame { position: relative; overflow: hidden; background: linear-gradient(160deg, #020202 0%, #0a0602 55%, #030202 100%); display: flex; flex-direction: column; }
+  .glow { position: absolute; left: 50%; top: 35%; width: 1100px; height: 1100px; transform: translate(-50%, -50%); border-radius: 50%; background: radial-gradient(circle, rgba(120,60,10,0.42) 0%, rgba(120,60,10,0) 66%); }
+  .z { position: relative; z-index: 1; display: flex; flex-direction: column; height: 100%; }
+  .eyebrow { font-weight: 700; text-transform: uppercase; color: #c9a84c; letter-spacing: 0.28em; font-size: 24px; white-space: nowrap; }
+  .display { font-family: "Bebas Neue", Impact, sans-serif; letter-spacing: 0.04em; line-height: 0.92; }
+  .gold { color: #c9a84c; }
+  .pct { font-size: 300px; line-height: 0.85; margin-top: 30px; }
+  body.story .pct { font-size: 380px; }
+  .title { font-size: 92px; margin-top: 24px; }
+  body.story .title { font-size: 110px; }
+  .bar { margin-top: 44px; height: 18px; background: rgba(255,255,255,0.08); }
+  .bar i { display: block; height: 100%; background: linear-gradient(90deg, #8b6e3a, #c9a84c); }
+  .nums { display: flex; justify-content: space-between; margin-top: 18px; font-size: 26px; color: #a89880; letter-spacing: 0.1em; text-transform: uppercase; }
+  .nums b { color: #ede5d8; font-family: "Bebas Neue", Impact, sans-serif; font-size: 44px; letter-spacing: 0.04em; font-weight: 400; }
+  .body { font-size: 34px; line-height: 1.45; color: #c7bba9; margin-top: 40px; max-width: 900px; }
+  .foot { margin-top: auto; display: flex; justify-content: space-between; align-items: flex-end; gap: 30px; border-top: 1px solid rgba(201,168,76,0.3); padding-top: 26px; }
+  .foot .url { font-size: 26px; font-weight: 600; white-space: nowrap; }
+  .foot .cash { font-size: 24px; color: #a89880; margin-top: 6px; }
+  .foot .cash b { color: #c9a84c; font-family: "JetBrains Mono", Menlo, monospace; font-weight: 400; }
+  .emblem { width: 300px; height: 200px; object-fit: contain; mix-blend-mode: screen; }
+  body.story .emblem { width: 360px; height: 240px; }
+</style>
+</head>
+<body class="square">
+<div class="frame"><div class="glow"></div><div class="z">
+  <p class="eyebrow" id="eyebrow">Road to San Antonio · Veterans Day 2026</p>
+  <p class="display pct"><span id="pct">25</span><span class="gold">%</span></p>
+  <p class="display title" id="title">THE ROAD HAS STARTED</p>
+  <div class="bar"><i id="fill" style="width:25%"></i></div>
+  <div class="nums"><span><b id="raised">$3,000</b> <span id="raisedLabel">raised</span></span><span><b id="remaining">$9,000</b> <span id="remainingLabel">to go</span></span><span><b id="days">60</b> <span id="daysLabel">days</span></span></div>
+  <p class="body" id="body">Thank you to everyone on the road so far. Keep it moving — every dollar and every share gets the full band to San Antonio on November 12.</p>
+  <div class="foot">
+    <div><p class="url">malachiasmusic.com/road-to-san-antonio</p><p class="cash" id="cash">Cash App · Warfighter Gardens · <b>$AWarriorsGarden</b></p></div>
+    <img class="emblem" src="../../../public/Malachias.PNG" alt="">
+  </div>
+</div></div>
+<script>
+  const q = new URLSearchParams(location.search)
+  const pct = Math.max(0, Math.min(100, parseInt(q.get('pct') || '25', 10)))
+  const goal = parseInt(q.get('goal') || '12000', 10)
+  const raised = q.get('raised') ? parseInt(q.get('raised'), 10) : Math.round(goal * pct / 100)
+  const days = q.get('days') || ''
+  const lang = q.get('lang') === 'es' ? 'es' : 'en'
+  const size = q.get('size') === 'story' ? 'story' : 'square'
+  document.body.className = size
+  const usd = n => '$' + n.toLocaleString('en-US')
+  const T = {
+    en: { eyebrow: 'Road to San Antonio · Veterans Day 2026 · Nov 12', raised: 'raised', remaining: 'to go', days: 'days',
+      titles: { 25: 'THE ROAD HAS STARTED', 50: 'HALFWAY TO SAN ANTONIO', 75: "WE'RE GETTING CLOSE", 90: 'FINAL PUSH', 100: 'SAN ANTONIO — HERE WE COME' },
+      body: 'Thank you to everyone on the road so far. Keep it moving — every dollar and every share gets the full band to San Antonio on November 12.',
+      body100: 'Goal reached. Thank you to every supporter and sponsor who built this road. See you in San Antonio on November 12.' },
+    es: { eyebrow: 'Road to San Antonio · 12 de noviembre de 2026', raised: 'recaudado', remaining: 'faltan', days: 'días',
+      titles: { 25: 'EL CAMINO YA EMPEZÓ', 50: 'A MITAD DE CAMINO', 75: 'YA CASI LLEGAMOS', 90: 'RECTA FINAL', 100: 'SAN ANTONIO — ALLÁ VAMOS' },
+      body: 'Gracias a todos los que ya están en el camino. Sigamos: cada dólar y cada vez que compartes lleva a toda la banda a San Antonio el 12 de noviembre.',
+      body100: 'Meta alcanzada. Gracias a cada persona y patrocinador que construyó este camino. Nos vemos en San Antonio el 12 de noviembre.' },
+  }[lang]
+  const keys = [25, 50, 75, 90, 100]; const k = keys.filter(x => pct >= x).pop() || 25
+  document.getElementById('eyebrow').textContent = T.eyebrow
+  document.getElementById('pct').textContent = pct
+  document.getElementById('title').textContent = T.titles[k]
+  document.getElementById('fill').style.width = pct + '%'
+  document.getElementById('raised').textContent = usd(raised)
+  document.getElementById('remaining').textContent = usd(Math.max(0, goal - raised))
+  document.getElementById('days').textContent = days
+  document.getElementById('raisedLabel').textContent = T.raised
+  document.getElementById('remainingLabel').textContent = T.remaining
+  document.getElementById('daysLabel').textContent = T.days
+  document.getElementById('body').textContent = pct >= 100 ? T.body100 : T.body
+  if (!days) document.getElementById('days').parentElement.style.display = 'none'
+</script>
+</body>
+</html>

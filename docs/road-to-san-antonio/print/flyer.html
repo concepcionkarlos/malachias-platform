@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Road to San Antonio — flyer</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700&display=swap">
+<style>
+  /* Two sizes from one file: body.letter (8.5×11 in) and body.card (4×6 in). */
+  @page { margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #030202; color: #ede5d8; font-family: Inter, Arial, sans-serif; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .page { position: relative; overflow: hidden; background: linear-gradient(160deg, #020202 0%, #0a0602 55%, #030202 100%); display: flex; flex-direction: column; }
+  body.letter .page { width: 8.5in; height: 11in; padding: 0.6in 0.65in; }
+  body.card .page { width: 4in; height: 6in; padding: 0.3in 0.32in; }
+  .glow { position: absolute; left: 50%; top: 28%; width: 120%; aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%; background: radial-gradient(circle, rgba(120,60,10,0.40) 0%, rgba(120,60,10,0) 65%); }
+  .z { position: relative; z-index: 1; display: flex; flex-direction: column; height: 100%; }
+  .eyebrow { font-weight: 700; text-transform: uppercase; color: #c9a84c; letter-spacing: 0.32em; }
+  .display { font-family: "Bebas Neue", Impact, sans-serif; letter-spacing: 0.04em; line-height: 0.92; }
+  .gold { color: #c9a84c; }
+  .emblem { display: block; object-fit: contain; mix-blend-mode: screen; margin: 0 auto; }
+  .qrbox { background: #fff; border-radius: 14px; padding: 8px; display: inline-block; }
+  .qrbox img { display: block; width: 100%; height: 100%; object-fit: contain; border-radius: 8px; }
+  .mono { font-family: "JetBrains Mono", Menlo, monospace; color: #c9a84c; }
+  .bar { margin-top: auto; border-top: 1px solid rgba(201,168,76,0.3); padding-top: 0.5em; display: flex; justify-content: space-between; gap: 1em; font-weight: 700; text-transform: uppercase; color: #c9a84c; letter-spacing: 0.22em; }
+  /* Letter sizes */
+  body.letter .eyebrow { font-size: 11pt; }
+  body.letter .emblem { width: 3.2in; height: 2.1in; margin-top: 0.1in; }
+  body.letter h1 { font-size: 84pt; margin-top: 0.2in; }
+  body.letter .sub { font-size: 14pt; color: #c7bba9; margin-top: 0.18in; max-width: 6in; line-height: 1.45; }
+  body.letter .ways { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.15in; margin-top: 0.32in; }
+  body.letter .way b { display: block; font-family: "Bebas Neue", Impact, sans-serif; font-size: 22pt; letter-spacing: 0.05em; }
+  body.letter .way span { font-size: 10pt; color: #a89880; }
+  body.letter .pay { display: grid; grid-template-columns: 2.2in 1fr; gap: 0.3in; align-items: center; margin-top: 0.35in; }
+  body.letter .qrbox { width: 2.2in; height: 2.2in; }
+  body.letter .pay .name { font-size: 30pt; }
+  body.letter .pay .mono { font-size: 18pt; margin-top: 4pt; }
+  body.letter .pay .hint { font-size: 11pt; color: #a89880; margin-top: 8pt; line-height: 1.4; }
+  body.letter .url { font-size: 12.5pt; font-weight: 600; margin-top: 10pt; white-space: nowrap; }
+  body.letter .bar { font-size: 10pt; }
+  /* 4×6 sizes */
+  body.card .eyebrow { font-size: 6.5pt; letter-spacing: 0.26em; }
+  body.card .emblem { width: 1.6in; height: 1.05in; }
+  body.card h1 { font-size: 40pt; margin-top: 0.06in; }
+  body.card .sub { font-size: 8pt; color: #c7bba9; margin-top: 0.08in; line-height: 1.4; }
+  body.card .ways { display: none; }
+  body.card .pay { display: grid; grid-template-columns: 1.35in 1fr; gap: 0.15in; align-items: center; margin-top: 0.16in; }
+  body.card .qrbox { width: 1.35in; height: 1.35in; border-radius: 9px; padding: 5px; }
+  body.card .pay .name { font-size: 14pt; }
+  body.card .pay .mono { font-size: 9.5pt; margin-top: 2pt; }
+  body.card .pay .hint { font-size: 6.8pt; color: #a89880; margin-top: 4pt; line-height: 1.35; }
+  body.card .url { font-size: 6.6pt; font-weight: 600; margin-top: 5pt; white-space: nowrap; }
+  body.card .bar { font-size: 6pt; letter-spacing: 0.18em; }
+</style>
+</head>
+<body class="letter">
+<div class="page"><div class="glow"></div><div class="z">
+  <p class="eyebrow">Malachias · Veterans Day 2026 · Nov 12 · San Antonio, TX</p>
+  <img class="emblem" src="../../../public/Malachias.PNG" alt="">
+  <h1 class="display">ROAD TO<br><span class="gold">SAN ANTONIO</span></h1>
+  <p class="sub">Malachias — a veteran-founded Christian rock band from Coral Springs — has been invited to play a Veterans Day stage in San Antonio. Help us bring the full band there.</p>
+  <div class="ways">
+    <div class="way"><b>1 · DONATE</b><span>Cash App — scan or tap</span></div>
+    <div class="way"><b>2 · MERCH</b><span>Wear the mission</span></div>
+    <div class="way"><b>3 · SPONSOR</b><span>Businesses &amp; churches</span></div>
+  </div>
+  <div class="pay">
+    <div class="qrbox"><img src="../../../public/warfighter-gardens-cashapp-qr.jpg" alt="Cash App QR"></div>
+    <div>
+      <p class="eyebrow">Support through Cash App</p>
+      <p class="display name">WARFIGHTER GARDENS</p>
+      <p class="mono">$AWarriorsGarden</p>
+      <p class="hint">Scan with your phone's camera or Cash App. Check that the name matches before you send. Any amount helps.</p>
+      <p class="url">www.malachiasmusic.com/road-to-san-antonio</p>
+    </div>
+  </div>
+  <div class="bar"><span>Road to San Antonio</span><span>@malachiasmusic</span></div>
+</div></div>
+</body>
+</html>
