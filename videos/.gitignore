@@ -1,0 +1,6 @@
+out/
+snaps/
+snapshots/
+renders/
+node_modules/
+capture/
