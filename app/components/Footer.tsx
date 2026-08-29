@@ -20,6 +20,7 @@ const NAV_LINKS: FooterLink[] = [
   { label: 'Book Us',      href: '/#booking'    },
   { label: 'Stay in Touch',href: '/#newsletter' },
   { label: '♥ Support',    href: '/support',    gold: true },
+  { label: '★ Road to San Antonio', href: '/road-to-san-antonio', gold: true },
 ];
 
 const CONTACTS = [

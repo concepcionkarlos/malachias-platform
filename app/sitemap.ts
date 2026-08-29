@@ -43,6 +43,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.70,
     },
     {
+      url: `${SITE_URL}/road-to-san-antonio`,
+      lastModified: new Date(),
+      changeFrequency: 'daily',
+      priority: 0.9,
+    },
+    {
+      url: `${SITE_URL}/road-to-san-antonio/sponsors`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.6,
+    },
+    {
       url: `${SITE_URL}/epk`,
       lastModified: new Date(),
       changeFrequency: 'monthly',

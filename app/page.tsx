@@ -10,6 +10,10 @@ import { readContent } from '@/lib/store';
 import { fetchFWProducts } from '@/lib/fourthwall';
 import { getSongs, getLiveSessions } from '@/lib/venueStore';
 import { fetchReleases, featuredRelease, youtubeWatchUrl } from '@/lib/releases';
+import { getCampaign } from '@/lib/campaignServer';
+import { campaignMath } from '@/lib/campaign';
+import CampaignBanner  from './components/CampaignBanner';
+import CampaignSection from './components/CampaignSection';
 import Navbar       from './components/Navbar';
 import Hero         from './components/Hero';
 import About        from './components/About';
@@ -51,13 +55,16 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Home() {
-  const [content, fwProducts, songs, liveSessions, releases] = await Promise.all([
+  const [content, fwProducts, songs, liveSessions, releases, campaign] = await Promise.all([
     readContent(),
     fetchFWProducts(),
     getSongs().catch(() => []),
     getLiveSessions().catch(() => []),
     fetchReleases(),
+    getCampaign(),
   ]);
+  const campaignStats = campaignMath(campaign.config);
+  const campaignLive = campaignStats.effectiveStatus === 'active' || campaignStats.effectiveStatus === 'funded';
 
   const today = new Date().toISOString().split('T')[0];
   const shows = content.shows
@@ -108,7 +115,10 @@ export default async function Home() {
         />
       )}
 
-      <NextShowBanner shows={shows} />
+      {/* One top strip at a time: a real upcoming show wins over the campaign. */}
+      {shows.length > 0
+        ? <NextShowBanner shows={shows} />
+        : campaignLive && <CampaignBanner path={campaign.config.path} label="Road to San Antonio" percent={campaignStats.percent} />}
       <LiveSessionBanner sessions={publicSessions} />
       <Navbar />
 
@@ -118,6 +128,9 @@ export default async function Home() {
 
       {/* ── 2. WHY — purpose before story ─────────────────────────── */}
       <Mission />
+
+      {/* ── 2b. THE ROAD — Veterans Day 2026 campaign (hidden when inactive) ── */}
+      <CampaignSection config={campaign.config} math={campaignStats} />
 
       {/* ── 3. WHO — origin story while they're emotionally open ──── */}
       <About aboutText={content.siteContent.aboutText} />

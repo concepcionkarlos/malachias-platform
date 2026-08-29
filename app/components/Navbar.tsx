@@ -21,7 +21,8 @@ const NAV: NavItem[] = [
   { label: 'The Field',   href: '/#journal' },
   { label: 'The Store',   href: '/merch'    },
   { label: 'The Mission', href: '/#mission' },
-  { label: 'Support',     href: '/support', gold: true },
+  { label: 'Support',     href: '/support' },
+  { label: 'San Antonio', href: '/road-to-san-antonio', gold: true },
 ];
 
 const SOCIAL_ICONS = [
