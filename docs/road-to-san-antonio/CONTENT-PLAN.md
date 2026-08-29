@@ -1,7 +1,7 @@
 # Road to San Antonio — content plan (Facebook · Instagram · Reels · Stories)
 
 Campaign name: **ROAD TO SAN ANTONIO** · Event: Veterans Day 2026, November 12, San Antonio, Texas
-Primary CTA: *Visit the campaign page* → https://malachiasmusic.com/road-to-san-antonio
+Primary CTA: *Visit the campaign page* → https://www.malachiasmusic.com/road-to-san-antonio
 Secondary CTA: *Share the campaign.*
 Hashtags: #RoadToSanAntonio #MalachiasBand #VeteransDay2026 #ChristianRock #VeteranMusic #SouthFlorida #SanAntonio
 
@@ -22,7 +22,7 @@ We got the invitation. Now we're building the road to get there.
 Support through Cash App → Warfighter Gardens · $AWarriorsGarden · cash.app/$AWarriorsGarden
 
 **Share text (what supporters paste):**
-Help Malachias bring the full band to San Antonio for Veterans Day 2026. https://malachiasmusic.com/road-to-san-antonio
+Help Malachias bring the full band to San Antonio for Veterans Day 2026. https://www.malachiasmusic.com/road-to-san-antonio
 
 ## Phases
 
@@ -71,3 +71,24 @@ Keep designs wearable after the trip; the campaign name should read as a tour, n
 
 ## Milestone messages (switch on from the real number on the site)
 25% The road has started · 50% Halfway to San Antonio · 75% We're getting close · 90% Final push · 100% San Antonio — here we come
+
+
+## Episode 01 — ready to paste (Admin → Road to San Antonio → Add update)
+
+**Title:** We Got Invited
+**Date:** the day you publish
+**Video / post URL:** the YouTube or Instagram link of the founder-to-camera clip (optional — the text stands alone)
+
+**Text:**
+
+We got the invitation.
+
+Malachias has been asked to perform at a Veterans Day event in San Antonio, Texas on November 12, 2026 — a day dedicated to honoring America's veterans. For a band founded by an Army veteran, with songs written for the people who came home carrying what nobody talks about, this is the stage the mission was built for.
+
+Now we're building the road to get there. Bringing the whole band from South Florida to Texas — flights, instruments, a place to sleep, a way to move the gear — is what this campaign pays for. The target is $12,000, and we'll publish where every dollar goes as the organizer confirms what the event itself covers.
+
+Three ways to walk it with us: support through Cash App (Warfighter Gardens · $AWarriorsGarden), grab Road to San Antonio merch when it drops, or put your business or church on the road as a sponsor.
+
+Thank you for reading this far. See you on the road.
+
+**Matching Reel/post:** use the "Campaign announcement" template in the admin (Sponsor outreach → Social posts) the same day.

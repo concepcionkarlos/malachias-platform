@@ -18,6 +18,17 @@ Campaign page: `/road-to-san-antonio` (also `/veterans-day-2026`) · Sponsor she
 
 Overrides are stored in the content store (`campaign`, `campaignSponsors`, `campaignUpdates`, `sponsorInquiries` keys) — Vercel KV in production, `data/content.json` locally.
 
+## Creating the campaign merch collection (Fourthwall)
+
+The storefront API can only read collections, so this is done once in the Fourthwall dashboard:
+
+1. Fourthwall dashboard → **Products → Collections → Create collection**.
+2. Name it exactly **Road to San Antonio** — Fourthwall derives the slug `road-to-san-antonio`, which is what `merchCollectionSlug` in `lib/campaign.ts` expects. (If the slug comes out different, change that one line.)
+3. Add the campaign products to it (tee, premium tee, hat, sticker, wristband, poster, bundle — see CONTENT-PLAN.md for the design concepts) and set them visible.
+4. Within 5 minutes the campaign page shows the products, the store shows the strip with them, and the campaign CTA becomes "Shop Road to San Antonio merch". No deploy needed.
+
+As of 2026-08-29 the store has only the default `all` collection.
+
 ## Updating the amount raised (the important one)
 
 Cash App has no safe public API, and the site never pretends to be synced. The number people see is entered by hand:

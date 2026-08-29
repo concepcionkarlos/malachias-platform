@@ -1,7 +1,7 @@
 # Road to San Antonio — sponsor outreach toolkit
 
 Copy, adapt, send by hand. Nothing here is sent automatically. Replace the bracketed parts.
-Campaign page: https://malachiasmusic.com/road-to-san-antonio · Sponsor sheet: https://malachiasmusic.com/road-to-san-antonio/sponsors · Sponsor contact: booking@malachiasmusic.com
+Campaign page: https://www.malachiasmusic.com/road-to-san-antonio · Sponsor sheet: https://www.malachiasmusic.com/road-to-san-antonio/sponsors · Sponsor contact: booking@malachiasmusic.com
 
 Rules: never claim tax deductibility or nonprofit status; never promise stage/venue/signage recognition (that belongs to the event organizer); recognition we can promise = campaign page, our social channels, our content.
 
@@ -29,7 +29,7 @@ Rules: never claim tax deductibility or nonprofit status; never promise stage/ve
 > - Gold — $2,500: premium placement, major social recognition, featured sponsor, inclusion in selected campaign videos
 > - Presenting / in-kind (travel, hotel, transportation, gear, meals): let's build it together
 >
-> Full overview: https://malachiasmusic.com/road-to-san-antonio/sponsors
+> Full overview: https://www.malachiasmusic.com/road-to-san-antonio/sponsors
 >
 > I'd welcome a short call this week. Thank you for considering it.
 >
@@ -46,8 +46,8 @@ Rules: never claim tax deductibility or nonprofit status; never promise stage/ve
 >
 > We've been invited to perform at a Veterans Day event in San Antonio on November 12. We are raising the cost of bringing the full band there, and we would be honored if [Church] would stand with us — as a sponsor, with a love offering, or simply by sharing the campaign with the congregation and the veterans among you.
 >
-> Campaign: https://malachiasmusic.com/road-to-san-antonio
-> Sponsorship overview: https://malachiasmusic.com/road-to-san-antonio/sponsors
+> Campaign: https://www.malachiasmusic.com/road-to-san-antonio
+> Sponsorship overview: https://www.malachiasmusic.com/road-to-san-antonio/sponsors
 >
 > We'd also gladly play for your community before or after the trip. Thank you, and God bless.
 >
@@ -61,7 +61,7 @@ Rules: never claim tax deductibility or nonprofit status; never promise stage/ve
 >
 > One veteran-built outfit to another. Malachias was founded by a two-tour Iraq vet (medic, then Army bandsman) and plays for the ones still fighting their way back. We've been invited to a Veterans Day event in San Antonio on Nov 12 and we're raising the travel budget to bring the full band.
 >
-> Sponsorship tiers run $250–$2,500, with recognition on the campaign page and our channels; in-kind help (flights, hotel, a van, gear) counts at the matching tier. Overview: https://malachiasmusic.com/road-to-san-antonio/sponsors
+> Sponsorship tiers run $250–$2,500, with recognition on the campaign page and our channels; in-kind help (flights, hotel, a van, gear) counts at the matching tier. Overview: https://www.malachiasmusic.com/road-to-san-antonio/sponsors
 >
 > Would [Business] put its name on the road? Happy to jump on a call.
 >
@@ -75,7 +75,7 @@ Rules: never claim tax deductibility or nonprofit status; never promise stage/ve
 >
 > Malachias is a veteran-founded rock band from South Florida with a steady release run (latest single "Because of You", Aug 2026). We're performing at a Veterans Day event in San Antonio on November 12 and running a campaign to bring the full band.
 >
-> We're looking for a Gear Sponsor: help with [strings / cases / backline rental / flight cases] in exchange for recognition on the campaign page, gear-in-use content across the campaign videos and social channels, and a Silver/Gold listing depending on value. Overview: https://malachiasmusic.com/road-to-san-antonio/sponsors
+> We're looking for a Gear Sponsor: help with [strings / cases / backline rental / flight cases] in exchange for recognition on the campaign page, gear-in-use content across the campaign videos and social channels, and a Silver/Gold listing depending on value. Overview: https://www.malachiasmusic.com/road-to-san-antonio/sponsors
 >
 > Can I send a one-page summary of what we play and where it would appear?
 >
@@ -103,7 +103,7 @@ Rules: never claim tax deductibility or nonprofit status; never promise stage/ve
 >
 > Malachias is a veteran-founded rock band from Coral Springs, Florida invited to perform at a Veterans Day event in San Antonio on November 12, 2026. Our largest cost is moving five musicians and their instruments from South Florida to Texas and back.
 >
-> We are inviting one company to be the Official Travel Sponsor of the Road to San Antonio — through flight credit, ticket coverage or a travel grant. Recognition: "Official Travel Sponsor" on the campaign page and in every travel-day post and video, plus our Gold-tier benefits. Overview: https://malachiasmusic.com/road-to-san-antonio/sponsors
+> We are inviting one company to be the Official Travel Sponsor of the Road to San Antonio — through flight credit, ticket coverage or a travel grant. Recognition: "Official Travel Sponsor" on the campaign page and in every travel-day post and video, plus our Gold-tier benefits. Overview: https://www.malachiasmusic.com/road-to-san-antonio/sponsors
 >
 > If [Company] has a veteran or community program this fits, I'd be glad to talk.
 >
@@ -117,7 +117,7 @@ Rules: never claim tax deductibility or nonprofit status; never promise stage/ve
 >
 > Malachias (veteran-founded rock band, Florida) is performing at a Veterans Day event in San Antonio on November 12. We need ground transportation for five people and instruments — airport ↔ hotel ↔ venue, Nov 11–13.
 >
-> We'd recognize [Company] as the Transportation Sponsor on the campaign page and in our travel content, at the Silver/Gold tier depending on value. Overview: https://malachiasmusic.com/road-to-san-antonio/sponsors
+> We'd recognize [Company] as the Transportation Sponsor on the campaign page and in our travel content, at the Silver/Gold tier depending on value. Overview: https://www.malachiasmusic.com/road-to-san-antonio/sponsors
 >
 > Could we talk about a van/shuttle arrangement for those days?
 >
@@ -127,7 +127,7 @@ Rules: never claim tax deductibility or nonprofit status; never promise stage/ve
 
 **Subject:** Re: Sponsorship — Malachias, Veterans Day 2026
 
-> Hi [Name] — following up on the note below. The campaign is now [XX]% funded with [N] sponsors on board, and there are [N] weeks to November 12. If [Business] would like a place on the road, the quickest path is the sponsor form here: https://malachiasmusic.com/road-to-san-antonio#sponsor-form — or just reply and I'll take care of it.
+> Hi [Name] — following up on the note below. The campaign is now [XX]% funded with [N] sponsors on board, and there are [N] weeks to November 12. If [Business] would like a place on the road, the quickest path is the sponsor form here: https://www.malachiasmusic.com/road-to-san-antonio#sponsor-form — or just reply and I'll take care of it.
 >
 > Either way, thank you for reading.
 >

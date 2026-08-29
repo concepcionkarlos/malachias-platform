@@ -5,7 +5,7 @@
 
 import { CAMPAIGN, usd } from './campaign'
 
-const URL = 'https://malachiasmusic.com/road-to-san-antonio'
+const URL = 'https://www.malachiasmusic.com/road-to-san-antonio'
 const SHEET = `${URL}/sponsors`
 const EMAIL = CAMPAIGN.sponsorEmail
 const CASH = `${CAMPAIGN.cashApp.displayName} · ${CAMPAIGN.cashApp.cashtag} · cash.app/${CAMPAIGN.cashApp.cashtag}`
