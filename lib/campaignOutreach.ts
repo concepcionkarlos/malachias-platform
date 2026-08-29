@@ -116,6 +116,53 @@ On behalf of the whole band — this matters more than you know.
 [Your name] · Malachias` },
 ]
 
+// Bilingual: every social post ships EN + ES (a large part of the audience is Spanish-speaking).
+export const SOCIAL_TEMPLATES_ES: Template[] = [
+  { id: 'announce-es', title: 'Anuncio de campaña (ES)', channel: 'Facebook / Instagram',
+    body: `NOS VAMOS A SAN ANTONIO.
+
+Malachias ha sido invitado a tocar en el Día de los Veteranos 2026. Ahora trabajamos para llevar a toda la banda.
+
+12 de noviembre. San Antonio, Texas.
+
+Tres formas de ayudar: dona, llévate merch, o patrocina el camino como negocio o iglesia.
+Apoya por Cash App → ${CASH}
+
+Únete al Road to San Antonio → ${URL}
+
+#RoadToSanAntonio #MalachiasBand #VeteransDay2026 #RockCristiano #Veteranos #SurDeFlorida #SanAntonio` },
+  { id: 'full-band-es', title: 'Ayúdanos a llevar a toda la banda (ES)', channel: 'Facebook / Instagram',
+    body: `AYÚDANOS A LLEVAR A TODA LA BANDA.
+
+Cada donación, cada pieza de merch, cada patrocinador y cada vez que compartes nos acerca a San Antonio.
+
+Cash App → ${CASH}
+Campaña → ${URL}
+
+#RoadToSanAntonio #VeteransDay2026 #MalachiasBand` },
+  { id: 'road-es', title: 'Road to San Antonio (corto, ES)', channel: 'Stories / Reels',
+    body: `ROAD TO SAN ANTONIO
+
+Nos llegó la invitación. Ahora construimos el camino para llegar.
+
+${URL}` },
+  { id: 'progress-es', title: 'Actualización de progreso (ES)', channel: 'Stories',
+    body: `[XX]% del camino a San Antonio. Faltan [$X,XXX] y [N] días.
+
+Gracias a todos los que ya están en el camino. Sigamos → ${URL}
+Cash App → ${CAMPAIGN.cashApp.cashtag}` },
+  { id: 'sponsor-thanks-es', title: 'Agradecimiento a patrocinador (ES)', channel: 'Facebook / Instagram',
+    body: `Bienvenido al camino, [Patrocinador] — nuevo patrocinador [Nivel / Categoría] para el Día de los Veteranos 2026 en San Antonio.
+
+[Una línea sobre quiénes son y por qué encaja.]
+
+Negocios e iglesias: todavía hay lugar en el camino → ${SHEET}
+
+#RoadToSanAntonio #VeteransDay2026` },
+  { id: 'share-es', title: 'Texto para compartir (ES)', channel: 'Donde sea',
+    body: `Ayuda a Malachias a llevar a toda la banda a San Antonio para el Día de los Veteranos 2026. ${URL}` },
+]
+
 export const SOCIAL_TEMPLATES: Template[] = [
   { id: 'announce', title: 'Campaign announcement', channel: 'Facebook / Instagram',
     body: `WE'RE GOING TO SAN ANTONIO.

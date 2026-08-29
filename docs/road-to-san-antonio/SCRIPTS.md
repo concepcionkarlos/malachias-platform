@@ -129,6 +129,20 @@ Recipient line to show on screen whenever money is mentioned: **Warfighter Garde
 
 ---
 
+## Captions en español (pégalos debajo del inglés)
+
+- **01 Anuncio:** NOS VAMOS A SAN ANTONIO. Malachias ha sido invitado a tocar en el Día de los Veteranos 2026. Ahora trabajamos para llevar a toda la banda. 12 de noviembre · San Antonio, TX. Apoya por Cash App → Warfighter Gardens · $AWarriorsGarden. Campaña → link en bio.
+- **02 Por qué importa:** El Día de los Veteranos no es un feriado para nosotros. Es pasar lista. Ayúdanos a llevar a toda la banda a San Antonio el 12 de noviembre.
+- **03 La banda:** Cuatro hombres. Un camino. Conoce a la banda que va a San Antonio. Ayúdanos a que lleguen todos → link en bio.
+- **04 Ensayo:** Ensayando para San Antonio. Cada dólar y cada vez que compartes mueve el camino. Cash App → $AWarriorsGarden.
+- **05 Progreso:** [25]% recaudado. Faltan [$9,000] y [75] días. El camino ya empezó.
+- **06 Patrocinio:** Negocios, iglesias, empresas de veteranos: pongan su nombre en el camino. Niveles desde $250 hasta $2,500 + apoyo en especie (viaje, hotel, transporte, equipo).
+- **07 Merch:** VISTE LA MISIÓN. Merch limitado Road to San Antonio — cada compra ayuda a llegar al Día de los Veteranos 2026.
+- **09 Recta final:** [10] días. Faltan [$2,000]. Estamos empacando. Si estabas esperando, es ahora.
+- **10 Llegamos:** Llegamos. Cada persona que dio, compartió o patrocinó nos puso hoy en este escenario. Gracias.
+
+**Hashtags ES:** #RockCristiano #Veteranos #SurDeFlorida #Miami #SanAntonio #MúsicaCristiana
+
 ## Caption bank (paste anywhere)
 
 - Help Malachias bring the full band to San Antonio for Veterans Day 2026. → link in bio

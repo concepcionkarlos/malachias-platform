@@ -8,7 +8,7 @@
 
 import { useEffect, useState } from 'react'
 import { Check, Plus, Trash2, ExternalLink, Copy } from 'lucide-react'
-import { OUTREACH_TEMPLATES, SOCIAL_TEMPLATES, type Template } from '@/lib/campaignOutreach'
+import { OUTREACH_TEMPLATES, SOCIAL_TEMPLATES, SOCIAL_TEMPLATES_ES, type Template } from '@/lib/campaignOutreach'
 import {
   CAMPAIGN, SPONSOR_TIERS, SPONSOR_CATEGORIES, campaignMath, usd,
   type CampaignOverrides, type CampaignStatus, type Sponsor, type CampaignUpdate, type SponsorInquiry, type SponsorTierId,
@@ -247,6 +247,12 @@ export default function AdminRoadToSanAntonio() {
       <div style={CARD}>
         <p style={HDR}>SOCIAL POSTS — FACEBOOK / INSTAGRAM / STORIES</p>
         <TemplateList items={SOCIAL_TEMPLATES} copiedKey={copiedKey} onCopy={copyTemplate} />
+      </div>
+
+      <div style={CARD}>
+        <p style={HDR}>POSTS EN ESPAÑOL — SIEMPRE JUNTO AL INGLÉS</p>
+        <p style={{ fontSize: 12, color: '#8a7f70', marginTop: 0 }}>Publica EN arriba y ES debajo (o ES en el primer comentario). Misma imagen, mismo enlace.</p>
+        <TemplateList items={SOCIAL_TEMPLATES_ES} copiedKey={copiedKey} onCopy={copyTemplate} />
       </div>
 
       <button style={BTN} onClick={() => save()} disabled={saving}>{saved ? <><Check size={14} /> Saved</> : saving ? 'Saving…' : 'Save everything'}</button>
