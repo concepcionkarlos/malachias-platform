@@ -10,7 +10,7 @@ import {
   MapPin, Settings, Newspaper, BarChart2, StickyNote, CheckSquare,
   Music, BookOpen, Zap, ListMusic, Repeat, Target, BookMarked,
   Layers, CalendarDays, DollarSign, Send, TrendingUp,
-  Menu, X, ExternalLink, LogOut, ChevronRight, Heart, Video, Megaphone, UserCheck, Flag,
+  Menu, X, ExternalLink, LogOut, ChevronRight, Heart, Video, Megaphone, UserCheck, Flag, Mic,
 } from 'lucide-react'
 import AdminLogin from './AdminLogin'
 
@@ -18,6 +18,7 @@ const SECTIONS = {
   dashboard:       { label: 'Dashboard',       icon: LayoutDashboard, group: 'Overview'    },
   bookings:        { label: 'Bookings',         icon: Calendar,        group: 'Operations'  },
   shows:           { label: 'Shows',            icon: MapPin,          group: 'Operations'  },
+  lessons:         { label: 'Voice Lessons',    icon: Mic,             group: 'Operations'  },
   tasks:           { label: 'Task Board',       icon: CheckSquare,     group: 'Operations'  },
   'song-stories':  { label: 'Behind the Song',  icon: Music,           group: 'Content'     },
   'fan-stories':   { label: 'Fan Stories',      icon: Heart,           group: 'Content'     },
@@ -57,6 +58,7 @@ const SectionComponents: Record<TabKey, React.ComponentType> = {
   dashboard:         dynamic(() => import('./sections/AdminDashboard')),
   bookings:          dynamic(() => import('./sections/AdminBookings')),
   shows:             dynamic(() => import('./sections/AdminShows')),
+  lessons:           dynamic(() => import('./sections/AdminLessons')),
   tasks:             dynamic(() => import('./sections/AdminTasks')),
   'song-stories':    dynamic(() => import('./sections/AdminSongStories')),
   'fan-stories':     dynamic(() => import('./sections/AdminFanStories')),

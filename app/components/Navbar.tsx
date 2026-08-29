@@ -21,6 +21,7 @@ const NAV: NavItem[] = [
   { label: 'The Field',   href: '/#journal' },
   { label: 'The Store',   href: '/merch'    },
   { label: 'The Mission', href: '/#mission' },
+  { label: 'Lessons',     href: '/voice-lessons' },
   { label: 'Support',     href: '/support' },
   { label: 'San Antonio', href: '/road-to-san-antonio', gold: true },
 ];

@@ -16,6 +16,7 @@ const NAV_LINKS: FooterLink[] = [
   { label: 'The Field',    href: '/#journal'    },
   { label: 'The Store',    href: '/merch'       },
   { label: 'The Mission',  href: '/#mission'    },
+  { label: 'Voice Lessons', href: '/voice-lessons' },
   { label: 'Press & EPK',  href: '/#press'      },
   { label: 'Book Us',      href: '/#booking'    },
   { label: 'Stay in Touch',href: '/#newsletter' },
