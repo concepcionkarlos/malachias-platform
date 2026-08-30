@@ -75,7 +75,7 @@ Use code ${COUPON} at checkout.
 ☕ Support Mug — from $9.99
 🧢 Warrior Hat — $19.99
 🧢 Trucker Hat — $19.99
-👕 Premium Tee — from $34.99
+👕 Premium Tee — from $39.99
 
 → ${MERCH_URL}
 
@@ -150,7 +150,7 @@ Official Malachias merch is live — and you get first access with 15% off your 
 ☕ Support Mug — from $9.99
 🧢 Warrior Hat — $19.99
 🧢 Trucker Hat — $19.99
-👕 Premium Tee — from $34.99
+👕 Premium Tee — from $39.99
 
 No label. No compromise. Faith, freedom, and music made the way it was meant to be made.
 
@@ -182,7 +182,7 @@ La tienda oficial de Malachias ya está disponible — y tienes acceso primero c
 ☕ Support Mug — desde $9.99
 🧢 Warrior Hat — $19.99
 🧢 Trucker Hat — $19.99
-👕 Premium Tee — desde $34.99
+👕 Premium Tee — desde $39.99
 
 Sin disquera. Sin compromiso. Fe, libertad y música hecha como debe hacerse.
 
@@ -280,7 +280,7 @@ If you know, you know.
 
 No label. No compromise. No explanation needed.
 
-👕 The Malachias Premium Tee — from $34.99.
+👕 The Malachias Premium Tee — from $39.99.
 Subscribe and get 15% off → malachiasmusic.com/promo
 
 #MalachiasBand #PremiumTee #FaithFreedomMusic #WearTheMission #ChristianRock #VeteranMusic #SouthFlorida #FaithOnFire #NoLabel #SupportTheMission`,
@@ -320,7 +320,7 @@ Background: Product photo
 Text:
 "☕ Mug from $9.99"
 "🧢 Hats $19.99"
-"👕 Tee from $34.99"
+"👕 Tee from $39.99"
 Bottom: "Subscribe → 15% off"
 
 ---
