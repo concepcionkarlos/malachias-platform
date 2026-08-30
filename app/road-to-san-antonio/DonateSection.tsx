@@ -73,11 +73,23 @@ export default function DonateSection({ config, qrReady }: Props) {
             </div>
 
             <div className="flex flex-col gap-3">
+              {config.donateUrl && (
+                <a
+                  href={config.donateUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-primary justify-center"
+                  style={{ letterSpacing: '0.18em', padding: '1rem 1.25rem', fontSize: '0.85rem' }}
+                  onClick={() => trackCampaign('donate_click', { surface: 'secure' })}
+                >
+                  <ExternalLink size={16} aria-hidden="true" />&ensp;Donate securely
+                </a>
+              )}
               <a
                 href={cashApp.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn btn-primary justify-center"
+                className={config.donateUrl ? 'btn btn-ghost justify-center' : 'btn btn-primary justify-center'}
                 style={{ letterSpacing: '0.18em', padding: '1rem 1.25rem', fontSize: '0.85rem' }}
                 onClick={() => trackCampaign('cashapp_click', { surface: 'donate' })}
               >

@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Road to San Antonio — Story frame</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700&display=swap">
+<style>
+  /* Story frame generator (1080×1920). ?type=open|where|cashapp|sponsor|inkind|quote|countdown|thanks|merch|cta
+     &lang=en|es &days=68 &name=Maria &q=... &sub=... &sponsor=... */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #030202; color: #ede5d8; font-family: Inter, Arial, sans-serif; }
+  .frame { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: linear-gradient(160deg, #020202 0%, #0a0602 55%, #030202 100%); }
+  .glow { position: absolute; left: 50%; top: 40%; width: 1200px; height: 1200px; transform: translate(-50%, -50%); border-radius: 50%; background: radial-gradient(circle, rgba(120,60,10,0.42) 0%, rgba(120,60,10,0) 66%); }
+  /* safe zone: 250px top / 300px bottom kept clear of platform UI */
+  .z { position: absolute; left: 90px; right: 90px; top: 260px; bottom: 320px; display: flex; flex-direction: column; justify-content: center; gap: 34px; }
+  .eyebrow { font-weight: 700; text-transform: uppercase; color: #c9a84c; letter-spacing: 0.3em; font-size: 28px; }
+  .display { font-family: "Bebas Neue", Impact, sans-serif; letter-spacing: 0.04em; line-height: 0.95; }
+  h1 { font-size: 150px; }
+  .gold { color: #c9a84c; }
+  .body { font-size: 44px; line-height: 1.4; color: #c7bba9; }
+  .big { font-size: 64px; line-height: 1.25; color: #ede5d8; font-weight: 600; }
+  .list { display: grid; gap: 18px; }
+  .list div { font-size: 54px; line-height: 1.2; color: #ede5d8; display: grid; grid-template-columns: 90px 1fr; align-items: center; gap: 20px; padding: 16px 0; border-top: 1px solid rgba(201,168,76,0.25); }
+  .list div:last-child { border-bottom: 1px solid rgba(201,168,76,0.25); }
+  .list span { font-size: 64px; }
+  .cta { align-self: flex-start; background: linear-gradient(135deg, #c9a84c, #b8902e); color: #000; font-family: "Bebas Neue", Impact, sans-serif; font-size: 56px; letter-spacing: 0.1em; padding: 26px 48px; }
+  .qr { background: #fff; border-radius: 30px; padding: 22px; width: 620px; height: 620px; align-self: center; }
+  .qr img { width: 100%; height: 100%; object-fit: contain; border-radius: 16px; display: block; }
+  .mono { font-family: "JetBrains Mono", Menlo, monospace; color: #c9a84c; font-size: 52px; }
+  .emblem { width: 520px; height: 350px; object-fit: contain; mix-blend-mode: screen; align-self: center; }
+  .foot { position: absolute; left: 90px; right: 90px; bottom: 330px; display: flex; justify-content: space-between; font-size: 26px; letter-spacing: 0.2em; text-transform: uppercase; color: #a89880; font-weight: 700; }
+  .num { font-size: 420px; line-height: 0.85; }
+</style>
+</head>
+<body>
+<div class="frame"><div class="glow"></div><div class="z" id="z"></div><div class="foot"><span>Road to San Antonio</span><span id="footR">malachiasmusic.com</span></div></div>
+<script>
+  const q = new URLSearchParams(location.search)
+  const type = q.get('type') || 'open', lang = q.get('lang') === 'es' ? 'es' : 'en'
+  const days = q.get('days') || '', name = q.get('name') || '', sponsor = q.get('sponsor') || '', custom = q.get('q') || '', sub = q.get('sub') || ''
+  const EMB = '<img class="emblem" src="../../../public/Malachias.PNG" alt="">'
+  const QR = '<div class="qr"><img src="../../../public/warfighter-gardens-cashapp-qr.jpg" alt=""></div>'
+  const T = {
+    en: {
+      open: `${EMB}<p class="eyebrow">Malachias · Veterans Day 2026</p><h1 class="display">ROAD TO<br><span class="gold">SAN ANTONIO</span></h1><p class="big">November 12 · Help us bring the full band.</p>`,
+      where: `<p class="eyebrow">Road to San Antonio</p><h1 class="display" style="font-size:120px">WHERE YOUR<br><span class="gold">SUPPORT GOES</span></h1><div class="list"><div><span>✈️</span>Flights</div><div><span>🏨</span>Hotel</div><div><span>🎸</span>Instrument baggage</div><div><span>🚐</span>Ground transportation</div><div><span>🍽️</span>Meals</div><div><span>🎵</span>Artist support</div></div>`,
+      cashapp: `<p class="eyebrow">Support through Cash App</p>${QR}<p class="display" style="font-size:96px;text-align:center">WARFIGHTER GARDENS</p><p class="mono" style="text-align:center">$AWarriorsGarden</p><p class="body" style="text-align:center">Tap an amount on the page — Cash App opens with it filled in.</p>`,
+      sponsor: `<p class="eyebrow">Businesses · churches · veteran-owned companies</p><h1 class="display" style="font-size:118px">WANT YOUR BUSINESS TO HELP GET A <span class="gold">VETERAN-FOUNDED BAND</span> TO SAN ANTONIO?</h1><p class="body">Sponsorships from $250. Your name on the road.</p><div class="cta">BECOME A SPONSOR</div>`,
+      inkind: `<p class="eyebrow">Road to San Antonio</p><h1 class="display" style="font-size:120px">WE'RE<br>LOOKING FOR:</h1><div class="list"><div><span>✈️</span>Travel partner</div><div><span>🏨</span>Hotel partner</div><div><span>🚐</span>Transportation partner</div></div><p class="body">Every real cost a partner covers is money we don't have to raise.</p><div class="cta">BECOME A SPONSOR</div>`,
+      quote: `${EMB}<p class="display" style="font-size:104px;line-height:1.05">“${custom || 'We play for the ones who need it most.'}”</p><p class="eyebrow">${sub || '— Malachias'}</p>`,
+      countdown: `<p class="eyebrow">Veterans Day 2026 · San Antonio</p><p class="display num gold">${days || '?'}</p><h1 class="display" style="font-size:120px">DAYS TO<br>SAN ANTONIO</h1><p class="body">Help us bring the full band.</p>`,
+      thanks: `${EMB}<p class="eyebrow">Thank you</p><h1 class="display" style="font-size:140px">${name ? name.toUpperCase() + ',' : 'THANK YOU,'}<br><span class="gold">YOU JUST MOVED THE ROAD.</span></h1><p class="body">Every dollar and every share gets the full band to San Antonio.</p>`,
+      sponsorthanks: `${EMB}<p class="eyebrow">Welcome to the road</p><h1 class="display" style="font-size:130px">${(sponsor || 'OUR NEW SPONSOR').toUpperCase()}</h1><p class="big">${sub || 'Thank you for getting us closer to San Antonio.'}</p>`,
+      merch: `<p class="eyebrow">Road to San Antonio merch</p><h1 class="display" style="font-size:130px">SUPPORT THE MISSION.<br><span class="gold">WEAR THE MISSION.</span></h1><p class="body">${sub || 'Which line would you wear? Vote below.'}</p>`,
+      cta: `${EMB}<h1 class="display" style="font-size:130px">HELP MOVE<br>THE ROAD<br><span class="gold">FORWARD</span></h1><p class="body">Donate · Merch · Sponsor</p><div class="cta">ROAD TO SAN ANTONIO</div>`,
+    },
+    es: {
+      open: `${EMB}<p class="eyebrow">Malachias · Día de los Veteranos 2026</p><h1 class="display">RUMBO A<br><span class="gold">SAN ANTONIO</span></h1><p class="big">12 de noviembre · Ayúdanos a llevar a toda la banda.</p>`,
+      where: `<p class="eyebrow">Road to San Antonio</p><h1 class="display" style="font-size:120px">A DÓNDE VA<br><span class="gold">TU APOYO</span></h1><div class="list"><div><span>✈️</span>Vuelos</div><div><span>🏨</span>Hotel</div><div><span>🎸</span>Equipaje de instrumentos</div><div><span>🚐</span>Transporte local</div><div><span>🍽️</span>Comidas</div><div><span>🎵</span>Apoyo a los músicos</div></div>`,
+      cashapp: `<p class="eyebrow">Apoya por Cash App</p>${QR}<p class="display" style="font-size:96px;text-align:center">WARFIGHTER GARDENS</p><p class="mono" style="text-align:center">$AWarriorsGarden</p><p class="body" style="text-align:center">Toca un monto en la página — Cash App se abre con la cifra lista.</p>`,
+      sponsor: `<p class="eyebrow">Negocios · iglesias · empresas de veteranos</p><h1 class="display" style="font-size:118px">¿QUIERES QUE TU NEGOCIO AYUDE A LLEVAR A UNA <span class="gold">BANDA DE VETERANOS</span> A SAN ANTONIO?</h1><p class="body">Patrocinios desde $250. Tu nombre en el camino.</p><div class="cta">PATROCINA</div>`,
+      inkind: `<p class="eyebrow">Road to San Antonio</p><h1 class="display" style="font-size:120px">BUSCAMOS:</h1><div class="list"><div><span>✈️</span>Socio de viaje</div><div><span>🏨</span>Socio de hotel</div><div><span>🚐</span>Socio de transporte</div></div><p class="body">Cada gasto real que cubre un socio es dinero que no hay que recaudar.</p><div class="cta">PATROCINA</div>`,
+      quote: `${EMB}<p class="display" style="font-size:104px;line-height:1.05">“${custom || 'Tocamos para los que más lo necesitan.'}”</p><p class="eyebrow">${sub || '— Malachias'}</p>`,
+      countdown: `<p class="eyebrow">Día de los Veteranos 2026 · San Antonio</p><p class="display num gold">${days || '?'}</p><h1 class="display" style="font-size:120px">DÍAS PARA<br>SAN ANTONIO</h1><p class="body">Ayúdanos a llevar a toda la banda.</p>`,
+      thanks: `${EMB}<p class="eyebrow">Gracias</p><h1 class="display" style="font-size:140px">${name ? name.toUpperCase() + ',' : 'GRACIAS,'}<br><span class="gold">ACABAS DE MOVER EL CAMINO.</span></h1><p class="body">Cada dólar y cada vez que compartes lleva a toda la banda a San Antonio.</p>`,
+      sponsorthanks: `${EMB}<p class="eyebrow">Bienvenido al camino</p><h1 class="display" style="font-size:130px">${(sponsor || 'NUEVO PATROCINADOR').toUpperCase()}</h1><p class="big">${sub || 'Gracias por acercarnos a San Antonio.'}</p>`,
+      merch: `<p class="eyebrow">Merch Road to San Antonio</p><h1 class="display" style="font-size:130px">APOYA LA MISIÓN.<br><span class="gold">VISTE LA MISIÓN.</span></h1><p class="body">${sub || '¿Qué frase llevarías puesta? Vota abajo.'}</p>`,
+      cta: `${EMB}<h1 class="display" style="font-size:130px">AYUDA A MOVER<br><span class="gold">EL CAMINO</span></h1><p class="body">Dona · Merch · Patrocina</p><div class="cta">ROAD TO SAN ANTONIO</div>`,
+    },
+  }
+  document.getElementById('z').innerHTML = (T[lang][type] || T[lang].open)
+  if (type === 'cashapp') document.getElementById('footR').textContent = 'cash.app/$AWarriorsGarden'
+</script>
+</body>
+</html>

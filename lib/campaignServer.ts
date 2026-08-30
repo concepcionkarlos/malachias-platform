@@ -8,13 +8,15 @@ import fs from 'fs'
 import path from 'path'
 import { readContent } from './store'
 import { fetchFWCollectionProducts, type FWProduct } from './fourthwall'
-import { CAMPAIGN, type CampaignConfig, type Sponsor, type CampaignUpdate } from './campaign'
+import { CAMPAIGN, inKindTotal, type CampaignConfig, type Sponsor, type CampaignUpdate, type InKindItem } from './campaign'
 
 export interface CampaignView {
   config: CampaignConfig
   qrReady: boolean
   sponsors: Sponsor[]          // visible only, gold → supporter
   updates: CampaignUpdate[]    // published only, newest first
+  inKind: InKindItem[]         // confirmed only
+  inKindValue: number          // USD equivalent of confirmed in-kind support
 }
 
 const TIER_ORDER = ['presenting', 'gold', 'silver', 'bronze', 'supporter']
@@ -39,7 +41,8 @@ export async function getCampaign(): Promise<CampaignView> {
     .filter(u => u.published)
     .sort((a, b) => b.date.localeCompare(a.date) || b.episode - a.episode)
 
-  return { config, qrReady, sponsors, updates }
+  const inKind = (store.campaignInKind ?? []).filter(i => i.confirmed)
+  return { config, qrReady, sponsors, updates, inKind, inKindValue: inKindTotal(inKind) }
 }
 
 /** Campaign merch = the Fourthwall collection named in the config; [] if none yet. */

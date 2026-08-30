@@ -36,6 +36,8 @@ export interface CampaignConfig {
   status: CampaignStatus
   travelers: number        // people the budget must move
   cashApp: CashAppInfo
+  donateUrl: string           // secure donation platform (Givebutter) — '' until an official link exists
+  nonprofitVerified: boolean  // only true once the recipient's nonprofit status is documented; gates any tax wording
   sponsorEmail: string
   merchCollectionSlug: string   // Fourthwall collection that holds campaign merch
   shareText: string
@@ -45,8 +47,20 @@ export interface CampaignConfig {
 
 // Fields the admin can override from the dashboard. Everything else stays in code.
 export type CampaignOverrides = Partial<Pick<CampaignConfig,
-  'goal' | 'raised' | 'raisedAsOf' | 'status' | 'eventVenue' | 'headline' | 'subheadline' | 'travelers'
+  'goal' | 'raised' | 'raisedAsOf' | 'status' | 'eventVenue' | 'headline' | 'subheadline' | 'travelers' | 'donateUrl' | 'nonprofitVerified'
 >> & { cashApp?: Partial<CashAppInfo> }
+
+// In-kind support (a sponsor covering flights, rooms, a van, gear, meals). Tracked
+// separately from cash: confirmed items lower what the campaign still needs.
+export interface InKindItem {
+  id: string
+  category: 'Travel' | 'Lodging' | 'Transportation' | 'Meals' | 'Gear' | 'Other'
+  sponsor: string
+  description: string
+  value: number         // USD equivalent
+  confirmed: boolean    // only confirmed items count publicly
+  addedAt: string
+}
 
 export type SponsorTierId = 'supporter' | 'bronze' | 'silver' | 'gold' | 'presenting'
 
@@ -110,6 +124,8 @@ export const CAMPAIGN: CampaignConfig = {
     url: 'https://cash.app/$AWarriorsGarden',
     qrImage: '/warfighter-gardens-cashapp-qr.jpg',
   },
+  donateUrl: '',
+  nonprofitVerified: false,
   sponsorEmail: 'booking@malachiasmusic.com',
   merchCollectionSlug: 'road-to-san-antonio',
   shareText: 'Help Malachias bring the full band to San Antonio for Veterans Day 2026.',
@@ -136,6 +152,38 @@ export const CAMPAIGN: CampaignConfig = {
     'We Made It',
   ],
 }
+
+// ── Internal budget model (never rendered publicly) ──────────────────────────
+// Planning numbers for FIVE musicians (a new drummer joined). Replace with real
+// quotes as they arrive; the public goal stays at CAMPAIGN.goal until approved.
+export interface BudgetLine2 { key: string; label: string; perMusician?: number; fixed?: number; note: string }
+export const BUDGET_MODEL: BudgetLine2[] = [
+  { key: 'airfare',   label: 'Airfare (round trip)',          perMusician: 500, note: '$400–600 per musician, FLL/MIA → SAT' },
+  { key: 'baggage',   label: 'Instrument / checked baggage',  perMusician: 150, note: 'Guitars, pedalboards, cases' },
+  { key: 'hotel',     label: 'Hotel',                          fixed: 1500,      note: '~3 nights, shared rooms' },
+  { key: 'meals',     label: 'Food / per diem',                perMusician: 180, note: '3 travel days' },
+  { key: 'transport', label: 'Local transportation',           fixed: 600,       note: 'Rental van / rides: airport, hotel, venue' },
+  { key: 'artist',    label: 'Artist compensation',            perMusician: 500, note: 'Modest base; scenario B/C raise it' },
+]
+export const BUDGET_CONTINGENCY = 0.10
+export const BUDGET_SCENARIOS = [
+  { id: 'minimum',  name: 'Minimum mission',                  target: 12000, artistPerMusician: 500,  note: 'Current public goal. Gets five musicians there, modest artist support.' },
+  { id: 'full',     name: 'Fully supported mission',          target: 15000, artistPerMusician: 1000, note: 'Adds backline/gear allowance and fuller artist support.' },
+  { id: 'strong',   name: 'Full mission · stronger comp',     target: 19000, artistPerMusician: 1800, note: '$18–20k. Compensation closer to a professional date.' },
+] as const
+
+export function budgetTotal(travelers: number, artistPerMusician = 500) {
+  const lines = BUDGET_MODEL.map(l => {
+    const perM = l.key === 'artist' ? artistPerMusician : (l.perMusician ?? 0)
+    const amount = l.fixed ?? perM * travelers
+    return { ...l, amount }
+  })
+  const subtotal = lines.reduce((s, l) => s + l.amount, 0)
+  const contingency = Math.round(subtotal * BUDGET_CONTINGENCY)
+  return { lines, subtotal, contingency, total: subtotal + contingency }
+}
+
+export const inKindTotal = (items: InKindItem[]) => items.filter(i => i.confirmed).reduce((s, i) => s + Math.max(0, i.value), 0)
 
 // Suggested contribution anchors. Each one links to `cash.app/$cashtag/<amount>`
 // (see cashAppPayUrl); Cash App opens with the amount filled in (verified on iPhone, 2026-08-29).

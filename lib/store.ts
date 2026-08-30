@@ -6,7 +6,7 @@
 import fs from 'fs'
 import path from 'path'
 import type { Show, MerchItem, BandMember, SiteContent, MediaItem, EpkContent, BookingRequest, AdminNote, Subscriber, BandTask, SongStory, DailyReflection, FanStory } from './data'
-import type { CampaignOverrides, Sponsor, CampaignUpdate, SponsorInquiry } from './campaign'
+import type { CampaignOverrides, Sponsor, CampaignUpdate, SponsorInquiry, InKindItem } from './campaign'
 import type { LessonInquiry } from './lessons'
 import {
   shows as defaultShows,
@@ -42,6 +42,7 @@ export interface ContentStore {
   campaignSponsors?: Sponsor[]
   campaignUpdates?: CampaignUpdate[]
   sponsorInquiries?: SponsorInquiry[]
+  campaignInKind?: InKindItem[]
   // Voice lessons with Malachias — offer lives in lib/lessons.ts
   lessonInquiries?: LessonInquiry[]
 }

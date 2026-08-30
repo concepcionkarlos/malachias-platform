@@ -63,9 +63,27 @@ The "what the event covers" grid is never shown publicly. Once the organizer con
 
 Do not write "tax deductible", "501(c)(3)" or "tax-exempt" anywhere unless the recipient's documentation has been verified and the band explicitly approves it. Current copy uses "support the campaign / contribute / help the band reach San Antonio".
 
+## Money engines and how each is tracked
+
+| Engine | Where it's entered | Where it shows |
+|---|---|---|
+| Donations (Cash App) | Admin → Raised so far (after reconciling) | progress card, banner, home block |
+| Donations (secure platform) | Admin → Secure donation link (Givebutter) once the **official, verified** link exists | "Donate securely" becomes the first button; Cash App second |
+| Merch | Fourthwall dashboard; count profit into "Raised so far" if you decide to | store strip + campaign merch section |
+| Cash sponsors | Admin → Sponsors (name, tier, logo); add the payment to "Raised so far" | sponsor wall |
+| In-kind sponsors | Admin → In-kind support (category, sponsor, value, **confirmed**) | "Plus $X in confirmed in-kind support" on the progress card; reduces "still needed" in the internal budget |
+
+Nonprofit status: the `Nonprofit status verified` checkbox is a flag for us. It adds **no** tax-deductibility wording anywhere — that copy is written only after documents are in hand and reviewed. Do not state or imply tax deductibility before then.
+
+Peer-to-peer (each musician's own page feeding the main campaign) is prepared conceptually only: once the platform provides real per-person links, add them as `campaignSponsors`-style entries or a small `peerLinks` list — no individual public goals until approved.
+
+## Internal budget
+
+Admin → *Internal budget* recomputes the 5-musician model (`lib/campaign.ts` → `BUDGET_MODEL`, `BUDGET_SCENARIOS`) from the `Travelers` field and shows the three scenarios ($12k / $15k / $18–20k). It never renders publicly. Full notes: BUDGET.md.
+
 ## Analytics
 
-Vercel Analytics is mounted site-wide. Campaign events: `campaign_page_view`, `donate_click`, `cashapp_click`, `cashtag_copy`, `merch_click`, `sponsor_click`, `sponsor_form_submit`, `share_click`, `campaign_video_play`, `campaign_banner_click` (all carry `campaign=road-to-san-antonio` and a coarse `surface`/`channel`/`tier`). Enable Analytics for the project in the Vercel dashboard if it is not already on.
+Vercel Analytics is mounted site-wide. Campaign events: `campaign_page_view`, `donate_click`, `cashapp_click`, `cashtag_copy`, `merch_click`, `sponsor_click`, `sponsor_form_submit`, `share_click`, `campaign_video_play`, `campaign_banner_click` (all carry `campaign=road-to-san-antonio` and a coarse `surface`/`channel`/`tier`). Analytics is enabled on the Vercel project. The admin's **This week — campaign dashboard** card reads page views, referrers and click events from the Web Analytics API when three env vars exist in the Vercel project: `VERCEL_API_TOKEN` (create at vercel.com/account/tokens — the CLI login token does **not** work for this API), `VERCEL_PROJECT_ID` = `prj_CAXb1KJ0yeSh95z3fKc715s5W2YB`, `VERCEL_TEAM_ID` = `team_yEjvwtXy1IY7Aq8qfZEL30Dp`. Until then, read them in Vercel → Analytics; the money half of the dashboard works regardless. Weekly report checklist: page views (campaign, home, /es, lessons) · referrers (facebook.com, instagram.com, l.instagram.com) · `donate_click` / `cashapp_click` / `cashtag_copy` · `sponsor_click` / `sponsor_form_submit` · `merch_click` · `share_click` · cash raised · in-kind confirmed · merch orders (Fourthwall) · sponsor inquiries → conversions. Facebook/Instagram reach, Story views and Reel views come from Meta Business Suite → Insights (export weekly).
 
 ## Later (not built)
 

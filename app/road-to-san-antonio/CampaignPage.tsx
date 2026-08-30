@@ -16,7 +16,7 @@ import DonateSection from './DonateSection'
 import SponsorSection from './SponsorSection'
 import UpdatesSection from './UpdatesSection'
 import ShareBar from './ShareBar'
-import { STATUS_COPY, MILESTONES, usd, formatEventDate, type CampaignConfig, type Sponsor, type CampaignUpdate, type CampaignStatus } from '@/lib/campaign'
+import { STATUS_COPY, MILESTONES, usd, formatEventDate, type CampaignConfig, type Sponsor, type CampaignUpdate, type CampaignStatus, type InKindItem } from '@/lib/campaign'
 import type { campaignMath } from '@/lib/campaign'
 import type { FWProduct } from '@/lib/fourthwall'
 import { fwFirstImage, fwPriceRange } from '@/lib/fourthwall'
@@ -34,6 +34,8 @@ interface Props {
   qrReady: boolean
   sponsors: Sponsor[]
   updates: CampaignUpdate[]
+  inKind: InKindItem[]
+  inKindValue: number
   products: FWProduct[]
   math: ReturnType<typeof campaignMath>
   url: string
@@ -42,7 +44,7 @@ interface Props {
 
 const ENDED: CampaignStatus[] = ['traveling', 'event-day', 'completed']
 
-export default function CampaignPage({ config, qrReady, sponsors, updates, products, math, url }: Props) {
+export default function CampaignPage({ config, qrReady, sponsors, updates, inKind, inKindValue, products, math, url }: Props) {
   const status = math.effectiveStatus
   const copy = STATUS_COPY[status]
   const live = status === 'active' || status === 'funded'
@@ -130,6 +132,11 @@ export default function CampaignPage({ config, qrReady, sponsors, updates, produ
           {math.milestone && (
             <p className="font-display mt-5" style={{ fontSize: 'clamp(1.3rem, 3vw, 1.9rem)', letterSpacing: '0.05em', color: '#c9a84c' }}>
               {math.milestone.title}
+            </p>
+          )}
+          {inKindValue > 0 && (
+            <p className="mt-4 text-[0.85rem]" style={{ color: 'var(--text-2)' }}>
+              Plus <b style={{ color: '#ede5d8' }}>{usd(inKindValue)}</b> in confirmed in-kind support ({[...new Set(inKind.map(i => i.category.toLowerCase()))].join(', ')}) — real costs already covered by sponsors.
             </p>
           )}
           {math.raised === 0 && live && (

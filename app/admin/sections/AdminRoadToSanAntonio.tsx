@@ -10,8 +10,8 @@ import { useEffect, useState } from 'react'
 import { Check, Plus, Trash2, ExternalLink, Copy } from 'lucide-react'
 import { OUTREACH_TEMPLATES, SOCIAL_TEMPLATES, SOCIAL_TEMPLATES_ES, DONOR_TEMPLATES, type Template } from '@/lib/campaignOutreach'
 import {
-  CAMPAIGN, SPONSOR_TIERS, SPONSOR_CATEGORIES, campaignMath, usd,
-  type CampaignOverrides, type CampaignStatus, type Sponsor, type CampaignUpdate, type SponsorInquiry, type SponsorTierId,
+  CAMPAIGN, SPONSOR_TIERS, SPONSOR_CATEGORIES, campaignMath, usd, budgetTotal, BUDGET_SCENARIOS, BUDGET_CONTINGENCY, inKindTotal,
+  type CampaignOverrides, type CampaignStatus, type Sponsor, type CampaignUpdate, type SponsorInquiry, type SponsorTierId, type InKindItem,
 } from '@/lib/campaign'
 
 const CARD: React.CSSProperties = { background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 8, padding: '20px 24px', marginBottom: 24 }
@@ -33,6 +33,15 @@ interface StoreSlice {
   campaignSponsors?: Sponsor[]
   campaignUpdates?: CampaignUpdate[]
   sponsorInquiries?: SponsorInquiry[]
+  campaignInKind?: InKindItem[]
+}
+
+interface Metrics {
+  analyticsConfigured: boolean
+  paths?: { data?: { requestPath?: string; total?: number; visitors?: number }[] } | null
+  referrers?: { data?: { referrerHostname?: string; total?: number }[] } | null
+  events?: { data?: { eventName?: string; total?: number }[] } | null
+  money: { raised: number; goal: number; percent: number; inKindConfirmed: number; inKindPending: number; sponsors: number; inquiries: { total: number; new: number; confirmed: number }; lessonInquiries: number }
 }
 
 const rid = () => Math.random().toString(36).slice(2, 10)
@@ -62,6 +71,8 @@ export default function AdminRoadToSanAntonio() {
   const [sponsors, setSponsors] = useState<Sponsor[]>([])
   const [updates, setUpdates] = useState<CampaignUpdate[]>([])
   const [inquiries, setInquiries] = useState<SponsorInquiry[]>([])
+  const [inKind, setInKind] = useState<InKindItem[]>([])
+  const [metrics, setMetrics] = useState<Metrics | null>(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
@@ -81,8 +92,10 @@ export default function AdminRoadToSanAntonio() {
       setSponsors(d.campaignSponsors ?? [])
       setUpdates(d.campaignUpdates ?? [])
       setInquiries(d.sponsorInquiries ?? [])
+      setInKind(d.campaignInKind ?? [])
       setLoading(false)
     }).catch(() => { setError('Failed to load'); setLoading(false) })
+    fetch('/api/admin/campaign-metrics').then(r => r.ok ? r.json() : null).then(m => { if (m) setMetrics(m) }).catch(() => {})
   }, [])
 
   const merged = { ...CAMPAIGN, ...o, cashApp: { ...CAMPAIGN.cashApp, ...(o?.cashApp ?? {}) } }
@@ -93,7 +106,7 @@ export default function AdminRoadToSanAntonio() {
     try {
       const res = await fetch('/api/content', {
         method: 'PATCH', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ campaign: o, campaignSponsors: sponsors, campaignUpdates: updates, sponsorInquiries: inquiries, ...extra }),
+        body: JSON.stringify({ campaign: o, campaignSponsors: sponsors, campaignUpdates: updates, sponsorInquiries: inquiries, campaignInKind: inKind, ...extra }),
       })
       if (!res.ok) throw new Error()
       setSaved(true); setTimeout(() => setSaved(false), 2000)
@@ -148,13 +161,101 @@ export default function AdminRoadToSanAntonio() {
 
       {/* ── Cash App ── */}
       <div style={CARD}>
-        <p style={HDR}>CASH APP</p>
+        <p style={HDR}>DONATIONS — SECURE PLATFORM + CASH APP</p>
+        <div style={{ ...GRID2, gridTemplateColumns: '2fr 1fr', marginBottom: 14 }}>
+          <div><label style={LABEL}>Secure donation link (Givebutter) — leave empty until the official campaign link exists</label><input style={INPUT} placeholder="https://givebutter.com/…" value={o?.donateUrl ?? ''} onChange={e => setField('donateUrl', e.target.value.trim())} /></div>
+          <label style={{ ...LABEL, display: 'flex', alignItems: 'center', gap: 8, marginTop: 20 }}><input type="checkbox" checked={!!o?.nonprofitVerified} onChange={e => setField('nonprofitVerified', e.target.checked)} /> Nonprofit status verified (documents in hand)</label>
+        </div>
+        <p style={{ fontSize: 12, color: '#8a7f70', margin: '0 0 14px' }}>With a link, the page shows <b>Donate securely</b> first and Cash App second. The nonprofit checkbox does not add any tax wording by itself — that copy is written only after legal review.</p>
+        <p style={{ ...HDR, marginTop: 6 }}>CASH APP</p>
         <div style={{ ...GRID2, gridTemplateColumns: '1fr 1fr 2fr' }}>
           <div><label style={LABEL}>Display name</label><input style={INPUT} value={o?.cashApp?.displayName ?? CAMPAIGN.cashApp.displayName} onChange={e => setO(c => ({ ...c, cashApp: { ...(c?.cashApp ?? {}), displayName: e.target.value } }))} /></div>
           <div><label style={LABEL}>$Cashtag</label><input style={INPUT} value={o?.cashApp?.cashtag ?? CAMPAIGN.cashApp.cashtag} onChange={e => setO(c => ({ ...c, cashApp: { ...(c?.cashApp ?? {}), cashtag: e.target.value } }))} /></div>
           <div><label style={LABEL}>Pay link</label><input style={INPUT} value={o?.cashApp?.url ?? CAMPAIGN.cashApp.url} onChange={e => setO(c => ({ ...c, cashApp: { ...(c?.cashApp ?? {}), url: e.target.value } }))} /></div>
         </div>
         <p style={{ fontSize: 12, color: '#8a7f70', margin: '10px 0 0' }}>QR image file: <code>public{CAMPAIGN.cashApp.qrImage}</code> — replace the file in the repo to change it; the page hides the QR automatically if the file is missing.</p>
+      </div>
+
+      {/* ── Dashboard (last 7 days) ── */}
+      <div style={CARD}>
+        <p style={HDR}>THIS WEEK — CAMPAIGN DASHBOARD</p>
+        {!metrics ? <p style={{ fontSize: 12, color: '#8a7f70', margin: 0 }}>Loading…</p> : (
+          <>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 10, marginBottom: 14 }}>
+              {[
+                ['Cash raised', usd(metrics.money.raised)], ['In-kind confirmed', usd(metrics.money.inKindConfirmed)], ['In-kind pending', usd(metrics.money.inKindPending)],
+                ['Sponsors live', String(metrics.money.sponsors)], ['Sponsor inquiries', `${metrics.money.inquiries.total} (${metrics.money.inquiries.new} new)`], ['Lesson inquiries', String(metrics.money.lessonInquiries)],
+              ].map(([k, v]) => (
+                <div key={k} style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 6, padding: '10px 12px' }}>
+                  <div style={{ fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: '#8a7f70' }}>{k}</div>
+                  <div style={{ fontFamily: 'var(--font-display)', fontSize: 22, color: '#e8ddd0', letterSpacing: '0.04em' }}>{v}</div>
+                </div>
+              ))}
+            </div>
+            {!metrics.analyticsConfigured ? (
+              <p style={{ fontSize: 12, color: '#8a7f70', margin: 0 }}>Web traffic and click events appear here once <code>VERCEL_API_TOKEN</code>, <code>VERCEL_PROJECT_ID</code> and <code>VERCEL_TEAM_ID</code> are set in the Vercel project (see docs/road-to-san-antonio/ADMIN.md). Until then, read them in the Vercel dashboard → Analytics.</p>
+            ) : (
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 14, fontSize: 12, color: '#a89880' }}>
+                <div><b style={{ color: '#c9a84c' }}>Page views (7 d)</b>{(metrics.paths?.data ?? []).filter(r => (r.requestPath ?? '').includes('road-to-san-antonio') || r.requestPath === '/' || (r.requestPath ?? '').includes('voice-lessons') || r.requestPath === '/es').slice(0, 8).map(r => <div key={r.requestPath}>{r.requestPath}: {r.total}</div>)}</div>
+                <div><b style={{ color: '#c9a84c' }}>Referrers</b>{(metrics.referrers?.data ?? []).slice(0, 8).map(r => <div key={r.referrerHostname}>{r.referrerHostname || '(direct)'}: {r.total}</div>)}</div>
+                <div><b style={{ color: '#c9a84c' }}>Clicks / events</b>{(metrics.events?.data ?? []).slice(0, 10).map(r => <div key={r.eventName}>{r.eventName}: {r.total}</div>)}</div>
+              </div>
+            )}
+          </>
+        )}
+      </div>
+
+      {/* ── Internal budget (never public) ── */}
+      <div style={CARD}>
+        <p style={HDR}>INTERNAL BUDGET — {merged.travelers} MUSICIANS (planning numbers, not public)</p>
+        {(() => { const b = budgetTotal(merged.travelers); return (
+          <>
+            <table style={{ width: '100%', fontSize: 12, color: '#a89880', borderCollapse: 'collapse' }}>
+              <tbody>
+                {b.lines.map(l => (
+                  <tr key={l.key} style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+                    <td style={{ padding: '6px 0', color: '#e8ddd0' }}>{l.label}</td>
+                    <td style={{ padding: '6px 8px' }}>{l.fixed ? 'fixed' : `${usd(l.key === 'artist' ? 500 : (l.perMusician ?? 0))} × ${merged.travelers}`}</td>
+                    <td style={{ padding: '6px 8px', textAlign: 'right', color: '#e8ddd0', fontFamily: 'var(--font-display)', fontSize: 15 }}>{usd(l.amount)}</td>
+                    <td style={{ padding: '6px 0 6px 12px', color: '#6f665a' }}>{l.note}</td>
+                  </tr>
+                ))}
+                <tr style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}><td style={{ padding: '6px 0' }}>Contingency {Math.round(BUDGET_CONTINGENCY * 100)}%</td><td /><td style={{ textAlign: 'right', color: '#e8ddd0', fontFamily: 'var(--font-display)', fontSize: 15 }}>{usd(b.contingency)}</td><td /></tr>
+                <tr style={{ borderTop: '1px solid rgba(201,168,76,0.3)' }}><td style={{ padding: '8px 0', color: '#c9a84c', fontWeight: 700 }}>Minimum mission total</td><td /><td style={{ textAlign: 'right', color: '#c9a84c', fontFamily: 'var(--font-display)', fontSize: 18 }}>{usd(b.total)}</td><td style={{ padding: '8px 0 8px 12px', color: '#6f665a' }}>Public goal stays {usd(merged.goal)} until approved</td></tr>
+              </tbody>
+            </table>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10, marginTop: 14 }}>
+              {BUDGET_SCENARIOS.map(sc => { const t = budgetTotal(merged.travelers, sc.artistPerMusician); return (
+                <div key={sc.id} style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 6, padding: '10px 12px' }}>
+                  <div style={{ fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: '#8a7f70' }}>{sc.name}</div>
+                  <div style={{ fontFamily: 'var(--font-display)', fontSize: 22, color: '#e8ddd0' }}>{usd(sc.target)} <span style={{ fontSize: 12, color: '#6f665a' }}>· model {usd(t.total)}</span></div>
+                  <div style={{ fontSize: 11, color: '#8a7f70', marginTop: 4 }}>{sc.note}</div>
+                </div>
+              ) })}
+            </div>
+            <p style={{ fontSize: 12, color: '#8a7f70', margin: '10px 0 0' }}>Confirmed in-kind below reduces what cash has to cover: still needed ≈ <b style={{ color: '#e8ddd0' }}>{usd(Math.max(0, b.total - math.raised - inKindTotal(inKind)))}</b> on the minimum model.</p>
+          </>
+        ) })()}
+      </div>
+
+      {/* ── In-kind support ── */}
+      <div style={CARD}>
+        <p style={HDR}>IN-KIND SUPPORT (flights, rooms, van, gear, meals) — {usd(inKindTotal(inKind))} confirmed</p>
+        {inKind.map((k, i) => (
+          <div key={k.id} style={{ display: 'grid', gridTemplateColumns: '1.2fr 1.4fr 2fr 1fr auto auto', gap: 8, alignItems: 'end', marginBottom: 8 }}>
+            <div><label style={LABEL}>Category</label>
+              <select style={INPUT} value={k.category} onChange={e => setInKind(l => l.map((x, j) => j === i ? { ...x, category: e.target.value as InKindItem['category'] } : x))}>
+                {['Travel', 'Lodging', 'Transportation', 'Meals', 'Gear', 'Other'].map(c => <option key={c} value={c}>{c}</option>)}
+              </select></div>
+            <div><label style={LABEL}>Sponsor</label><input style={INPUT} value={k.sponsor} onChange={e => setInKind(l => l.map((x, j) => j === i ? { ...x, sponsor: e.target.value } : x))} /></div>
+            <div><label style={LABEL}>What exactly</label><input style={INPUT} value={k.description} onChange={e => setInKind(l => l.map((x, j) => j === i ? { ...x, description: e.target.value } : x))} /></div>
+            <div><label style={LABEL}>Value (USD)</label><input style={INPUT} inputMode="numeric" value={k.value} onChange={e => setInKind(l => l.map((x, j) => j === i ? { ...x, value: num(e.target.value) } : x))} /></div>
+            <label style={{ ...LABEL, marginBottom: 8 }}><input type="checkbox" checked={k.confirmed} onChange={e => setInKind(l => l.map((x, j) => j === i ? { ...x, confirmed: e.target.checked } : x))} /> confirmed</label>
+            <button style={BTN_SM} aria-label="Remove" onClick={() => setInKind(l => l.filter((_, j) => j !== i))}><Trash2 size={13} /></button>
+          </div>
+        ))}
+        <button style={BTN_SM} onClick={() => setInKind(l => [...l, { id: rid(), category: 'Travel', sponsor: '', description: '', value: 0, confirmed: false, addedAt: today() }])}><Plus size={13} /> Add in-kind item</button>
+        <p style={{ fontSize: 12, color: '#8a7f70', margin: '10px 0 0' }}>Only <b>confirmed</b> items show on the campaign page (&quot;Plus $X in confirmed in-kind support&quot;). Pending = promised, not yet in writing.</p>
       </div>
 
       {/* ── Sponsors ── */}

@@ -60,6 +60,8 @@ export default async function RoadToSanAntonioPage() {
         qrReady={view.qrReady}
         sponsors={view.sponsors}
         updates={view.updates}
+        inKind={view.inKind}
+        inKindValue={view.inKindValue}
         products={products}
         math={math}
         url={URL}
