@@ -44,3 +44,10 @@ Pick a sequence (hook → story → human → progress → CTA), fill the frames
 
 ## Weekly rhythm (from now to Nov 12)
 Daily 3–5 Stories · weekly 3–4 Reels, 2 feed posts, 1 campaign update, 1 sponsor post, 1 merch push. Not every Reel is a fundraiser: rotate human / music / campaign / sponsor.
+
+## Once Givebutter is live (add to the rotation; link sticker → Givebutter campaign)
+- **SUPPORT THE ROAD 🇺🇸** — [Givebutter link sticker]
+- **Five musicians. Miami → San Antonio. November 12. HELP US GET THERE** — [Donate]
+- **ROAD TO SAN ANTONIO · $X / $12K** — [Support the Mission] (ledger number only)
+- **Support [name]'s road →** one frame per musician's personal page (peer-to-peer), rotate one per day
+- ES: **APOYA EL CAMINO 🇺🇸** · **Cinco músicos. Miami → San Antonio. 12 de noviembre. AYÚDANOS A LLEGAR**

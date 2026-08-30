@@ -62,6 +62,7 @@ export default async function RoadToSanAntonioPage() {
         updates={view.updates}
         inKind={view.inKind}
         inKindValue={view.inKindValue}
+        peerLinks={view.peerLinks}
         products={products}
         math={math}
         url={URL}

@@ -10,8 +10,8 @@ import { useEffect, useState } from 'react'
 import { Check, Plus, Trash2, ExternalLink, Copy } from 'lucide-react'
 import { OUTREACH_TEMPLATES, SOCIAL_TEMPLATES, SOCIAL_TEMPLATES_ES, DONOR_TEMPLATES, type Template } from '@/lib/campaignOutreach'
 import {
-  CAMPAIGN, SPONSOR_TIERS, SPONSOR_CATEGORIES, campaignMath, usd, budgetTotal, BUDGET_SCENARIOS, BUDGET_CONTINGENCY, inKindTotal,
-  type CampaignOverrides, type CampaignStatus, type Sponsor, type CampaignUpdate, type SponsorInquiry, type SponsorTierId, type InKindItem,
+  CAMPAIGN, SPONSOR_TIERS, SPONSOR_CATEGORIES, campaignMath, usd, budgetTotal, BUDGET_SCENARIOS, BUDGET_CONTINGENCY, inKindTotal, ledgerTotals, LEDGER_SOURCE_LABEL,
+  type CampaignOverrides, type CampaignStatus, type Sponsor, type CampaignUpdate, type SponsorInquiry, type SponsorTierId, type InKindItem, type LedgerEntry, type LedgerSource, type PeerLink,
 } from '@/lib/campaign'
 
 const CARD: React.CSSProperties = { background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 8, padding: '20px 24px', marginBottom: 24 }
@@ -34,6 +34,8 @@ interface StoreSlice {
   campaignUpdates?: CampaignUpdate[]
   sponsorInquiries?: SponsorInquiry[]
   campaignInKind?: InKindItem[]
+  campaignLedger?: LedgerEntry[]
+  campaignPeerLinks?: PeerLink[]
 }
 
 interface Metrics {
@@ -72,6 +74,8 @@ export default function AdminRoadToSanAntonio() {
   const [updates, setUpdates] = useState<CampaignUpdate[]>([])
   const [inquiries, setInquiries] = useState<SponsorInquiry[]>([])
   const [inKind, setInKind] = useState<InKindItem[]>([])
+  const [ledger, setLedger] = useState<LedgerEntry[]>([])
+  const [peers, setPeers] = useState<PeerLink[]>([])
   const [metrics, setMetrics] = useState<Metrics | null>(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -93,6 +97,8 @@ export default function AdminRoadToSanAntonio() {
       setUpdates(d.campaignUpdates ?? [])
       setInquiries(d.sponsorInquiries ?? [])
       setInKind(d.campaignInKind ?? [])
+      setLedger(d.campaignLedger ?? [])
+      setPeers(d.campaignPeerLinks ?? [])
       setLoading(false)
     }).catch(() => { setError('Failed to load'); setLoading(false) })
     fetch('/api/admin/campaign-metrics').then(r => r.ok ? r.json() : null).then(m => { if (m) setMetrics(m) }).catch(() => {})
@@ -106,7 +112,7 @@ export default function AdminRoadToSanAntonio() {
     try {
       const res = await fetch('/api/content', {
         method: 'PATCH', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ campaign: o, campaignSponsors: sponsors, campaignUpdates: updates, sponsorInquiries: inquiries, campaignInKind: inKind, ...extra }),
+        body: JSON.stringify({ campaign: o, campaignSponsors: sponsors, campaignUpdates: updates, sponsorInquiries: inquiries, campaignInKind: inKind, campaignLedger: ledger, campaignPeerLinks: peers, ...extra }),
       })
       if (!res.ok) throw new Error()
       setSaved(true); setTimeout(() => setSaved(false), 2000)
@@ -141,7 +147,7 @@ export default function AdminRoadToSanAntonio() {
         </p>
         <div style={{ ...GRID2, gridTemplateColumns: '1fr 1fr 1fr 1fr' }}>
           <div><label style={LABEL}>Goal (USD)</label><input style={INPUT} inputMode="numeric" value={o?.goal ?? CAMPAIGN.goal} onChange={e => setField('goal', num(e.target.value))} /></div>
-          <div><label style={LABEL}>Raised so far (USD)</label><input style={INPUT} inputMode="numeric" value={o?.raised ?? CAMPAIGN.raised} onChange={e => setField('raised', num(e.target.value))} /></div>
+          <div><label style={LABEL}>Raised so far (USD){ledger.length > 0 ? ' — computed from the ledger below' : ''}</label><input style={INPUT} inputMode="numeric" disabled={ledger.length > 0} value={ledger.length > 0 ? ledgerTotals(ledger).total : (o?.raised ?? CAMPAIGN.raised)} onChange={e => setField('raised', num(e.target.value))} /></div>
           <div><label style={LABEL}>Reconciled on</label><input style={INPUT} type="date" value={o?.raisedAsOf ?? ''} onChange={e => setField('raisedAsOf', e.target.value)} /></div>
           <div><label style={LABEL}>Status</label>
             <select style={INPUT} value={o?.status ?? CAMPAIGN.status} onChange={e => setField('status', e.target.value as CampaignStatus)}>
@@ -236,6 +242,49 @@ export default function AdminRoadToSanAntonio() {
             <p style={{ fontSize: 12, color: '#8a7f70', margin: '10px 0 0' }}>Confirmed in-kind below reduces what cash has to cover: still needed ≈ <b style={{ color: '#e8ddd0' }}>{usd(Math.max(0, b.total - math.raised - inKindTotal(inKind)))}</b> on the minimum model.</p>
           </>
         ) })()}
+      </div>
+
+      {/* ── Verified-support ledger ── */}
+      <div style={CARD}>
+        <p style={HDR}>VERIFIED SUPPORT LEDGER — {usd(ledgerTotals(ledger).total)} cash · every amount with its source</p>
+        <p style={{ fontSize: 12, color: '#8a7f70', marginTop: 0 }}>One row per reconciliation (a Givebutter payout, a week of Cash App activity, a merch payout, a sponsor&apos;s check). Rows here <b>replace</b> the manual &quot;Raised so far&quot; and become the public number. Never enter anything that hasn&apos;t actually arrived.</p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8, marginBottom: 12 }}>
+          {(Object.keys(LEDGER_SOURCE_LABEL) as LedgerSource[]).map(src => (
+            <div key={src} style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 6, padding: '8px 10px' }}>
+              <div style={{ fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#8a7f70' }}>{LEDGER_SOURCE_LABEL[src]}</div>
+              <div style={{ fontFamily: 'var(--font-display)', fontSize: 20, color: '#e8ddd0' }}>{usd(ledgerTotals(ledger).by[src])}</div>
+            </div>
+          ))}
+        </div>
+        {ledger.map((r, i) => (
+          <div key={r.id} style={{ display: 'grid', gridTemplateColumns: '150px 1.4fr 1fr 2.4fr auto', gap: 8, alignItems: 'end', marginBottom: 8 }}>
+            <div><label style={LABEL}>Date</label><input style={INPUT} type="date" value={r.date} onChange={e => setLedger(l => l.map((x, j) => j === i ? { ...x, date: e.target.value } : x))} /></div>
+            <div><label style={LABEL}>Source</label>
+              <select style={INPUT} value={r.source} onChange={e => setLedger(l => l.map((x, j) => j === i ? { ...x, source: e.target.value as LedgerSource } : x))}>
+                {(Object.keys(LEDGER_SOURCE_LABEL) as LedgerSource[]).map(s => <option key={s} value={s}>{LEDGER_SOURCE_LABEL[s]}</option>)}
+              </select></div>
+            <div><label style={LABEL}>Amount (USD, as received)</label><input style={INPUT} inputMode="numeric" value={r.amount} onChange={e => setLedger(l => l.map((x, j) => j === i ? { ...x, amount: num(e.target.value) } : x))} /></div>
+            <div><label style={LABEL}>Reference / note</label><input style={INPUT} placeholder="Givebutter payout #… · Cash App activity Aug 25–31 · Sponsor: …" value={r.note} onChange={e => setLedger(l => l.map((x, j) => j === i ? { ...x, note: e.target.value } : x))} /></div>
+            <button style={BTN_SM} aria-label="Remove row" onClick={() => setLedger(l => l.filter((_, j) => j !== i))}><Trash2 size={13} /></button>
+          </div>
+        ))}
+        <button style={BTN_SM} onClick={() => setLedger(l => [...l, { id: rid(), date: today(), source: 'cashapp', amount: 0, note: '' }])}><Plus size={13} /> Add reconciliation</button>
+      </div>
+
+      {/* ── Peer-to-peer team ── */}
+      <div style={CARD}>
+        <p style={HDR}>ROAD TO SAN ANTONIO TEAM — personal Givebutter pages ({peers.filter(p => p.visible && p.url).length} live)</p>
+        <p style={{ fontSize: 12, color: '#8a7f70', marginTop: 0 }}>Once the Givebutter campaign has peer-to-peer enabled, paste each musician&apos;s member page link. Visible links appear on the campaign page as &quot;Support [name]&apos;s road&quot;; all of them feed the same campaign total. No individual public goals unless approved.</p>
+        {peers.map((p, i) => (
+          <div key={p.id} style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 2.4fr auto auto', gap: 8, alignItems: 'end', marginBottom: 8 }}>
+            <div><label style={LABEL}>Name</label><input style={INPUT} value={p.name} onChange={e => setPeers(l => l.map((x, j) => j === i ? { ...x, name: e.target.value } : x))} /></div>
+            <div><label style={LABEL}>Role</label><input style={INPUT} placeholder="Lead guitar" value={p.role} onChange={e => setPeers(l => l.map((x, j) => j === i ? { ...x, role: e.target.value } : x))} /></div>
+            <div><label style={LABEL}>Member page URL (givebutter.com/…)</label><input style={INPUT} value={p.url} onChange={e => setPeers(l => l.map((x, j) => j === i ? { ...x, url: e.target.value.trim() } : x))} /></div>
+            <label style={{ ...LABEL, marginBottom: 8 }}><input type="checkbox" checked={p.visible} onChange={e => setPeers(l => l.map((x, j) => j === i ? { ...x, visible: e.target.checked } : x))} /> shown</label>
+            <button style={BTN_SM} aria-label="Remove member" onClick={() => setPeers(l => l.filter((_, j) => j !== i))}><Trash2 size={13} /></button>
+          </div>
+        ))}
+        <button style={BTN_SM} onClick={() => setPeers(l => [...l, { id: rid(), name: '', role: '', url: '', visible: false }])}><Plus size={13} /> Add member</button>
       </div>
 
       {/* ── In-kind support ── */}

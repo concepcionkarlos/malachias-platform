@@ -183,6 +183,31 @@ export function budgetTotal(travelers: number, artistPerMusician = 500) {
   return { lines, subtotal, contingency, total: subtotal + contingency }
 }
 
+// Verified-support ledger: every dollar that counts toward the public "raised"
+// number has a row with its source and the reconciliation note. Cash sources add
+// up to `raised`; in-kind stays separate (InKindItem). When the ledger has rows it
+// is the source of truth and the manual `raised` override is ignored.
+export type LedgerSource = 'givebutter' | 'cashapp' | 'merch' | 'sponsor-cash'
+export const LEDGER_SOURCE_LABEL: Record<LedgerSource, string> = {
+  givebutter: 'Givebutter donations', cashapp: 'Cash App donations', merch: 'Merch net contribution', 'sponsor-cash': 'Cash sponsorships',
+}
+export interface LedgerEntry {
+  id: string
+  date: string          // YYYY-MM-DD of the reconciliation
+  source: LedgerSource
+  amount: number        // USD, net of fees as received
+  note: string          // "Givebutter payout #…", "Cash App activity Aug 25–31", sponsor name…
+}
+export const ledgerTotals = (rows: LedgerEntry[]) => {
+  const by: Record<LedgerSource, number> = { givebutter: 0, cashapp: 0, merch: 0, 'sponsor-cash': 0 }
+  for (const r of rows) by[r.source] += Math.max(0, r.amount)
+  return { by, total: Object.values(by).reduce((s, n) => s + n, 0) }
+}
+
+// Peer-to-peer: each traveling musician's personal Givebutter team page. Empty
+// until the team campaign exists; all links feed the same campaign total.
+export interface PeerLink { id: string; name: string; role: string; url: string; visible: boolean }
+
 export const inKindTotal = (items: InKindItem[]) => items.filter(i => i.confirmed).reduce((s, i) => s + Math.max(0, i.value), 0)
 
 // Suggested contribution anchors. Each one links to `cash.app/$cashtag/<amount>`

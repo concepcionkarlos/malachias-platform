@@ -16,7 +16,7 @@ import DonateSection from './DonateSection'
 import SponsorSection from './SponsorSection'
 import UpdatesSection from './UpdatesSection'
 import ShareBar from './ShareBar'
-import { STATUS_COPY, MILESTONES, usd, formatEventDate, type CampaignConfig, type Sponsor, type CampaignUpdate, type CampaignStatus, type InKindItem } from '@/lib/campaign'
+import { STATUS_COPY, MILESTONES, usd, formatEventDate, type CampaignConfig, type Sponsor, type CampaignUpdate, type CampaignStatus, type InKindItem, type PeerLink } from '@/lib/campaign'
 import type { campaignMath } from '@/lib/campaign'
 import type { FWProduct } from '@/lib/fourthwall'
 import { fwFirstImage, fwPriceRange } from '@/lib/fourthwall'
@@ -36,6 +36,7 @@ interface Props {
   updates: CampaignUpdate[]
   inKind: InKindItem[]
   inKindValue: number
+  peerLinks: PeerLink[]
   products: FWProduct[]
   math: ReturnType<typeof campaignMath>
   url: string
@@ -44,7 +45,7 @@ interface Props {
 
 const ENDED: CampaignStatus[] = ['traveling', 'event-day', 'completed']
 
-export default function CampaignPage({ config, qrReady, sponsors, updates, inKind, inKindValue, products, math, url }: Props) {
+export default function CampaignPage({ config, qrReady, sponsors, updates, inKind, inKindValue, peerLinks, products, math, url }: Props) {
   const status = math.effectiveStatus
   const copy = STATUS_COPY[status]
   const live = status === 'active' || status === 'funded'
@@ -241,6 +242,28 @@ export default function CampaignPage({ config, qrReady, sponsors, updates, inKin
 
       {/* ── 6. DONATE ───────────────────────────────────────────────────── */}
       {live && <DonateSection config={config} qrReady={qrReady} />}
+
+      {/* ── 6b. PEER-TO-PEER — one card per traveling musician (only when the team exists) ── */}
+      {live && peerLinks.length > 0 && (
+        <section id="team" className="section-pad" style={{ background: '#030201', scrollMarginTop: 80 }}>
+          <div className="max-w-6xl mx-auto px-6">
+            <motion.p {...fade()} className="label-xs mb-3" style={{ color: 'var(--gold)', letterSpacing: '0.40em' }}>Road to San Antonio team</motion.p>
+            <motion.h2 {...fade(0.05)} className="font-display leading-[0.92] tracking-[0.06em] text-white" style={{ fontSize: 'clamp(2.4rem, 6vw, 4.2rem)' }}>SUPPORT ONE MUSICIAN&apos;S ROAD</motion.h2>
+            <motion.p {...fade(0.1)} className="mt-4 text-[0.9rem] leading-relaxed" style={{ color: 'var(--text-2)', maxWidth: '40rem' }}>
+              Every member has a personal page. Whichever one you pick, it all lands in the same campaign total.
+            </motion.p>
+            <div className="mt-8 grid sm:grid-cols-2 lg:grid-cols-5 gap-3">
+              {peerLinks.map((p, i) => (
+                <motion.a key={p.id} {...fade(0.05 + i * 0.04)} href={p.url} target="_blank" rel="noopener noreferrer" className="tac-box block" style={{ padding: '1.2rem 1.2rem', textDecoration: 'none' }} onClick={() => trackCampaign('donate_click', { surface: 'peer' })}>
+                  <p className="font-display" style={{ fontSize: '1.5rem', letterSpacing: '0.05em', color: '#ede5d8', lineHeight: 1 }}>{p.name}</p>
+                  <p className="mt-1" style={{ fontSize: '0.64rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#c9a84c' }}>{p.role}</p>
+                  <p className="mt-3" style={{ fontSize: '0.68rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--text-2)' }}>Support {p.name.split(' ')[0]}&apos;s road →</p>
+                </motion.a>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ── 7. MERCH ────────────────────────────────────────────────────── */}
       <section id="merch" className="section-pad" style={{ background: '#040404', scrollMarginTop: 80 }}>
