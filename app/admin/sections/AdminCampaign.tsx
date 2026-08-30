@@ -72,7 +72,7 @@ The official Malachias merch store is live — and as one of our subscribers, yo
 
 Use code ${COUPON} at checkout.
 
-☕ Support Mug — from $8.95
+☕ Support Mug — from $9.99
 🧢 Warrior Hat — $19.99
 🧢 Trucker Hat — $19.99
 👕 Premium Tee — from $34.99
@@ -99,7 +99,7 @@ Still thinking about it? No rush.
 
 Code: ${COUPON} — ${DISCOUNT} off → ${MERCH_URL}
 
-The mug starts at $8.95. Take it or leave it — but the people who grabbed one haven't looked back.
+The mug starts at $9.99. Take it or leave it — but the people who grabbed one haven't looked back.
 
 God bless,
 Malachias`,
@@ -147,7 +147,7 @@ So we made something.
 
 Official Malachias merch is live — and you get first access with 15% off your first order. Subscribe below and the code goes straight to your inbox.
 
-☕ Support Mug — from $8.95
+☕ Support Mug — from $9.99
 🧢 Warrior Hat — $19.99
 🧢 Trucker Hat — $19.99
 👕 Premium Tee — from $34.99
@@ -179,7 +179,7 @@ Así que hicimos algo.
 
 La tienda oficial de Malachias ya está disponible — y tienes acceso primero con 15% de descuento en tu primer pedido. Suscríbete abajo y el código llega directo a tu correo.
 
-☕ Support Mug — desde $8.95
+☕ Support Mug — desde $9.99
 🧢 Warrior Hat — $19.99
 🧢 Trucker Hat — $19.99
 👕 Premium Tee — desde $34.99
@@ -199,13 +199,13 @@ Gracias por estar aquí.
     id: 'p2',
     day: 'Day 2',
     label: 'The Mug — Daily Habit (Entry Price)',
-    note: "Entry point at $8.95. Angle: how you start the day says something about what you're aligned with. Accessible for anyone.",
+    note: "Entry point at $9.99. Angle: how you start the day says something about what you're aligned with. Accessible for anyone.",
     platform: 'Facebook / Instagram',
     text: `How you start the day matters.
 
 Start it on the right side of the mission.
 
-☕ The Malachias Support Mug — from $8.95.
+☕ The Malachias Support Mug — from $9.99.
 
 Less than the coffee you put in it. More than a reminder — a daily choice.
 
@@ -295,7 +295,7 @@ Subscribe and get 15% off → malachiasmusic.com/promo
 
 MALACHIAS15 — 15% off your first order.
 
-The mug starts at $8.95. Subscribe, get the code, use it.
+The mug starts at $9.99. Subscribe, get the code, use it.
 
 → malachiasmusic.com/promo
 
@@ -318,7 +318,7 @@ Subtext: "Faith. Freedom. Music."
 SLIDE 2 — The Products
 Background: Product photo
 Text:
-"☕ Mug from $8.95"
+"☕ Mug from $9.99"
 "🧢 Hats $19.99"
 "👕 Tee from $34.99"
 Bottom: "Subscribe → 15% off"
@@ -433,7 +433,7 @@ const STEPS = [
   {
     n: 6,
     title: 'Post "The Mug" (Day 2, 9am)',
-    detail: 'Product focus post — entry price $8.95. Most accessible item. Use it to reach people who follow but haven\'t committed to a purchase yet.',
+    detail: 'Product focus post — entry price $9.99. Most accessible item. Use it to reach people who follow but haven\'t committed to a purchase yet.',
   },
   {
     n: 7,
