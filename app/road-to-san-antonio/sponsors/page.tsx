@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { getCampaign } from '@/lib/campaignServer'
-import { SPONSOR_TIERS, SPONSOR_CATEGORIES, campaignMath, campaignUrl, formatEventDate, usd, type SponsorTierId } from '@/lib/campaign'
+import { SPONSOR_TIERS, SPONSOR_CATEGORIES, PRESS, campaignMath, campaignUrl, formatEventDate, usd, type SponsorTierId } from '@/lib/campaign'
 import { ARTIST } from '@/lib/releases'
 import PrintButton from './PrintButton'
 
@@ -115,6 +115,15 @@ export default async function SponsorKitPage({ searchParams }: { searchParams: P
 
         <p style={LABEL}>{t.band}</p>
         <p style={{ marginTop: '0.75rem', lineHeight: 1.75 }}>{t.bandText}</p>
+
+        {PRESS.length > 0 && (
+          <p style={{ marginTop: '1rem', fontSize: '0.9rem', color: '#a89880', lineHeight: 1.7 }}>
+            {lang === 'es' ? 'Reseñado anteriormente en ' : 'Previously featured in '}
+            {PRESS.map((p, i) => (
+              <span key={p.outlet}>{i > 0 && ' · '}<a href={p.url} target="_blank" rel="noopener noreferrer">{p.outlet}</a> ({p.date})</span>
+            ))}.
+          </p>
+        )}
 
         <p style={{ ...LABEL, marginTop: '2rem' }}>{t.opp}</p>
         <p style={{ marginTop: '0.75rem', lineHeight: 1.75 }}>{t.oppText(config.eventName, config.eventCity, date, config.travelers)}</p>

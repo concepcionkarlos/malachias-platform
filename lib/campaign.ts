@@ -208,6 +208,19 @@ export const ledgerTotals = (rows: LedgerEntry[]) => {
 // until the team campaign exists; all links feed the same campaign total.
 export interface PeerLink { id: string; name: string; role: string; url: string; visible: boolean }
 
+// Verified press. Only entries someone can click and check; wording stays factual
+// ("featured in"), no logos, no implied endorsement.
+export interface PressMention { outlet: string; title: string; date: string; url: string; note: string }
+export const PRESS: PressMention[] = [
+  {
+    outlet: 'Cashbox Magazine',
+    title: 'Artist Spotlight: Malachias Gaskin',
+    date: 'March 2023',
+    url: 'https://www.cashboxmagazine.org/',
+    note: 'Feature by Robin Tanner on his service, his recovery and the founding of A Warrior\'s Garden and Warfighter Gardens.',
+  },
+]
+
 export const inKindTotal = (items: InKindItem[]) => items.filter(i => i.confirmed).reduce((s, i) => s + Math.max(0, i.value), 0)
 
 // Suggested contribution anchors. Each one links to `cash.app/$cashtag/<amount>`

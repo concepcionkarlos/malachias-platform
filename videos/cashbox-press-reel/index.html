@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait"
+  data-composition-variables='[
+    {"id":"t1","type":"string","label":"Hook","default":"BEFORE THIS BAND EVEN EXISTED…"},
+    {"id":"t2a","type":"string","label":"Article line 1","default":"CASHBOX MAGAZINE"},
+    {"id":"t2b","type":"string","label":"Article line 2","default":"MARCH 2023"},
+    {"id":"b2","type":"string","label":"Article body","default":"was already telling Malachias Gaskin&rsquo;s story."},
+    {"id":"l1","type":"string","label":"Fact 1","default":"ARMY VETERAN"},
+    {"id":"l2","type":"string","label":"Fact 2","default":"COMBAT MEDIC"},
+    {"id":"l3","type":"string","label":"Fact 3","default":"IRAQ — TWICE"},
+    {"id":"l4","type":"string","label":"Fact 4","default":"ARMY BANDSMAN"},
+    {"id":"t4","type":"string","label":"Transition year","default":"2026."},
+    {"id":"b4a","type":"string","label":"Transition line 1","default":"NEW BAND."},
+    {"id":"b4b","type":"string","label":"Transition line 2","default":"NEW CHAPTER."},
+    {"id":"t5a","type":"string","label":"Mission line 1","default":"FIVE MUSICIANS."},
+    {"id":"t5b","type":"string","label":"Mission line 2","default":"ONE VETERANS DAY STAGE."},
+    {"id":"t6a","type":"string","label":"End 1","default":"ROAD TO SAN ANTONIO"},
+    {"id":"t6b","type":"string","label":"End 2","default":"NOV 12"},
+    {"id":"b6","type":"string","label":"End body","default":"Help us get there."},
+    {"id":"bar","type":"string","label":"Bar","default":"Road to San Antonio"}
+  ]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Cashbox press — Road to San Antonio Reel</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700&display=swap" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+      body { font-family: "Inter", system-ui, sans-serif; color: #e8ddd0; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; }
+      .clip { position: absolute; inset: 0; overflow: hidden; }
+      .bg { position: absolute; inset: 0; background: linear-gradient(160deg, #020202 0%, #0a0602 55%, #030202 100%); }
+      .glow { position: absolute; left: 50%; top: 42%; width: 1000px; height: 1000px; transform: translate(-50%, -50%); border-radius: 50%; background: radial-gradient(circle, rgba(120,60,10,0.42) 0%, rgba(120,60,10,0) 68%); }
+      .display { font-family: "Bebas Neue", sans-serif; font-weight: 400; letter-spacing: 0.04em; line-height: 0.98; color: #ede5d8; }
+      .gold { color: #c9a84c; }
+      .eyebrow { font-family: "Inter", sans-serif; font-weight: 700; font-size: 30px; letter-spacing: 0.34em; text-transform: uppercase; color: #c9a84c; }
+      .body { font-family: "Inter", sans-serif; font-size: 42px; line-height: 1.45; color: #c7bba9; }
+      .stack { position: absolute; left: 90px; right: 90px; }
+      .line { display: block; }
+      .paper { background: #f5f2ec; border-radius: 12px; padding: 24px; box-shadow: 0 40px 100px rgba(0,0,0,0.65); }
+      .paper img { display: block; width: 100%; height: auto; border-radius: 5px; }
+      .photo { position: absolute; inset: -6%; width: 112%; height: 112%; object-fit: cover; object-position: center 28%; filter: contrast(1.05) saturate(0.72) brightness(0.72); }
+      .shade { position: absolute; inset: 0; background: linear-gradient(to top, rgba(3,2,2,0.98) 0%, rgba(3,2,2,0.72) 40%, rgba(3,2,2,0.15) 72%, rgba(3,2,2,0.55) 100%); }
+      .facts div { font-family: "Bebas Neue", sans-serif; font-size: 84px; letter-spacing: 0.05em; color: #ede5d8; padding: 20px 0; border-top: 1px solid rgba(201,168,76,0.25); line-height: 1; }
+      .facts div:last-child { border-bottom: 1px solid rgba(201,168,76,0.25); }
+      .bar { position: absolute; left: 0; right: 0; bottom: 0; height: 120px; display: flex; align-items: center; justify-content: center; gap: 22px; border-top: 1px solid rgba(201,168,76,0.28); background: rgba(2,2,2,0.82); }
+      .bar span { font-family: "Inter", sans-serif; font-weight: 700; font-size: 26px; letter-spacing: 0.32em; text-transform: uppercase; color: #c9a84c; }
+      .bar i { width: 6px; height: 6px; border-radius: 50%; background: #c9a84c; display: block; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="28" data-width="1080" data-height="1920">
+
+      <!-- 1 · hook over article title crop (0–3.5) -->
+      <section id="s1" class="clip" data-track-index="1" data-start="0" data-duration="3.5">
+        <div class="bg"></div>
+        <div class="glow"></div>
+        <div style="position:absolute; left:50%; top:640px; width:760px; transform:translateX(-50%);">
+          <div id="s1-paper" class="paper"><img src="assets/cashbox-title.jpg" alt="" /></div>
+        </div>
+        <div class="stack" style="top:250px; text-align:center;">
+          <div id="s1-title" class="display" data-var-text="t1" style="font-size:120px;">BEFORE THIS BAND EVEN EXISTED…</div>
+        </div>
+      </section>
+
+      <!-- 2 · the article (3.5–8) -->
+      <section id="s2" class="clip" data-track-index="2" data-start="3.5" data-duration="4.5">
+        <div class="bg"></div>
+        <div class="glow" style="opacity:0.7;"></div>
+        <div style="position:absolute; left:50%; top:190px; width:780px; transform:translateX(-50%);">
+          <div id="s2-paper" class="paper"><img src="assets/cashbox-march-2023.jpg" alt="" /></div>
+        </div>
+        <div class="stack" style="top:1480px; text-align:center;">
+          <div id="s2-title" class="display" data-layout-allow-overlap style="font-size:96px;">
+            <span class="line" data-var-text="t2a">CASHBOX MAGAZINE</span>
+            <span class="line gold" data-var-text="t2b">MARCH 2023</span>
+          </div>
+          <div id="s2-body" class="body" data-var-text="b2" style="margin-top:20px;">was already telling Malachias Gaskin&rsquo;s story.</div>
+        </div>
+      </section>
+
+      <!-- 3 · the facts (8–13) -->
+      <section id="s3" class="clip" data-track-index="3" data-start="8" data-duration="5">
+        <div class="bg"></div>
+        <div class="glow" style="opacity:0.7;"></div>
+        <div style="position:absolute; left:50%; top:230px; width:600px; transform:translateX(-50%);">
+          <div id="s3-photo" class="paper"><img src="assets/cashbox-photo.jpg" alt="" /></div>
+        </div>
+        <div class="stack facts" style="top:960px;">
+          <div id="s3-l1" data-var-text="l1">ARMY VETERAN</div>
+          <div id="s3-l2" data-var-text="l2">COMBAT MEDIC</div>
+          <div id="s3-l3" data-var-text="l3">IRAQ — TWICE</div>
+          <div id="s3-l4" data-var-text="l4">ARMY BANDSMAN</div>
+        </div>
+      </section>
+
+      <!-- 4 · hard transition to 2026 (13–17) -->
+      <section id="s4" class="clip" data-track-index="4" data-start="13" data-duration="4">
+        <div class="bg"></div>
+        <img id="s4-photo" class="photo" data-layout-allow-overflow src="assets/band-2026.jpg" alt="" />
+        <div class="shade"></div>
+        <div class="stack" style="top:1180px;">
+          <div id="s4-year" class="display gold" data-var-text="t4" style="font-size:230px;">2026.</div>
+          <div id="s4-lines" class="display" data-layout-allow-overlap style="font-size:110px; margin-top:14px;">
+            <span class="line" data-var-text="b4a">NEW BAND.</span>
+            <span class="line gold" data-var-text="b4b">NEW CHAPTER.</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5 · five musicians, one stage (17–22) -->
+      <section id="s5" class="clip" data-track-index="5" data-start="17" data-duration="5">
+        <div class="bg"></div>
+        <img id="s5-photo" class="photo" data-layout-allow-overflow src="assets/founder-card-2.jpg" alt="" />
+        <div class="shade"></div>
+        <div class="stack" style="top:1180px;">
+          <div id="s5-title" class="display" data-layout-allow-overlap style="font-size:130px;">
+            <span class="line" data-var-text="t5a">FIVE MUSICIANS.</span>
+            <span class="line gold" data-var-text="t5b">ONE VETERANS DAY STAGE.</span>
+          </div>
+        </div>
+        <div class="bar"><i></i><span data-var-text="bar">Road to San Antonio</span><i></i></div>
+      </section>
+
+      <!-- 6 · CTA end card (22–28) -->
+      <section id="s6" class="clip" data-track-index="6" data-start="22" data-duration="6">
+        <div class="bg"></div>
+        <div class="glow"></div>
+        <div id="s6-emblem" style="position:absolute; left:50%; top:230px; width:560px; height:373px; transform:translateX(-50%);">
+          <img src="assets/emblem-end.png" alt="" style="width:100%; height:100%; object-fit:contain; display:block; mix-blend-mode:screen;" />
+        </div>
+        <div class="stack" style="top:760px; text-align:center;">
+          <div id="s6-title" class="display" data-layout-allow-overlap style="font-size:150px;">
+            <span class="line" data-var-text="t6a">ROAD TO SAN ANTONIO</span>
+            <span class="line gold" data-var-text="t6b">NOV 12</span>
+          </div>
+          <div id="s6-body" class="display" data-var-text="b6" style="font-size:96px; margin-top:36px; color:#c7bba9;">Help us get there.</div>
+          <div id="s6-url" class="body" style="margin-top:48px; font-size:40px; color:#e8ddd0; font-weight:600; white-space:nowrap;">malachiasmusic.com/road-to-san-antonio</div>
+        </div>
+        <div class="bar"><i></i><span data-var-text="bar">Road to San Antonio</span><i></i></div>
+      </section>
+
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      const E = "power3.out";
+      // 1
+      tl.fromTo("#s1-title", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.8, ease: E }, 0.1);
+      tl.fromTo("#s1-paper", { opacity: 0, y: 80, rotate: -6 }, { opacity: 1, y: 0, rotate: -2, duration: 1.0, ease: E }, 0.5);
+      tl.to(["#s1-title", "#s1-paper"], { opacity: 0, duration: 0.4, ease: "sine.in" }, 3.1);
+      tl.set(["#s1-title", "#s1-paper"], { opacity: 0 }, 3.5);
+      // 2
+      tl.fromTo("#s2-paper", { opacity: 0, scale: 0.94 }, { opacity: 1, scale: 1, duration: 0.9, ease: E }, 3.6);
+      tl.to("#s2-paper", { y: -60, duration: 3.4, ease: "none" }, 4.4);
+      tl.fromTo("#s2-title .line", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.8, ease: E, stagger: 0.15 }, 4.0);
+      tl.fromTo("#s2-body", { opacity: 0 }, { opacity: 1, duration: 0.7, ease: E }, 4.6);
+      // 3
+      tl.fromTo("#s3-photo", { opacity: 0, y: 50, rotate: 5 }, { opacity: 1, y: 0, rotate: 1.5, duration: 0.9, ease: E }, 8.1);
+      tl.fromTo(["#s3-l1", "#s3-l2", "#s3-l3", "#s3-l4"], { opacity: 0, x: -50 }, { opacity: 1, x: 0, duration: 0.7, ease: E, stagger: 0.6 }, 8.6);
+      // 4
+      tl.fromTo("#s4-photo", { scale: 1.0 }, { scale: 1.07, duration: 4, ease: "none" }, 13);
+      tl.fromTo("#s4-year", { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.7, ease: "back.out(1.6)" }, 13.2);
+      tl.fromTo("#s4-lines .line", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.8, ease: E, stagger: 0.2 }, 13.8);
+      // 5
+      tl.fromTo("#s5-photo", { scale: 1.0 }, { scale: 1.07, duration: 5, ease: "none" }, 17);
+      tl.fromTo("#s5-title .line", { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.9, ease: E, stagger: 0.25 }, 17.3);
+      // 6
+      tl.fromTo("#s6-emblem", { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.9, ease: E }, 22.1);
+      tl.fromTo("#s6-title .line", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.8, ease: E, stagger: 0.2 }, 22.5);
+      tl.fromTo(["#s6-body", "#s6-url"], { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.8, ease: E, stagger: 0.25 }, 23.3);
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
