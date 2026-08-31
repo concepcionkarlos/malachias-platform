@@ -31,6 +31,7 @@ import Footer       from './components/Footer';
 import SectionDivider from './components/SectionDivider';
 import BandTogether   from './components/BandTogether';
 import LessonsTeaser  from './components/LessonsTeaser';
+import PressFeature   from './components/PressFeature';
 import SongStories    from './components/SongStories';
 import WarRoom        from './components/WarRoom';
 import Setlist, { type PublicSong } from './components/Setlist';
@@ -169,6 +170,7 @@ export default async function Home() {
 
       {/* ── 12. CREDIBILITY + CONVERSION ─────────────────────────── */}
       <SectionDivider accent="crimson" />
+      <PressFeature background="#040404" />
       <Press />
       <SectionDivider accent="gold" label="BROTHERHOOD" />
       <Booking />

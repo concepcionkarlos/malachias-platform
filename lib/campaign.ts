@@ -210,14 +210,28 @@ export interface PeerLink { id: string; name: string; role: string; url: string;
 
 // Verified press. Only entries someone can click and check; wording stays factual
 // ("featured in"), no logos, no implied endorsement.
-export interface PressMention { outlet: string; title: string; date: string; url: string; note: string }
+export interface PressMention {
+  outlet: string
+  title: string
+  byline?: string
+  date: string
+  url: string
+  note: string
+  pullQuote?: string   // verbatim from the piece
+  image?: string       // crop hosted under /public/press
+  imageAlt?: string
+}
 export const PRESS: PressMention[] = [
   {
     outlet: 'Cashbox Magazine',
     title: 'Artist Spotlight: Malachias Gaskin',
     date: 'March 2023',
-    url: 'https://www.cashboxmagazine.org/',
-    note: 'Feature by Robin Tanner on his service, his recovery and the founding of A Warrior\'s Garden and Warfighter Gardens.',
+    url: 'https://www.cashbox-magazine.com/_files/ugd/aa670e_27a5752417ff4fb69acba5efbaaa449f.pdf#page=16',   // the March 2023 issue, opening on page 16
+    byline: 'By Robin Tanner',
+    note: 'A feature on his service as a Combat Medic and Army Bandsman, two deployments to Iraq, his recovery, and the founding of A Warrior\'s Garden and Warfighter Gardens.',
+    pullQuote: 'During my time in the army I lost a bit of my hearing due to combat, small arms fire, and roadside bomb explosions. I had to actually relearn how to hear so that I could sing right again.',
+    image: '/press/cashbox-top.jpg',
+    imageAlt: 'Cashbox Magazine, March 2023 — Artist Spotlight: Malachias Gaskin, by Robin Tanner',
   },
 ]
 

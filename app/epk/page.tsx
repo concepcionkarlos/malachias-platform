@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { readContent } from '@/lib/store'
 import { BAND_ROSTER } from '@/lib/bandRoster'
 import { fetchReleases } from '@/lib/releases'
+import PressFeature from '../components/PressFeature'
 
 export async function generateMetadata() {
   return {
@@ -247,6 +248,12 @@ export default async function EpkPage() {
         </div>
 
         <hr style={RULE} />
+
+        {/* ── Press ─── */}
+        <div style={{ marginBottom: '2.5rem' }}>
+          <p style={SECTION_LABEL}>Press</p>
+          <PressFeature variant="inline" />
+        </div>
 
         {/* ── Releases ─── */}
         {releases.length > 0 && (

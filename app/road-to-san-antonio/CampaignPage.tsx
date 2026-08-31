@@ -16,7 +16,8 @@ import DonateSection from './DonateSection'
 import SponsorSection from './SponsorSection'
 import UpdatesSection from './UpdatesSection'
 import ShareBar from './ShareBar'
-import { STATUS_COPY, MILESTONES, PRESS, usd, formatEventDate, type CampaignConfig, type Sponsor, type CampaignUpdate, type CampaignStatus, type InKindItem, type PeerLink } from '@/lib/campaign'
+import PressFeature from '../components/PressFeature'
+import { STATUS_COPY, MILESTONES, usd, formatEventDate, type CampaignConfig, type Sponsor, type CampaignUpdate, type CampaignStatus, type InKindItem, type PeerLink } from '@/lib/campaign'
 import type { campaignMath } from '@/lib/campaign'
 import type { FWProduct } from '@/lib/fourthwall'
 import { fwFirstImage, fwPriceRange } from '@/lib/fourthwall'
@@ -206,18 +207,6 @@ export default function CampaignPage({ config, qrReady, sponsors, updates, inKin
               <motion.p {...fade(0.25)}>
                 Every contribution, every piece of merch, every sponsor and every share moves the road forward. Thank you for walking it with us.
               </motion.p>
-              {PRESS.length > 0 && (
-                <motion.p {...fade(0.3)} className="text-[0.82rem]" style={{ color: 'var(--text-3)', borderTop: '1px solid rgba(201,168,76,0.12)', paddingTop: '1rem', marginTop: '1.5rem' }}>
-                  Previously featured in{' '}
-                  {PRESS.map((p, i) => (
-                    <span key={p.outlet}>
-                      {i > 0 && ' · '}
-                      <a href={p.url} target="_blank" rel="noopener noreferrer" style={{ color: '#c9a84c', textDecoration: 'underline', textUnderlineOffset: 3 }}>{p.outlet}</a>
-                      {' '}({p.date})
-                    </span>
-                  ))}.
-                </motion.p>
-              )}
             </div>
           </div>
           <motion.div {...fade(0.15)} className="tac-box overflow-hidden" style={{ position: 'relative', aspectRatio: '4/5' }}>
@@ -227,6 +216,9 @@ export default function CampaignPage({ config, qrReady, sponsors, updates, inKin
           </motion.div>
         </div>
       </section>
+
+      {/* ── 4b. THE RECEIPTS — real press ───────────────────────────────── */}
+      <PressFeature background="#060504" heading="The story, before the campaign" />
 
       {/* ── 5. WHERE IT GOES ────────────────────────────────────────────── */}
       <section id="budget" className="section-pad" style={{ background: '#050403' }}>

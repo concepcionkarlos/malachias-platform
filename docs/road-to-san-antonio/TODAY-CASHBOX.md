@@ -1,6 +1,6 @@
 # Today's package — the Cashbox article (trust → support)
 
-**Anchor asset:** the real Cashbox Magazine feature, *Artist Spotlight: Malachias Gaskin* by Robin Tanner, **page 16, March 2023**. Original saved at `docs/road-to-san-antonio/press/cashbox-march-2023.jpg`; crops (title, portrait, A Warrior's Garden seal, service paragraph, footer) beside it. The page is never regenerated, rewritten or re-branded — only cropped and shown as it is.
+**Anchor asset:** the real Cashbox Magazine feature, *Artist Spotlight: Malachias Gaskin* by Robin Tanner, **page 16 of the March 2023 issue** — verified against the magazine's own PDF (88 pages, matches the 16/88 watermark). Direct link, opens on his page: https://www.cashbox-magazine.com/_files/ugd/aa670e_27a5752417ff4fb69acba5efbaaa449f.pdf#page=16 Original saved at `docs/road-to-san-antonio/press/cashbox-march-2023.jpg`; crops (title, portrait, A Warrior's Garden seal, service paragraph, footer) beside it. The page is never regenerated, rewritten or re-branded — only cropped and shown as it is.
 
 **Why it works:** the article is from **three years before the current band existed**. It proves the story isn't built for a fundraiser. Sequence: who he is → why Veterans Day → the story predates the band → the band has a real invitation → five musicians cost real money → here's how to help.
 
@@ -84,4 +84,10 @@ Never claim a specific donation pays for a specific item; we don't have that acc
 ---
 
 ## On the website (live now)
-The campaign page and the sponsor sheet carry a factual credit under the story: *"Previously featured in Cashbox Magazine (March 2023)."* linking to cashboxmagazine.org. Text only — the full magazine page is used in social content, not republished as site content.
+The article is a real section, not a footnote:
+- **`/press`** — the coverage page to send sponsors, promoters and journalists.
+- **Campaign page** — "The story, before the campaign" band between the story and the budget.
+- **Home** — "As featured in" band before Press & EPK.
+- **EPK** — compact press card under the bio; **sponsor sheet** — factual line (EN/ES).
+
+Every link goes straight to the magazine's own PDF, opening on **page 16**. On the site we show the top crop (masthead + portrait) with attribution and the link out; the full page stays in social content rather than being republished as site content.

@@ -120,7 +120,7 @@ export default async function SponsorKitPage({ searchParams }: { searchParams: P
           <p style={{ marginTop: '1rem', fontSize: '0.9rem', color: '#a89880', lineHeight: 1.7 }}>
             {lang === 'es' ? 'Reseñado anteriormente en ' : 'Previously featured in '}
             {PRESS.map((p, i) => (
-              <span key={p.outlet}>{i > 0 && ' · '}<a href={p.url} target="_blank" rel="noopener noreferrer">{p.outlet}</a> ({p.date})</span>
+              <span key={p.outlet}>{i > 0 && ' · '}<a href={p.url} target="_blank" rel="noopener noreferrer">{p.outlet}</a> ({p.date}, {lang === 'es' ? 'pág.' : 'p.'} 16)</span>
             ))}.
           </p>
         )}
