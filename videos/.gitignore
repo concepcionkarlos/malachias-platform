@@ -1,8 +1,13 @@
-assets/malachias.mp4
-capture/
-node_modules/
-out/
-renders/
-snaps/
-snapshots/
-source/
+# Rendered output and working files — never committed.
+**/out/
+**/out.json
+**/renders/
+**/snaps/
+**/snapshots/
+**/capture/
+**/node_modules/
+**/source/
+**/__pycache__/
+
+# Source footage: large, and supplied by the band rather than authored here.
+**/assets/malachias.mp4

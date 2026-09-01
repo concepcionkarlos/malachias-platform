@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="es" data-resolution="portrait">
+<html lang="en" data-resolution="portrait">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <title>Malachias — message (es)</title>
+    <title>Malachias — message (en)</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;800&display=swap" />
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
     <style>
@@ -12,28 +12,50 @@
       body { font-family: "Inter", system-ui, sans-serif; color: #ede5d8; }
       #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #030202; }
       .clip { position: absolute; inset: 0; }
-      .scrim { position: absolute; left: 0; right: 0; bottom: 0; height: 46%; z-index: 2;
-        background: linear-gradient(to top, rgba(3,2,2,0.94) 0%, rgba(3,2,2,0.72) 42%, rgba(3,2,2,0) 100%); }
-      .topfade { position: absolute; left: 0; right: 0; top: 0; height: 16%; z-index: 2;
-        background: linear-gradient(to bottom, rgba(3,2,2,0.75), rgba(3,2,2,0)); }
-      .chip { position: absolute; top: 210px; left: 60px; z-index: 4; display: flex; align-items: center; gap: 14px;
-        font-weight: 700; font-size: 26px; letter-spacing: 0.26em; text-transform: uppercase; color: #f5cf63;
-        background: rgba(4,3,2,0.82); padding: 14px 22px; border-radius: 999px;
-        border: 1px solid rgba(201,168,76,0.35); }
+
+      /* Sky scrim — stops at 620px, well above his hair (768px). */
+      .skyfade { position: absolute; left: 0; right: 0; top: 0; height: 620px; z-index: 2;
+        background: linear-gradient(to bottom, rgba(3,2,2,0.78) 0%, rgba(3,2,2,0.35) 55%, rgba(3,2,2,0) 100%); }
+      /* Shirt scrim — starts at 1500px, below the beard (1498px). */
+      .shirtfade { position: absolute; left: 0; right: 0; top: 1500px; bottom: 0; z-index: 2;
+        background: linear-gradient(to bottom, rgba(3,2,2,0) 0%, rgba(3,2,2,0.80) 30%, rgba(3,2,2,0.92) 100%); }
+
+      .chip { position: absolute; top: 150px; left: 60px; z-index: 6;
+        display: inline-flex; align-items: center; gap: 14px;
+        font-weight: 700; font-size: 26px; letter-spacing: 0.24em; text-transform: uppercase;
+        color: #f5cf63; background: rgba(4,3,2,0.82); padding: 14px 24px; border-radius: 999px;
+        border: 1px solid rgba(201,168,76,0.38); }
       .chip i { display: block; width: 10px; height: 10px; border-radius: 50%; background: #f5cf63; }
-      .cue { z-index: 5; display: flex; align-items: flex-end; justify-content: center;
-        padding: 0 72px 470px; text-align: center; }
-      .cue p { display: inline-block; max-width: 900px; font-weight: 800; font-size: 74px; line-height: 1.18;
-        letter-spacing: -0.01em; color: #fff; background: rgba(4,3,2,0.80); padding: 20px 30px; border-radius: 16px;
-        box-shadow: 0 18px 60px rgba(0,0,0,0.55); }
-      .cue .g { color: #f5cf63; }
-      .bar { position: absolute; left: 0; right: 0; bottom: 0; height: 130px; z-index: 6; display: flex;
-        align-items: center; justify-content: center; gap: 22px; border-top: 1px solid rgba(201,168,76,0.30);
-        background: rgba(2,2,2,0.88); font-weight: 700; font-size: 27px; letter-spacing: 0.28em;
-        text-transform: uppercase; color: #c9a84c; }
+      .tag { position: absolute; top: 224px; left: 74px; z-index: 6;
+        font-weight: 600; font-size: 25px; letter-spacing: 0.20em; text-transform: uppercase;
+        color: rgba(237,229,216,0.92); text-shadow: 0 2px 12px rgba(0,0,0,0.9); }
+
+      /* HERO — the one promoted phrase, in the dead sky above his head. */
+      .heroband { z-index: 5; }
+      .heroband span { position: absolute; top: 430px; left: 70px; width: 940px;
+        height: 300px; display: flex; align-items: center; justify-content: center; text-align: center;
+        font-family: "Bebas Neue", sans-serif; font-size: 120px; line-height: 0.92; letter-spacing: 0.03em;
+        color: #f5cf63; text-shadow: 0 6px 40px rgba(0,0,0,0.85), 0 2px 8px rgba(0,0,0,0.9); }
+
+      /* RAIL — verbatim captions, bottom band only. Fixed box: cannot drift up. */
+      .rail { z-index: 5; }
+      .rail p { position: absolute; top: 1570px; left: 60px; width: 960px; height: 180px;
+        display: flex; align-items: center; justify-content: center; }
+      .rail .t { display: inline-block; max-width: 100%; text-align: center;
+        font-weight: 800; font-size: 54px; line-height: 1.18; letter-spacing: -0.005em;
+        color: #fff; background: rgba(5,4,3,0.78); border-radius: 16px; padding: 14px 28px;
+        box-shadow: 0 14px 44px rgba(0,0,0,0.5); }
+      .rail .g { color: #f5cf63; }
+
+      .bar { position: absolute; top: 1780px; left: 0; right: 0; bottom: 0; z-index: 6;
+        display: flex; align-items: center; justify-content: center;
+        border-top: 1px solid rgba(201,168,76,0.30); background: rgba(2,2,2,0.90);
+        font-weight: 700; font-size: 27px; letter-spacing: 0.28em; text-transform: uppercase; color: #c9a84c; }
+
       .end { background: linear-gradient(160deg, #020202 0%, #0a0602 55%, #030202 100%); }
-      .end .glow { position: absolute; left: 50%; top: 40%; width: 1100px; height: 1100px; transform: translate(-50%,-50%);
-        border-radius: 50%; background: radial-gradient(circle, rgba(120,60,10,0.45) 0%, rgba(120,60,10,0) 66%); }
+      .end .glow { position: absolute; left: 50%; top: 40%; width: 1100px; height: 1100px;
+        transform: translate(-50%,-50%); border-radius: 50%;
+        background: radial-gradient(circle, rgba(120,60,10,0.45) 0%, rgba(120,60,10,0) 66%); }
       .end .inner { position: absolute; left: 80px; right: 80px; top: 300px; bottom: 300px; z-index: 2;
         display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 40px; text-align: center; }
       .display { font-family: "Bebas Neue", sans-serif; letter-spacing: 0.04em; line-height: 0.98; }
@@ -41,65 +63,119 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="82.8" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="96.81" data-width="1080" data-height="1920">
 
       <video id="v0" class="clip" src="assets/malachias.mp4" muted playsinline
-        data-start="0.00" data-duration="28.70" data-media-start="0.30" data-track-index="1"
-        style="width:100%;height:100%;object-fit:cover;"></video>
+        data-start="0.00" data-duration="29.02" data-media-start="0.30"
+        data-track-index="1" style="width:100%;height:100%;object-fit:cover;"></video>
       <audio id="a0" src="assets/malachias.mp4"
-        data-start="0.00" data-duration="28.70" data-media-start="0.30" data-track-index="9" data-volume="1"></audio>
+        data-start="0.00" data-duration="29.02" data-media-start="0.30"
+        data-track-index="9" data-volume="1"></audio>
       <video id="v1" class="clip" src="assets/malachias.mp4" muted playsinline
-        data-start="28.70" data-duration="16.45" data-media-start="29.30" data-track-index="1"
-        style="width:100%;height:100%;object-fit:cover;"></video>
+        data-start="29.02" data-duration="16.43" data-media-start="29.32"
+        data-track-index="1" style="width:100%;height:100%;object-fit:cover;"></video>
       <audio id="a1" src="assets/malachias.mp4"
-        data-start="28.70" data-duration="16.45" data-media-start="29.30" data-track-index="9" data-volume="1"></audio>
+        data-start="29.02" data-duration="16.43" data-media-start="29.32"
+        data-track-index="9" data-volume="1"></audio>
       <video id="v2" class="clip" src="assets/malachias.mp4" muted playsinline
-        data-start="45.15" data-duration="15.55" data-media-start="47.10" data-track-index="1"
-        style="width:100%;height:100%;object-fit:cover;"></video>
+        data-start="45.45" data-duration="15.38" data-media-start="47.10"
+        data-track-index="1" style="width:100%;height:100%;object-fit:cover;"></video>
       <audio id="a2" src="assets/malachias.mp4"
-        data-start="45.15" data-duration="15.55" data-media-start="47.10" data-track-index="9" data-volume="1"></audio>
+        data-start="45.45" data-duration="15.38" data-media-start="47.10"
+        data-track-index="9" data-volume="1"></audio>
       <video id="v3" class="clip" src="assets/malachias.mp4" muted playsinline
-        data-start="60.70" data-duration="13.55" data-media-start="76.40" data-track-index="1"
-        style="width:100%;height:100%;object-fit:cover;"></video>
+        data-start="60.83" data-duration="13.94" data-media-start="62.48"
+        data-track-index="1" style="width:100%;height:100%;object-fit:cover;"></video>
       <audio id="a3" src="assets/malachias.mp4"
-        data-start="60.70" data-duration="13.55" data-media-start="76.40" data-track-index="9" data-volume="1"></audio>
+        data-start="60.83" data-duration="13.94" data-media-start="62.48"
+        data-track-index="9" data-volume="1"></audio>
       <video id="v4" class="clip" src="assets/malachias.mp4" muted playsinline
-        data-start="74.25" data-duration="4.55" data-media-start="90.05" data-track-index="1"
-        style="width:100%;height:100%;object-fit:cover;"></video>
+        data-start="74.77" data-duration="13.49" data-media-start="76.42"
+        data-track-index="1" style="width:100%;height:100%;object-fit:cover;"></video>
       <audio id="a4" src="assets/malachias.mp4"
-        data-start="74.25" data-duration="4.55" data-media-start="90.05" data-track-index="9" data-volume="1"></audio>
+        data-start="74.77" data-duration="13.49" data-media-start="76.42"
+        data-track-index="9" data-volume="1"></audio>
+      <video id="v5" class="clip" src="assets/malachias.mp4" muted playsinline
+        data-start="88.26" data-duration="4.55" data-media-start="90.05"
+        data-track-index="1" style="width:100%;height:100%;object-fit:cover;"></video>
+      <audio id="a5" src="assets/malachias.mp4"
+        data-start="88.26" data-duration="4.55" data-media-start="90.05"
+        data-track-index="9" data-volume="1"></audio>
 
-      <div id="scrim" class="clip" data-start="0" data-duration="78.80" data-track-index="2" aria-hidden="true" style="pointer-events:none;"><div class="scrim"></div><div class="topfade"></div></div>
-      <div id="frame" class="clip" data-start="0" data-duration="78.80" data-track-index="2" style="pointer-events:none;">
+      <div id="scrim" class="clip" data-start="0" data-duration="92.81" data-track-index="2" aria-hidden="true" style="pointer-events:none;">
+        <div class="skyfade"></div><div class="shirtfade"></div>
+      </div>
+      <div id="frame" class="clip" data-start="0" data-duration="92.81" data-track-index="2" style="pointer-events:none;">
         <div class="chip"><i></i><span>Road to San Antonio</span></div>
-        <div class="bar">AYÚDANOS A LLEGAR</div>
+        <div class="tag">Nov 12, 2026 · San Antonio, TX</div>
+        <div class="bar">HELP US GET THERE</div>
       </div>
 
-      <div id="cue0" class="clip cue" data-start="0.00" data-duration="3.40" data-track-index="3"><p>Hola a todos, soy Malachias,<br>de la banda Malachias.</p></div>
-      <div id="cue1" class="clip cue" data-start="3.40" data-duration="5.20" data-track-index="3"><p>Nos dieron la oportunidad de tocar<br>en San Antonio, Texas,</p></div>
-      <div id="cue2" class="clip cue" data-start="8.60" data-duration="5.40" data-track-index="3"><p>en un local familiar<br>llamado Fitzgerald.</p></div>
-      <div id="cue3" class="clip cue" data-start="14.00" data-duration="5.00" data-track-index="3"><p>Las dueñas son hijas<br>de un veterano del Ejército.</p></div>
-      <div id="cue4" class="clip cue" data-start="19.00" data-duration="9.60" data-track-index="3"><p>Para lograrlo tenemos que reunir<br>los fondos del viaje.</p></div>
-      <div id="cue5" class="clip cue" data-start="28.70" data-duration="2.80" data-track-index="3"><p>Hay dos maneras de llegar:</p></div>
-      <div id="cue6" class="clip cue" data-start="31.50" data-duration="4.50" data-track-index="3"><p>que vaya yo solo<br>con una guitarra acústica…</p></div>
-      <div id="cue7" class="clip cue" data-start="36.00" data-duration="4.00" data-track-index="3"><p>…o que vaya la banda completa.</p></div>
-      <div id="cue8" class="clip cue" data-start="40.00" data-duration="5.10" data-track-index="3"><p>Depende de cuánto podamos recaudar.</p></div>
-      <div id="cue9" class="clip cue" data-start="45.20" data-duration="2.40" data-track-index="3"><p>Ofrecemos tocar gratis.</p></div>
-      <div id="cue10" class="clip cue" data-start="47.60" data-duration="3.40" data-track-index="3"><p>Porque es para los veteranos<br>y sus familias.</p></div>
-      <div id="cue11" class="clip cue" data-start="51.00" data-duration="5.00" data-track-index="3"><p>No queremos quitarle nada al evento<br>pidiéndoles que nos paguen.</p></div>
-      <div id="cue12" class="clip cue" data-start="56.00" data-duration="4.70" data-track-index="3"><p>Pedimos donaciones<br>solo para el viaje.</p></div>
-      <div id="cue13" class="clip cue" data-start="60.80" data-duration="3.00" data-track-index="3"><p>No vamos a ganar dinero<br>con este evento.</p></div>
-      <div id="cue14" class="clip cue" data-start="63.80" data-duration="4.60" data-track-index="3"><p>Todo lo recaudado se usa<br>para llegar allá,</p></div>
-      <div id="cue15" class="clip cue" data-start="68.40" data-duration="2.80" data-track-index="3"><p>mantenernos allí<br>y volver a casa.</p></div>
-      <div id="cue16" class="clip cue" data-start="71.20" data-duration="3.10" data-track-index="3"><p>Lo que sobre se dona a otra<br>organización de veteranos.</p></div>
-      <div id="cue17" class="clip cue" data-start="74.40" data-duration="2.80" data-track-index="3"><p>Los quiero. Ojalá puedan ayudar.</p></div>
-      <div id="cue18" class="clip cue" data-start="77.20" data-duration="1.70" data-track-index="3"><p>Dios los bendiga. Fuerza y honor.</p></div>
+      <div id="hero" class="clip heroband" data-start="41.60" data-duration="3.00" data-track-index="4"><span>THE ENTIRE BAND</span></div>
 
-      <section id="end" class="clip end" data-start="78.80" data-duration="4.0" data-track-index="8">
+      <div id="cue0" class="clip rail" data-start="0.00" data-duration="2.03" data-track-index="3"><p><span class="t"><span>Hey,</span> <span>what&#x27;s</span> <span>going</span> <span>on</span> <span>everybody,</span></span></p></div>
+      <div id="cue1" class="clip rail" data-start="2.07" data-duration="1.47" data-track-index="3"><p><span class="t"><span>it&#x27;s</span> <span>Malachias</span> <span>with</span></span></p></div>
+      <div id="cue2" class="clip rail" data-start="3.58" data-duration="2.36" data-track-index="3"><p><span class="t"><span>the</span> <span class="g">band</span> <span>Malachias.</span></span></p></div>
+      <div id="cue3" class="clip rail" data-start="5.98" data-duration="1.17" data-track-index="3"><p><span class="t"><span>I</span> <span>just</span> <span>wanted</span> <span>to</span> <span>tell</span> <span>you</span></span></p></div>
+      <div id="cue4" class="clip rail" data-start="7.19" data-duration="1.27" data-track-index="3"><p><span class="t"><span>that</span> <span>we</span> <span>have</span> <span>been</span> <span>afforded</span></span></p></div>
+      <div id="cue5" class="clip rail" data-start="8.50" data-duration="3.32" data-track-index="3"><p><span class="t"><span>the</span> <span>opportunity</span> <span>to</span> <span>rock</span> <span>out</span></span></p></div>
+      <div id="cue6" class="clip rail" data-start="11.86" data-duration="3.11" data-track-index="3"><p><span class="t"><span>in</span> <span class="g">San</span> <span class="g">Antonio,</span> <span>Texas</span> <span>at</span></span></p></div>
+      <div id="cue7" class="clip rail" data-start="15.01" data-duration="4.29" data-track-index="3"><p><span class="t"><span>a</span> <span>beautiful</span> <span>family-owned</span> <span>establishment</span></span></p></div>
+      <div id="cue8" class="clip rail" data-start="19.34" data-duration="2.55" data-track-index="3"><p><span class="t"><span>called</span> <span class="g">Fitzgerald.</span></span></p></div>
+      <div id="cue9" class="clip rail" data-start="21.93" data-duration="3.16" data-track-index="3"><p><span class="t"><span>The</span> <span>owners</span> <span>are</span> <span>the</span> <span>daughters</span></span></p></div>
+      <div id="cue10" class="clip rail" data-start="25.13" data-duration="2.23" data-track-index="3"><p><span class="t"><span>of</span> <span>a</span> <span>Army</span> <span class="g">veteran,</span></span></p></div>
+      <div id="cue11" class="clip rail" data-start="27.40" data-duration="1.58" data-track-index="3"><p><span class="t"><span>much</span> <span>love.</span></span></p></div>
+      <div id="cue12" class="clip rail" data-start="29.02" data-duration="0.89" data-track-index="3"><p><span class="t"><span>In</span> <span>order</span> <span>to</span> <span>do</span> <span>that</span></span></p></div>
+      <div id="cue13" class="clip rail" data-start="29.95" data-duration="0.80" data-track-index="3"><p><span class="t"><span>we</span> <span>have</span> <span>to</span> <span>be</span> <span>able</span></span></p></div>
+      <div id="cue14" class="clip rail" data-start="30.79" data-duration="1.12" data-track-index="3"><p><span class="t"><span>to</span> <span class="g">raise</span> <span>the</span> <span>funds</span> <span>that</span></span></p></div>
+      <div id="cue15" class="clip rail" data-start="31.95" data-duration="1.29" data-track-index="3"><p><span class="t"><span>we</span> <span>need</span> <span>to</span> <span>get</span> <span>there.</span></span></p></div>
+      <div id="cue16" class="clip rail" data-start="33.28" data-duration="1.60" data-track-index="3"><p><span class="t"><span>We</span> <span>have</span> <span>two</span> <span>different</span> <span>options</span></span></p></div>
+      <div id="cue17" class="clip rail" data-start="34.92" data-duration="1.09" data-track-index="3"><p><span class="t"><span>of</span> <span>getting</span> <span>us</span> <span>there,</span></span></p></div>
+      <div id="cue18" class="clip rail" data-start="36.05" data-duration="1.14" data-track-index="3"><p><span class="t"><span>so</span> <span>it&#x27;s</span> <span>either</span> <span>me</span> <span>going</span></span></p></div>
+      <div id="cue19" class="clip rail" data-start="37.23" data-duration="1.87" data-track-index="3"><p><span class="t"><span>and</span> <span>just</span> <span>playing</span> <span>acoustic</span> <span>guitar</span></span></p></div>
+      <div id="cue20" class="clip rail" data-start="39.14" data-duration="1.64" data-track-index="3"><p><span class="t"><span>and</span> <span>doing</span> <span>a</span> <span>little</span> <span>bit</span> <span>of</span> <span>fun,</span></span></p></div>
+      <div id="cue21" class="clip rail" data-start="40.82" data-duration="1.85" data-track-index="3"><p><span class="t"><span>or</span> <span>me</span> <span>bringing</span> <span>the</span> <span class="g">entire</span> <span class="g">band,</span></span></p></div>
+      <div id="cue22" class="clip rail" data-start="42.71" data-duration="0.88" data-track-index="3"><p><span class="t"><span>so</span> <span>it&#x27;s</span> <span>really</span> <span>going</span></span></p></div>
+      <div id="cue23" class="clip rail" data-start="43.63" data-duration="1.11" data-track-index="3"><p><span class="t"><span>to</span> <span>be</span> <span>dependent</span> <span>on</span> <span>how</span> <span>much</span></span></p></div>
+      <div id="cue24" class="clip rail" data-start="44.78" data-duration="0.59" data-track-index="3"><p><span class="t"><span>we</span> <span>can</span> <span class="g">raise.</span></span></p></div>
+      <div id="cue25" class="clip rail" data-start="45.41" data-duration="2.05" data-track-index="3"><p><span class="t"><span>we</span> <span>are</span> <span>offering</span> <span>to</span> <span>do</span> <span>this</span> <span>for</span> <span class="g">free,</span></span></p></div>
+      <div id="cue26" class="clip rail" data-start="47.50" data-duration="2.04" data-track-index="3"><p><span class="t"><span>because</span> <span>it</span> <span>is</span> <span>for</span> <span class="g">veterans</span> <span>today,</span></span></p></div>
+      <div id="cue27" class="clip rail" data-start="49.58" data-duration="1.20" data-track-index="3"><p><span class="t"><span>it</span> <span>is</span> <span>for</span> <span class="g">veterans,</span></span></p></div>
+      <div id="cue28" class="clip rail" data-start="50.82" data-duration="1.74" data-track-index="3"><p><span class="t"><span>it</span> <span>is</span> <span>for</span> <span>the</span> <span>family</span> <span>of</span> <span class="g">veterans,</span></span></p></div>
+      <div id="cue29" class="clip rail" data-start="52.60" data-duration="1.02" data-track-index="3"><p><span class="t"><span>and</span> <span>so</span> <span>we</span> <span>don&#x27;t</span> <span>want</span></span></p></div>
+      <div id="cue30" class="clip rail" data-start="53.66" data-duration="1.13" data-track-index="3"><p><span class="t"><span>to</span> <span>take</span> <span>away</span> <span>from</span></span></p></div>
+      <div id="cue31" class="clip rail" data-start="54.83" data-duration="1.24" data-track-index="3"><p><span class="t"><span>the</span> <span>event</span> <span>by</span> <span>asking</span></span></p></div>
+      <div id="cue32" class="clip rail" data-start="56.11" data-duration="1.24" data-track-index="3"><p><span class="t"><span>for</span> <span>them</span> <span>to</span> <span>pay</span> <span>us,</span></span></p></div>
+      <div id="cue33" class="clip rail" data-start="57.39" data-duration="2.55" data-track-index="3"><p><span class="t"><span>so</span> <span>we&#x27;re</span> <span>looking</span> <span>for</span> <span class="g">donations</span> <span>for</span></span></p></div>
+      <div id="cue34" class="clip rail" data-start="59.98" data-duration="0.84" data-track-index="3"><p><span class="t"><span>our</span> <span class="g">travel.</span></span></p></div>
+      <div id="cue35" class="clip rail" data-start="60.86" data-duration="0.83" data-track-index="3"><p><span class="t"><span>I&#x27;m</span> <span>going</span> <span>to</span> <span>put</span></span></p></div>
+      <div id="cue36" class="clip rail" data-start="61.73" data-duration="1.41" data-track-index="3"><p><span class="t"><span>a</span> <span>link</span> <span>in</span> <span>the</span> <span>comments,</span></span></p></div>
+      <div id="cue37" class="clip rail" data-start="63.18" data-duration="1.97" data-track-index="3"><p><span class="t"><span>make</span> <span>sure</span> <span>that</span> <span>you</span> <span>check</span> <span>it</span> <span>out,</span></span></p></div>
+      <div id="cue38" class="clip rail" data-start="65.19" data-duration="1.87" data-track-index="3"><p><span class="t"><span>you</span> <span>can</span> <span>donate</span> <span>through</span> <span>Cash</span> <span>App,</span></span></p></div>
+      <div id="cue39" class="clip rail" data-start="67.10" data-duration="1.78" data-track-index="3"><p><span class="t"><span>you</span> <span>can</span> <span>donate</span> <span>through</span> <span>PayPal,</span></span></p></div>
+      <div id="cue40" class="clip rail" data-start="68.92" data-duration="1.60" data-track-index="3"><p><span class="t"><span>you</span> <span>can</span> <span>contact</span> <span>me</span> <span>directly</span></span></p></div>
+      <div id="cue41" class="clip rail" data-start="70.56" data-duration="1.13" data-track-index="3"><p><span class="t"><span>and</span> <span>I</span> <span>can</span> <span>send</span> <span>you</span></span></p></div>
+      <div id="cue42" class="clip rail" data-start="71.73" data-duration="3.02" data-track-index="3"><p><span class="t"><span>a</span> <span>tax</span> <span>deductible</span> <span>thing.</span></span></p></div>
+      <div id="cue43" class="clip rail" data-start="74.79" data-duration="0.68" data-track-index="3"><p><span class="t"><span>We</span> <span>are</span> <span>not</span> <span>going</span></span></p></div>
+      <div id="cue44" class="clip rail" data-start="75.51" data-duration="1.20" data-track-index="3"><p><span class="t"><span>to</span> <span>make</span> <span class="g">money</span> <span>on</span> <span>this</span> <span>event,</span></span></p></div>
+      <div id="cue45" class="clip rail" data-start="76.75" data-duration="1.12" data-track-index="3"><p><span class="t"><span>we</span> <span>are</span> <span>going</span> <span>to</span> <span>use</span> <span>this,</span></span></p></div>
+      <div id="cue46" class="clip rail" data-start="77.91" data-duration="1.07" data-track-index="3"><p><span class="t"><span>all</span> <span>the</span> <span class="g">money</span> <span>raised</span></span></p></div>
+      <div id="cue47" class="clip rail" data-start="79.02" data-duration="2.04" data-track-index="3"><p><span class="t"><span>will</span> <span>be</span> <span>used</span> <span>to</span> <span>get</span> <span>us</span> <span>there,</span> <span>to</span> <span>take</span> <span>care</span></span></p></div>
+      <div id="cue48" class="clip rail" data-start="81.10" data-duration="1.22" data-track-index="3"><p><span class="t"><span>of</span> <span>us</span> <span>while</span> <span>we&#x27;re</span> <span>there</span></span></p></div>
+      <div id="cue49" class="clip rail" data-start="82.36" data-duration="1.38" data-track-index="3"><p><span class="t"><span>and</span> <span>to</span> <span>get</span> <span>us</span> <span class="g">home.</span></span></p></div>
+      <div id="cue50" class="clip rail" data-start="83.78" data-duration="1.08" data-track-index="3"><p><span class="t"><span>Any</span> <span class="g">money</span> <span>left</span> <span>over</span></span></p></div>
+      <div id="cue51" class="clip rail" data-start="84.90" data-duration="1.02" data-track-index="3"><p><span class="t"><span>will</span> <span>be</span> <span>donated</span></span></p></div>
+      <div id="cue52" class="clip rail" data-start="85.96" data-duration="2.12" data-track-index="3"><p><span class="t"><span>to</span> <span>another</span> <span class="g">veteran</span> <span>non-profit,</span></span></p></div>
+      <div id="cue53" class="clip rail" data-start="88.12" data-duration="1.26" data-track-index="3"><p><span class="t"><span>so</span> <span>I</span> <span>love</span> <span>you</span> <span>guys,</span></span></p></div>
+      <div id="cue54" class="clip rail" data-start="89.42" data-duration="1.10" data-track-index="3"><p><span class="t"><span>I</span> <span>hope</span> <span>you</span> <span>guys</span> <span>can</span> <span>help</span></span></p></div>
+      <div id="cue55" class="clip rail" data-start="90.56" data-duration="1.16" data-track-index="3"><p><span class="t"><span>and</span> <span>take</span> <span>care,</span> <span>God</span> <span>bless,</span></span></p></div>
+      <div id="cue56" class="clip rail" data-start="91.76" data-duration="1.13" data-track-index="3"><p><span class="t"><span>strength</span> <span>and</span> <span>honor.</span></span></p></div>
+
+      <section id="end" class="clip end" data-start="92.81" data-duration="4.0" data-track-index="8">
         <div class="glow"></div>
         <div class="inner">
           <img id="end-emblem" src="assets/emblem-end.png" alt="" style="width:520px;height:347px;object-fit:contain;mix-blend-mode:screen;" />
-          <p id="end-title" class="display" style="font-size:118px;">AYÚDANOS A LLEVAR<br><span class="gold">A TODA LA BANDA.</span></p>
+          <p id="end-title" class="display" style="font-size:118px;">HELP US BRING<br><span class="gold">THE FULL BAND.</span></p>
           <p id="end-url" style="font-size:40px;font-weight:600;color:#e8ddd0;white-space:nowrap;">malachiasmusic.com/road-to-san-antonio</p>
           <p id="end-cash" style="font-size:30px;color:#a89880;">Cash App · Warfighter Gardens · $AWarriorsGarden</p>
         </div>
@@ -111,9 +187,12 @@
       window.__timelines = window.__timelines || {};
       const tl = gsap.timeline({ paused: true });
       const E = "power3.out";
-      tl.fromTo("#end-emblem", { opacity: 0, y: -18 }, { opacity: 1, y: 0, duration: 0.8, ease: E }, 78.80);
-      tl.fromTo("#end-title", { opacity: 0, y: 34 }, { opacity: 1, y: 0, duration: 0.8, ease: E }, 79.05);
-      tl.fromTo(["#end-url", "#end-cash"], { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.7, ease: E, stagger: 0.18 }, 79.50);
+      tl.fromTo("#hero span", { opacity: 0, y: 26, scale: 0.94 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.55, ease: E }, 41.60);
+      tl.to("#hero span", { opacity: 0, duration: 0.35, ease: "power2.in" }, 44.25);
+      tl.fromTo("#end-emblem", { opacity: 0, y: -18 }, { opacity: 1, y: 0, duration: 0.8, ease: E }, 92.81);
+      tl.fromTo("#end-title", { opacity: 0, y: 34 }, { opacity: 1, y: 0, duration: 0.8, ease: E }, 93.06);
+      tl.fromTo(["#end-url", "#end-cash"], { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.7, ease: E, stagger: 0.18 }, 93.51);
       window.__timelines["main"] = tl;
     </script>
   </body>

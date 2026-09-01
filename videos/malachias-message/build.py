@@ -1,134 +1,225 @@
 #!/usr/bin/env python3
-"""Build captioned cuts of Malachias's own message.
+"""Build captioned cuts of Malachias's phone message.
 
-One source clip (assets/malachias.mp4, 95 s, vertical), several cuts. Each cut is
-one or more parts of the source stitched on the timeline, with burned-in captions
-taken from the word-level transcript (English) or hand-written (Spanish), plus a
-branded end card. Usage:  python3 build.py <cut> <lang>   → writes index.html
+LAYOUT — measured from the source, not guessed (5% grid on frames at 5/30/50/78/92 s):
+
+    0 %  ─┬─ empty screened patio + sky ......... CLEAN
+   11 %   │   chip
+   22 %   │   HERO band (one promoted phrase per cut)
+   38 %  ─┼─ ................................... top of his hair (40-45%)
+          │
+          │   HIS FACE — nothing is ever drawn here
+          │
+   78 %  ─┼─ ................................... bottom of the beard (75-78%)
+   80 %   │   RAIL band (verbatim captions, over the dark shirt)
+   93 %   │   CTA bar
+  100 %  ─┴─
+
+Two tracks, per the embedded-captions model: the RAIL carries the words, the
+HERO is scarce (exactly one per cut) and lands on the beat the phrase is spoken.
+
+Usage:  python3 build.py <cut> <lang>   → writes index.html
 """
-import json, sys, html, re
+import json, sys, html
 
 W, H = 1080, 1920
-END_CARD = 4.0          # seconds of end card after the last part
-CUE_MAX_WORDS = 4
-CUE_MAX_SECONDS = 1.9
-GAP_SPLIT = 0.45        # a pause longer than this starts a new cue
 
-# Words that carry the message — shown in gold.
+# ── Measured safe geometry (px at 1080x1920) ────────────────────────────────
+CHIP_TOP   = 150
+HERO_TOP   = 430          # hero band 430-740; his hair starts at ~768
+HERO_H     = 300
+RAIL_TOP   = 1570         # rail band 1570-1750; his beard bottoms out at ~1540
+RAIL_H     = 180
+BAR_TOP    = 1780         # CTA bar 1780-1920
+RAIL_FONT  = 54           # 2 lines max at this size inside RAIL_H
+
+END_CARD   = 4.0
+CUE_MAX_WORDS   = 5
+CUE_MAX_SECONDS = 2.4
+GAP_SPLIT       = 0.45
+MIN_CUE         = 0.55   # a caption on screen for less than this is unreadable
+
+# Rail emphasis — accent colour inline, still on the rail (never promoted).
 GOLD = {
-    'san', 'antonio', 'free', 'veterans', 'veteran', 'band', 'november', 'travel',
-    'donations', 'home', 'fitzgerald', 'fitzgerald.', 'raise', 'entire',
+    'san', 'antonio', 'free', 'veterans', 'veteran', 'band', 'november',
+    'travel', 'donations', 'home', 'fitzgerald', 'raise', 'entire', 'money',
 }
 
-# ── The cuts ─────────────────────────────────────────────────────────────────
-# parts: (media_start, duration) taken from the transcript's word timings.
+# ── Source blocks: (media_start, duration) ──────────────────────────────────
+BLOCKS = {
+    'intro':   (0.30, 29.02),
+    'band':    (29.32, 16.43),
+    'free':    (47.10, 15.38),
+    'how':     (62.48, 13.94),
+    'money':   (76.42, 13.49),
+    'signoff': (90.05, 4.55),
+}
+
+# Spanish rail — short chunks (3-6 words), timed to the English phrase
+# boundaries taken from transcript.json. Times are relative to the block.
+ES = {
+    'intro': [
+        (0.0, 3.4, 'Hola a todos, soy Malachias.'),
+        (3.4, 8.6, 'Nos invitaron a tocar en San Antonio, Texas.'),
+        (8.6, 14.0, 'En un local familiar llamado Fitzgerald.'),
+        (14.0, 19.0, 'Las dueñas son hijas de un veterano.'),
+        (19.0, 28.5, 'Para lograrlo tenemos que reunir los fondos.'),
+    ],
+    'band': [
+        (0.0, 3.8, 'Tenemos que reunir los fondos del viaje.'),
+        (4.3, 6.8, 'Hay dos maneras de llegar.'),
+        (7.1, 11.7, 'Voy yo solo, con guitarra acústica…'),
+        (11.8, 13.6, '…o va la banda completa.'),
+        (13.7, 16.4, 'Depende de cuánto podamos recaudar.'),
+    ],
+    'free': [
+        (0.0, 2.0, 'Ofrecemos hacer esto gratis.'),
+        (2.0, 4.0, 'Porque es para los veteranos.'),
+        (4.1, 4.9, 'Para los veteranos.'),
+        (5.4, 6.7, 'Para las familias de veteranos.'),
+        (7.1, 9.8, 'No queremos quitarle nada al evento'),
+        (10.0, 11.7, 'pidiendo que nos paguen.'),
+        (11.9, 15.4, 'Buscamos donaciones para el viaje.'),
+    ],
+    'how': [
+        (0.03, 2.35, 'Voy a poner el enlace en los comentarios.'),
+        (2.35, 4.29, 'Asegúrense de verlo.'),
+        (4.36, 6.27, 'Pueden donar por Cash App.'),
+        (6.27, 8.09, 'Pueden donar por PayPal.'),
+        (8.09, 9.62, 'Pueden contactarme directamente'),
+        (9.73, 13.90, 'y les envío el comprobante deducible de impuestos.'),
+    ],
+    'money': [
+        (0.0, 2.0, 'No vamos a ganar dinero con esto.'),
+        (2.1, 5.3, 'Todo lo recaudado se usa para llegar.'),
+        (5.8, 7.5, 'Para mantenernos allá.'),
+        (7.6, 8.6, 'Y para volver a casa.'),
+        (9.0, 13.4, 'Lo que sobre se dona a otra organización de veteranos.'),
+    ],
+    'signoff': [
+        (0.1, 2.7, 'Los quiero. Ojalá puedan ayudar.'),
+        (2.7, 4.5, 'Dios los bendiga. Fuerza y honor.'),
+    ],
+}
+
+# ── The cuts ────────────────────────────────────────────────────────────────
+# hero: (block, source_second, duration, EN, ES) — exactly one, on the beat.
 CUTS = {
-    # "We're playing for free" — the trust piece.
     'free': {
-        'parts': [(47.10, 15.55), (90.05, 4.55)],
-        'chip': 'Road to San Antonio',
-        'end': ('WE PLAY FOR FREE.', 'HELP US GET THERE.'),
+        'blocks': ['free', 'signoff'],
+        'chip': ('Road to San Antonio', 'Road to San Antonio'),
+        'cta':  ('HELP US GET THERE', 'AYÚDANOS A LLEGAR'),
+        'hero': ('free', 48.50, 2.7, 'FOR FREE', 'GRATIS'),
+        'end':    ('WE PLAY FOR FREE.', 'HELP US GET THERE.'),
         'end_es': ('TOCAMOS GRATIS.', 'AYÚDANOS A LLEGAR.'),
-        'es': [
-            (0.0, 2.2, 'Ofrecemos tocar gratis.'),
-            (2.2, 5.0, 'Porque es para los veteranos,'),
-            (5.0, 7.4, 'y para las familias de los veteranos.'),
-            (7.4, 11.6, 'No queremos quitarle nada al evento\npidiéndoles que nos paguen.'),
-            (11.6, 15.5, 'Así que pedimos donaciones\nsolo para el viaje.'),
-            (15.6, 18.4, 'Los quiero. Ojalá puedan ayudar.'),
-            (18.4, 20.1, 'Dios los bendiga. Fuerza y honor.'),
-        ],
     },
-    # "Me or the whole band" — the unlock.
     'band': {
-        'parts': [(29.30, 16.45), (90.05, 4.55)],
-        'chip': 'Road to San Antonio',
-        'end': ('BRING THE WHOLE BAND.', 'NOV 12 · SAN ANTONIO'),
+        'blocks': ['band', 'signoff'],
+        'chip': ('Two ways to get there', 'Dos maneras de llegar'),
+        'cta':  ('HELP US GET THERE', 'AYÚDANOS A LLEGAR'),
+        'hero': ('band', 41.90, 3.0, 'THE ENTIRE BAND', 'LA BANDA COMPLETA'),
+        'end':    ('BRING THE WHOLE BAND.', 'NOV 12 · SAN ANTONIO'),
         'end_es': ('QUE VAYA TODA LA BANDA.', '12 NOV · SAN ANTONIO'),
-        'es': [
-            (0.0, 3.0, 'Para lograrlo tenemos que reunir\nlos fondos del viaje.'),
-            (3.0, 5.2, 'Hay dos maneras de llegar:'),
-            (5.2, 9.6, 'que vaya yo solo\ncon una guitarra acústica…'),
-            (9.6, 13.0, '…o que vaya la banda completa.'),
-            (13.0, 16.4, 'Depende de cuánto podamos recaudar.'),
-            (16.5, 19.3, 'Los quiero. Ojalá puedan ayudar.'),
-            (19.3, 21.0, 'Dios los bendiga. Fuerza y honor.'),
-        ],
     },
-    # "Where every dollar goes" — transparency.
     'money': {
-        'parts': [(76.40, 13.55), (90.05, 4.55)],
-        'chip': 'Where every dollar goes',
-        'end': ('EVERY DOLLAR GOES', 'TO THE ROAD.'),
+        'blocks': ['money', 'signoff'],
+        'chip': ('Where every dollar goes', 'A dónde va cada dólar'),
+        'cta':  ('HELP US GET THERE', 'AYÚDANOS A LLEGAR'),
+        'hero': ('money', 81.20, 3.0, 'TO GET US THERE', 'PARA LLEGAR ALLÁ'),
+        'end':    ('EVERY DOLLAR GOES', 'TO THE ROAD.'),
         'end_es': ('CADA DÓLAR VA', 'AL CAMINO.'),
-        'es': [
-            (0.0, 3.0, 'No vamos a ganar dinero\ncon este evento.'),
-            (3.0, 7.6, 'Todo lo recaudado se usa\npara llegar allá,'),
-            (7.6, 10.4, 'mantenernos allí\ny volver a casa.'),
-            (10.4, 13.5, 'Lo que sobre se dona a otra\norganización de veteranos.'),
-            (13.6, 16.4, 'Los quiero. Ojalá puedan ayudar.'),
-            (16.4, 18.1, 'Dios los bendiga. Fuerza y honor.'),
-        ],
     },
-    # The full message — for the website and the Facebook feed.
     'message': {
-        'parts': [(0.30, 28.70), (29.30, 16.45), (47.10, 15.55), (76.40, 13.55), (90.05, 4.55)],
-        'chip': 'Road to San Antonio',
-        'end': ('HELP US BRING', 'THE FULL BAND.'),
+        'blocks': ['intro', 'band', 'free', 'how', 'money', 'signoff'],
+        'chip': ('Road to San Antonio', 'Road to San Antonio'),
+        'cta':  ('HELP US GET THERE', 'AYÚDANOS A LLEGAR'),
+        'hero': ('band', 41.90, 3.0, 'THE ENTIRE BAND', 'LA BANDA COMPLETA'),
+        'end':    ('HELP US BRING', 'THE FULL BAND.'),
         'end_es': ('AYÚDANOS A LLEVAR', 'A TODA LA BANDA.'),
-        'es': [
-            (0.0, 3.4, 'Hola a todos, soy Malachias,\nde la banda Malachias.'),
-            (3.4, 8.6, 'Nos dieron la oportunidad de tocar\nen San Antonio, Texas,'),
-            (8.6, 14.0, 'en un local familiar\nllamado Fitzgerald.'),
-            (14.0, 19.0, 'Las dueñas son hijas\nde un veterano del Ejército.'),
-            (19.0, 28.6, 'Para lograrlo tenemos que reunir\nlos fondos del viaje.'),
-            (28.7, 31.5, 'Hay dos maneras de llegar:'),
-            (31.5, 36.0, 'que vaya yo solo\ncon una guitarra acústica…'),
-            (36.0, 40.0, '…o que vaya la banda completa.'),
-            (40.0, 45.1, 'Depende de cuánto podamos recaudar.'),
-            (45.2, 47.6, 'Ofrecemos tocar gratis.'),
-            (47.6, 51.0, 'Porque es para los veteranos\ny sus familias.'),
-            (51.0, 56.0, 'No queremos quitarle nada al evento\npidiéndoles que nos paguen.'),
-            (56.0, 60.7, 'Pedimos donaciones\nsolo para el viaje.'),
-            (60.8, 63.8, 'No vamos a ganar dinero\ncon este evento.'),
-            (63.8, 68.4, 'Todo lo recaudado se usa\npara llegar allá,'),
-            (68.4, 71.2, 'mantenernos allí\ny volver a casa.'),
-            (71.2, 74.3, 'Lo que sobre se dona a otra\norganización de veteranos.'),
-            (74.4, 77.2, 'Los quiero. Ojalá puedan ayudar.'),
-            (77.2, 78.9, 'Dios los bendiga. Fuerza y honor.'),
-        ],
     },
 }
 
 
-def load_words():
-    return json.load(open('transcript.json'))
+# Words that naturally BEGIN a clause. When a long sentence has to be split,
+# the break is nudged so the next cue starts on one of these instead of
+# stranding it at the tail of the previous cue.
+STARTERS = {
+    'and', 'so', 'but', 'because', 'or', 'that', 'to', 'for', 'with', 'when',
+    'if', 'we', 'they', 'it', 'all', 'any', 'the', 'a', 'an', 'of', 'my',
+    'our', 'by', 'in', 'on', 'at', 'from', 'is', 'was', 'will',
+}
 
 
-def cues_for_part(words, media_start, duration, offset):
-    """Group transcript words inside [media_start, media_start+duration) into cues,
-    timed against the output timeline (offset = where this part starts)."""
-    sel = [w for w in words if w['start'] >= media_start - 0.02 and w['end'] <= media_start + duration + 0.25]
-    cues, cur = [], []
-    for w in sel:
-        if cur:
-            span = w['end'] - cur[0]['start']
-            gap = w['start'] - cur[-1]['end']
-            if len(cur) >= CUE_MAX_WORDS or span > CUE_MAX_SECONDS or gap > GAP_SPLIT:
-                cues.append(cur); cur = []
+def _bare(w):
+    return w['text'].lower().strip(',.!?"\'')
+
+
+def en_cues(words, media_start, duration, offset):
+    """Group transcript words into rail cues, timed on the output timeline.
+
+    Break on what the speaker actually does — punctuation and real pauses —
+    then split anything still too long at a clause boundary. Fixed-width
+    chunking is what strands 'and' or 'because it is' at the end of a line.
+    """
+    sel = [w for w in words
+           if w['start'] >= media_start - 0.15
+           and w['end'] <= media_start + duration + 0.25
+           and w['start'] <= media_start + duration - 0.30]
+
+    # 1) Clauses: end on punctuation or a real pause.
+    clauses, cur = [], []
+    for i, w in enumerate(sel):
         cur.append(w)
+        gap = sel[i + 1]['start'] - w['end'] if i + 1 < len(sel) else 99.0
+        if w['text'].rstrip()[-1:] in '.,?!' or gap > GAP_SPLIT:
+            clauses.append(cur); cur = []
     if cur:
-        cues.append(cur)
+        clauses.append(cur)
+
+    # 2) Split clauses that are too long, preferring a clause boundary.
+    pieces = []
+    for c in clauses:
+        if len(c) <= CUE_MAX_WORDS and c[-1]['end'] - c[0]['start'] <= CUE_MAX_SECONDS:
+            pieces.append(c); continue
+        n = max(2, -(-len(c) // CUE_MAX_WORDS))
+        target = -(-len(c) // n)
+        i = 0
+        while i < len(c):
+            j = min(i + target, len(c))
+            if j < len(c):
+                for k in (j, j - 1, j + 1, j - 2):
+                    if i + 2 <= k < len(c) and _bare(c[k]) in STARTERS:
+                        j = k; break
+            pieces.append(c[i:j]); i = j
+
+    # 3) Merge neighbouring fragments back into readable lines. Never across a
+    #    sentence end — that is what dragged the next sentence's first word
+    #    onto the tail of the previous caption.
+    groups = []
+    for p in pieces:
+        if groups:
+            prev = groups[-1]
+            n = len(prev) + len(p)
+            span = p[-1]['end'] - prev[0]['start']
+            ends_sentence = prev[-1]['text'].rstrip()[-1:] in '.?!'
+            p_closes = p[-1]['text'].rstrip()[-1:] in '.,?!'
+            ok = ((p_closes and n <= 7)          # p completes a clause
+                  or (len(prev) <= 3 and n <= 7)  # prev is too short to stand alone
+                  or (len(p) <= 2 and n <= 8))    # p is a fragment
+            if not ends_sentence and span <= 3.2 and ok:
+                groups[-1] = prev + p
+                continue
+        groups.append(p)
+
     out = []
-    for c in cues:
-        start = offset + (c[0]['start'] - media_start)
-        end = offset + (c[-1]['end'] - media_start) + 0.18
-        text = ' '.join(x['text'] for x in c)
-        out.append((max(0.0, start), end, text))
+    for g in groups:
+        a = offset + (g[0]['start'] - media_start)
+        b = offset + (g[-1]['end'] - media_start) + 0.20
+        out.append((max(0.0, a), b, ' '.join(x['text'] for x in g)))
     return out
 
 
-def render_en_cue(text):
+def mark_en(text):
     parts = []
     for tok in text.split():
         bare = tok.lower().strip('.,!?"\'')
@@ -137,50 +228,69 @@ def render_en_cue(text):
     return ' '.join(parts)
 
 
-def render_es_cue(text):
-    return '<br>'.join(html.escape(line) for line in text.split('\n'))
-
-
-def build(cut_name, lang):
+def build(cut_name, lang='en'):
     cut = CUTS[cut_name]
-    words = load_words()
-    parts = cut['parts']
+    words = json.load(open('transcript.json'))
+    es = lang != 'en'
 
-    media, offset = [], 0.0
-    for i, (ms, dur) in enumerate(parts):
-        media.append(f'''      <video id="v{i}" class="clip" src="assets/malachias.mp4" muted playsinline
-        data-start="{offset:.2f}" data-duration="{dur:.2f}" data-media-start="{ms:.2f}" data-track-index="1"
-        style="width:100%;height:100%;object-fit:cover;"></video>
-      <audio id="a{i}" src="assets/malachias.mp4"
-        data-start="{offset:.2f}" data-duration="{dur:.2f}" data-media-start="{ms:.2f}" data-track-index="9" data-volume="1"></audio>''')
+    # Lay the blocks out on the output timeline.
+    media, cues, offset, starts = [], [], 0.0, {}
+    for i, name in enumerate(cut['blocks']):
+        ms, dur = BLOCKS[name]
+        starts[name] = offset
+        media.append(
+            f'      <video id="v{i}" class="clip" src="assets/malachias.mp4" muted playsinline\n'
+            f'        data-start="{offset:.2f}" data-duration="{dur:.2f}" data-media-start="{ms:.2f}"\n'
+            f'        data-track-index="1" style="width:100%;height:100%;object-fit:cover;"></video>\n'
+            f'      <audio id="a{i}" src="assets/malachias.mp4"\n'
+            f'        data-start="{offset:.2f}" data-duration="{dur:.2f}" data-media-start="{ms:.2f}"\n'
+            f'        data-track-index="9" data-volume="1"></audio>')
+        if es:
+            cues += [(offset + s, offset + e, html.escape(t)) for s, e, t in ES[name]]
+        else:
+            cues += [(s, e, mark_en(t)) for s, e, t in en_cues(words, ms, dur, offset)]
         offset += dur
+
     video_total = offset
     total = round(video_total + END_CARD, 2)
 
-    if lang == 'en':
-        cues, off = [], 0.0
-        for ms, dur in parts:
-            cues += cues_for_part(words, ms, dur, off)
-            off += dur
-        cue_html = [
-            f'      <div id="cue{i}" class="clip cue" data-start="{s:.2f}" data-duration="{max(0.35, e - s):.2f}" data-track-index="3"><p>{render_en_cue(t)}</p></div>'
-            for i, (s, e, t) in enumerate(cues) if s < video_total
-        ]
-        end1, end2 = cut['end']
-        chip = cut['chip']
-        cta = 'HELP US GET THERE'
-        url = 'malachiasmusic.com/road-to-san-antonio'
-        cash = 'Cash App · Warfighter Gardens · $AWarriorsGarden'
-    else:
-        cue_html = [
-            f'      <div id="cue{i}" class="clip cue" data-start="{s:.2f}" data-duration="{max(0.35, e - s):.2f}" data-track-index="3"><p>{render_es_cue(t)}</p></div>'
-            for i, (s, e, t) in enumerate(cut['es']) if s < video_total
-        ]
-        end1, end2 = cut['end_es']
-        chip = 'Road to San Antonio'
-        cta = 'AYÚDANOS A LLEGAR'
-        url = 'malachiasmusic.com/road-to-san-antonio'
-        cash = 'Cash App · Warfighter Gardens · $AWarriorsGarden'
+    # The rail is a single box, so no two cues may ever be on screen at once.
+    # 1) handoff — each cue yields 0.04s before the next enters
+    # 2) merge anything left under MIN_CUE (a flashed caption is unreadable)
+    def handoff(cs):
+        return [(a, min(b, cs[i + 1][0] - 0.04) if i + 1 < len(cs) else b, t)
+                for i, (a, b, t) in enumerate(cs)]
+
+    cues.sort(key=lambda c: c[0])
+    cues = handoff(cues)
+    merged = []
+    for a, b, t in cues:
+        if merged and b - a < MIN_CUE:
+            pa, _, pt = merged[-1]
+            merged[-1] = (pa, b, pt + ' ' + t)
+        else:
+            merged.append((a, b, t))
+    cues = handoff(merged)
+
+    rail = [
+        f'      <div id="cue{i}" class="clip rail" data-start="{s:.2f}" '
+        f'data-duration="{e - s:.2f}" data-track-index="3"><p><span class="t">{m}</span></p></div>'
+        for i, (s, e, m) in enumerate(cues) if s < video_total - 0.1
+    ]
+
+    # The one promoted phrase, on the beat it is spoken.
+    hb, hsec, hdur, hen, hes = cut['hero']
+    hero_at = starts[hb] + (hsec - BLOCKS[hb][0])
+    hero_txt = hes if es else hen
+    hero = (f'      <div id="hero" class="clip heroband" data-start="{hero_at:.2f}" '
+            f'data-duration="{hdur:.2f}" data-track-index="4"><span>{html.escape(hero_txt)}</span></div>')
+
+    chip = cut['chip'][1 if es else 0]
+    cta = cut['cta'][1 if es else 0]
+    end1, end2 = cut['end_es'] if es else cut['end']
+    tagline = 'Nov 12, 2026 · San Antonio, TX' if not es else '12 nov 2026 · San Antonio, TX'
+    url = 'malachiasmusic.com/road-to-san-antonio'
+    cash = 'Cash App · Warfighter Gardens · $AWarriorsGarden'
 
     doc = f'''<!doctype html>
 <html lang="{lang}" data-resolution="portrait">
@@ -196,28 +306,50 @@ def build(cut_name, lang):
       body {{ font-family: "Inter", system-ui, sans-serif; color: #ede5d8; }}
       #root {{ position: relative; width: {W}px; height: {H}px; overflow: hidden; background: #030202; }}
       .clip {{ position: absolute; inset: 0; }}
-      .scrim {{ position: absolute; left: 0; right: 0; bottom: 0; height: 46%; z-index: 2;
-        background: linear-gradient(to top, rgba(3,2,2,0.94) 0%, rgba(3,2,2,0.72) 42%, rgba(3,2,2,0) 100%); }}
-      .topfade {{ position: absolute; left: 0; right: 0; top: 0; height: 16%; z-index: 2;
-        background: linear-gradient(to bottom, rgba(3,2,2,0.75), rgba(3,2,2,0)); }}
-      .chip {{ position: absolute; top: 210px; left: 60px; z-index: 4; display: flex; align-items: center; gap: 14px;
-        font-weight: 700; font-size: 26px; letter-spacing: 0.26em; text-transform: uppercase; color: #f5cf63;
-        background: rgba(4,3,2,0.82); padding: 14px 22px; border-radius: 999px;
-        border: 1px solid rgba(201,168,76,0.35); }}
+
+      /* Sky scrim — stops at 620px, well above his hair (768px). */
+      .skyfade {{ position: absolute; left: 0; right: 0; top: 0; height: 620px; z-index: 2;
+        background: linear-gradient(to bottom, rgba(3,2,2,0.78) 0%, rgba(3,2,2,0.35) 55%, rgba(3,2,2,0) 100%); }}
+      /* Shirt scrim — starts at 1500px, below the beard (1498px). */
+      .shirtfade {{ position: absolute; left: 0; right: 0; top: 1500px; bottom: 0; z-index: 2;
+        background: linear-gradient(to bottom, rgba(3,2,2,0) 0%, rgba(3,2,2,0.80) 30%, rgba(3,2,2,0.92) 100%); }}
+
+      .chip {{ position: absolute; top: {CHIP_TOP}px; left: 60px; z-index: 6;
+        display: inline-flex; align-items: center; gap: 14px;
+        font-weight: 700; font-size: 26px; letter-spacing: 0.24em; text-transform: uppercase;
+        color: #f5cf63; background: rgba(4,3,2,0.82); padding: 14px 24px; border-radius: 999px;
+        border: 1px solid rgba(201,168,76,0.38); }}
       .chip i {{ display: block; width: 10px; height: 10px; border-radius: 50%; background: #f5cf63; }}
-      .cue {{ z-index: 5; display: flex; align-items: flex-end; justify-content: center;
-        padding: 0 72px 470px; text-align: center; }}
-      .cue p {{ display: inline-block; max-width: 900px; font-weight: 800; font-size: 74px; line-height: 1.18;
-        letter-spacing: -0.01em; color: #fff; background: rgba(4,3,2,0.80); padding: 20px 30px; border-radius: 16px;
-        box-shadow: 0 18px 60px rgba(0,0,0,0.55); }}
-      .cue .g {{ color: #f5cf63; }}
-      .bar {{ position: absolute; left: 0; right: 0; bottom: 0; height: 130px; z-index: 6; display: flex;
-        align-items: center; justify-content: center; gap: 22px; border-top: 1px solid rgba(201,168,76,0.30);
-        background: rgba(2,2,2,0.88); font-weight: 700; font-size: 27px; letter-spacing: 0.28em;
-        text-transform: uppercase; color: #c9a84c; }}
+      .tag {{ position: absolute; top: {CHIP_TOP + 74}px; left: 74px; z-index: 6;
+        font-weight: 600; font-size: 25px; letter-spacing: 0.20em; text-transform: uppercase;
+        color: rgba(237,229,216,0.92); text-shadow: 0 2px 12px rgba(0,0,0,0.9); }}
+
+      /* HERO — the one promoted phrase, in the dead sky above his head. */
+      .heroband {{ z-index: 5; }}
+      .heroband span {{ position: absolute; top: {HERO_TOP}px; left: 70px; width: {W - 140}px;
+        height: {HERO_H}px; display: flex; align-items: center; justify-content: center; text-align: center;
+        font-family: "Bebas Neue", sans-serif; font-size: 120px; line-height: 0.92; letter-spacing: 0.03em;
+        color: #f5cf63; text-shadow: 0 6px 40px rgba(0,0,0,0.85), 0 2px 8px rgba(0,0,0,0.9); }}
+
+      /* RAIL — verbatim captions, bottom band only. Fixed box: cannot drift up. */
+      .rail {{ z-index: 5; }}
+      .rail p {{ position: absolute; top: {RAIL_TOP}px; left: 60px; width: {W - 120}px; height: {RAIL_H}px;
+        display: flex; align-items: center; justify-content: center; }}
+      .rail .t {{ display: inline-block; max-width: 100%; text-align: center;
+        font-weight: 800; font-size: {RAIL_FONT}px; line-height: 1.18; letter-spacing: -0.005em;
+        color: #fff; background: rgba(5,4,3,0.78); border-radius: 16px; padding: 14px 28px;
+        box-shadow: 0 14px 44px rgba(0,0,0,0.5); }}
+      .rail .g {{ color: #f5cf63; }}
+
+      .bar {{ position: absolute; top: {BAR_TOP}px; left: 0; right: 0; bottom: 0; z-index: 6;
+        display: flex; align-items: center; justify-content: center;
+        border-top: 1px solid rgba(201,168,76,0.30); background: rgba(2,2,2,0.90);
+        font-weight: 700; font-size: 27px; letter-spacing: 0.28em; text-transform: uppercase; color: #c9a84c; }}
+
       .end {{ background: linear-gradient(160deg, #020202 0%, #0a0602 55%, #030202 100%); }}
-      .end .glow {{ position: absolute; left: 50%; top: 40%; width: 1100px; height: 1100px; transform: translate(-50%,-50%);
-        border-radius: 50%; background: radial-gradient(circle, rgba(120,60,10,0.45) 0%, rgba(120,60,10,0) 66%); }}
+      .end .glow {{ position: absolute; left: 50%; top: 40%; width: 1100px; height: 1100px;
+        transform: translate(-50%,-50%); border-radius: 50%;
+        background: radial-gradient(circle, rgba(120,60,10,0.45) 0%, rgba(120,60,10,0) 66%); }}
       .end .inner {{ position: absolute; left: 80px; right: 80px; top: 300px; bottom: 300px; z-index: 2;
         display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 40px; text-align: center; }}
       .display {{ font-family: "Bebas Neue", sans-serif; letter-spacing: 0.04em; line-height: 0.98; }}
@@ -229,13 +361,18 @@ def build(cut_name, lang):
 
 {chr(10).join(media)}
 
-      <div id="scrim" class="clip" data-start="0" data-duration="{video_total:.2f}" data-track-index="2" aria-hidden="true" style="pointer-events:none;"><div class="scrim"></div><div class="topfade"></div></div>
+      <div id="scrim" class="clip" data-start="0" data-duration="{video_total:.2f}" data-track-index="2" aria-hidden="true" style="pointer-events:none;">
+        <div class="skyfade"></div><div class="shirtfade"></div>
+      </div>
       <div id="frame" class="clip" data-start="0" data-duration="{video_total:.2f}" data-track-index="2" style="pointer-events:none;">
         <div class="chip"><i></i><span>{html.escape(chip)}</span></div>
+        <div class="tag">{html.escape(tagline)}</div>
         <div class="bar">{html.escape(cta)}</div>
       </div>
 
-{chr(10).join(cue_html)}
+{hero}
+
+{chr(10).join(rail)}
 
       <section id="end" class="clip end" data-start="{video_total:.2f}" data-duration="{END_CARD}" data-track-index="8">
         <div class="glow"></div>
@@ -253,6 +390,9 @@ def build(cut_name, lang):
       window.__timelines = window.__timelines || {{}};
       const tl = gsap.timeline({{ paused: true }});
       const E = "power3.out";
+      tl.fromTo("#hero span", {{ opacity: 0, y: 26, scale: 0.94 }},
+        {{ opacity: 1, y: 0, scale: 1, duration: 0.55, ease: E }}, {hero_at:.2f});
+      tl.to("#hero span", {{ opacity: 0, duration: 0.35, ease: "power2.in" }}, {hero_at + hdur - 0.35:.2f});
       tl.fromTo("#end-emblem", {{ opacity: 0, y: -18 }}, {{ opacity: 1, y: 0, duration: 0.8, ease: E }}, {video_total:.2f});
       tl.fromTo("#end-title", {{ opacity: 0, y: 34 }}, {{ opacity: 1, y: 0, duration: 0.8, ease: E }}, {video_total + 0.25:.2f});
       tl.fromTo(["#end-url", "#end-cash"], {{ opacity: 0, y: 20 }}, {{ opacity: 1, y: 0, duration: 0.7, ease: E, stagger: 0.18 }}, {video_total + 0.7:.2f});
@@ -262,8 +402,8 @@ def build(cut_name, lang):
 </html>
 '''
     open('index.html', 'w').write(doc)
-    n_cues = len(cue_html)
-    print(f'{cut_name}/{lang}: {len(parts)} parts · video {video_total:.1f}s · total {total}s · {n_cues} cues')
+    print(f'{cut_name}/{lang}: video {video_total:.1f}s · total {total}s · '
+          f'{len(rail)} rail cues · hero "{hero_txt}" @ {hero_at:.2f}s')
 
 
 if __name__ == '__main__':
