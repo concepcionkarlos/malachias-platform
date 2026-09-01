@@ -53,7 +53,8 @@ export default function CampaignSection({ config, math }: Props) {
           </div>
           <div className="mt-4" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={math.percent} aria-label={`${math.percent}% funded`}>
             <div style={{ height: 8, background: 'rgba(255,255,255,0.06)' }}>
-              <div style={{ height: '100%', width: `${math.percent}%`, background: 'linear-gradient(90deg, #8b6e3a, #c9a84c)' }} />
+              {/* Same minWidth as the campaign page bar, for the same reason. */}
+              <div style={{ height: '100%', width: `${math.percent}%`, minWidth: math.raised > 0 ? 10 : 0, background: 'linear-gradient(90deg, #8b6e3a, #c9a84c)' }} />
             </div>
           </div>
           <div className="mt-3 flex justify-between" style={{ fontSize: '0.66rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--text-2)' }}>

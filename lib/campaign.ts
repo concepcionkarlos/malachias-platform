@@ -132,8 +132,8 @@ export const CAMPAIGN: CampaignConfig = {
   eventCity: 'San Antonio, Texas',
   eventVenue: '',
   goal: 12000,
-  raised: 0,
-  raisedAsOf: '',
+  raised: 100,
+  raisedAsOf: '2026-09-01',
   status: 'active',
   travelers: 5,
   cashApp: {

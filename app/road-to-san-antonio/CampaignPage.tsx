@@ -122,7 +122,9 @@ export default function CampaignPage({ config, qrReady, sponsors, updates, inKin
 
           <div className="mt-6" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={math.percent} aria-label={`${math.percent}% of the ${usd(math.goal)} goal raised`}>
             <div style={{ height: 10, background: 'rgba(255,255,255,0.06)', overflow: 'hidden' }}>
-              <div style={{ height: '100%', width: `${math.percent}%`, background: 'linear-gradient(90deg, #8b6e3a, #c9a84c)', transition: 'width 1s ease' }} />
+              {/* minWidth keeps the first contributions visible: 1% of the goal is a
+                  4px sliver that reads as a rendering glitch rather than a start. */}
+              <div style={{ height: '100%', width: `${math.percent}%`, minWidth: math.raised > 0 ? 10 : 0, background: 'linear-gradient(90deg, #8b6e3a, #c9a84c)', transition: 'width 1s ease' }} />
             </div>
             <div className="mt-2 flex justify-between" aria-hidden="true">
               {MILESTONES.map(m => (
