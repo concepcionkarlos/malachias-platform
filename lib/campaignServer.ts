@@ -29,6 +29,7 @@ export async function getCampaign(): Promise<CampaignView> {
     ...CAMPAIGN,
     ...o,
     cashApp: { ...CAMPAIGN.cashApp, ...(o.cashApp ?? {}) },
+    paypal: CAMPAIGN.paypal ? { ...CAMPAIGN.paypal, ...(o.paypal ?? {}) } : null,
   }
   // A reconciled ledger is the source of truth for the public number.
   const ledger = store.campaignLedger ?? []

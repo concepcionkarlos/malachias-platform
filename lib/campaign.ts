@@ -18,6 +18,22 @@ export interface CashAppInfo {
   qrImage: string       // path under /public; rendered only when the file exists
 }
 
+export interface PayPalInfo {
+  email: string        // the PayPal account that receives — shown so people can also send directly
+  url: string          // PayPal's donate link for an email-identified account
+}
+
+// The registered charity that receives the money. Verified against the IRS record
+// (EIN 81-4794313, subsection 3, deductibility code 1) on 2026-09-01 before any
+// tax wording was published. `nonprofitVerified` below gates that wording.
+export interface NonprofitInfo {
+  legalName: string    // exactly as registered with the IRS
+  ein: string
+  city: string
+  state: string
+  rulingYear: number
+}
+
 export interface BudgetLine { label: string; note: string }
 
 export interface CampaignConfig {
@@ -36,6 +52,8 @@ export interface CampaignConfig {
   status: CampaignStatus
   travelers: number        // people the budget must move
   cashApp: CashAppInfo
+  paypal: PayPalInfo | null   // null until a PayPal account is confirmed
+  nonprofit: NonprofitInfo | null
   donateUrl: string           // secure donation platform (Givebutter) — '' until an official link exists
   nonprofitVerified: boolean  // only true once the recipient's nonprofit status is documented; gates any tax wording
   sponsorEmail: string
@@ -48,7 +66,7 @@ export interface CampaignConfig {
 // Fields the admin can override from the dashboard. Everything else stays in code.
 export type CampaignOverrides = Partial<Pick<CampaignConfig,
   'goal' | 'raised' | 'raisedAsOf' | 'status' | 'eventVenue' | 'headline' | 'subheadline' | 'travelers' | 'donateUrl' | 'nonprofitVerified'
->> & { cashApp?: Partial<CashAppInfo> }
+>> & { cashApp?: Partial<CashAppInfo>; paypal?: Partial<PayPalInfo> }
 
 // In-kind support (a sponsor covering flights, rooms, a van, gear, meals). Tracked
 // separately from cash: confirmed items lower what the campaign still needs.
@@ -124,8 +142,19 @@ export const CAMPAIGN: CampaignConfig = {
     url: 'https://cash.app/$AWarriorsGarden',
     qrImage: '/warfighter-gardens-cashapp-qr.jpg',
   },
+  paypal: {
+    email: 'Warfighterup@gmail.com',
+    url: 'https://www.paypal.com/donate/?business=Warfighterup%40gmail.com&currency_code=USD',
+  },
+  nonprofit: {
+    legalName: 'Warfighter Gardens',
+    ein: '81-4794313',
+    city: 'Coral Springs',
+    state: 'FL',
+    rulingYear: 2017,
+  },
   donateUrl: '',
-  nonprofitVerified: false,
+  nonprofitVerified: true,
   sponsorEmail: 'booking@malachiasmusic.com',
   merchCollectionSlug: 'road-to-san-antonio',
   shareText: 'Help Malachias bring the full band to San Antonio for Veterans Day 2026.',
@@ -354,6 +383,17 @@ export function formatEventDate(iso: string): string {
 export function cashAppPayUrl(cashApp: Pick<CashAppInfo, 'url'>, amount?: number): string {
   const base = cashApp.url.replace(/\/$/, '')
   return amount && amount > 0 ? `${base}/${Math.round(amount)}` : base
+}
+
+/**
+ * PayPal donate link. The account is identified by email rather than a paypal.me
+ * handle, so this is PayPal's `business=` donate form; an amount is appended when
+ * one is given. The raw email is shown alongside it on the page, because that path
+ * works in the PayPal app regardless of how the donate flow behaves.
+ */
+export function paypalPayUrl(paypal: Pick<PayPalInfo, 'url'>, amount?: number): string {
+  if (!amount || amount <= 0) return paypal.url
+  return `${paypal.url}${paypal.url.includes('?') ? '&' : '?'}amount=${Math.round(amount)}`
 }
 
 export function campaignUrl(siteUrl: string): string {

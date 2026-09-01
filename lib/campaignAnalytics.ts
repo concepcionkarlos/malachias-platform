@@ -10,6 +10,8 @@ export type CampaignEvent =
   | 'donate_click'
   | 'cashapp_click'
   | 'cashtag_copy'
+  | 'paypal_click'
+  | 'paypal_copy'
   | 'merch_click'
   | 'sponsor_click'
   | 'sponsor_form_submit'

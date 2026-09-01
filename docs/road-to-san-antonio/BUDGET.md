@@ -46,4 +46,10 @@ airfare · hotel · meals · ground transport · backline · PA · baggage · pa
 
 - "Artist compensation", "musician support", "performance-related expenses" — never "$2,000 each".
 - "Where your support goes" lists categories, no percentages, until quotes exist.
-- Nothing about tax deductibility until `nonprofitVerified` is true **and** the wording is reviewed.
+- Tax deductibility: `nonprofitVerified` went `true` on 2026-09-01, after the EIN
+  Juan supplied (81-4794313) was checked against the IRS record — Warfighter
+  Gardens, Coral Springs FL, subsection 3, deductibility code 1, ruling year 2017.
+  The published wording is *"Contributions are tax deductible to the extent
+  allowed by law"* plus a receipt contact. Keep that phrasing: what an individual
+  can actually deduct depends on their own return, so a flat "your donation is tax
+  deductible" claims more than the record supports.

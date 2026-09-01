@@ -11,8 +11,8 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import { Copy, Check, ExternalLink, QrCode } from 'lucide-react'
-import { DONATION_LEVELS, usd, cashAppPayUrl, type CampaignConfig } from '@/lib/campaign'
-import { trackCampaign } from '@/lib/campaignAnalytics'
+import { DONATION_LEVELS, usd, cashAppPayUrl, paypalPayUrl, type CampaignConfig } from '@/lib/campaign'
+import { trackCampaign, type CampaignEvent } from '@/lib/campaignAnalytics'
 
 interface Props {
   config: CampaignConfig
@@ -20,17 +20,17 @@ interface Props {
 }
 
 export default function DonateSection({ config, qrReady }: Props) {
-  const { cashApp } = config
-  const [copied, setCopied] = useState(false)
+  const { cashApp, paypal, nonprofit } = config
+  const [copied, setCopied] = useState('')
 
-  async function copyCashtag() {
+  async function copy(value: string, key: string, event: CampaignEvent) {
     try {
-      await navigator.clipboard.writeText(cashApp.cashtag)
-      setCopied(true)
-      trackCampaign('cashtag_copy')
-      setTimeout(() => setCopied(false), 2500)
+      await navigator.clipboard.writeText(value)
+      setCopied(key)
+      trackCampaign(event)
+      setTimeout(() => setCopied(''), 2500)
     } catch {
-      // Clipboard blocked — the cashtag is printed on screen, nothing else to do.
+      // Clipboard blocked — the value is printed on screen, nothing else to do.
     }
   }
 
@@ -39,11 +39,12 @@ export default function DonateSection({ config, qrReady }: Props) {
       <div className="max-w-5xl mx-auto px-6">
         <p className="label-xs mb-3" style={{ color: 'var(--gold)', letterSpacing: '0.40em' }}>1 · Donate</p>
         <h2 className="font-display leading-[0.92] tracking-[0.06em] text-white" style={{ fontSize: 'clamp(2.4rem, 6vw, 4.2rem)' }}>
-          SUPPORT THROUGH CASH APP
+          WAYS TO GIVE
         </h2>
         <p className="mt-4 text-[0.95rem] leading-relaxed" style={{ color: 'var(--text-2)', maxWidth: '38rem' }}>
-          Help support Malachias&apos; Road to San Antonio for {config.eventName}. Scan the QR code or open Cash App
-          to contribute through {cashApp.displayName}. Every contribution helps move the road forward.
+          Help support Malachias&apos; Road to San Antonio for {config.eventName}. Cash App is the fastest way — scan the
+          QR code or tap an amount{paypal ? ', and PayPal is below if you prefer it' : ''}. Every contribution goes to{' '}
+          {cashApp.displayName} and helps move the road forward.
         </p>
 
         <div className="tac-box mt-10 grid md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-0 overflow-hidden">
@@ -97,12 +98,12 @@ export default function DonateSection({ config, qrReady }: Props) {
               </a>
               <button
                 type="button"
-                onClick={copyCashtag}
+                onClick={() => copy(cashApp.cashtag, 'cashtag', 'cashtag_copy')}
                 className="btn btn-ghost justify-center"
                 style={{ letterSpacing: '0.16em', padding: '0.9rem 1.25rem', fontSize: '0.78rem' }}
                 aria-live="polite"
               >
-                {copied
+                {copied === 'cashtag'
                   ? <><Check size={15} aria-hidden="true" />&ensp;Copied {cashApp.cashtag}</>
                   : <><Copy size={15} aria-hidden="true" />&ensp;Copy $Cashtag</>}
               </button>
@@ -199,10 +200,64 @@ export default function DonateSection({ config, qrReady }: Props) {
           </div>
         </div>
 
+        {/* ── PayPal — the account is identified by email, so the address is shown
+             next to the button: that path works in the PayPal app no matter how
+             the donate flow behaves. ── */}
+        {paypal && (
+          <div className="tac-box mt-4 p-6 md:p-8 flex flex-col sm:flex-row sm:items-center gap-5 sm:gap-8">
+            <div style={{ minWidth: 0, flex: 1 }}>
+              <p className="label-xs mb-2" style={{ color: 'var(--text-2)', letterSpacing: '0.30em' }}>Prefer PayPal?</p>
+              <p className="font-display" style={{ fontSize: '1.5rem', letterSpacing: '0.05em', color: '#ede5d8', lineHeight: 1.1 }}>
+                {cashApp.displayName}
+              </p>
+              <p className="font-mono mt-1" style={{ fontSize: '0.9rem', color: '#c9a84c', wordBreak: 'break-all' }}>{paypal.email}</p>
+              <p className="mt-2 text-[0.78rem] leading-relaxed" style={{ color: 'var(--text-2)' }}>
+                Send to this address in PayPal, or use the button.
+              </p>
+            </div>
+            <div className="flex flex-col gap-2 sm:w-[15rem] shrink-0">
+              <a
+                href={paypalPayUrl(paypal)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-primary justify-center"
+                style={{ letterSpacing: '0.16em', padding: '0.9rem 1.25rem', fontSize: '0.78rem' }}
+                aria-label={`Give with PayPal to ${paypal.email}`}
+                onClick={() => trackCampaign('paypal_click', { surface: 'paypal-card' })}
+              >
+                <ExternalLink size={16} aria-hidden="true" />&ensp;Give with PayPal
+              </a>
+              <button
+                type="button"
+                onClick={() => copy(paypal.email, 'paypal', 'paypal_copy')}
+                className="btn btn-ghost justify-center"
+                style={{ letterSpacing: '0.16em', padding: '0.9rem 1.25rem', fontSize: '0.78rem' }}
+                aria-live="polite"
+              >
+                {copied === 'paypal'
+                  ? <><Check size={15} aria-hidden="true" />&ensp;Copied address</>
+                  : <><Copy size={15} aria-hidden="true" />&ensp;Copy PayPal address</>}
+              </button>
+            </div>
+          </div>
+        )}
+
         <p className="mt-6 text-[0.78rem] leading-relaxed" style={{ color: 'var(--text-2)', maxWidth: '44rem' }}>
-          Contributions go to {cashApp.displayName} via Cash App and are applied to the Road to San Antonio travel budget.
+          Contributions go to {cashApp.displayName} and are applied to the Road to San Antonio travel budget.
           The amount raised shown on this page is updated by the band after reconciling contributions — it is not a live feed.
         </p>
+
+        {/* Tax wording appears only when the nonprofit status has been checked
+            against the IRS record — see `nonprofitVerified` in lib/campaign.ts. */}
+        {config.nonprofitVerified && nonprofit && (
+          <p className="mt-3 text-[0.78rem] leading-relaxed" style={{ color: 'var(--text-2)', maxWidth: '44rem' }}>
+            {nonprofit.legalName} is a registered 501(c)(3) nonprofit organization (EIN {nonprofit.ein}),
+            based in {nonprofit.city}, {nonprofit.state}. Contributions are tax deductible to the extent allowed by law.
+            For a receipt, contact{' '}
+            <a href={`mailto:${config.sponsorEmail}`} style={{ color: '#c9a84c' }}>{config.sponsorEmail}</a>.
+            Please consult your tax advisor about your own situation.
+          </p>
+        )}
       </div>
     </section>
   )

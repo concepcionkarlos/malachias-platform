@@ -44,32 +44,38 @@ screened patio above his head. That geometry dictates everything:
 - **The footage is never graded, cropped or recoloured.** Captions are the only
   thing added.
 
-## The "how to donate" section — video yes, site no
+## The "how to donate" section — now matched by the site
 
 The stretch from 62 s to 76 s ("I'm going to put a link in the comments… you can
 donate through Cash App, you can donate through PayPal, you can contact me
 directly and I can send you a tax deductible thing") **is included in the
-`message` cut.** Juan confirmed on 2026-08-31 that the nonprofit behind the
-campaign is verified, and that PayPal and Zelle are being added.
+`message` cut**, and as of 2026-09-01 the site backs all of it:
 
-The **website is deliberately unchanged** for now, by Juan's decision:
+- **PayPal** is live on the campaign page next to Cash App —
+  `Warfighterup@gmail.com`, in `CAMPAIGN.paypal`.
+- **Tax deductibility** is stated on the campaign page. `nonprofitVerified` is
+  now `true`, and `CAMPAIGN.nonprofit` carries the legal name and EIN.
 
-- `nonprofitVerified` stays `false` in `lib/campaign.ts` and no deductibility
-  language appears on any page.
-- Cash App remains the only donation method shown. PayPal and Zelle are not on
-  the site yet.
+The EIN was checked against the IRS record before any of that wording shipped:
 
-So the long video mentions two things the site does not yet offer. That is a
-known gap, not an oversight. Two things close it when Juan is ready:
+| | |
+|---|---|
+| Legal name | Warfighter Gardens |
+| EIN | 81-4794313 |
+| Location | Coral Springs, FL |
+| Subsection | 3 → 501(c)(3) |
+| Ruling year | 2017 |
+| Deductibility code | 1 → contributions are deductible |
 
-1. **PayPal / Zelle** — send the PayPal link and the Zelle email or phone, and
-   they go next to Cash App with the same button design.
-2. **Deductibility on the site** — send the organization's exact legal name and
-   EIN, and the receipt language can be written accurately.
+The published wording is *"Contributions are tax deductible to the extent allowed
+by law"* plus a receipt contact — the standard form. Do not tighten it to a flat
+"your donation is tax deductible": what any individual can actually deduct depends
+on their own return, and the softer phrasing is both accurate and what the IRS
+record supports.
 
-Until then, when posting the long cut, do not add a deductibility claim in the
-caption. Let the video be him speaking for himself, and keep the written caption
-to what the site can back up.
+**Still missing: Zelle.** He mentions it nowhere in the video, so there is no gap
+to close, but it was planned. Send the Zelle email or phone and it goes in next to
+PayPal.
 
 ---
 
