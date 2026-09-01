@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="es" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Malachias — message (es)</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;800&display=swap" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+      body { font-family: "Inter", system-ui, sans-serif; color: #ede5d8; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #030202; }
+      .clip { position: absolute; inset: 0; }
+      .scrim { position: absolute; left: 0; right: 0; bottom: 0; height: 46%; z-index: 2;
+        background: linear-gradient(to top, rgba(3,2,2,0.94) 0%, rgba(3,2,2,0.72) 42%, rgba(3,2,2,0) 100%); }
+      .topfade { position: absolute; left: 0; right: 0; top: 0; height: 16%; z-index: 2;
+        background: linear-gradient(to bottom, rgba(3,2,2,0.75), rgba(3,2,2,0)); }
+      .chip { position: absolute; top: 210px; left: 60px; z-index: 4; display: flex; align-items: center; gap: 14px;
+        font-weight: 700; font-size: 26px; letter-spacing: 0.26em; text-transform: uppercase; color: #f5cf63;
+        background: rgba(4,3,2,0.82); padding: 14px 22px; border-radius: 999px;
+        border: 1px solid rgba(201,168,76,0.35); }
+      .chip i { display: block; width: 10px; height: 10px; border-radius: 50%; background: #f5cf63; }
+      .cue { z-index: 5; display: flex; align-items: flex-end; justify-content: center;
+        padding: 0 72px 470px; text-align: center; }
+      .cue p { display: inline-block; max-width: 900px; font-weight: 800; font-size: 74px; line-height: 1.18;
+        letter-spacing: -0.01em; color: #fff; background: rgba(4,3,2,0.80); padding: 20px 30px; border-radius: 16px;
+        box-shadow: 0 18px 60px rgba(0,0,0,0.55); }
+      .cue .g { color: #f5cf63; }
+      .bar { position: absolute; left: 0; right: 0; bottom: 0; height: 130px; z-index: 6; display: flex;
+        align-items: center; justify-content: center; gap: 22px; border-top: 1px solid rgba(201,168,76,0.30);
+        background: rgba(2,2,2,0.88); font-weight: 700; font-size: 27px; letter-spacing: 0.28em;
+        text-transform: uppercase; color: #c9a84c; }
+      .end { background: linear-gradient(160deg, #020202 0%, #0a0602 55%, #030202 100%); }
+      .end .glow { position: absolute; left: 50%; top: 40%; width: 1100px; height: 1100px; transform: translate(-50%,-50%);
+        border-radius: 50%; background: radial-gradient(circle, rgba(120,60,10,0.45) 0%, rgba(120,60,10,0) 66%); }
+      .end .inner { position: absolute; left: 80px; right: 80px; top: 300px; bottom: 300px; z-index: 2;
+        display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 40px; text-align: center; }
+      .display { font-family: "Bebas Neue", sans-serif; letter-spacing: 0.04em; line-height: 0.98; }
+      .gold { color: #c9a84c; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="82.8" data-width="1080" data-height="1920">
+
+      <video id="v0" class="clip" src="assets/malachias.mp4" muted playsinline
+        data-start="0.00" data-duration="28.70" data-media-start="0.30" data-track-index="1"
+        style="width:100%;height:100%;object-fit:cover;"></video>
+      <audio id="a0" src="assets/malachias.mp4"
+        data-start="0.00" data-duration="28.70" data-media-start="0.30" data-track-index="9" data-volume="1"></audio>
+      <video id="v1" class="clip" src="assets/malachias.mp4" muted playsinline
+        data-start="28.70" data-duration="16.45" data-media-start="29.30" data-track-index="1"
+        style="width:100%;height:100%;object-fit:cover;"></video>
+      <audio id="a1" src="assets/malachias.mp4"
+        data-start="28.70" data-duration="16.45" data-media-start="29.30" data-track-index="9" data-volume="1"></audio>
+      <video id="v2" class="clip" src="assets/malachias.mp4" muted playsinline
+        data-start="45.15" data-duration="15.55" data-media-start="47.10" data-track-index="1"
+        style="width:100%;height:100%;object-fit:cover;"></video>
+      <audio id="a2" src="assets/malachias.mp4"
+        data-start="45.15" data-duration="15.55" data-media-start="47.10" data-track-index="9" data-volume="1"></audio>
+      <video id="v3" class="clip" src="assets/malachias.mp4" muted playsinline
+        data-start="60.70" data-duration="13.55" data-media-start="76.40" data-track-index="1"
+        style="width:100%;height:100%;object-fit:cover;"></video>
+      <audio id="a3" src="assets/malachias.mp4"
+        data-start="60.70" data-duration="13.55" data-media-start="76.40" data-track-index="9" data-volume="1"></audio>
+      <video id="v4" class="clip" src="assets/malachias.mp4" muted playsinline
+        data-start="74.25" data-duration="4.55" data-media-start="90.05" data-track-index="1"
+        style="width:100%;height:100%;object-fit:cover;"></video>
+      <audio id="a4" src="assets/malachias.mp4"
+        data-start="74.25" data-duration="4.55" data-media-start="90.05" data-track-index="9" data-volume="1"></audio>
+
+      <div id="scrim" class="clip" data-start="0" data-duration="78.80" data-track-index="2" aria-hidden="true" style="pointer-events:none;"><div class="scrim"></div><div class="topfade"></div></div>
+      <div id="frame" class="clip" data-start="0" data-duration="78.80" data-track-index="2" style="pointer-events:none;">
+        <div class="chip"><i></i><span>Road to San Antonio</span></div>
+        <div class="bar">AYÚDANOS A LLEGAR</div>
+      </div>
+
+      <div id="cue0" class="clip cue" data-start="0.00" data-duration="3.40" data-track-index="3"><p>Hola a todos, soy Malachias,<br>de la banda Malachias.</p></div>
+      <div id="cue1" class="clip cue" data-start="3.40" data-duration="5.20" data-track-index="3"><p>Nos dieron la oportunidad de tocar<br>en San Antonio, Texas,</p></div>
+      <div id="cue2" class="clip cue" data-start="8.60" data-duration="5.40" data-track-index="3"><p>en un local familiar<br>llamado Fitzgerald.</p></div>
+      <div id="cue3" class="clip cue" data-start="14.00" data-duration="5.00" data-track-index="3"><p>Las dueñas son hijas<br>de un veterano del Ejército.</p></div>
+      <div id="cue4" class="clip cue" data-start="19.00" data-duration="9.60" data-track-index="3"><p>Para lograrlo tenemos que reunir<br>los fondos del viaje.</p></div>
+      <div id="cue5" class="clip cue" data-start="28.70" data-duration="2.80" data-track-index="3"><p>Hay dos maneras de llegar:</p></div>
+      <div id="cue6" class="clip cue" data-start="31.50" data-duration="4.50" data-track-index="3"><p>que vaya yo solo<br>con una guitarra acústica…</p></div>
+      <div id="cue7" class="clip cue" data-start="36.00" data-duration="4.00" data-track-index="3"><p>…o que vaya la banda completa.</p></div>
+      <div id="cue8" class="clip cue" data-start="40.00" data-duration="5.10" data-track-index="3"><p>Depende de cuánto podamos recaudar.</p></div>
+      <div id="cue9" class="clip cue" data-start="45.20" data-duration="2.40" data-track-index="3"><p>Ofrecemos tocar gratis.</p></div>
+      <div id="cue10" class="clip cue" data-start="47.60" data-duration="3.40" data-track-index="3"><p>Porque es para los veteranos<br>y sus familias.</p></div>
+      <div id="cue11" class="clip cue" data-start="51.00" data-duration="5.00" data-track-index="3"><p>No queremos quitarle nada al evento<br>pidiéndoles que nos paguen.</p></div>
+      <div id="cue12" class="clip cue" data-start="56.00" data-duration="4.70" data-track-index="3"><p>Pedimos donaciones<br>solo para el viaje.</p></div>
+      <div id="cue13" class="clip cue" data-start="60.80" data-duration="3.00" data-track-index="3"><p>No vamos a ganar dinero<br>con este evento.</p></div>
+      <div id="cue14" class="clip cue" data-start="63.80" data-duration="4.60" data-track-index="3"><p>Todo lo recaudado se usa<br>para llegar allá,</p></div>
+      <div id="cue15" class="clip cue" data-start="68.40" data-duration="2.80" data-track-index="3"><p>mantenernos allí<br>y volver a casa.</p></div>
+      <div id="cue16" class="clip cue" data-start="71.20" data-duration="3.10" data-track-index="3"><p>Lo que sobre se dona a otra<br>organización de veteranos.</p></div>
+      <div id="cue17" class="clip cue" data-start="74.40" data-duration="2.80" data-track-index="3"><p>Los quiero. Ojalá puedan ayudar.</p></div>
+      <div id="cue18" class="clip cue" data-start="77.20" data-duration="1.70" data-track-index="3"><p>Dios los bendiga. Fuerza y honor.</p></div>
+
+      <section id="end" class="clip end" data-start="78.80" data-duration="4.0" data-track-index="8">
+        <div class="glow"></div>
+        <div class="inner">
+          <img id="end-emblem" src="assets/emblem-end.png" alt="" style="width:520px;height:347px;object-fit:contain;mix-blend-mode:screen;" />
+          <p id="end-title" class="display" style="font-size:118px;">AYÚDANOS A LLEVAR<br><span class="gold">A TODA LA BANDA.</span></p>
+          <p id="end-url" style="font-size:40px;font-weight:600;color:#e8ddd0;white-space:nowrap;">malachiasmusic.com/road-to-san-antonio</p>
+          <p id="end-cash" style="font-size:30px;color:#a89880;">Cash App · Warfighter Gardens · $AWarriorsGarden</p>
+        </div>
+      </section>
+
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      const E = "power3.out";
+      tl.fromTo("#end-emblem", { opacity: 0, y: -18 }, { opacity: 1, y: 0, duration: 0.8, ease: E }, 78.80);
+      tl.fromTo("#end-title", { opacity: 0, y: 34 }, { opacity: 1, y: 0, duration: 0.8, ease: E }, 79.05);
+      tl.fromTo(["#end-url", "#end-cash"], { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.7, ease: E, stagger: 0.18 }, 79.50);
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

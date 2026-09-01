@@ -1,6 +1,8 @@
+assets/malachias.mp4
+capture/
+node_modules/
 out/
+renders/
 snaps/
 snapshots/
-renders/
-node_modules/
-capture/
+source/
