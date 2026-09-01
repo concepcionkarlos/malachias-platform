@@ -20,6 +20,19 @@ A donor's name goes on the **public sponsors list only if they ask for it.**
 That list is public by design and is meant for businesses backing the campaign.
 Never move someone there because they gave money.
 
+**Default to private.** Individual donors are private unless they say otherwise:
+no sponsors list, no campaign update, no social post, no screenshot of a Cash App
+or PayPal notification with a name in it. Ask before naming anyone; some donors
+say so up front, and that has already happened on this campaign.
+
+Donor names and emails also **never go into this repository** — it is public on
+GitHub, and git history keeps what it is given even after a later deletion. They
+belong in the admin ledger, which lives in the content store, not in the code.
+The templates below use placeholders for exactly this reason.
+
+Putting a donor's own name on their acknowledgment letter is not "naming" them —
+it is their document, addressed to them, and the letter is useless without it.
+
 ---
 
 ## 1 · The thank-you (band, send right away)
