@@ -97,8 +97,27 @@ export default function VoiceLessonsClient() {
             <h2 className="font-display leading-[0.95] tracking-[0.05em] text-white" style={{ fontSize: 'clamp(2rem, 5vw, 3.2rem)' }}>BOOK YOUR FIRST LESSON</h2>
             <p className="mt-4 text-[0.9rem] leading-relaxed" style={{ color: 'var(--text-2)' }}>
               Tell us how you want to work and what you&apos;re after. Malachias replies personally with times and the veteran or package rate if it applies.
-              Prefer email? <a href={`mailto:${LESSONS.contactEmail}?subject=${encodeURIComponent('Voice lessons')}`} style={{ color: '#c9a84c', textDecoration: 'underline', textUnderlineOffset: 3 }}>{LESSONS.contactEmail}</a>
             </p>
+
+            {/* Direct contacts — the form is the easy path, but some people would
+                rather call. Both are real links so a phone can act on them. */}
+            <div className="tac-box mt-6" style={{ padding: '1.2rem 1.3rem' }}>
+              <p className="label-xs" style={{ color: 'var(--text-2)', letterSpacing: '0.30em' }}>Or reach Malachias directly</p>
+              <a
+                href={`tel:${LESSONS.contactPhoneHref}`}
+                className="font-display block mt-3"
+                style={{ fontSize: '1.6rem', letterSpacing: '0.04em', color: '#ede5d8', lineHeight: 1.1, textDecoration: 'none' }}
+              >
+                {LESSONS.contactPhone}
+              </a>
+              <a
+                href={`mailto:${LESSONS.contactEmail}?subject=${encodeURIComponent('Voice lessons')}`}
+                className="font-mono block mt-2"
+                style={{ fontSize: '0.9rem', color: '#c9a84c', textDecoration: 'underline', textUnderlineOffset: 3, wordBreak: 'break-all' }}
+              >
+                {LESSONS.contactEmail}
+              </a>
+            </div>
           </div>
           <LessonForm />
         </div>

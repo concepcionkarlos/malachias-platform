@@ -14,7 +14,11 @@ export const LESSONS = {
   formats: ['In person', 'Via Zoom'] as const,
   inPersonCounties: ['Broward', 'Palm Beach', 'Miami-Dade'],
   discounts: ['Veterans', 'Bulk packages'],
-  contactEmail: 'booking@malachiasmusic.com',
+  // Lessons are Malachias's own offering, so these are his direct contacts
+  // rather than the band's booking address.
+  contactEmail: 'malachiasmusic@gmail.com',
+  contactPhone: '+1 317 560 2356',
+  contactPhoneHref: '+13175602356',   // tel: form — digits and a leading +
   focus: [
     { title: 'Vocal technique', body: 'Breath, range, tone, control — the fundamentals that keep a voice healthy through a full set.' },
     { title: 'Style', body: 'Rock, country, worship: phrasing and delivery that sound like you, not like an exercise.' },
