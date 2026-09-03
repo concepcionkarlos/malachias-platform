@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Voice lessons — Facebook carousel card</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;800&display=swap">
+<style>
+  /* Facebook / Instagram carousel card, 1080x1080. ?card=1..5
+     Square on purpose: the feed crops anything else, and these are read small
+     on a phone mid-scroll, so one idea per card and nothing under ~34px.
+     No QR anywhere — nobody can scan the screen they are holding. */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #030202; color: #ede5d8; font-family: Inter, Arial, sans-serif; }
+  .card { position: relative; width: 1080px; height: 1080px; overflow: hidden;
+    background: linear-gradient(160deg, #020202 0%, #0a0602 55%, #030202 100%); }
+  .glow { position: absolute; left: 50%; top: 42%; width: 1100px; height: 1100px;
+    transform: translate(-50%,-50%); border-radius: 50%;
+    background: radial-gradient(circle, rgba(120,60,10,0.42) 0%, rgba(120,60,10,0) 66%); }
+  .z { position: absolute; inset: 82px; display: flex; flex-direction: column; justify-content: center; gap: 30px; }
+  .eyebrow { font-weight: 700; text-transform: uppercase; color: #c9a84c; letter-spacing: 0.3em; font-size: 26px; }
+  .display { font-family: "Bebas Neue", Impact, sans-serif; letter-spacing: 0.04em; line-height: 0.94; }
+  h1 { font-size: 118px; }
+  .gold { color: #c9a84c; }
+  .body { font-size: 40px; line-height: 1.45; color: #c7bba9; }
+  .rows { display: grid; gap: 22px; }
+  .rows div { border-top: 1px solid rgba(201,168,76,0.25); padding-top: 20px; }
+  .rows b { display: block; font-family: "Bebas Neue", Impact, sans-serif; font-size: 58px;
+    letter-spacing: 0.05em; color: #ede5d8; line-height: 1; }
+  .rows span { font-size: 32px; color: #a89880; line-height: 1.4; display: block; margin-top: 8px; }
+  .price { font-family: "Bebas Neue", Impact, sans-serif; font-size: 190px; color: #c9a84c; line-height: 0.85; }
+  .per { font-size: 42px; color: #c7bba9; }
+  .phone { font-family: "Bebas Neue", Impact, sans-serif; font-size: 96px; color: #ede5d8; line-height: 1; }
+  .mono { font-family: "JetBrains Mono", Menlo, monospace; color: #c9a84c; font-size: 40px; }
+  .pager { position: absolute; right: 82px; top: 82px; font-size: 26px; letter-spacing: 0.2em;
+    color: #a89880; font-weight: 700; }
+  .foot { position: absolute; left: 82px; right: 82px; bottom: 60px; display: flex;
+    justify-content: space-between; font-size: 24px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: #a89880; font-weight: 700; }
+  .also { border-top: 1px solid rgba(201,168,76,0.25); padding-top: 22px; font-size: 30px;
+    color: #a89880; line-height: 1.45; }
+  .also b { color: #c9a84c; }
+</style>
+</head>
+<body>
+<div class="card"><div class="glow"></div><div class="z" id="z"></div>
+  <div class="pager" id="pager"></div>
+  <div class="foot"><span>Voice lessons</span><span>malachiasmusic.com</span></div>
+</div>
+<script>
+  const n = Math.min(5, Math.max(1, +(new URLSearchParams(location.search).get('card') || 1)))
+  const CARDS = [
+    `<p class="eyebrow">Voice lessons with Malachias</p>
+     <h1 class="display">LEARN TO SING<br><span class="gold">LIKE YOU MEAN IT.</span></h1>
+     <p class="body">Vocal technique, style and stage presence — in South Florida or anywhere via Zoom.</p>`,
+
+    `<p class="eyebrow">Who's teaching</p>
+     <h1 class="display" style="font-size:96px">30 YEARS.<br><span class="gold">REAL STAGES.</span></h1>
+     <p class="body">International touring artist — Iraq, Kuwait, Dubai, China, Ireland and over half
+     the United States. Former Nashville recording artist. Army veteran.</p>`,
+
+    `<p class="eyebrow">What you work on</p>
+     <div class="rows">
+       <div><b>VOCAL TECHNIQUE</b><span>Breath, range, tone, control — what keeps a voice healthy through a full set.</span></div>
+       <div><b>STYLE</b><span>Rock, country, worship. Phrasing that sounds like you, not like an exercise.</span></div>
+       <div><b>STAGE PRESENCE</b><span>What to do with your hands, your eyes and the room.</span></div>
+     </div>`,
+
+    `<p class="eyebrow">What it costs</p>
+     <div><span class="price">$80</span> <span class="per">per 50-minute lesson</span></div>
+     <div class="rows">
+       <div><b>IN PERSON</b><span>Broward · Palm Beach · Miami-Dade</span></div>
+       <div><b>OR VIA ZOOM</b><span>Anywhere.</span></div>
+     </div>
+     <p class="body" style="color:#c9a84c">Discounts for veterans and bulk packages.</p>`,
+
+    `<p class="eyebrow">Book a first lesson</p>
+     <p class="phone">+1 317 560 2356</p>
+     <p class="mono">malachiasmusic@gmail.com</p>
+     <p class="body">Or message this page. Malachias answers personally.</p>
+     <p class="also">ALSO — he fronts <b>MALACHIAS</b>, a veteran-founded Christian rock band
+     out of South Florida. Hear the music at malachiasmusic.com</p>`,
+  ]
+  document.getElementById('z').innerHTML = CARDS[n - 1]
+  document.getElementById('pager').textContent = n + ' / 5'
+</script>
+</body>
+</html>
