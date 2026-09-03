@@ -4,15 +4,21 @@ Open in a browser with a query string, screenshot at the stated size.
 
 | File | Size | Query | Output |
 |---|---|---|---|
-| `carousel.html` | 1080×1080 | `?card=1..5` | Voice lessons carousel for Facebook / Instagram |
+| `carousel.html` | 1080×1080 | `?set=band&card=1..6` | The band + Road to San Antonio (6 cards) |
+| `carousel.html` | 1080×1080 | `?set=lessons&card=1..5` | Voice lessons (5 cards) |
+
+The band set runs who they are → who started it → the Cashbox proof → the
+invitation → what the money is for → how to help. Card 3 matters more than it
+looks: the article predates the current lineup by three years, which is the
+strongest available answer to "is this just built for a fundraiser?".
 
 ```bash
 python3 -m http.server 8899           # from the repo root
-for n in 1 2 3 4 5; do
+for n in 1 2 3 4 5 6; do
   "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new \
     --disable-gpu --hide-scrollbars --window-size=1080,1080 --virtual-time-budget=7000 \
-    --screenshot="$HOME/Desktop/Malachias-Carousel-Lessons/card-$n.png" \
-    "http://localhost:8899/docs/social/carousel.html?card=$n"
+    --screenshot="$HOME/Desktop/Malachias-Carousel-Band/card-$n.png" \
+    "http://localhost:8899/docs/social/carousel.html?set=band&card=$n"
 done
 ```
 

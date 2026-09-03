@@ -5,7 +5,7 @@
 <title>Voice lessons — Facebook carousel card</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;800&display=swap">
 <style>
-  /* Facebook / Instagram carousel card, 1080x1080. ?card=1..5
+  /* Facebook / Instagram carousel card, 1080x1080. ?set=band|lessons &card=1..6
      Square on purpose: the feed crops anything else, and these are read small
      on a phone mid-scroll, so one idea per card and nothing under ~34px.
      No QR anywhere — nobody can scan the screen they are holding. */
@@ -39,16 +39,59 @@
   .also { border-top: 1px solid rgba(201,168,76,0.25); padding-top: 22px; font-size: 30px;
     color: #a89880; line-height: 1.45; }
   .also b { color: #c9a84c; }
+  .emblem { width: 420px; height: 280px; object-fit: contain; mix-blend-mode: screen; align-self: flex-start; }
+  .stat { display: flex; gap: 56px; }
+  .stat b { display: block; font-family: "Bebas Neue", Impact, sans-serif; font-size: 100px;
+    line-height: 1; color: #c9a84c; }
+  .stat span { font-size: 26px; letter-spacing: 0.2em; text-transform: uppercase; color: #a89880; font-weight: 700; }
+  .quote { font-size: 46px; line-height: 1.35; color: #ede5d8; font-style: italic; }
 </style>
 </head>
 <body>
 <div class="card"><div class="glow"></div><div class="z" id="z"></div>
   <div class="pager" id="pager"></div>
-  <div class="foot"><span>Voice lessons</span><span>malachiasmusic.com</span></div>
+  <div class="foot"><span id="footL">Voice lessons</span><span>malachiasmusic.com</span></div>
 </div>
 <script>
-  const n = Math.min(5, Math.max(1, +(new URLSearchParams(location.search).get('card') || 1)))
-  const CARDS = [
+  const q = new URLSearchParams(location.search)
+  const set = q.get('set') === 'lessons' ? 'lessons' : 'band'
+  const EMB = '<img class="emblem" src="../../public/Malachias.PNG" alt="">'
+
+  const BAND = [
+    `${EMB}
+     <h1 class="display" style="font-size:104px">A VETERAN-FOUNDED<br><span class="gold">ROCK BAND</span><br>OUT OF SOUTH FLORIDA.</h1>
+     <p class="body">Original music about faith, service, and what it takes to come home.</p>`,
+
+    `<p class="eyebrow">Who started it</p>
+     <h1 class="display" style="font-size:94px">TWO TOURS<br>IN IRAQ.<br><span class="gold">ONE WITH A RIFLE.<br>ONE WITH A BAND.</span></h1>
+     <p class="body">Malachias served as a Combat Medic and Infantryman, then went back
+     as an Army Bandsman. The music came out of that.</p>`,
+
+    `<p class="eyebrow">Before this band existed</p>
+     <h1 class="display" style="font-size:110px">CASHBOX<br><span class="gold">MAGAZINE</span></h1>
+     <p class="body">Artist Spotlight, March 2023 — three years before the current lineup.
+     The story was never built for a fundraiser.</p>`,
+
+    `<p class="eyebrow">November 12, 2026 · Veterans Day</p>
+     <h1 class="display" style="font-size:116px">THEY GOT<br>INVITED TO<br><span class="gold">SAN ANTONIO.</span></h1>
+     <p class="body">A family-owned venue in Texas. The owners are the daughters of an
+     Army veteran. Malachias is playing it for free.</p>`,
+
+    `<p class="eyebrow">So what's the money for</p>
+     <h1 class="display" style="font-size:104px">GETTING<br><span class="gold">FIVE MUSICIANS</span><br>TO TEXAS.</h1>
+     <p class="body">Flights, hotel, instruments, transportation, meals. That is the whole
+     ask — the road itself, nothing else.</p>
+     <div class="stat"><div><b>$12,000</b><span>Goal</span></div><div><b>71</b><span>Days left</span></div></div>`,
+
+    `<p class="eyebrow">How to help</p>
+     <h1 class="display" style="font-size:104px">HELP US<br><span class="gold">GET THERE.</span></h1>
+     <p class="body">malachiasmusic.com/road-to-san-antonio<br>
+     Cash App · $AWarriorsGarden &nbsp;·&nbsp; PayPal · Warfighterup@gmail.com</p>
+     <p class="also">Warfighter Gardens is a registered <b>501(c)(3)</b> nonprofit (EIN 81-4794313).
+     Contributions are tax deductible to the extent allowed by law.</p>`,
+  ]
+
+  const LESSONS = [
     `<p class="eyebrow">Voice lessons with Malachias</p>
      <h1 class="display">LEARN TO SING<br><span class="gold">LIKE YOU MEAN IT.</span></h1>
      <p class="body">Vocal technique, style and stage presence — in South Florida or anywhere via Zoom.</p>`,
@@ -80,8 +123,12 @@
      <p class="also">ALSO — he fronts <b>MALACHIAS</b>, a veteran-founded Christian rock band
      out of South Florida. Hear the music at malachiasmusic.com</p>`,
   ]
+  const CARDS = set === 'band' ? BAND : LESSONS
+  const n = Math.min(CARDS.length, Math.max(1, +(q.get('card') || 1)))
   document.getElementById('z').innerHTML = CARDS[n - 1]
-  document.getElementById('pager').textContent = n + ' / 5'
+  document.getElementById('pager').textContent = n + ' / ' + CARDS.length
+  document.getElementById('footL').textContent =
+    set === 'band' ? 'Road to San Antonio' : 'Voice lessons'
 </script>
 </body>
 </html>
