@@ -26,6 +26,8 @@
     {"id":"o2","type":"string","label":"Offer line 2","default":"Or via Zoom, anywhere"},
     {"id":"o3","type":"string","label":"Offer line 3","default":"Discounts for veterans and packages"},
     {"id":"cta","type":"string","label":"End CTA","default":"SIGN UP TODAY"},
+    {"id":"phone","type":"string","label":"End phone","default":"+1 317 560 2353"},
+    {"id":"mail","type":"string","label":"End email","default":"malachiasmusic@gmail.com"},
     {"id":"bar","type":"string","label":"Bottom bar","default":"Voice Lessons with Malachias"}
   ]'>
   <head>
@@ -157,7 +159,8 @@
         <div class="stack" style="top:900px; text-align:center;">
           <div id="s6-cta" class="display" data-var-text="cta" style="font-size:150px;">SIGN UP TODAY</div>
           <div id="s6-url" class="body" style="margin-top:40px; font-size:42px; color:#e8ddd0; font-weight:600; white-space:nowrap;">malachiasmusic.com/voice-lessons</div>
-          <div id="s6-mail" class="eyebrow" style="margin-top:26px; letter-spacing:0.2em; text-transform:none;">booking@malachiasmusic.com</div>
+          <div id="s6-phone" class="display" data-var-text="phone" style="margin-top:30px; font-size:76px; color:#ede5d8;">+1 317 560 2353</div>
+          <div id="s6-mail" class="eyebrow" data-var-text="mail" style="margin-top:18px; letter-spacing:0.2em; text-transform:none;">malachiasmusic@gmail.com</div>
         </div>
         <div class="bar"><i></i><span data-var-text="bar">Voice Lessons with Malachias</span><i></i></div>
       </section>
@@ -195,7 +198,7 @@
       // 6
       tl.fromTo("#s6-emblem", { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 1.0, ease: E }, 25.1);
       tl.fromTo("#s6-cta", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.9, ease: E }, 25.5);
-      tl.fromTo(["#s6-url", "#s6-mail"], { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8, ease: E, stagger: 0.2 }, 26.1);
+      tl.fromTo(["#s6-url", "#s6-phone", "#s6-mail"], { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8, ease: E, stagger: 0.18 }, 26.1);
       window.__timelines["main"] = tl;
     </script>
   </body>

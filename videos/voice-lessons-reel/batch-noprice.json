@@ -1,5 +1,16 @@
 {
+  "_comment": "No-price cut. Malachias also teaches at a venue for another company, and that company sets its own rates — so this variant carries no dollar figure and no discount line. Scene 5's hero becomes the format (one on one) rather than a blank where the price was; duration and levels move down into the bullet lines. Row 1 English, row 2 Spanish.",
   "rows": [
+    {
+      "eye5": "Lessons",
+      "price": "ONE ON ONE",
+      "o1": "In person — Broward, Palm Beach, Miami-Dade",
+      "o2": "Or via Zoom, anywhere",
+      "o3": "50-minute sessions, all levels",
+      "cta": "ASK ABOUT LESSONS",
+      "phone": "+1 317 560 2353",
+      "mail": "malachiasmusic@gmail.com"
+    },
     {
       "eye1": "Malachias · Coral Springs, Florida",
       "t1a": "CLASES DE CANTO",
@@ -21,14 +32,14 @@
       "p3t": "PRESENCIA",
       "p3s": "Tus manos, tu mirada, el público",
       "eye5": "Clases",
-      "price": "$80 / 50 MIN",
+      "price": "UNO A UNO",
       "o1": "Presencial — Broward, Palm Beach, Miami-Dade",
       "o2": "O por Zoom, desde donde sea",
-      "o3": "Descuentos para veteranos y paquetes",
-      "cta": "RESERVA HOY",
-      "bar": "Clases de canto con Malachias",
+      "o3": "Sesiones de 50 minutos, todos los niveles",
+      "cta": "PREGUNTA POR LAS CLASES",
       "phone": "+1 317 560 2353",
-      "mail": "malachiasmusic@gmail.com"
+      "mail": "malachiasmusic@gmail.com",
+      "bar": "Clases de canto con Malachias"
     }
   ]
 }

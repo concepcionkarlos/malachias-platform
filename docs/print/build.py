@@ -86,9 +86,22 @@ SHARED_CSS = """
 """
 
 
-def voice_lessons() -> str:
+def voice_lessons(priced: bool = True) -> str:
     # Ten tear-off tabs. On a corkboard this is the whole point of the flyer:
     # somebody takes the number without having to write anything down.
+    if priced:
+        deal_lead = '<span class="price">$80</span> <span class="per">per 50-minute lesson</span>'
+        deal_terms = 'Discounts for veterans and bulk packages'
+        hint = ('Scan the code to book a first lesson, see what a session covers, '
+                'and ask about the veteran or package rate.')
+    else:
+        # No figure and no discount line: where he teaches for another company,
+        # the rate is theirs to quote, not ours to print.
+        deal_lead = '<span class="price">ONE ON ONE</span>'
+        deal_terms = '50-minute sessions · all levels'
+        hint = ('Scan the code to see what a session covers, '
+                'then call or write about scheduling.')
+
     tabs = ''.join(
         f'<div class="tab"><div class="rot">'
         f'<span class="who">Voice lessons</span>'
@@ -156,11 +169,11 @@ def voice_lessons() -> str:
     </div>
 
     <div class="deal">
-      <div><span class="price">$80</span> <span class="per">per 50-minute lesson</span></div>
+      <div>{deal_lead}</div>
       <div class="terms">
         In person — Broward · Palm Beach · Miami-Dade<br>
         or anywhere via Zoom<br>
-        <span class="gold">Discounts for veterans and bulk packages</span>
+        <span class="gold">{deal_terms}</span>
       </div>
     </div>
 
@@ -169,8 +182,7 @@ def voice_lessons() -> str:
       <div>
         <p class="phone">{PHONE}</p>
         <p class="mail mono">{EMAIL}</p>
-        <p class="hint">Scan the code to book a first lesson, see what a session covers,
-        and ask about the veteran or package rate.<br>{SITE}/voice-lessons</p>
+        <p class="hint">{hint}<br>{SITE}/voice-lessons</p>
       </div>
     </div>
 
@@ -407,6 +419,9 @@ def handout() -> str:
 """
 
 if __name__ == '__main__':
-    for name, html in (('voice-lessons', voice_lessons()), ('band', band()), ('handout', handout())):
+    sheets = (('voice-lessons', voice_lessons()),
+              ('voice-lessons-noprice', voice_lessons(priced=False)),
+              ('band', band()), ('handout', handout()))
+    for name, html in sheets:
         open(f'{name}.html', 'w').write(html)
         print(f'{name}.html')

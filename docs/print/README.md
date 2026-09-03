@@ -10,6 +10,7 @@ cd docs/print && python3 build.py
 | File | Size | Sides | QR points to | Use |
 |---|---|---|---|---|
 | `voice-lessons.html` | Letter 8.5×11 | 1 | `/voice-lessons` | Corkboards, coffee shops, music stores, churches, VFW halls |
+| `voice-lessons-noprice.html` | Letter 8.5×11 | 1 | `/voice-lessons` | Same, for the venue where he teaches under another company |
 | `band.html` | Letter 8.5×11 | 1 | site root | Venues, promoters, merch table, posting at shows |
 | `handout.html` | 4×6 | **2** | both | Handing out on the street, leaving on counters |
 
@@ -58,6 +59,21 @@ prints white and the gold text disappears.
 
 `band.html` also has a 4×6 mode: change `<body class="letter">` to
 `<body class="card">`. It is sized separately, not the letter sheet shrunk.
+
+## Two lesson sheets, and which one to hand out
+
+Malachias teaches independently **and** at a venue for another company. That
+company quotes its own rate, so the no-price sheet carries no dollar figure and
+no discount line — printing ours next to their offer would undercut them and
+confuse the student about what a lesson actually costs.
+
+Where the price sat, the no-price sheet says **ONE ON ONE**, and duration and
+levels move into the terms. That matters: deleting the price and leaving the band
+empty reads as an unfinished flyer, so the space keeps saying something true.
+
+Both come from `voice_lessons()` — the `priced` flag is the only difference, so
+the bio, the three focus columns, the QR and the tear-off tabs cannot drift apart
+between the two.
 
 ## The tear-off tabs
 
