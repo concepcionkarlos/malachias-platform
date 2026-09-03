@@ -10,7 +10,7 @@ cd docs/print && python3 build.py
 | File | Size | Sides | QR points to | Use |
 |---|---|---|---|---|
 | `voice-lessons.html` | Letter 8.5×11 | 1 | `/voice-lessons` | Corkboards, coffee shops, music stores, churches, VFW halls |
-| `voice-lessons-noprice.html` | Letter 8.5×11 | 1 | `/voice-lessons` | Same, for the venue where he teaches under another company |
+| `voice-lessons-studio.html` | Letter 8.5×11 | 1 | none | The sheet a teaching studio promotes |
 | `band.html` | Letter 8.5×11 | 1 | site root | Venues, promoters, merch table, posting at shows |
 | `handout.html` | 4×6 | **2** | both | Handing out on the street, leaving on counters |
 
@@ -62,18 +62,34 @@ prints white and the gold text disappears.
 
 ## Two lesson sheets, and which one to hand out
 
-Malachias teaches independently **and** at a venue for another company. That
-company quotes its own rate, so the no-price sheet carries no dollar figure and
-no discount line — printing ours next to their offer would undercut them and
-confuse the student about what a lesson actually costs.
+Malachias teaches independently **and** at a studio that promotes his lessons
+itself. Those need different sheets, and the studio one removes **three** things,
+not just the price:
 
-Where the price sat, the no-price sheet says **ONE ON ONE**, and duration and
-levels move into the terms. That matters: deleting the price and leaving the band
-empty reads as an unfinished flyer, so the space keeps saying something true.
+| | `own` | `studio` |
+|---|---|---|
+| Rate | $80 / 50 min | none — the studio quotes its own |
+| Phone + email | his | none — the studio owns enrolment |
+| QR | → `/voice-lessons` | none |
+| Tear-off tabs | ten, with his number | none |
 
-Both come from `voice_lessons()` — the `priced` flag is the only difference, so
-the bio, the three focus columns, the QR and the tear-off tabs cannot drift apart
-between the two.
+Dropping only the dollar figure is the trap. The QR opens `/voice-lessons`, which
+publishes his independent rate, and each tear-off tab hands out his direct
+number — so a "no-price" studio sheet would still have shown a competing price
+one scan away and routed students around the studio.
+
+Where the price sat, the studio sheet says **ONE ON ONE**, with duration and
+levels moved into the terms: delete a price and leave the band empty and it reads
+as an unfinished flyer, so the slot keeps saying something true. The space freed
+by the missing QR and tabs goes to his portrait, since making the instructor
+credible is the whole job of a sheet somebody else is promoting.
+
+The portrait comes from the reel's assets rather than `public/`, because the
+public headshots are about 360px square and a print band would have upscaled them
+fivefold into mush.
+
+Both sheets come from `voice_lessons()` — one `variant` argument apart — so the
+bio and the three focus columns cannot drift between them.
 
 ## The tear-off tabs
 

@@ -57,6 +57,16 @@
     border-top: 1px dashed rgba(201,168,76,0.55); height: 1.5in; }
   .tab { border-left: 1px dashed rgba(201,168,76,0.40); display: flex; align-items: center;
     justify-content: center; }
+  .tabs:empty { display: none; border-top: 0; height: 0; }
+  /* Studio sheet: the studio owns enrolment, so this replaces the QR + contact. */
+  .portrait { width: 2.2in; height: 2.4in; flex-shrink: 0; overflow: hidden;
+    border: 1px solid rgba(201,168,76,0.3); }
+  .portrait img { width: 100%; height: 100%; object-fit: cover; object-position: center 22%;
+    display: block; filter: contrast(1.04) saturate(0.85); }
+  .enrol { margin-top: auto; padding-top: 0.26in; display: flex; gap: 0.32in; align-items: center; }
+  .enrol-lead { font-family: "Bebas Neue", Impact, sans-serif; font-size: 44pt;
+    letter-spacing: 0.04em; color: #c9a84c; line-height: 1; }
+  .enrol-sub { font-size: 12pt; color: #a89880; margin-top: 0.14in; line-height: 1.5; max-width: 6.2in; }
   .tab:first-child { border-left: 0; }
   /* The rotated block's WIDTH runs along the tab's height, so it is sized against
      that (1.5in), not against the 0.73in tab width. */
@@ -99,7 +109,8 @@
       <div>
         <p class="phone">+1 317 560 2353</p>
         <p class="mail mono">malachiasmusic@gmail.com</p>
-        <p class="hint">Scan the code to book a first lesson, see what a session covers, and ask about the veteran or package rate.<br>malachiasmusic.com/voice-lessons</p>
+        <p class="hint">Scan the code to book a first lesson, see what a session covers,
+        and ask about the veteran or package rate.<br>malachiasmusic.com/voice-lessons</p>
       </div>
     </div>
 

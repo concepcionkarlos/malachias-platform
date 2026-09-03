@@ -1,15 +1,16 @@
 {
-  "_comment": "No-price cut. Malachias also teaches at a venue for another company, and that company sets its own rates — so this variant carries no dollar figure and no discount line. Scene 5's hero becomes the format (one on one) rather than a blank where the price was; duration and levels move down into the bullet lines. Row 1 English, row 2 Spanish.",
+  "_comment": "Studio cut. This is promoted by a teaching studio, so it carries no rate and none of Malachias's own contact details — the studio owns enrolment. Dropping only the price would not be enough: the end card's URL opens the lessons page, which publishes his independent rate, so that goes too. Row 1 English, row 2 Spanish.",
   "rows": [
     {
       "eye5": "Lessons",
       "price": "ONE ON ONE",
-      "o1": "In person — Broward, Palm Beach, Miami-Dade",
-      "o2": "Or via Zoom, anywhere",
-      "o3": "50-minute sessions, all levels",
+      "o1": "In person or over Zoom",
+      "o2": "50-minute sessions",
+      "o3": "Every level — first-timer to working singer",
       "cta": "ASK ABOUT LESSONS",
-      "phone": "+1 317 560 2353",
-      "mail": "malachiasmusic@gmail.com"
+      "url": "Ask at the front desk about scheduling.",
+      "phone": "",
+      "mail": ""
     },
     {
       "eye1": "Malachias · Coral Springs, Florida",
@@ -33,12 +34,13 @@
       "p3s": "Tus manos, tu mirada, el público",
       "eye5": "Clases",
       "price": "UNO A UNO",
-      "o1": "Presencial — Broward, Palm Beach, Miami-Dade",
-      "o2": "O por Zoom, desde donde sea",
-      "o3": "Sesiones de 50 minutos, todos los niveles",
+      "o1": "Presencial o por Zoom",
+      "o2": "Sesiones de 50 minutos",
+      "o3": "Todos los niveles — desde principiante",
       "cta": "PREGUNTA POR LAS CLASES",
-      "phone": "+1 317 560 2353",
-      "mail": "malachiasmusic@gmail.com",
+      "url": "Consulta en recepción para agendar.",
+      "phone": "",
+      "mail": "",
       "bar": "Clases de canto con Malachias"
     }
   ]

@@ -86,29 +86,66 @@ SHARED_CSS = """
 """
 
 
-def voice_lessons(priced: bool = True) -> str:
-    # Ten tear-off tabs. On a corkboard this is the whole point of the flyer:
-    # somebody takes the number without having to write anything down.
-    if priced:
-        deal_lead = '<span class="price">$80</span> <span class="per">per 50-minute lesson</span>'
-        deal_terms = 'Discounts for veterans and bulk packages'
-        hint = ('Scan the code to book a first lesson, see what a session covers, '
-                'and ask about the veteran or package rate.')
-    else:
-        # No figure and no discount line: where he teaches for another company,
-        # the rate is theirs to quote, not ours to print.
+def voice_lessons(variant: str = 'own') -> str:
+    """`own` is Malachias booking his own students. `studio` is the sheet a
+    teaching studio promotes.
+
+    The studio sheet strips three things, not one. Removing the price alone is
+    not enough: the QR opens /voice-lessons, which publishes his independent
+    rate, and the tear-off tabs hand out his direct number — so a studio sheet
+    that only dropped the dollar figure would still route enrolments around the
+    studio and show them a competing price. Contact, QR and tabs all come off.
+    """
+    studio = variant == 'studio'
+
+    if studio:
         deal_lead = '<span class="price">ONE ON ONE</span>'
         deal_terms = '50-minute sessions · all levels'
-        hint = ('Scan the code to see what a session covers, '
-                'then call or write about scheduling.')
+    else:
+        deal_lead = '<span class="price">$80</span> <span class="per">per 50-minute lesson</span>'
+        deal_terms = 'Discounts for veterans and bulk packages'
 
-    tabs = ''.join(
+    # Ten tear-off tabs — on a corkboard, this is most of the value of the sheet:
+    # somebody takes the number without writing anything down. Which is exactly
+    # why the studio sheet has none.
+    tabs = '' if studio else ''.join(
         f'<div class="tab"><div class="rot">'
         f'<span class="who">Voice lessons</span>'
         f'<span class="num">{PHONE}</span>'
         f'</div></div>'
         for _ in range(10)
     )
+
+    if studio:
+        contact_block = '''<div class="enrol">
+      <div class="portrait"><img src="../../videos/voice-lessons-reel/assets/founder-card.jpg" alt="Malachias"></div>
+      <div>
+      <p class="enrol-lead">Ask at the front desk about scheduling.</p>
+      <p class="enrol-sub">Lessons are taught in person and over Zoom, for every level —
+      from a first-timer to a working singer.</p>
+      </div>
+    </div>'''
+        cross_block = '''<div class="cross">
+      <b>YOUR INSTRUCTOR —</b>
+      <span>Malachias is an Army veteran, a former Nashville recording artist, and the
+      frontman of a veteran-founded rock band. He has performed in Iraq, Kuwait, Dubai,
+      China, Ireland and over half the United States.</span>
+    </div>'''
+    else:
+        contact_block = f'''<div class="contact">
+      <div class="qrbox">{qr_svg(OUT["voice-lessons"], 1.65)}</div>
+      <div>
+        <p class="phone">{PHONE}</p>
+        <p class="mail mono">{EMAIL}</p>
+        <p class="hint">Scan the code to book a first lesson, see what a session covers,
+        and ask about the veteran or package rate.<br>{SITE}/voice-lessons</p>
+      </div>
+    </div>'''
+        cross_block = f'''<div class="cross">
+      <b>ALSO —</b>
+      <span>Malachias fronts a veteran-founded Christian rock band out of South Florida.
+      Hear the music, catch a show or book them at <b style="font-size:9pt;letter-spacing:0">{SITE}</b></span>
+    </div>'''
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -141,6 +178,16 @@ def voice_lessons(priced: bool = True) -> str:
     border-top: 1px dashed rgba(201,168,76,0.55); height: 1.5in; }}
   .tab {{ border-left: 1px dashed rgba(201,168,76,0.40); display: flex; align-items: center;
     justify-content: center; }}
+  .tabs:empty {{ display: none; border-top: 0; height: 0; }}
+  /* Studio sheet: the studio owns enrolment, so this replaces the QR + contact. */
+  .portrait {{ width: 2.2in; height: 2.4in; flex-shrink: 0; overflow: hidden;
+    border: 1px solid rgba(201,168,76,0.3); }}
+  .portrait img {{ width: 100%; height: 100%; object-fit: cover; object-position: center 22%;
+    display: block; filter: contrast(1.04) saturate(0.85); }}
+  .enrol {{ margin-top: auto; padding-top: 0.26in; display: flex; gap: 0.32in; align-items: center; }}
+  .enrol-lead {{ font-family: "Bebas Neue", Impact, sans-serif; font-size: 44pt;
+    letter-spacing: 0.04em; color: #c9a84c; line-height: 1; }}
+  .enrol-sub {{ font-size: 12pt; color: #a89880; margin-top: 0.14in; line-height: 1.5; max-width: 6.2in; }}
   .tab:first-child {{ border-left: 0; }}
   /* The rotated block's WIDTH runs along the tab's height, so it is sized against
      that (1.5in), not against the 0.73in tab width. */
@@ -177,20 +224,9 @@ def voice_lessons(priced: bool = True) -> str:
       </div>
     </div>
 
-    <div class="contact">
-      <div class="qrbox">{qr_svg(OUT['voice-lessons'], 1.65)}</div>
-      <div>
-        <p class="phone">{PHONE}</p>
-        <p class="mail mono">{EMAIL}</p>
-        <p class="hint">{hint}<br>{SITE}/voice-lessons</p>
-      </div>
-    </div>
+    {contact_block}
 
-    <div class="cross">
-      <b>ALSO —</b>
-      <span>Malachias fronts a veteran-founded Christian rock band out of South Florida.
-      Hear the music, catch a show or book them at <b style="font-size:9pt;letter-spacing:0">{SITE}</b></span>
-    </div>
+    {cross_block}
 
     <div class="tabs">{tabs}</div>
   </div>
@@ -419,8 +455,8 @@ def handout() -> str:
 """
 
 if __name__ == '__main__':
-    sheets = (('voice-lessons', voice_lessons()),
-              ('voice-lessons-noprice', voice_lessons(priced=False)),
+    sheets = (('voice-lessons', voice_lessons('own')),
+              ('voice-lessons-studio', voice_lessons('studio')),
               ('band', band()), ('handout', handout()))
     for name, html in sheets:
         open(f'{name}.html', 'w').write(html)
