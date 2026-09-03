@@ -23,7 +23,7 @@ OUT = {
     'band': 'https://www.malachiasmusic.com',
 }
 
-PHONE = '+1 317 560 2356'
+PHONE = '+1 317 560 2353'
 EMAIL = 'malachiasmusic@gmail.com'
 SITE = 'malachiasmusic.com'
 
