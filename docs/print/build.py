@@ -54,8 +54,17 @@ def qr_svg(url: str, size_in: float) -> str:
     )
 
 
+CROSS_CSS = """
+  .cross { width: 100%; border-top: 1px solid rgba(201,168,76,0.25); margin-top: 0.18in;
+    padding-top: 0.13in; display: flex; align-items: baseline; gap: 0.14in;
+    font-size: 9pt; color: #a89880; line-height: 1.45; }
+  .cross b { font-family: "Bebas Neue", Impact, sans-serif; font-size: 13pt;
+    letter-spacing: 0.06em; color: #c9a84c; white-space: nowrap; }
+"""
+
 SHARED_CSS = """
-  @page { margin: 0; }
+  /* An explicit size is required: without it print-to-pdf uses the default
+     paper and the page geometry below no longer matches the sheet. */
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { background: #030202; color: #ede5d8; font-family: Inter, Arial, sans-serif;
     -webkit-print-color-adjust: exact; print-color-adjust: exact; }
@@ -94,7 +103,8 @@ def voice_lessons() -> str:
 <title>Voice Lessons with Malachias — flyer</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;800&display=swap">
 <style>
-{SHARED_CSS}
+{SHARED_CSS}{CROSS_CSS}
+  @page {{ size: 8.5in 11in; margin: 0; }}
   .page {{ width: 8.5in; height: 11in; padding: 0.55in 0.6in 0; }}
   .eyebrow {{ font-size: 11pt; }}
   h1 {{ font-size: 76pt; margin-top: 0.16in; }}
@@ -164,6 +174,12 @@ def voice_lessons() -> str:
       </div>
     </div>
 
+    <div class="cross">
+      <b>ALSO —</b>
+      <span>Malachias fronts a veteran-founded Christian rock band out of South Florida.
+      Hear the music, catch a show or book them at <b style="font-size:9pt;letter-spacing:0">{SITE}</b></span>
+    </div>
+
     <div class="tabs">{tabs}</div>
   </div>
 </div>
@@ -180,7 +196,10 @@ def band() -> str:
 <title>MALACHIAS — band flyer</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;800&display=swap">
 <style>
-{SHARED_CSS}
+{SHARED_CSS}{CROSS_CSS}
+  @page {{ size: 8.5in 11in; margin: 0; }}
+  body.card .cross {{ font-size: 5.4pt; margin-top: 0.07in; padding-top: 0.06in; gap: 0.08in; }}
+  body.card .cross b {{ font-size: 7.5pt; }}
   /* Two sizes from one file: body.letter (8.5×11) for boards, body.card (4×6)
      for handing out and leaving on counters. Switch the body class. */
   body.letter .page {{ width: 8.5in; height: 11in; padding: 0.6in 0.65in; }}
@@ -267,6 +286,13 @@ def band() -> str:
       </div>
     </div>
 
+    <div class="cross">
+      <b>ALSO —</b>
+      <span>Voice, style and stage-presence lessons with Malachias. $80 per 50 minutes,
+      in person across Broward, Palm Beach and Miami-Dade, or anywhere via Zoom.
+      Veteran and package rates at <b style="font-size:9pt;letter-spacing:0">{SITE}/voice-lessons</b></span>
+    </div>
+
     <div class="bar">
       <span>{SITE}</span>
       <span>@malachiasmusic</span>
@@ -279,7 +305,108 @@ def band() -> str:
 """
 
 
+def handout() -> str:
+    """A 4x6 double-sided handout: band on the front, lessons on the back.
+
+    This is the answer to wanting both messages in circulation without either
+    one diluting the other. A posted flyer only ever shows one face, so those
+    stay single-subject; a handout gets turned over, so each side can commit
+    fully to its own ask. Print double-sided, flipping on the SHORT edge.
+    """
+    return f"""<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>MALACHIAS — double-sided handout (4x6)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;800&display=swap">
+<style>
+{SHARED_CSS}
+  @page {{ size: 4in 6in; margin: 0; }}
+  .page {{ width: 4in; height: 6in; padding: 0.28in 0.3in; page-break-after: always; }}
+  .page:last-child {{ page-break-after: auto; }}
+  .center {{ text-align: center; align-items: center; }}
+  .emblem {{ width: 1.5in; height: 0.98in; margin: 0 auto; }}
+  .eyebrow {{ font-size: 6pt; letter-spacing: 0.26em; }}
+  h1 {{ font-size: 40pt; margin-top: 0.05in; }}
+  h2 {{ font-size: 27pt; margin-top: 0.06in; line-height: 0.95; }}
+  .tagline {{ font-size: 6.2pt; letter-spacing: 0.18em; text-transform: uppercase;
+    font-weight: 700; color: #c9a84c; margin-top: 0.05in; }}
+  .sub {{ font-size: 7.2pt; color: #c7bba9; margin-top: 0.1in; line-height: 1.45; }}
+  .press {{ font-size: 5.8pt; color: #a89880; margin-top: 0.07in; }}
+  .press b {{ color: #ede5d8; }}
+  .mid {{ flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; }}
+  .scan {{ display: flex; align-items: center; gap: 0.14in; }}
+  .scan .what {{ text-align: left; }}
+  .scan .what b {{ display: block; font-family: "Bebas Neue", Impact, sans-serif;
+    font-size: 12pt; letter-spacing: 0.05em; color: #ede5d8; line-height: 1.2; }}
+  .scan .what span {{ font-size: 5.8pt; color: #a89880; }}
+  .qrbox svg {{ width: 0.95in !important; height: 0.95in !important; }}
+  .qrbox {{ padding: 6px; border-radius: 8px; }}
+  .price {{ font-family: "Bebas Neue", Impact, sans-serif; font-size: 30pt; color: #c9a84c; line-height: 0.9; }}
+  .per {{ font-size: 7.5pt; color: #c7bba9; }}
+  .terms {{ font-size: 6.4pt; color: #a89880; line-height: 1.55; margin-top: 0.08in; }}
+  .phone {{ font-family: "Bebas Neue", Impact, sans-serif; font-size: 20pt; color: #ede5d8; line-height: 1; }}
+  .mail {{ font-size: 7.4pt; margin-top: 2pt; }}
+  .rule {{ width: 100%; border-top: 1px solid rgba(201,168,76,0.28); margin: 0.1in 0; }}
+  .bar {{ font-size: 5.4pt; letter-spacing: 0.12em; padding-top: 0.08in; }}
+</style>
+</head>
+<body>
+
+<!-- FRONT — the band -->
+<div class="page">
+  <div class="glow"></div>
+  <div class="z center">
+    <img class="emblem" src="../../public/Malachias.PNG" alt="">
+    <h1 class="display">MALACHIAS</h1>
+    <p class="tagline">Christian Rock · Veteran Mission · Faith on Fire</p>
+    <p class="sub">A veteran-founded five-piece out of South Florida. Original music about
+    faith, service and what it takes to come home.</p>
+    <p class="press">As featured in <b>Cashbox Magazine</b> — March 2023</p>
+    <div class="mid">
+      <div class="scan">
+        <div class="qrbox">{qr_svg(OUT['band'], 1.0)}</div>
+        <div class="what">
+          <b>LISTEN.<br>BOOK US.<br>FOLLOW.</b>
+          <span>The music, the shows, the story.</span>
+        </div>
+      </div>
+      <p class="press" style="margin-top:0.12in">Road to San Antonio · Nov 12, 2026 · Veterans Day</p>
+    </div>
+    <div class="bar"><span>{SITE}</span><span>@malachiasmusic</span></div>
+  </div>
+</div>
+
+<!-- BACK — the lessons -->
+<div class="page">
+  <div class="glow"></div>
+  <div class="z center">
+    <p class="eyebrow">Voice lessons with Malachias</p>
+    <h2 class="display">LEARN TO SING<br><span class="gold">LIKE YOU MEAN IT.</span></h2>
+    <p class="sub">International touring artist and former Nashville recording artist.
+    Over 30 years on stage. Vocal technique, style and stage presence.</p>
+    <div class="rule"></div>
+    <div><span class="price">$80</span> <span class="per">per 50-minute lesson</span></div>
+    <p class="terms">In person — Broward · Palm Beach · Miami-Dade · or anywhere via Zoom<br>
+    <span class="gold">Discounts for veterans and bulk packages</span></p>
+    <div class="mid">
+      <div class="scan">
+        <div class="qrbox">{qr_svg(OUT['voice-lessons'], 1.0)}</div>
+        <div class="what">
+          <p class="phone">{PHONE}</p>
+          <p class="mail mono">{EMAIL}</p>
+        </div>
+      </div>
+    </div>
+    <div class="bar"><span>{SITE}/voice-lessons</span></div>
+  </div>
+</div>
+
+</body>
+</html>
+"""
+
 if __name__ == '__main__':
-    for name, html in (('voice-lessons', voice_lessons()), ('band', band())):
+    for name, html in (('voice-lessons', voice_lessons()), ('band', band()), ('handout', handout())):
         open(f'{name}.html', 'w').write(html)
-        print(f'{name}.html — QR → {OUT[name]}')
+        print(f'{name}.html')

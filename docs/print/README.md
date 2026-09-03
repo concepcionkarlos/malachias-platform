@@ -7,20 +7,57 @@ is regenerated and overwritten.
 cd docs/print && python3 build.py
 ```
 
-| File | Size | QR points to | Use |
-|---|---|---|---|
-| `voice-lessons.html` | Letter, 8.5×11 | `/voice-lessons` | Corkboards, coffee shops, music stores, churches, VFW halls |
-| `band.html` | Letter, 8.5×11 (or 4×6) | site root | Venues, promoters, merch table, handing out at shows |
+| File | Size | Sides | QR points to | Use |
+|---|---|---|---|---|
+| `voice-lessons.html` | Letter 8.5×11 | 1 | `/voice-lessons` | Corkboards, coffee shops, music stores, churches, VFW halls |
+| `band.html` | Letter 8.5×11 | 1 | site root | Venues, promoters, merch table, posting at shows |
+| `handout.html` | 4×6 | **2** | both | Handing out on the street, leaving on counters |
+
+Each posted flyer commits to **one** subject and carries a small "ALSO —" strip
+mentioning the other. That is deliberate: a board flyer has about three seconds
+to say what it is, and giving the band and the lessons equal billing on one sheet
+means a passer-by can identify neither. The handout is where both get full
+weight, because a handout gets turned over — band on the front, lessons on the
+back, neither competing with the other.
+
+Only one QR per face, too. Two codes side by side make people hesitate over which
+to scan, and a hesitating reader walks away.
 
 ## Printing
 
-Open the file in Chrome → **Cmd-P** → Letter → Margins **None** → **Background
-graphics ON**. That last one is not optional: without it the page prints white
-and the gold text disappears.
+**Print shop: use the PDFs.** Regenerate them with:
 
-`band.html` also does a 4×6 handout — change `<body class="letter">` to
-`<body class="card">` and print at 4×6. The card is sized separately, so it is
-not just the letter sheet shrunk.
+```bash
+cd docs/print && python3 build.py
+# then, with a local server running at the repo root:
+for f in voice-lessons band handout; do
+  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new \
+    --disable-gpu --no-pdf-header-footer --virtual-time-budget=9000 \
+    --print-to-pdf="$HOME/Desktop/Malachias-Flyers/$f.pdf" \
+    "http://localhost:8899/docs/print/$f.html"
+done
+```
+
+At the counter:
+
+| PDF | Paper | Setting |
+|---|---|---|
+| `voice-lessons.pdf` | Letter, cardstock or 32 lb | Single-sided, color |
+| `band.pdf` | Letter, cardstock or 32 lb | Single-sided, color |
+| `handout.pdf` | 4×6 cardstock | **Double-sided, flip on the SHORT edge** |
+
+**Say "print actual size, do not scale to fit."** Shops default to fit-to-page,
+which shrinks the art and adds a white border — on a full-bleed dark design that
+looks like a mistake. The PDFs already carry the exact page size (`@page` sets
+it; without that Chrome falls back to the default paper and silently printed the
+4×6 handout on letter).
+
+Printing it yourself instead: Chrome → **Cmd-P** → Margins **None** →
+**Background graphics ON**. That last one is not optional — without it the page
+prints white and the gold text disappears.
+
+`band.html` also has a 4×6 mode: change `<body class="letter">` to
+`<body class="card">`. It is sized separately, not the letter sheet shrunk.
 
 ## The tear-off tabs
 
@@ -39,8 +76,8 @@ can be damaged and still scan), and inlined into the HTML as SVG. That means:
   typed into an online tool.
 - The code is vector, so it stays sharp at any print size.
 
-**Both codes were verified by decoding them back out of a rendered image**, not
-just assumed correct. If you change a URL in `build.py`, re-render and scan the
+**Every code was verified by decoding it back out of the PDF**, rasterized at
+300 dpi — the same file the print shop receives — not just assumed correct. If you change a URL in `build.py`, re-render and scan the
 result with a phone before printing a stack.
 
 One trap worth knowing: `segno` emits an SVG with `width`/`height` but no

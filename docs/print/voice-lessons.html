@@ -6,7 +6,8 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;800&display=swap">
 <style>
 
-  @page { margin: 0; }
+  /* An explicit size is required: without it print-to-pdf uses the default
+     paper and the page geometry below no longer matches the sheet. */
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { background: #030202; color: #ede5d8; font-family: Inter, Arial, sans-serif;
     -webkit-print-color-adjust: exact; print-color-adjust: exact; }
@@ -26,6 +27,13 @@
     display: flex; justify-content: space-between; gap: 1em; font-weight: 700;
     text-transform: uppercase; color: #c9a84c; letter-spacing: 0.20em; }
 
+  .cross { width: 100%; border-top: 1px solid rgba(201,168,76,0.25); margin-top: 0.18in;
+    padding-top: 0.13in; display: flex; align-items: baseline; gap: 0.14in;
+    font-size: 9pt; color: #a89880; line-height: 1.45; }
+  .cross b { font-family: "Bebas Neue", Impact, sans-serif; font-size: 13pt;
+    letter-spacing: 0.06em; color: #c9a84c; white-space: nowrap; }
+
+  @page { size: 8.5in 11in; margin: 0; }
   .page { width: 8.5in; height: 11in; padding: 0.55in 0.6in 0; }
   .eyebrow { font-size: 11pt; }
   h1 { font-size: 76pt; margin-top: 0.16in; }
@@ -94,6 +102,12 @@
         <p class="hint">Scan the code to book a first lesson, see what a session covers,
         and ask about the veteran or package rate.<br>malachiasmusic.com/voice-lessons</p>
       </div>
+    </div>
+
+    <div class="cross">
+      <b>ALSO —</b>
+      <span>Malachias fronts a veteran-founded Christian rock band out of South Florida.
+      Hear the music, catch a show or book them at <b style="font-size:9pt;letter-spacing:0">malachiasmusic.com</b></span>
     </div>
 
     <div class="tabs"><div class="tab"><div class="rot"><span class="who">Voice lessons</span><span class="num">+1 317 560 2356</span></div></div><div class="tab"><div class="rot"><span class="who">Voice lessons</span><span class="num">+1 317 560 2356</span></div></div><div class="tab"><div class="rot"><span class="who">Voice lessons</span><span class="num">+1 317 560 2356</span></div></div><div class="tab"><div class="rot"><span class="who">Voice lessons</span><span class="num">+1 317 560 2356</span></div></div><div class="tab"><div class="rot"><span class="who">Voice lessons</span><span class="num">+1 317 560 2356</span></div></div><div class="tab"><div class="rot"><span class="who">Voice lessons</span><span class="num">+1 317 560 2356</span></div></div><div class="tab"><div class="rot"><span class="who">Voice lessons</span><span class="num">+1 317 560 2356</span></div></div><div class="tab"><div class="rot"><span class="who">Voice lessons</span><span class="num">+1 317 560 2356</span></div></div><div class="tab"><div class="rot"><span class="who">Voice lessons</span><span class="num">+1 317 560 2356</span></div></div><div class="tab"><div class="rot"><span class="who">Voice lessons</span><span class="num">+1 317 560 2356</span></div></div></div>

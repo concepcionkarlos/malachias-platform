@@ -6,7 +6,8 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;800&display=swap">
 <style>
 
-  @page { margin: 0; }
+  /* An explicit size is required: without it print-to-pdf uses the default
+     paper and the page geometry below no longer matches the sheet. */
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { background: #030202; color: #ede5d8; font-family: Inter, Arial, sans-serif;
     -webkit-print-color-adjust: exact; print-color-adjust: exact; }
@@ -26,6 +27,15 @@
     display: flex; justify-content: space-between; gap: 1em; font-weight: 700;
     text-transform: uppercase; color: #c9a84c; letter-spacing: 0.20em; }
 
+  .cross { width: 100%; border-top: 1px solid rgba(201,168,76,0.25); margin-top: 0.18in;
+    padding-top: 0.13in; display: flex; align-items: baseline; gap: 0.14in;
+    font-size: 9pt; color: #a89880; line-height: 1.45; }
+  .cross b { font-family: "Bebas Neue", Impact, sans-serif; font-size: 13pt;
+    letter-spacing: 0.06em; color: #c9a84c; white-space: nowrap; }
+
+  @page { size: 8.5in 11in; margin: 0; }
+  body.card .cross { font-size: 5.4pt; margin-top: 0.07in; padding-top: 0.06in; gap: 0.08in; }
+  body.card .cross b { font-size: 7.5pt; }
   /* Two sizes from one file: body.letter (8.5×11) for boards, body.card (4×6)
      for handing out and leaving on counters. Switch the body class. */
   body.letter .page { width: 8.5in; height: 11in; padding: 0.6in 0.65in; }
@@ -111,6 +121,13 @@
           <span>Scan for the music, the shows and the story.</span>
         </div>
       </div>
+    </div>
+
+    <div class="cross">
+      <b>ALSO —</b>
+      <span>Voice, style and stage-presence lessons with Malachias. $80 per 50 minutes,
+      in person across Broward, Palm Beach and Miami-Dade, or anywhere via Zoom.
+      Veteran and package rates at <b style="font-size:9pt;letter-spacing:0">malachiasmusic.com/voice-lessons</b></span>
     </div>
 
     <div class="bar">
