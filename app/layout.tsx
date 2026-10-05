@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     template: '%s', // page titles already carry the band name
   },
   description:
-    'Malachias is a veteran-founded Christian rock band from South Florida. Faith-driven music that heals PTSD, depression, and suicidal ideation. Available for bars, festivals, churches, and military events.',
+    'Malachias is a veteran-founded Christian rock band from South Florida. Faith-driven music for anyone fighting PTSD, depression, or suicidal thoughts. Available for bars, festivals, churches, and military events.',
   keywords: [
     'Christian rock band', 'veteran music', 'faith rock', 'military band', 'Malachias',
     'South Florida band', 'Miami rock band', 'South Florida rock festival', 'Christian metal',
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
   openGraph: {
     title: 'MALACHIAS — Christian Rock. Veteran Spirit. Faith on Fire.',
-    description: 'Faith-driven rock from a veteran-founded band in South Florida. Music that heals PTSD and depression. Available for bars, festivals, churches, military events, and community gatherings.',
+    description: 'Faith-driven rock from a veteran-founded band in South Florida. Music for anyone fighting their way back from PTSD and depression. Available for bars, festivals, churches, military events, and community gatherings.',
     type: 'website',
     url: SITE_URL,
     siteName: 'Malachias',
@@ -60,7 +60,7 @@ const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'MusicGroup',
   name: 'Malachias',
-  description: 'Christian rock band based in Coral Springs, South Florida, founded by a U.S. Army veteran. Music that heals PTSD, depression, and suicidal ideation through faith. Available for bars, festivals, churches, and military events.',
+  description: 'Christian rock band based in Coral Springs, South Florida, founded by a U.S. Army veteran. Music that helps heal what PTSD, depression, and suicidal ideation leave behind, through faith. Available for bars, festivals, churches, and military events.',
   genre: ['Christian Rock', 'Rock', 'Hard Rock', 'Faith Rock'],
   foundingDate: '2014',
   // Started in Fort Wayne (the founder's story); the band lives and plays out of Coral Springs.

@@ -17,7 +17,7 @@ const fade = (delay = 0) => ({
 const VALUES = [
   { word: 'Faith',     line: 'Messianic. Struggled with it for years. Still here.',             accent: 'var(--gold)'       },
   { word: 'Service',   line: "Medic. Infantryman. Bandsman. It didn't stop when we came home.", accent: 'var(--steel-warm)' },
-  { word: 'Healing',   line: 'Reduce suicidal ideation. Lift from depression. Heal PTSD.',      accent: '#c04020'            },
+  { word: 'Healing',   line: 'Reduce suicidal ideation. Lift from depression. Help heal PTSD.',      accent: '#c04020'            },
 ];
 
 export default function Mission() {

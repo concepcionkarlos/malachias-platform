@@ -753,13 +753,13 @@ export const merch: MerchItem[] = [
   },
   {
     id: '4',
-    name: '"The Messenger" Debut LP',
+    name: '"The Messenger" LP',
     price: 30,
     category: 'music',
     available: false,
     visible: true,
     story: 'When the record is done. 12-inch. Limited first pressing.',
-    description: 'Debut LP on vinyl. Limited first pressing. Pre-order list forming now.',
+    description: 'New LP on vinyl. Limited first pressing. Pre-order list forming now.',
     specs: [
       { label: 'Format', value: '12-inch vinyl' },
       { label: 'Pressing', value: 'First run — limited' },
