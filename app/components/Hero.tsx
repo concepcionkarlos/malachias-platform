@@ -1,34 +1,38 @@
 'use client';
 
-// Homepage hero — full-bleed live photo (War on drums, stage fire) under a dark
-// gradient, the Malachias emblem as a small badge, rising embers, the "WE PLAY FOR
-// THE ONES WHO NEED IT MOST" headline, the newest release, scripture anchor, and
-// Listen/Book/Press CTAs. Uses scroll-linked parallax and fade.
+// Homepage hero — full-screen atmospheric landing with the Malachias emblem, layered
+// fog/glow/vignette, rising embers, the "WE PLAY FOR THE ONES WHO NEED IT MOST" headline,
+// scripture anchor, and Listen/Book/Press CTAs. Uses scroll-linked parallax and fade.
 
-import { useRef, useSyncExternalStore } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import Embers from './Embers';
 import type { Release } from '@/lib/releases';
 
-// Layout lives in CSS breakpoints (no flash on hydration); this flag only tunes
-// the scroll-fade runway, which needs to be longer on tall phone heroes.
-const MOBILE_QUERY = '(max-width: 1023px)';
-const subscribeMobile = (cb: () => void) => {
-  const mq = window.matchMedia(MOBILE_QUERY);
-  mq.addEventListener('change', cb);
-  return () => mq.removeEventListener('change', cb);
-};
-const isMobile = () => window.matchMedia(MOBILE_QUERY).matches;
+// Mobile layout: the emblem sits in its own band at the top and the text starts
+// right under it, so the two never overlap however tall the text block gets.
+const MOBILE_LOGO_TOP = '76px'      // just below the 62px navbar
+const MOBILE_LOGO_WIDTH = '66vw'
 
 export default function Hero({ release }: { release?: Release }) {
   const ref = useRef<HTMLElement>(null);
   const { scrollY } = useScroll();
-  const mobile = useSyncExternalStore(subscribeMobile, isMobile, () => false);
+  const [mobile, setMobile] = useState(false);
 
-  const photoY  = useTransform(scrollY, [0, 700], [0, 90]);
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 1023px)');
+    setMobile(mq.matches);
+    const fn = (e: MediaQueryListEvent) => setMobile(e.matches);
+    mq.addEventListener('change', fn);
+    return () => mq.removeEventListener('change', fn);
+  }, []);
+
+  const logoY   = useTransform(scrollY, [0, 700], [0, -72]);
   const textY   = useTransform(scrollY, [0, 700], [0, -24]);
+  // The text fades as you scroll; on phones the hero is taller and the text sits
+  // lower, so it needs a longer runway or the CTAs vanish while still on screen.
   const fadeDesktop = useTransform(scrollY, [0, 420], [1, 0]);
   const fadeMobile  = useTransform(scrollY, [260, 1100], [1, 0]);
   const masterO = mobile ? fadeMobile : fadeDesktop;
@@ -37,48 +41,135 @@ export default function Hero({ release }: { release?: Release }) {
     <section
       id="hero"
       ref={ref}
-      className="relative min-h-[100svh] overflow-hidden select-none flex flex-col justify-end"
-      style={{ background: '#030201' }}
+      className="relative min-h-screen overflow-hidden select-none"
+      style={{ background: 'linear-gradient(160deg, #020202 0%, #080503 42%, #0a0602 65%, #030202 100%)' }}
     >
 
-      {/* ─── Live photo — the band on stage. Phone: top band so the face clears
-             the text; desktop: right-anchored so the text sits on black. ────── */}
+      {/* ─── Warm ambient depth — environment ────────────────────────── */}
+      <div aria-hidden="true" className="absolute inset-0 pointer-events-none" style={{ zIndex: 1 }}>
+        <div style={{
+          position: 'absolute',
+          top: '30%', left: '45%',
+          transform: 'translate(-50%,-50%)',
+          width: '68vw', height: '65vh',
+          background: 'radial-gradient(ellipse, rgba(120,60,10,0.25) 0%, rgba(65,26,4,0.10) 48%, transparent 74%)',
+          filter: 'blur(110px)',
+          animation: 'glowPulse 20s ease-in-out infinite',
+          willChange: 'opacity',
+        }} />
+        <div style={{
+          position: 'absolute',
+          bottom: 0, left: '10%',
+          width: '80vw', height: '30vh',
+          background: 'radial-gradient(ellipse, rgba(80,35,6,0.14) 0%, transparent 75%)',
+          filter: 'blur(80px)',
+          animation: 'glowPulse 26s ease-in-out infinite 9s',
+          willChange: 'opacity',
+        }} />
+        {/* Gold halo behind emblem — luxury depth */}
+        <div style={{
+          position: 'absolute',
+          top: '50%', right: '5%',
+          transform: 'translateY(-50%)',
+          width: 'min(50vw, 720px)', height: 'min(50vw, 720px)',
+          background: 'radial-gradient(ellipse, rgba(201,168,76,0.07) 0%, rgba(140,100,20,0.04) 40%, transparent 72%)',
+          filter: 'blur(60px)',
+          animation: 'glowPulse 14s ease-in-out infinite 2s',
+          willChange: 'opacity',
+        }} />
+      </div>
+
+      {/* ─── Emblem — right-anchored, atmospheric ───────────────────── */}
       <motion.div
         aria-hidden="true"
-        style={{ y: photoY, zIndex: 1 }}
-        className="absolute inset-x-0 top-0 h-[64%] lg:h-full lg:left-[30%] pointer-events-none"
+        style={{ y: logoY, zIndex: 2 }}
+        className="absolute inset-0 pointer-events-none"
       >
-        <Image
-          src="/War Drums.jpeg"
-          alt=""
-          fill
-          preload
-          sizes="(max-width: 1023px) 100vw, 70vw"
-          className="object-cover object-[60%_82%] lg:object-[50%_46%]"
-          style={{ filter: 'contrast(1.08) saturate(0.82) brightness(0.86)' }}
-        />
+        {/* Positioning wrapper — mobile: stacked above the text (never behind it);
+            desktop: center-right beside the text */}
+        <div
+          style={mobile ? {
+            position: 'absolute',
+            top: MOBILE_LOGO_TOP,
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: MOBILE_LOGO_WIDTH,
+            aspectRatio: '1 / 1',
+          } : {
+            position: 'absolute',
+            top: '50%',
+            right: '0%',
+            transform: 'translateY(-50%)',
+            width: 'min(56vw, 800px)',
+            aspectRatio: '1 / 1',
+          }}
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.94 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 4.2, delay: 0.2, ease: [0.16, 1, 0.3, 1] as [number,number,number,number] }}
+            className="logo-breathe"
+            style={{
+              position: 'relative',
+              width: '100%',
+              height: '100%',
+              opacity: mobile ? 0.92 : 0.62,
+              WebkitMaskImage: mobile
+                ? `radial-gradient(ellipse 88% 88% at 50% 50%, black 40%, rgba(0,0,0,.9) 62%, rgba(0,0,0,.4) 78%, transparent 92%)`
+                : `radial-gradient(ellipse 80% 80% at 52% 50%, black 14%, rgba(0,0,0,.92) 38%, rgba(0,0,0,.48) 58%, rgba(0,0,0,.12) 74%, transparent 86%)`,
+              maskImage: mobile
+                ? `radial-gradient(ellipse 88% 88% at 50% 50%, black 40%, rgba(0,0,0,.9) 62%, rgba(0,0,0,.4) 78%, transparent 92%)`
+                : `radial-gradient(ellipse 80% 80% at 52% 50%, black 14%, rgba(0,0,0,.92) 38%, rgba(0,0,0,.48) 58%, rgba(0,0,0,.12) 74%, transparent 86%)`,
+            }}
+          >
+            <Image
+              src="/Malachias.PNG"
+              alt=""
+              fill
+              className="object-contain"
+              priority
+              sizes="(max-width: 1024px) 90vw, 800px"
+              style={{
+                mixBlendMode: 'screen',
+                filter: 'contrast(1.06) brightness(1.05) saturate(0.78)',
+              }}
+            />
+          </motion.div>
+        </div>
       </motion.div>
 
-      {/* ─── Overlay — keeps every line of copy at ≥4.5:1 over the photo ─── */}
+      {/* ─── Fog layers — protect text zone, merge edges ─────────────── */}
       <div aria-hidden="true" className="absolute inset-0 pointer-events-none" style={{ zIndex: 3 }}>
-        {/* Phone: photo melts into black where the text begins */}
-        <div className="lg:hidden absolute inset-0" style={{
-          background: 'linear-gradient(to bottom, rgba(3,2,1,0.55) 0%, rgba(3,2,1,0.0) 16%, rgba(3,2,1,0.10) 30%, rgba(3,2,1,0.80) 48%, #030201 62%)',
+        {/* Left guard — full on desktop, light on mobile (badge is centered) */}
+        <div style={{
+          position: 'absolute', top: 0, left: 0, bottom: 0,
+          width: mobile ? '30%' : '52%',
+          background: mobile
+            ? 'linear-gradient(to right, rgba(2,2,2,0.70) 0%, transparent 100%)'
+            : 'linear-gradient(to right, rgba(2,2,2,0.97) 0%, rgba(2,2,2,0.80) 40%, rgba(2,2,2,0.40) 70%, transparent 100%)',
         }} />
-        {/* Desktop: black on the text side, fading into the stage */}
-        <div className="hidden lg:block absolute inset-0" style={{
-          background: 'linear-gradient(to right, #030201 0%, #030201 30%, rgba(3,2,1,0.82) 42%, rgba(3,2,1,0.35) 62%, rgba(3,2,1,0.10) 80%, rgba(3,2,1,0.45) 100%)',
+        {/* Right edge fade */}
+        <div style={{
+          position: 'absolute', top: 0, right: 0, bottom: 0, width: '22%',
+          background: 'linear-gradient(to left, rgba(2,2,2,0.88) 0%, transparent 100%)',
         }} />
-        <div className="hidden lg:block absolute inset-x-0 top-0 h-[22%]" style={{
-          background: 'linear-gradient(to bottom, rgba(3,2,1,0.85) 0%, transparent 100%)',
+        {/* Top fade */}
+        <div style={{
+          position: 'absolute', top: 0, left: 0, right: 0, height: '28%',
+          background: 'linear-gradient(to bottom, rgba(2,2,2,0.98) 0%, rgba(2,2,2,0.55) 50%, transparent 100%)',
         }} />
-        <div className="hidden lg:block absolute inset-x-0 bottom-0 h-[38%]" style={{
-          background: 'linear-gradient(to top, #030201 0%, rgba(3,2,1,0.70) 45%, transparent 100%)',
+        {/* Bottom fade — stronger on mobile to protect text */}
+        <div style={{
+          position: 'absolute', bottom: 0, left: 0, right: 0,
+          height: mobile ? '40%' : '35%',
+          background: mobile
+            ? 'linear-gradient(to top, rgba(2,2,2,0.98) 0%, rgba(2,2,2,0.70) 40%, transparent 100%)'
+            : 'linear-gradient(to top, rgba(2,2,2,0.88) 0%, transparent 100%)',
         }} />
       </div>
 
       {/* ─── Vignette ─────────────────────────────────────────────────── */}
-      <div aria-hidden="true" className="absolute inset-0 pointer-events-none vignette" style={{ zIndex: 4, opacity: 0.45 }} />
+      <div aria-hidden="true" className="absolute inset-0 pointer-events-none vignette" style={{ zIndex: 4 }} />
 
       {/* ─── Crimson ground glow — battle-born, beneath the words ────── */}
       <div aria-hidden="true" className="absolute inset-x-0 bottom-0 pointer-events-none" style={{ zIndex: 5, height: '55%' }}>
@@ -86,7 +177,7 @@ export default function Hero({ release }: { release?: Release }) {
           position: 'absolute',
           bottom: '8%', left: '2%',
           width: '45vw', height: '50%',
-          background: 'radial-gradient(ellipse, rgba(120,18,8,0.14) 0%, rgba(80,10,5,0.05) 55%, transparent 80%)',
+          background: 'radial-gradient(ellipse, rgba(120,18,8,0.12) 0%, rgba(80,10,5,0.05) 55%, transparent 80%)',
           filter: 'blur(70px)',
           animation: 'glowPulse 18s ease-in-out infinite 5s',
           willChange: 'opacity',
@@ -100,45 +191,29 @@ export default function Hero({ release }: { release?: Release }) {
 
       {/* ─── Text — emotional statement ──────────────────────────────── */}
       <motion.div
-        style={{ y: textY, opacity: masterO, zIndex: 10 }}
-        className="relative px-6 lg:px-16 pt-[150px] pb-12 lg:pb-[11vh]"
+        style={mobile
+          ? { y: textY, opacity: masterO, zIndex: 10, position: 'relative', paddingTop: `calc(${MOBILE_LOGO_TOP} + ${MOBILE_LOGO_WIDTH} + 1.25rem)`, paddingBottom: '4rem' }
+          : { y: textY, opacity: masterO, zIndex: 10 }}
+        className={mobile ? 'px-6' : 'absolute inset-x-0 bottom-0 px-6 lg:px-16 pb-[11vh]'}
       >
-        <div className="max-w-[90vw] lg:max-w-[min(46rem,54vw)]">
-
-          {/* Emblem — a badge now; the people carry the frame */}
-          <motion.div
-            aria-hidden="true"
-            initial={{ opacity: 0, scale: 0.94 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 2.4, delay: 0.2, ease: [0.16, 1, 0.3, 1] as [number,number,number,number] }}
-            className="relative w-[84px] lg:w-[110px] aspect-[3/2] mb-3 lg:mb-5 -ml-1"
-          >
-            <Image
-              src="/Malachias.PNG"
-              alt=""
-              fill
-              className="object-contain"
-              sizes="110px"
-              style={{ mixBlendMode: 'screen', filter: 'contrast(1.06) brightness(1.1) saturate(0.85)' }}
-            />
-          </motion.div>
+        <div style={{ maxWidth: mobile ? '90vw' : 'min(46rem, 54vw)' }}>
 
           {/* Luxury origin label */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 2.0, delay: 0.65 }}
-            style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}
+            style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.4rem' }}
           >
-            <div className="hidden lg:block" style={{ width: '1.8rem', height: 1, background: 'linear-gradient(to right, transparent, rgba(201,168,76,0.45))' }} />
-            <span className="whitespace-nowrap tracking-[0.16em] lg:whitespace-normal lg:tracking-[0.32em]" style={{
-              fontSize: '0.7rem',
-              color: 'rgba(201,168,76,0.85)', textTransform: 'uppercase',
+            {!mobile && <div style={{ width: '1.8rem', height: 1, background: 'linear-gradient(to right, transparent, rgba(201,168,76,0.45))' }} />}
+            <span style={{
+              fontSize: '0.7rem', letterSpacing: mobile ? '0.16em' : '0.32em', whiteSpace: mobile ? 'nowrap' : 'normal',
+              color: 'rgba(201,168,76,0.80)', textTransform: 'uppercase',
               fontFamily: 'var(--font-body)', lineHeight: 1.8,
             }}>
-              Christian Rock · Coral Springs, FL<span className="hidden lg:inline"> · Faith on Fire</span>
+              {mobile ? 'Christian Rock · Coral Springs, FL' : 'Christian Rock · Coral Springs, FL · Faith on Fire'}
             </span>
-            <div className="hidden lg:block" style={{ width: '1.8rem', height: 1, background: 'linear-gradient(to left, transparent, rgba(201,168,76,0.45))' }} />
+            {!mobile && <div style={{ width: '1.8rem', height: 1, background: 'linear-gradient(to left, transparent, rgba(201,168,76,0.45))' }} />}
           </motion.div>
 
           {/* Emotional statement — the page's one h1 */}
@@ -150,8 +225,7 @@ export default function Hero({ release }: { release?: Release }) {
               initial={{ opacity: 0, y: 22 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1.2, delay: 0.85, ease: [0.16, 1, 0.3, 1] as [number,number,number,number] }}
-              className="block text-[clamp(2.6rem,10vw,3.2rem)] lg:text-[clamp(3rem,7vw,5.5rem)]"
-              style={{ color: 'rgba(237,229,216,0.72)' }}
+              style={{ display: 'block', fontSize: mobile ? 'clamp(2.6rem, 10vw, 3.2rem)' : 'clamp(3rem, 7vw, 5.5rem)', color: 'rgba(237,229,216,0.55)' }}
             >
               WE PLAY
             </motion.span>
@@ -159,7 +233,7 @@ export default function Hero({ release }: { release?: Release }) {
               initial={{ opacity: 0, y: 22 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1.2, delay: 1.05, ease: [0.16, 1, 0.3, 1] as [number,number,number,number] }}
-              className="block text-[clamp(2.6rem,10vw,3.2rem)] lg:text-[clamp(3rem,7vw,5.5rem)]"
+              style={{ display: 'block', fontSize: mobile ? 'clamp(2.6rem, 10vw, 3.2rem)' : 'clamp(3rem, 7vw, 5.5rem)' }}
             >
               <span className="shimmer-gold">FOR THE ONES</span>
             </motion.span>
@@ -167,8 +241,7 @@ export default function Hero({ release }: { release?: Release }) {
               initial={{ opacity: 0, y: 22 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1.2, delay: 1.20, ease: [0.16, 1, 0.3, 1] as [number,number,number,number] }}
-              className="block text-[clamp(2.6rem,10vw,3.2rem)] lg:text-[clamp(3rem,7vw,5.5rem)]"
-              style={{ color: 'rgba(237,229,216,0.66)' }}
+              style={{ display: 'block', fontSize: mobile ? 'clamp(2.6rem, 10vw, 3.2rem)' : 'clamp(3rem, 7vw, 5.5rem)', color: 'rgba(237,229,216,0.48)' }}
             >
               WHO NEED IT MOST.
             </motion.span>
@@ -183,7 +256,7 @@ export default function Hero({ release }: { release?: Release }) {
               transformOrigin: 'left',
               maxWidth: '10rem',
               height: 1,
-              margin: '1.1rem 0',
+              margin: '1.4rem 0',
               background: 'linear-gradient(90deg, rgba(201,168,76,0.80) 0%, rgba(201,168,76,0.30) 60%, transparent 100%)',
             }}
           />
@@ -196,7 +269,7 @@ export default function Hero({ release }: { release?: Release }) {
             style={{
               fontSize: '0.82rem', lineHeight: 1.80, fontStyle: 'italic',
               color: 'rgba(168,152,128,0.80)', maxWidth: '24rem',
-              letterSpacing: '0.025em', marginBottom: '1.3rem',
+              letterSpacing: '0.025em', marginBottom: '1.8rem',
             }}
           >
             Music forged in faith. Carried through fire.<br />
@@ -212,7 +285,7 @@ export default function Hero({ release }: { release?: Release }) {
               transition={{ duration: 1.0, delay: 1.40, ease: [0.22, 1, 0.36, 1] as [number,number,number,number] }}
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: '0.9rem',
-                padding: '0.55rem 1rem 0.55rem 0.55rem', marginBottom: '1.2rem', maxWidth: '100%',
+                padding: '0.55rem 1rem 0.55rem 0.55rem', marginBottom: '1.6rem', maxWidth: '100%',
                 border: '1px solid rgba(201,168,76,0.28)', background: 'rgba(8,6,4,0.72)',
                 backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)', textDecoration: 'none',
               }}
@@ -241,7 +314,7 @@ export default function Hero({ release }: { release?: Release }) {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.0, delay: 1.50, ease: [0.22, 1, 0.36, 1] as [number,number,number,number] }}
-            className="flex flex-row flex-wrap items-center gap-3 mb-5 lg:mb-8"
+            className="flex flex-row flex-wrap items-center gap-3 mb-8"
           >
             <motion.a
               href="#latest"
@@ -286,6 +359,17 @@ export default function Hero({ release }: { release?: Release }) {
           </motion.p>
         </div>
       </motion.div>
+
+      {/* ─── Hard bottom fade ─────────────────────────────────────────── */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-x-0 bottom-0 pointer-events-none"
+        style={{
+          zIndex: 11,
+          height: '40%',
+          background: 'linear-gradient(to top, #030202 0%, rgba(3,2,2,0.90) 25%, rgba(3,2,2,0.42) 55%, transparent 100%)',
+        }}
+      />
 
       {/* ─── Scroll indicator ─────────────────────────────────────────── */}
       <motion.div
