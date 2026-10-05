@@ -24,7 +24,6 @@ export default function Mission() {
   return (
     <section id="mission" className="section-pad relative overflow-hidden" style={{ background: '#020202' }}>
 
-      <div aria-hidden="true" className="ghost-num" style={{ position: 'absolute', top: '4%', right: '-1%' }}>02</div>
 
       <div aria-hidden="true" style={{
         position: 'absolute', inset: 0,

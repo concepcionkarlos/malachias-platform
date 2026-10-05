@@ -31,7 +31,6 @@ export default function Testimonies({ stories }: TestimoniesProps) {
       className="section-pad relative overflow-hidden"
       style={{ background: '#000000' }}
     >
-      <div aria-hidden="true" className="ghost-num" style={{ position: 'absolute', bottom: '4%', right: '-1%' }}>03</div>
 
       {/* Faint warm center glow — a candle in the dark */}
       <div aria-hidden="true" style={{

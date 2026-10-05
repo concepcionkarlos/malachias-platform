@@ -5,6 +5,7 @@ import GalleryClient from './GalleryClient';
 
 export const metadata: Metadata = {
   title: 'Gallery — MALACHIAS',
+  alternates: { canonical: '/gallery' },
 };
 
 export default function GalleryPage() {

@@ -58,7 +58,7 @@ export default function CampaignSection({ config, math }: Props) {
             </div>
           </div>
           <div className="mt-3 flex justify-between" style={{ fontSize: '0.66rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--text-2)' }}>
-            <span>{math.percent}% funded</span>
+            <span>{math.percent >= 15 ? `${math.percent}% funded` : 'Every dollar moves us'}</span>
             {math.daysToEvent > 0 && <span>{math.daysToEvent} days to go</span>}
           </div>
           <Link href={config.path} className="mt-5 inline-block" style={{ fontSize: '0.68rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#c9a84c' }}>

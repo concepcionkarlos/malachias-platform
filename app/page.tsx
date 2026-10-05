@@ -54,6 +54,9 @@ export async function generateMetadata(): Promise<Metadata> {
       title: c.ogTitle ?? c.heroHeadline,
       description: c.ogDescription ?? c.metaDescription,
       type: 'website',
+      url: SITE_URL,
+      siteName: 'Malachias',
+      images: [{ url: '/og-malachias.jpg', width: 1200, height: 630, alt: 'Malachias — Christian Rock Band' }],
     },
   };
 }
@@ -122,7 +125,7 @@ export default async function Home() {
       {/* One top strip at a time: a real upcoming show wins over the campaign. */}
       {shows.length > 0
         ? <NextShowBanner shows={shows} />
-        : campaignLive && <CampaignBanner path={campaign.config.path} label="Road to San Antonio" percent={campaignStats.percent} />}
+        : campaignLive && <CampaignBanner path={campaign.config.path} label="Road to San Antonio" percent={campaignStats.percent} daysToEvent={campaignStats.daysToEvent} />}
       <LiveSessionBanner sessions={publicSessions} />
       <Navbar />
 

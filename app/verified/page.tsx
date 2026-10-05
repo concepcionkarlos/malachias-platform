@@ -1,7 +1,10 @@
 // Page — /verified: landing shown after a subscriber clicks the email-confirm link;
 // renders success ("you're in" + 15% off code prompt) or an error state
 // (missing/invalid/expired) based on the query string.
+import type { Metadata } from 'next'
 import Link from 'next/link'
+
+export const metadata: Metadata = { title: 'Subscription — MALACHIAS', robots: { index: false, follow: false } }
 
 export default async function VerifiedPage({
   searchParams,

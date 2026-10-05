@@ -103,7 +103,6 @@ export default function Merch({ fourthwallProducts = [] }: MerchProps) {
       />
 
       {/* Ghost section numeral */}
-      <div aria-hidden="true" className="ghost-num" style={{ position: 'absolute', bottom: '4%', right: '-1%' }}>05</div>
 
       <div className="max-w-5xl mx-auto px-6 relative" style={{ zIndex: 1 }}>
 

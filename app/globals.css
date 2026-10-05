@@ -384,7 +384,7 @@ input:-webkit-autofill, input:-webkit-autofill:focus {
   color: var(--text-1);
   padding: 0.85rem 1rem;
   font-family: var(--font-body);
-  font-size: 0.85rem;
+  font-size: 16px; /* under 16px iOS zooms the page on focus */
   outline: none;
   transition: border-color 0.3s ease, background 0.3s ease;
 }
@@ -434,20 +434,6 @@ select.field { background: #0d0d0d; }
   margin-bottom: 4rem;
 }
 
-/* Ghost section numeral — large, faint stencil */
-.ghost-num {
-  font-family: var(--font-display);
-  font-size: clamp(9rem, 22vw, 17rem);
-  line-height: 1;
-  letter-spacing: -0.02em;
-  color: transparent;
-  -webkit-text-stroke: 1px rgba(201,168,76,0.055);
-  pointer-events: none;
-  -webkit-user-select: none;
-  user-select: none;
-  z-index: 0;
-}
-
 /* Crimson variant left accent bar */
 .left-bar-crimson {
   border-left: 2px solid rgba(192,64,32,0.45);
@@ -464,4 +450,21 @@ select.field { background: #0d0d0d; }
     rgba(201,168,76,0.06) 75%,
     transparent 100%
   );
+}
+
+/* ─────────────────────────────────────────────
+   TOP STRIP OFFSET · FOCUS · REDUCED MOTION
+───────────────────────────────────────────── */
+/* A fixed 44px strip (campaign / next show) sits at top:0 — push the nav below it. */
+body:has([data-top-strip]) .site-nav { top: 44px; }
+
+:focus-visible { outline: 2px solid #e8c55a; outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

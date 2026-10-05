@@ -90,7 +90,7 @@ export default function Navbar() {
       initial={{ y: -64, opacity: 0 }}
       animate={{ y: 0,   opacity: 1  }}
       transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] as [number,number,number,number] }}
-      className="fixed top-0 inset-x-0 z-50 transition-all duration-500"
+      className="site-nav fixed top-0 inset-x-0 z-50 transition-all duration-500"
       style={{
         background:    scrolled ? 'rgba(2,1,0,0.92)' : 'transparent',
         backdropFilter: scrolled ? 'blur(22px)'       : 'none',
@@ -165,9 +165,10 @@ export default function Navbar() {
           {/* Mobile hamburger */}
           <button
             type="button"
-            className="lg:hidden w-8 h-8 flex items-center justify-center text-[#c9a84c]"
+            className="lg:hidden w-11 h-11 -mr-2 flex items-center justify-center text-[#c9a84c]"
             onClick={() => setOpen(v => !v)}
             aria-label="Toggle navigation"
+            aria-expanded={open}
           >
             <AnimatePresence mode="wait" initial={false}>
               {open
@@ -190,7 +191,7 @@ export default function Navbar() {
             className="lg:hidden overflow-hidden border-t border-white/[0.05]"
             style={{ background: 'rgba(2,1,0,0.97)', backdropFilter: 'blur(20px)' }}
           >
-            <div className="px-6 py-6 flex flex-col gap-4">
+            <div className="px-6 py-4 flex flex-col">
               {NAV.map((link, i) => (
                 <motion.a
                   key={link.href}
@@ -199,8 +200,8 @@ export default function Navbar() {
                   initial={{ x: -14, opacity: 0 }}
                   animate={{ x: 0,   opacity: 1  }}
                   transition={{ delay: i * 0.04 }}
-                  className="text-[0.72rem] tracking-[0.24em] uppercase hover:text-white transition-colors"
-                  style={{ color: link.gold ? '#c9a84c' : 'rgba(232,221,208,0.55)' }}
+                  className="py-3 text-[0.8rem] tracking-[0.2em] uppercase hover:text-white transition-colors"
+                  style={{ color: link.gold ? '#c9a84c' : 'rgba(232,221,208,0.75)' }}
                 >
                   {link.gold ? `♥ ${link.label}` : link.label}
                 </motion.a>

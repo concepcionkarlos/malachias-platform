@@ -21,6 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${product.name} — MALACHIAS Merch`,
     description: product.description.replace(/<[^>]+>/g, '').slice(0, 160),
+    alternates: { canonical: `/merch/${slug}` },
     openGraph: {
       title: `${product.name} — MALACHIAS`,
       description: `${fwPriceRange(product)} · Official Malachias merchandise`,

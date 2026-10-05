@@ -15,7 +15,7 @@ import PrintButton from './PrintButton'
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.malachiasmusic.com'
 
 export const metadata: Metadata = {
-  title: 'Sponsorship Opportunities — Road to San Antonio',
+  title: 'Sponsorship Opportunities — Road to San Antonio | MALACHIAS',
   description: 'Sponsorship overview for Malachias — Road to San Antonio, Veterans Day 2026 (November 12, San Antonio, Texas): tiers, benefits, what sponsorship supports, and contact. English and Spanish.',
   alternates: { canonical: `${campaignUrl(SITE_URL)}/sponsors`, languages: { en: `${campaignUrl(SITE_URL)}/sponsors`, es: `${campaignUrl(SITE_URL)}/sponsors?lang=es` } },
   openGraph: { title: 'Sponsor the Road to San Antonio — Malachias', description: 'Sponsorship tiers and benefits for the Veterans Day 2026 campaign.', type: 'website', url: `${campaignUrl(SITE_URL)}/sponsors` },

@@ -18,6 +18,7 @@ export async function generateMetadata({ params }: Props) {
   return {
     title: `${entry.title} — MALACHIAS Journal`,
     description: entry.excerpt,
+    alternates: { canonical: `/journal/${slug}` },
   }
 }
 

@@ -5,6 +5,7 @@ import type { Metadata } from 'next';
 import { Bebas_Neue, Inter } from 'next/font/google';
 import Script from 'next/script';
 import { Analytics } from '@vercel/analytics/next';
+import MotionPrefs from './components/MotionPrefs';
 import './globals.css';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://malachiasmusic.com'
@@ -26,7 +27,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
     default: 'MALACHIAS — Christian Rock. Veteran Spirit. Faith on Fire.',
-    template: '%s — MALACHIAS',
+    template: '%s', // page titles already carry the band name
   },
   description:
     'Malachias is a veteran-founded Christian rock band from South Florida. Faith-driven music that heals PTSD, depression, and suicidal ideation. Available for bars, festivals, churches, and military events.',
@@ -39,7 +40,6 @@ export const metadata: Metadata = {
   creator: 'Malachias',
   publisher: 'Malachias',
   robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
-  alternates: { canonical: SITE_URL },
   openGraph: {
     title: 'MALACHIAS — Christian Rock. Veteran Spirit. Faith on Fire.',
     description: 'Faith-driven rock from a veteran-founded band in South Florida. Music that heals PTSD and depression. Available for bars, festivals, churches, military events, and community gatherings.',
@@ -47,13 +47,13 @@ export const metadata: Metadata = {
     url: SITE_URL,
     siteName: 'Malachias',
     locale: 'en_US',
-    images: [{ url: `${SITE_URL}/Malachias.PNG`, width: 1200, height: 630, alt: 'Malachias — Christian Rock Band' }],
+    images: [{ url: '/og-malachias.jpg', width: 1200, height: 630, alt: 'Malachias — Christian Rock Band' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'MALACHIAS — Christian Rock. Veteran Spirit.',
     description: 'Faith-driven rock from a veteran-founded band. Available for bars, festivals, churches & community events.',
-    images: [`${SITE_URL}/Malachias.PNG`],
+    images: ['/og-malachias.jpg'],
   },
 };
 
@@ -135,7 +135,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             willChange: 'auto',
           }}
         />
-        {children}
+        <MotionPrefs>{children}</MotionPrefs>
         <Analytics />
       </body>
     </html>

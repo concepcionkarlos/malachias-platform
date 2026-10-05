@@ -166,8 +166,10 @@ export async function fetchReleases(): Promise<Release[]> {
 export const featuredRelease = (releases: Release[]): Release | undefined =>
   releases.find(r => r.primary) ?? releases[0]
 
-export const appleEmbedUrl = (r: Release) =>
-  r.appleUrl.replace('https://music.apple.com', 'https://embed.music.apple.com')
+export const appleEmbedUrl = (r: Release) => {
+  const url = r.appleUrl.replace('https://music.apple.com', 'https://embed.music.apple.com')
+  return `${url}${url.includes('?') ? '&' : '?'}theme=dark`
+}
 
 export const youtubeWatchUrl = (r: Release) =>
   r.youtubeId ? `https://www.youtube.com/watch?v=${r.youtubeId}` : ARTIST.youtubeUrl

@@ -11,7 +11,10 @@ import { trackCampaign } from '@/lib/campaignAnalytics'
 const LS_KEY = 'malachias_rtsa_banner_ts'
 const TTL_MS = 3 * 24 * 60 * 60 * 1000
 
-interface Props { path: string; label: string; percent: number }
+interface Props { path: string; label: string; percent: number; daysToEvent: number }
+
+// Below this, a % reads as weak social proof — show the countdown instead.
+const SHOW_PERCENT_FROM = 15
 
 function initiallyDismissed(): boolean {
   if (typeof window === 'undefined') return false
@@ -22,7 +25,7 @@ function initiallyDismissed(): boolean {
   } catch { return false }
 }
 
-export default function CampaignBanner({ path, label, percent }: Props) {
+export default function CampaignBanner({ path, label, percent, daysToEvent }: Props) {
   const [dismissed, setDismissed] = useState(initiallyDismissed)
   if (dismissed) return null
 
@@ -34,6 +37,7 @@ export default function CampaignBanner({ path, label, percent }: Props) {
   return (
     <>
       <div
+        data-top-strip
         role="region"
         aria-label="Road to San Antonio campaign"
         style={{
@@ -51,7 +55,9 @@ export default function CampaignBanner({ path, label, percent }: Props) {
           <span style={{ fontSize: '0.6rem', letterSpacing: '0.30em', textTransform: 'uppercase', color: '#c9a84c', fontWeight: 700, whiteSpace: 'nowrap' }}>{label}</span>
           <span aria-hidden="true" style={{ color: 'rgba(201,168,76,0.4)' }}>·</span>
           <span style={{ fontSize: '0.7rem', color: '#e8ddd0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-            Help us reach Veterans Day 2026{percent > 0 ? ` · ${percent}% funded` : ''}
+            Help us reach Veterans Day 2026{percent >= SHOW_PERCENT_FROM
+              ? ` · ${percent}% funded`
+              : daysToEvent > 0 ? ` · ${daysToEvent} days to go` : ''}
           </span>
           <span style={{ fontSize: '0.6rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: '#c9a84c', borderBottom: '1px solid rgba(201,168,76,0.4)', whiteSpace: 'nowrap' }}>Support →</span>
         </Link>

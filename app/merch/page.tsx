@@ -11,7 +11,7 @@ export const revalidate = 300;  // Re-fetch Fourthwall catalog every 5 minutes
 export const metadata: Metadata = {
   title: 'Official Merch — MALACHIAS | Christian Rock Band South Florida',
   description: 'Support a veteran-founded Christian rock band. Official Malachias gear funds live shows, original music, and veteran outreach events. No label. Every purchase matters.',
-  alternates: { canonical: 'https://malachiasmusic.com/merch' },
+  alternates: { canonical: '/merch' },
   openGraph: {
     title: 'Support Malachias — Official Band Merch',
     description: 'Veteran-founded Christian rock band. Every purchase funds shows, recordings, and veteran outreach. No label. Direct to the band.',
