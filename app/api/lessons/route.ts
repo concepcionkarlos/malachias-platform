@@ -4,14 +4,14 @@
 // the admin (best-effort). Never emails the address the visitor typed.
 import { NextRequest, NextResponse } from 'next/server'
 import crypto from 'crypto'
-import { readContent, writeContent } from '@/lib/store'
+import { updateContent } from '@/lib/store'
+import { str } from '@/lib/str'
 import { sendAdminNotification } from '@/lib/emailService'
 import { rateLimit } from '@/lib/rateLimit'
 import { verifyChallenge, consumeChallengeNonce } from '@/lib/captcha'
 import { LESSONS, type LessonInquiry, type LessonFormat } from '@/lib/lessons'
 
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
-const str = (v: unknown, max: number) => (typeof v === 'string' ? v.trim().slice(0, max) : '')
 
 export async function POST(req: NextRequest) {
   const limited = await rateLimit(req, 'lessons', { limit: 5, windowMs: 60_000 })
@@ -54,8 +54,7 @@ export async function POST(req: NextRequest) {
     status: 'new',
     createdAt: new Date().toISOString(),
   }
-  const store = await readContent()
-  await writeContent({ lessonInquiries: [...(store.lessonInquiries ?? []), inquiry] })
+  await updateContent(store => ({ lessonInquiries: [...(store.lessonInquiries ?? []), inquiry] }))
 
   const adminEmail = process.env.ADMIN_NOTIFY_EMAIL
   if (adminEmail) await sendAdminNotification({

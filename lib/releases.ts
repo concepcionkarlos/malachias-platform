@@ -95,7 +95,7 @@ interface ItunesCollection {
 
 async function fetchAppleCatalog(): Promise<Release[]> {
   const url = `https://itunes.apple.com/lookup?id=${ARTIST.appleId}&entity=album&limit=200&country=US`
-  const res = await fetch(url, { next: { revalidate: REVALIDATE_SECONDS } })
+  const res = await fetch(url, { next: { revalidate: REVALIDATE_SECONDS }, signal: AbortSignal.timeout(5000) })
   if (!res.ok) throw new Error(`itunes ${res.status}`)
   const json = (await res.json()) as { results: ItunesCollection[] }
   return json.results
@@ -121,7 +121,7 @@ async function fetchAppleCatalog(): Promise<Release[]> {
 
 async function fetchYouTubeIndex(): Promise<{ id: string; title: string }[]> {
   const url = `https://www.youtube.com/feeds/videos.xml?channel_id=${ARTIST.youtubeChannelId}`
-  const res = await fetch(url, { next: { revalidate: REVALIDATE_SECONDS } })
+  const res = await fetch(url, { next: { revalidate: REVALIDATE_SECONDS }, signal: AbortSignal.timeout(5000) })
   if (!res.ok) throw new Error(`youtube rss ${res.status}`)
   const xml = await res.text()
   const out: { id: string; title: string }[] = []

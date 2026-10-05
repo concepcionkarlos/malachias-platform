@@ -5,7 +5,8 @@
 // mail to the address the visitor typed.
 import { NextRequest, NextResponse } from 'next/server'
 import crypto from 'crypto'
-import { readContent, writeContent } from '@/lib/store'
+import { updateContent } from '@/lib/store'
+import { str } from '@/lib/str'
 import { sendAdminNotification } from '@/lib/emailService'
 import { rateLimit } from '@/lib/rateLimit'
 import { verifyChallenge, consumeChallengeNonce } from '@/lib/captcha'
@@ -15,7 +16,6 @@ function esc(s: string): string {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 }
 
-const str = (v: unknown, max: number) => (typeof v === 'string' ? v.trim().slice(0, max) : '')
 
 export async function POST(req: NextRequest) {
   const limited = await rateLimit(req, 'sponsor', { limit: 5, windowMs: 60_000 })
@@ -65,8 +65,7 @@ export async function POST(req: NextRequest) {
     createdAt: new Date().toISOString(),
   }
 
-  const store = await readContent()
-  await writeContent({ sponsorInquiries: [...(store.sponsorInquiries ?? []), inquiry] })
+  await updateContent(store => ({ sponsorInquiries: [...(store.sponsorInquiries ?? []), inquiry] }))
 
   const adminEmail = process.env.ADMIN_NOTIFY_EMAIL
   if (adminEmail) await sendAdminNotification({

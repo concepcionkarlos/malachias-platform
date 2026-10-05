@@ -3,7 +3,7 @@
 // fallback for invalid/expired tokens, otherwise renders the RehearsalRSVP form.
 import Link from 'next/link'
 import RehearsalRSVP from './RehearsalRSVP'
-import { getRehearsalByToken, getSongs } from '@/lib/venueStore'
+import { getRehearsalByToken, getSongs, publicRehearsal } from '@/lib/venueStore'
 
 export const dynamic = 'force-dynamic'
 
@@ -30,5 +30,5 @@ export default async function RehearsalPage({ params }: { params: Promise<{ toke
     )
   }
   const songs = allSongs.filter(s => (rehearsal.songIds ?? []).includes(s.id))
-  return <RehearsalRSVP token={token} rehearsal={rehearsal} songs={songs} />
+  return <RehearsalRSVP token={token} rehearsal={publicRehearsal(rehearsal)} songs={songs} />
 }

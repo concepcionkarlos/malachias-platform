@@ -1,24 +1,21 @@
 // Cron endpoint: GET-only, authorized via Bearer CRON_SECRET (500 if unset, 401 if mismatch); also requires RESEND_API_KEY.
 // Reads the subscriberDrip queue from content store and, per entry, sends the day-3 and day-7
 // newsletter onboarding emails directly through the Resend API once their delays elapse.
-// Logs each successful send, marks the step sent, removes fully-completed entries, and persists the queue.
+// Only addresses still in `subscribers` get mail (unsubscribed ones are dropped from the queue).
+// Each successful step is persisted right after it sends, so a crash or a Resend error
+// mid-run never causes a duplicate send on the next run. Fully-completed entries are removed.
 import { NextRequest, NextResponse } from 'next/server'
-import { readContent, writeContent } from '@/lib/store'
-import { addSentEmail } from '@/lib/venueStore'
+import { readContent, updateContent, type SubscriberDripEntry } from '@/lib/store'
+import { addSentEmails } from '@/lib/venueStore'
+import { unsubscribeUrl } from '@/lib/unsubscribe'
+import type { SentEmail } from '@/lib/data'
 
 export const dynamic = 'force-dynamic'
 
 const SITE_URL = 'https://www.malachiasmusic.com'
 
-interface DripEntry {
-  email: string
-  subscribedAt: string
-  day3Sent: boolean
-  day7Sent: boolean
-}
-
 function buildDay3Email(email: string): { subject: string; html: string } {
-  const unsubUrl = `${SITE_URL}/api/newsletter/unsubscribe?email=${encodeURIComponent(email)}`
+  const unsubUrl = unsubscribeUrl(email)
   return {
     subject: 'Quick question — I\'m curious about something',
     html: `<!DOCTYPE html>
@@ -64,7 +61,7 @@ function buildDay3Email(email: string): { subject: string; html: string } {
 }
 
 function buildDay7Email(email: string): { subject: string; html: string } {
-  const unsubUrl = `${SITE_URL}/api/newsletter/unsubscribe?email=${encodeURIComponent(email)}`
+  const unsubUrl = unsubscribeUrl(email)
   return {
     subject: 'The song that started all this',
     html: `<!DOCTYPE html>
@@ -124,50 +121,66 @@ export async function GET(req: NextRequest) {
   if (!apiKey) return NextResponse.json({ error: 'Resend not configured' }, { status: 500 })
 
   const store = await readContent()
-  const queue: DripEntry[] = (store as any).subscriberDrip ?? []
+  const subscribed = new Set((store.subscribers ?? []).map(s => s.email.toLowerCase()))
+  const queue: SubscriberDripEntry[] = store.subscriberDrip ?? []
   const now = Date.now()
   const DAY = 86_400_000
 
+  // Mark one step done on the freshly stored entry (under the store lock), so
+  // concurrent signups/unsubscribes in the meantime are preserved.
+  const markSent = (email: string, step: 'day3Sent' | 'day7Sent') =>
+    updateContent(cur => ({
+      subscriberDrip: (cur.subscriberDrip ?? []).map(e => e.email.toLowerCase() === email.toLowerCase() ? { ...e, [step]: true } : e),
+    }))
+
   let sent = 0
-  const updated = await Promise.all(queue.map(async entry => {
-    const enrolledMs = new Date(entry.subscribedAt).getTime()
+  let failed = 0
+  const logs: Omit<SentEmail, 'id'>[] = []
 
-    if (!entry.day3Sent && now >= enrolledMs + 3 * DAY) {
-      const { subject, html } = buildDay3Email(entry.email)
-      const sentAt = new Date().toISOString()
-      const res = await fetch('https://api.resend.com/emails', {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ from: 'Malachias <hello@malachiasmusic.com>', to: [entry.email], subject, html }),
-      })
-      if (res.ok) {
-        entry = { ...entry, day3Sent: true }; sent++
+  try {
+    for (const entry of queue) {
+      if (!subscribed.has(entry.email.toLowerCase())) continue // unsubscribed — never mail
+      const enrolledMs = new Date(entry.subscribedAt).getTime()
+      const steps: { key: 'day3Sent' | 'day7Sent'; due: boolean; build: (email: string) => { subject: string; html: string } }[] = [
+        { key: 'day3Sent', due: !entry.day3Sent && now >= enrolledMs + 3 * DAY, build: buildDay3Email },
+        { key: 'day7Sent', due: !entry.day7Sent && now >= enrolledMs + 7 * DAY, build: buildDay7Email },
+      ]
+      for (const step of steps) {
+        if (!step.due) continue
+        const { subject, html } = step.build(entry.email)
+        const sentAt = new Date().toISOString()
+        let res: Response
+        try {
+          res = await fetch('https://api.resend.com/emails', {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ from: 'Malachias <hello@malachiasmusic.com>', to: [entry.email], subject, html }),
+            signal: AbortSignal.timeout(10_000),
+          })
+          if (!res.ok) throw new Error(`resend ${res.status}`)
+        } catch (err) {
+          // Leave the step unsent; the next run retries just this one.
+          failed++
+          logs.push({ toEmail: entry.email, subject, bodyHtml: html, sentAt, status: 'failed', errorMessage: String(err).slice(0, 200) })
+          break // don't send day 7 before day 3 went out
+        }
+        sent++
+        await markSent(entry.email, step.key) // record progress before moving on
         const data = await res.json().catch(() => ({}))
-        await addSentEmail({ toEmail: entry.email, subject, bodyHtml: html, sentAt, resendEmailId: data?.id, status: 'sent' }).catch(() => {})
+        logs.push({ toEmail: entry.email, subject, bodyHtml: html, sentAt, resendEmailId: data?.id, status: 'sent' })
       }
     }
+  } finally {
+    await addSentEmails(logs).catch(() => {})
+  }
 
-    if (!entry.day7Sent && now >= enrolledMs + 7 * DAY) {
-      const { subject, html } = buildDay7Email(entry.email)
-      const sentAt = new Date().toISOString()
-      const res = await fetch('https://api.resend.com/emails', {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ from: 'Malachias <hello@malachiasmusic.com>', to: [entry.email], subject, html }),
-      })
-      if (res.ok) {
-        entry = { ...entry, day7Sent: true }; sent++
-        const data = await res.json().catch(() => ({}))
-        await addSentEmail({ toEmail: entry.email, subject, bodyHtml: html, sentAt, resendEmailId: data?.id, status: 'sent' }).catch(() => {})
-      }
+  // Drop completed entries and anyone no longer subscribed.
+  const after = await updateContent(cur => {
+    const current = new Set((cur.subscribers ?? []).map(s => s.email.toLowerCase()))
+    return {
+      subscriberDrip: (cur.subscriberDrip ?? []).filter(e => (!e.day3Sent || !e.day7Sent) && current.has(e.email.toLowerCase())),
     }
+  })
 
-    return entry
-  }))
-
-  // Remove entries where both emails are done
-  const remaining = updated.filter(e => !e.day3Sent || !e.day7Sent)
-  await writeContent({ subscriberDrip: remaining } as any)
-
-  return NextResponse.json({ sent, remaining: remaining.length })
+  return NextResponse.json({ sent, failed, remaining: (after.subscriberDrip ?? []).length })
 }

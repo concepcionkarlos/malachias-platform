@@ -82,6 +82,7 @@ export default function AdminRoadToSanAntonio() {
   const [saved, setSaved] = useState(false)
   const [error, setError] = useState('')
   const [copiedKey, setCopiedKey] = useState<string | null>(null)
+  const [dirtyInquiries, setDirtyInquiries] = useState<Set<string>>(new Set())
 
   function copyTemplate(t: Template) {
     const text = t.subject ? `Subject: ${t.subject}\n\n${t.body}` : t.body
@@ -112,9 +113,19 @@ export default function AdminRoadToSanAntonio() {
     try {
       const res = await fetch('/api/content', {
         method: 'PATCH', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ campaign: o, campaignSponsors: sponsors, campaignUpdates: updates, sponsorInquiries: inquiries, campaignInKind: inKind, campaignLedger: ledger, campaignPeerLinks: peers, ...extra }),
+        body: JSON.stringify({ campaign: o, campaignSponsors: sponsors, campaignUpdates: updates, campaignInKind: inKind, campaignLedger: ledger, campaignPeerLinks: peers, ...extra }),
       })
       if (!res.ok) throw new Error()
+      // Sponsor inquiries come from the public form: save only the changed
+      // statuses, one item at a time, so new arrivals are never overwritten.
+      for (const q of inquiries.filter(x => dirtyInquiries.has(x.id))) {
+        const r = await fetch('/api/content', {
+          method: 'PATCH', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sponsorInquiries: 'merge-item', item: { id: q.id, status: q.status } }),
+        })
+        if (!r.ok) throw new Error()
+      }
+      setDirtyInquiries(new Set())
       setSaved(true); setTimeout(() => setSaved(false), 2000)
     } catch { setError('Save failed') } finally { setSaving(false) }
   }
@@ -380,7 +391,7 @@ export default function AdminRoadToSanAntonio() {
               <div style={{ fontSize: 12, color: '#8a7f70', marginTop: 2 }}>{q.level} · {new Date(q.createdAt).toLocaleDateString('en-US')}</div>
               {q.message && <div style={{ fontSize: 12, color: '#a89880', marginTop: 4, whiteSpace: 'pre-wrap' }}>{q.message}</div>}
             </div>
-            <select style={{ ...INPUT, width: 130 }} value={q.status} onChange={e => setInquiries(l => l.map(x => x.id === q.id ? { ...x, status: e.target.value as SponsorInquiry['status'] } : x))}>
+            <select style={{ ...INPUT, width: 130 }} value={q.status} onChange={e => { setInquiries(l => l.map(x => x.id === q.id ? { ...x, status: e.target.value as SponsorInquiry['status'] } : x)); setDirtyInquiries(d => new Set(d).add(q.id)) }}>
               <option value="new">new</option><option value="contacted">contacted</option><option value="confirmed">confirmed</option><option value="declined">declined</option>
             </select>
           </div>

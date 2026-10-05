@@ -6,11 +6,12 @@
 // and an admin notification email (all best-effort). Returns 201 with the id.
 import { NextRequest, NextResponse } from 'next/server'
 import crypto from 'crypto'
-import { readContent, writeContent } from '@/lib/store'
+import { updateContent } from '@/lib/store'
 import { triggerAutoReply, sendAdminNotification } from '@/lib/emailService'
 import { enrollInBookingDrip } from '@/lib/venueStore'
 import { rateLimit } from '@/lib/rateLimit'
 import { verifyChallenge, consumeChallengeNonce } from '@/lib/captcha'
+import { str } from '@/lib/str'
 import type { BookingRequest } from '@/lib/data'
 
 function esc(s: string): string {
@@ -41,20 +42,6 @@ function validateName(name: string): string | null {
   if (/^\d+$/.test(trimmed)) return 'Name cannot be only numbers.'
   // All the same character
   if (new Set(trimmed.toLowerCase().replace(/\s/g, '').split('')).size <= 1) return 'Please enter a real name.'
-  // Keyboard-row mashing (asdf, qwerty, hjkl…): flag a run of 4+ letters that
-  // appear CONSECUTIVELY in a keyboard row (forward or reversed). The previous
-  // check counted any letters that merely belonged to the row, which rejected
-  // real names like "Tyler Powers" or "Pastor Williams" (e,r,t,y,u,i,o,p are
-  // common letters that all live on the top row).
-  const rows = ['qwertyuiop', 'asdfghjkl', 'zxcvbnm']
-  const lower = trimmed.toLowerCase().replace(/[^a-z]/g, '')
-  for (const row of rows) {
-    const rev = [...row].reverse().join('')
-    for (let i = 0; i + 4 <= lower.length; i++) {
-      const seg = lower.slice(i, i + 4)
-      if (row.includes(seg) || rev.includes(seg)) return 'Please enter a real name.'
-    }
-  }
   return null
 }
 
@@ -80,12 +67,20 @@ export async function POST(req: NextRequest) {
   const limited = await rateLimit(req, 'booking', { limit: 5, windowMs: 60_000 })
   if (limited) return limited
 
-  const body = await req.json()
-  const {
-    fullName, venueOrOrg, email, phone, eventDate, city,
-    eventType, budgetRange, guestCount, message,
-    website, captchaToken, captchaAnswer,
-  } = body
+  let body: Record<string, unknown>
+  try { body = await req.json() } catch { return NextResponse.json({ error: 'Invalid request.' }, { status: 400 }) }
+  const { website, captchaToken, captchaAnswer } = body
+  // Coerce every text field — a number or object here must be a 400, not a 500.
+  const fullName = str(body.fullName, 200)
+  const venueOrOrg = str(body.venueOrOrg, 200)
+  const email = str(body.email, 300).toLowerCase()
+  const phone = str(body.phone, 40)
+  const eventDate = str(body.eventDate, 40)
+  const city = str(body.city, 120)
+  const eventType = str(body.eventType, 80)
+  const budgetRange = str(body.budgetRange, 80)
+  const guestCount = str(body.guestCount, 40)
+  const message = str(body.message, 5000)
 
   // Honeypot — bots fill this, humans never see it
   if (website) return NextResponse.json({ ok: true }, { status: 201 })
@@ -113,7 +108,7 @@ export async function POST(req: NextRequest) {
   const nameErr = validateName(fullName)
   if (nameErr) return NextResponse.json({ error: nameErr }, { status: 400 })
 
-  const phoneErr = validatePhone(phone ?? '')
+  const phoneErr = validatePhone(phone)
   if (phoneErr) return NextResponse.json({ error: phoneErr }, { status: 400 })
 
   const msgErr = validateMessage(message)
@@ -127,16 +122,13 @@ export async function POST(req: NextRequest) {
   const now = new Date().toISOString()
   const booking: BookingRequest = {
     id: crypto.randomBytes(8).toString('hex'),
-    fullName: fullName.trim(), venueOrOrg: (venueOrOrg ?? '').trim(), email: email.trim().toLowerCase(),
-    phone: (phone ?? '').trim(), eventDate: eventDate ?? '', city: (city ?? '').trim(),
-    eventType: eventType ?? '', budgetRange: (budgetRange ?? '').trim(),
-    guestCount: (guestCount ?? '').trim(), message: message.trim(),
+    fullName, venueOrOrg, email, phone, eventDate, city,
+    eventType, budgetRange, guestCount, message,
     source: 'website', status: 'New',
     createdAt: now, updatedAt: now,
   }
 
-  const store = await readContent()
-  await writeContent({ bookingRequests: [...store.bookingRequests, booking] })
+  await updateContent(store => ({ bookingRequests: [...store.bookingRequests, booking] }))
 
   await triggerAutoReply(booking).catch(() => {})
   await enrollInBookingDrip(booking).catch(() => {})
@@ -146,9 +138,9 @@ export async function POST(req: NextRequest) {
     toEmail: adminEmail,
     subject: `New booking request from ${fullName}`,
     bodyHtml: `<p>New booking request received from <strong>${esc(fullName)}</strong> (${esc(email)}).</p>
-               <p>Event: ${esc(eventType ?? '')} on ${esc(eventDate ?? '')} in ${esc(city ?? '')}</p>
-               <p>Budget: ${esc(budgetRange ?? '')} | Guests: ${esc(guestCount ?? '')}</p>
-               <p>Message: ${esc(message ?? '')}</p>`,
+               <p>Event: ${esc(eventType)} on ${esc(eventDate)} in ${esc(city)}</p>
+               <p>Budget: ${esc(budgetRange)} | Guests: ${esc(guestCount)}</p>
+               <p>Message: ${esc(message)}</p>`,
   }).catch(() => {})
 
   return NextResponse.json({ ok: true, id: booking.id }, { status: 201 })

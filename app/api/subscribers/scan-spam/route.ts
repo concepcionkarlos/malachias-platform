@@ -3,7 +3,7 @@
 // bot prefixes, keyboard-mash and numeric/random patterns; returns ranked candidates with severity.
 // DELETE: bulk-removes subscribers by an array of emails from the content store.
 import { NextRequest, NextResponse } from 'next/server'
-import { readContent, writeContent } from '@/lib/store'
+import { readContent, updateContent } from '@/lib/store'
 import { isAuthenticatedFromRequest } from '@/lib/auth'
 
 export interface SubSpamCandidate {
@@ -203,10 +203,12 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ error: 'No emails provided' }, { status: 400 })
   }
 
-  const store = await readContent()
-  const emailSet = new Set(emails.map(e => e.toLowerCase()))
-  const remaining = (store.subscribers ?? []).filter(s => !emailSet.has(s.email.toLowerCase()))
-  await writeContent({ subscribers: remaining })
+  const emailSet = new Set(emails.map(e => String(e).toLowerCase()))
+  const store = await updateContent(current => ({
+    subscribers: (current.subscribers ?? []).filter(s => !emailSet.has(s.email.toLowerCase())),
+    subscriberDrip: (current.subscriberDrip ?? []).filter(e => !emailSet.has(e.email.toLowerCase())),
+  }))
+  const remaining = store.subscribers
 
   return NextResponse.json({ ok: true, removed: emails.length, remaining: remaining.length })
 }

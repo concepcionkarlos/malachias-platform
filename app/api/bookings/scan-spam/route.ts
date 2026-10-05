@@ -4,7 +4,7 @@
 // DELETE: requires an authenticated session; bulk-deletes bookings by an array of ids and
 // returns deleted/remaining counts.
 import { NextRequest, NextResponse } from 'next/server'
-import { readContent, writeContent } from '@/lib/store'
+import { readContent, updateContent } from '@/lib/store'
 import { isAuthenticated } from '@/lib/auth'
 import type { BookingRequest } from '@/lib/data'
 
@@ -108,10 +108,12 @@ export async function DELETE(req: NextRequest) {
   const { ids } = await req.json() as { ids: string[] }
   if (!Array.isArray(ids) || ids.length === 0) return NextResponse.json({ error: 'ids required' }, { status: 400 })
 
-  const store = await readContent()
-  const before = (store.bookingRequests ?? []).length
-  const bookingRequests = (store.bookingRequests ?? []).filter(b => !ids.includes(b.id))
-  await writeContent({ bookingRequests })
+  let before = 0
+  const store = await updateContent(current => {
+    before = (current.bookingRequests ?? []).length
+    return { bookingRequests: (current.bookingRequests ?? []).filter(b => !ids.includes(b.id)) }
+  })
+  const bookingRequests = store.bookingRequests
 
   return NextResponse.json({ deleted: before - bookingRequests.length, remaining: bookingRequests.length })
 }

@@ -18,6 +18,7 @@ export default function AdminLessons() {
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const [error, setError] = useState('')
+  const [dirty, setDirty] = useState<Set<string>>(new Set())
 
   useEffect(() => {
     fetch('/api/content').then(r => r.json()).then(d => { setInquiries(d.lessonInquiries ?? []); setLoading(false) })
@@ -27,8 +28,13 @@ export default function AdminLessons() {
   async function save() {
     setSaving(true); setSaved(false); setError('')
     try {
-      const res = await fetch('/api/content', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ lessonInquiries: inquiries }) })
-      if (!res.ok) throw new Error()
+      // One merge-item per changed inquiry — never the whole list, so an inquiry
+      // that arrived while this page was open isn't overwritten.
+      for (const q of inquiries.filter(x => dirty.has(x.id))) {
+        const res = await fetch('/api/content', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ lessonInquiries: 'merge-item', item: { id: q.id, status: q.status } }) })
+        if (!res.ok) throw new Error()
+      }
+      setDirty(new Set())
       setSaved(true); setTimeout(() => setSaved(false), 2000)
     } catch { setError('Save failed') } finally { setSaving(false) }
   }
@@ -60,7 +66,7 @@ export default function AdminLessons() {
               <div style={{ fontSize: 12, color: '#8a7f70', marginTop: 2 }}>{q.format}{q.county ? ` · ${q.county}` : ''}{q.goal ? ` · ${q.goal}` : ''} · {new Date(q.createdAt).toLocaleDateString('en-US')}</div>
               {q.message && <div style={{ fontSize: 12, color: '#a89880', marginTop: 4, whiteSpace: 'pre-wrap' }}>{q.message}</div>}
             </div>
-            <select style={{ ...INPUT, width: 130 }} value={q.status} onChange={e => setInquiries(l => l.map(x => x.id === q.id ? { ...x, status: e.target.value as LessonInquiry['status'] } : x))}>
+            <select style={{ ...INPUT, width: 130 }} value={q.status} onChange={e => { setInquiries(l => l.map(x => x.id === q.id ? { ...x, status: e.target.value as LessonInquiry['status'] } : x)); setDirty(d => new Set(d).add(q.id)) }}>
               <option value="new">new</option><option value="contacted">contacted</option><option value="booked">booked</option><option value="declined">declined</option>
             </select>
           </div>

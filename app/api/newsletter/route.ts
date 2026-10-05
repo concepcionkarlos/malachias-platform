@@ -4,17 +4,19 @@
 // addresses stores a pending subscriber with a verification token and sends a
 // double opt-in confirmation email via Resend (logged through addSentEmail).
 import { NextRequest, NextResponse } from 'next/server'
-import { readContent, writeContent } from '@/lib/store'
+import { readContent, updateContent } from '@/lib/store'
 import { isAuthenticated } from '@/lib/auth'
 import { rateLimit } from '@/lib/rateLimit'
 import { addSentEmail } from '@/lib/venueStore'
+import { str } from '@/lib/str'
+import { unsubscribeUrl } from '@/lib/unsubscribe'
 
 const SITE_URL = 'https://www.malachiasmusic.com'
 const DISCOUNT  = '15%'
 
 function buildVerifyEmail(email: string, token: string): string {
   const verifyUrl = `${SITE_URL}/api/verify-email?token=${token}`
-  const unsubUrl  = `${SITE_URL}/api/newsletter/unsubscribe?email=${encodeURIComponent(email)}`
+  const unsubUrl = unsubscribeUrl(email)
   return `<!DOCTYPE html>
 <html>
 <body style="margin:0;padding:0;background:#f0ede8;font-family:Arial,sans-serif;">
@@ -61,32 +63,28 @@ export async function POST(req: NextRequest) {
   const limited = await rateLimit(req, 'newsletter', { limit: 3, windowMs: 60_000 })
   if (limited) return limited
 
-  const { email } = await req.json()
+  const body = await req.json().catch(() => ({}))
+  const email = str(body?.email, 300)
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 254) {
     return NextResponse.json({ error: 'Valid email required' }, { status: 400 })
   }
+  const lowerEmail = email.toLowerCase()
 
-  const store = await readContent()
-  const lowerEmail = (email as string).toLowerCase()
-
-  // Already confirmed subscriber
-  if ((store.subscribers ?? []).some(s => s.email.toLowerCase() === lowerEmail)) {
-    return NextResponse.json({ ok: true, pending: false })
-  }
-
-  // Already pending — don't re-send
-  const pending: { email: string; token: string; createdAt: string }[] =
-    (store as any).pendingSubscribers ?? []
-  if (pending.some(p => p.email.toLowerCase() === lowerEmail)) {
-    return NextResponse.json({ ok: true, pending: true })
-  }
-
-  // Create token and store pending
+  // Check + insert under the store lock so two quick signups can't drop each other.
   const { randomBytes } = await import('crypto')
   const token = randomBytes(32).toString('hex')
-  await writeContent({
-    pendingSubscribers: [...pending, { email: lowerEmail, token, createdAt: new Date().toISOString() }],
-  } as any)
+  let state = 'new' as 'subscribed' | 'pending' | 'new'
+  await updateContent(store => {
+    // Already a confirmed subscriber — don't re-send.
+    if ((store.subscribers ?? []).some(s => s.email.toLowerCase() === lowerEmail)) { state = 'subscribed'; return null }
+    // Already pending confirmation — don't send a second email.
+    const pending = store.pendingSubscribers ?? []
+    if (pending.some(p => p.email.toLowerCase() === lowerEmail)) { state = 'pending'; return null }
+    // Store as pending (NOT a subscriber yet) with a confirmation token.
+    return { pendingSubscribers: [...pending, { email: lowerEmail, token, createdAt: new Date().toISOString() }] }
+  })
+  if (state === 'subscribed') return NextResponse.json({ ok: true, pending: false })
+  if (state === 'pending') return NextResponse.json({ ok: true, pending: true })
 
   // Send verification email
   const apiKey = process.env.RESEND_API_KEY

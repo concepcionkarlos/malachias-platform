@@ -7,6 +7,7 @@
 import fs from 'fs'
 import path from 'path'
 import crypto from 'crypto'
+import { withLock } from './kvLock'
 import type { Venue, OutreachLog, EmailTemplate, AutoReplyLog, BookingEmailLog, InboundEmail, SentEmail, VenueStore, DripCampaign, DripEnrollment, Song, Rehearsal, RehearsalConfirmation, Goal, ShowSetList, ContentPost, FinanceEntry, BandStats, LiveSession } from './data'
 
 const VENUE_DATA_PATH = path.join(process.cwd(), 'data', 'venues.json')
@@ -476,11 +477,13 @@ export async function updateTemplate(id: string, patch: Partial<Pick<EmailTempla
 // ── Outreach Logs ─────────────────────────────────────────────────────────────
 
 export async function addOutreachLog(log: Omit<OutreachLog, 'id'>): Promise<OutreachLog> {
-  const store = await readVenueStore()
-  const newLog: OutreachLog = { ...log, id: makeId() }
-  const outreachLogs = [...store.outreachLogs, newLog]
-  useKV ? await writeKV({ outreachLogs }) : writeLocal({ outreachLogs })
-  return newLog
+  return withLock('venue:outreachLogs', async () => {
+    const store = await readVenueStore()
+    const newLog: OutreachLog = { ...log, id: makeId() }
+    const outreachLogs = [...store.outreachLogs, newLog]
+    useKV ? await writeKV({ outreachLogs }) : writeLocal({ outreachLogs })
+    return newLog
+  })
 }
 
 export async function getOutreachLogsForVenue(venueId: string): Promise<OutreachLog[]> {
@@ -495,31 +498,37 @@ export async function getAutoReplyLogForBooking(bookingId: string): Promise<Auto
 }
 
 export async function addAutoReplyLog(log: Omit<AutoReplyLog, 'id'>): Promise<AutoReplyLog> {
-  const store = await readVenueStore()
-  const newLog: AutoReplyLog = { ...log, id: makeId() }
-  const autoReplyLogs = [...store.autoReplyLogs, newLog]
-  useKV ? await writeKV({ autoReplyLogs }) : writeLocal({ autoReplyLogs })
-  return newLog
+  return withLock('venue:autoReplyLogs', async () => {
+    const store = await readVenueStore()
+    const newLog: AutoReplyLog = { ...log, id: makeId() }
+    const autoReplyLogs = [...store.autoReplyLogs, newLog]
+    useKV ? await writeKV({ autoReplyLogs }) : writeLocal({ autoReplyLogs })
+    return newLog
+  })
 }
 
 export async function updateAutoReplyLog(id: string, patch: Partial<AutoReplyLog>): Promise<AutoReplyLog> {
-  const store = await readVenueStore()
-  const idx = store.autoReplyLogs.findIndex((l) => l.id === id)
-  if (idx === -1) throw new Error(`AutoReplyLog ${id} not found`)
-  const updated: AutoReplyLog = { ...store.autoReplyLogs[idx], ...patch }
-  const autoReplyLogs = store.autoReplyLogs.map((l) => (l.id === id ? updated : l))
-  useKV ? await writeKV({ autoReplyLogs }) : writeLocal({ autoReplyLogs })
-  return updated
+  return withLock('venue:autoReplyLogs', async () => {
+    const store = await readVenueStore()
+    const idx = store.autoReplyLogs.findIndex((l) => l.id === id)
+    if (idx === -1) throw new Error(`AutoReplyLog ${id} not found`)
+    const updated: AutoReplyLog = { ...store.autoReplyLogs[idx], ...patch }
+    const autoReplyLogs = store.autoReplyLogs.map((l) => (l.id === id ? updated : l))
+    useKV ? await writeKV({ autoReplyLogs }) : writeLocal({ autoReplyLogs })
+    return updated
+  })
 }
 
 // ── Booking / Song-Request Email Logs ─────────────────────────────────────────
 
 export async function addBookingEmailLog(log: Omit<BookingEmailLog, 'id'>): Promise<BookingEmailLog> {
-  const store = await readVenueStore()
-  const newLog: BookingEmailLog = { ...log, id: makeId() }
-  const bookingEmailLogs = [...(store.bookingEmailLogs ?? []), newLog]
-  useKV ? await writeKV({ bookingEmailLogs }) : writeLocal({ bookingEmailLogs })
-  return newLog
+  return withLock('venue:bookingEmailLogs', async () => {
+    const store = await readVenueStore()
+    const newLog: BookingEmailLog = { ...log, id: makeId() }
+    const bookingEmailLogs = [...(store.bookingEmailLogs ?? []), newLog]
+    useKV ? await writeKV({ bookingEmailLogs }) : writeLocal({ bookingEmailLogs })
+    return newLog
+  })
 }
 
 export async function getBookingEmailLogs(entityType: 'booking', entityId: string): Promise<BookingEmailLog[]> {
@@ -530,11 +539,13 @@ export async function getBookingEmailLogs(entityType: 'booking', entityId: strin
 // ── Inbound Emails ────────────────────────────────────────────────────────────
 
 export async function addInboundEmail(email: Omit<InboundEmail, 'id'>): Promise<InboundEmail> {
-  const store = await readVenueStore()
-  const newEmail: InboundEmail = { ...email, id: makeId() }
-  const inboundEmails = [...(store.inboundEmails ?? []), newEmail]
-  useKV ? await writeKV({ inboundEmails }) : writeLocal({ inboundEmails })
-  return newEmail
+  return withLock('venue:inboundEmails', async () => {
+    const store = await readVenueStore()
+    const newEmail: InboundEmail = { ...email, id: makeId() }
+    const inboundEmails = [...(store.inboundEmails ?? []), newEmail]
+    useKV ? await writeKV({ inboundEmails }) : writeLocal({ inboundEmails })
+    return newEmail
+  })
 }
 
 export async function getInboundEmails(): Promise<InboundEmail[]> {
@@ -543,31 +554,61 @@ export async function getInboundEmails(): Promise<InboundEmail[]> {
 }
 
 export async function markInboundEmailRead(id: string): Promise<void> {
-  const store = await readVenueStore()
-  const inboundEmails = (store.inboundEmails ?? []).map((e) => e.id === id ? { ...e, read: true } : e)
-  useKV ? await writeKV({ inboundEmails }) : writeLocal({ inboundEmails })
+  return withLock('venue:inboundEmails', async () => {
+    const store = await readVenueStore()
+    const inboundEmails = (store.inboundEmails ?? []).map((e) => e.id === id ? { ...e, read: true } : e)
+    useKV ? await writeKV({ inboundEmails }) : writeLocal({ inboundEmails })
+  })
 }
 
 export async function markAllInboundEmailsRead(): Promise<void> {
-  const store = await readVenueStore()
-  const inboundEmails = (store.inboundEmails ?? []).map((e) => ({ ...e, read: true }))
-  useKV ? await writeKV({ inboundEmails }) : writeLocal({ inboundEmails })
+  return withLock('venue:inboundEmails', async () => {
+    const store = await readVenueStore()
+    const inboundEmails = (store.inboundEmails ?? []).map((e) => ({ ...e, read: true }))
+    useKV ? await writeKV({ inboundEmails }) : writeLocal({ inboundEmails })
+  })
 }
 
 export async function deleteInboundEmail(id: string): Promise<void> {
-  const store = await readVenueStore()
-  const inboundEmails = (store.inboundEmails ?? []).filter((e) => e.id !== id)
-  useKV ? await writeKV({ inboundEmails }) : writeLocal({ inboundEmails })
+  return withLock('venue:inboundEmails', async () => {
+    const store = await readVenueStore()
+    const inboundEmails = (store.inboundEmails ?? []).filter((e) => e.id !== id)
+    useKV ? await writeKV({ inboundEmails }) : writeLocal({ inboundEmails })
+  })
 }
 
 // ── Sent Emails ───────────────────────────────────────────────────────────────
 
+// The log is one KV value rewritten on every send, so it can't grow forever:
+// keep the newest SENT_LOG_MAX entries, and only the newest SENT_LOG_HTML_KEEP
+// keep their full HTML body (older ones keep subject/recipient/status/text).
+const SENT_LOG_MAX = 500
+const SENT_LOG_HTML_KEEP = 100
+const SENT_HTML_MAX_CHARS = 100_000
+
+function capSentLog(list: SentEmail[]): SentEmail[] {
+  return list.slice(0, SENT_LOG_MAX).map((e, i) =>
+    i >= SENT_LOG_HTML_KEEP || (e.bodyHtml?.length ?? 0) > SENT_HTML_MAX_CHARS
+      ? (e.bodyHtml ? { ...e, bodyHtml: '' } : e)
+      : e
+  )
+}
+
 export async function addSentEmail(email: Omit<SentEmail, 'id'>): Promise<SentEmail> {
-  const store = await readVenueStore()
-  const newEmail: SentEmail = { ...email, id: makeId() }
-  const sentEmails = [newEmail, ...(store.sentEmails ?? [])]
-  useKV ? await writeKV({ sentEmails }) : writeLocal({ sentEmails })
-  return newEmail
+  const [added] = await addSentEmails([email])
+  return added
+}
+
+// Batch insert — one read/write for a whole send run (e.g. a newsletter blast).
+export async function addSentEmails(emails: Omit<SentEmail, 'id'>[]): Promise<SentEmail[]> {
+  const added: SentEmail[] = emails.map(e => ({ ...e, id: makeId() }))
+  if (added.length === 0) return added
+  return withLock('venue:sentEmails', async () => {
+    const store = await readVenueStore()
+    const sentEmails = capSentLog([...[...added].reverse(), ...(store.sentEmails ?? [])])
+    useKV ? await writeKV({ sentEmails }) : writeLocal({ sentEmails })
+    return added
+  })
 }
 
 export async function getSentEmails(): Promise<SentEmail[]> {
@@ -576,9 +617,11 @@ export async function getSentEmails(): Promise<SentEmail[]> {
 }
 
 export async function deleteSentEmail(id: string): Promise<void> {
-  const store = await readVenueStore()
-  const sentEmails = (store.sentEmails ?? []).filter((e) => e.id !== id)
-  useKV ? await writeKV({ sentEmails }) : writeLocal({ sentEmails })
+  return withLock('venue:sentEmails', async () => {
+    const store = await readVenueStore()
+    const sentEmails = (store.sentEmails ?? []).filter((e) => e.id !== id)
+    useKV ? await writeKV({ sentEmails }) : writeLocal({ sentEmails })
+  })
 }
 
 // ── Drip Campaigns ────────────────────────────────────────────────────────────
@@ -611,39 +654,45 @@ export async function getActiveDripEnrollments(): Promise<DripEnrollment[]> {
 }
 
 export async function addDripEnrollment(data: Omit<DripEnrollment, 'id'>): Promise<DripEnrollment> {
-  const store = await readVenueStore()
-  const existing = store.dripEnrollments.find(
-    (e) => e.entityId === data.entityId && e.campaignId === data.campaignId && e.status === 'active'
-  )
-  if (existing) return existing
-  const enrollment: DripEnrollment = { ...data, id: makeId() }
-  const dripEnrollments = [...store.dripEnrollments, enrollment]
-  useKV ? await writeKV({ dripEnrollments }) : writeLocal({ dripEnrollments })
-  return enrollment
+  return withLock('venue:dripEnrollments', async () => {
+    const store = await readVenueStore()
+    const existing = store.dripEnrollments.find(
+      (e) => e.entityId === data.entityId && e.campaignId === data.campaignId && e.status === 'active'
+    )
+    if (existing) return existing
+    const enrollment: DripEnrollment = { ...data, id: makeId() }
+    const dripEnrollments = [...store.dripEnrollments, enrollment]
+    useKV ? await writeKV({ dripEnrollments }) : writeLocal({ dripEnrollments })
+    return enrollment
+  })
 }
 
 export async function updateDripEnrollment(id: string, patch: Partial<DripEnrollment>): Promise<DripEnrollment> {
-  const store = await readVenueStore()
-  const idx = store.dripEnrollments.findIndex((e) => e.id === id)
-  if (idx === -1) throw new Error(`Enrollment ${id} not found`)
-  const updated: DripEnrollment = { ...store.dripEnrollments[idx], ...patch }
-  const dripEnrollments = store.dripEnrollments.map((e) => (e.id === id ? updated : e))
-  useKV ? await writeKV({ dripEnrollments }) : writeLocal({ dripEnrollments })
-  return updated
+  return withLock('venue:dripEnrollments', async () => {
+    const store = await readVenueStore()
+    const idx = store.dripEnrollments.findIndex((e) => e.id === id)
+    if (idx === -1) throw new Error(`Enrollment ${id} not found`)
+    const updated: DripEnrollment = { ...store.dripEnrollments[idx], ...patch }
+    const dripEnrollments = store.dripEnrollments.map((e) => (e.id === id ? updated : e))
+    useKV ? await writeKV({ dripEnrollments }) : writeLocal({ dripEnrollments })
+    return updated
+  })
 }
 
 const DRIP_TERMINAL_STATUSES = new Set(['Confirmed', 'Paid', 'Completed', 'Lost', 'Archived'])
 
 export async function pauseBookingDrip(bookingId: string): Promise<void> {
-  const store = await readVenueStore()
-  const active = store.dripEnrollments.filter(
-    (e) => e.entityId === bookingId && e.entityType === 'booking' && e.status === 'active'
-  )
-  if (active.length === 0) return
-  const dripEnrollments = store.dripEnrollments.map((e) =>
-    active.some((a) => a.id === e.id) ? { ...e, status: 'paused' as const } : e
-  )
-  useKV ? await writeKV({ dripEnrollments }) : writeLocal({ dripEnrollments })
+  return withLock('venue:dripEnrollments', async () => {
+    const store = await readVenueStore()
+    const active = store.dripEnrollments.filter(
+      (e) => e.entityId === bookingId && e.entityType === 'booking' && e.status === 'active'
+    )
+    if (active.length === 0) return
+    const dripEnrollments = store.dripEnrollments.map((e) =>
+      active.some((a) => a.id === e.id) ? { ...e, status: 'paused' as const } : e
+    )
+    useKV ? await writeKV({ dripEnrollments }) : writeLocal({ dripEnrollments })
+  })
 }
 
 export function isTerminalBookingStatus(status: string): boolean {
@@ -705,27 +754,33 @@ export async function getRehearsals(): Promise<Rehearsal[]> {
 }
 
 export async function addRehearsal(data: Omit<Rehearsal, 'id' | 'createdAt'>): Promise<Rehearsal> {
-  const store = await readVenueStore()
-  const rehearsal: Rehearsal = { ...data, id: makeId(), createdAt: now() }
-  const rehearsals = [...store.rehearsals, rehearsal]
-  useKV ? await writeKV({ rehearsals }) : writeLocal({ rehearsals })
-  return rehearsal
+  return withLock('venue:rehearsals', async () => {
+    const store = await readVenueStore()
+    const rehearsal: Rehearsal = { ...data, id: makeId(), createdAt: now() }
+    const rehearsals = [...store.rehearsals, rehearsal]
+    useKV ? await writeKV({ rehearsals }) : writeLocal({ rehearsals })
+    return rehearsal
+  })
 }
 
 export async function updateRehearsal(id: string, patch: Partial<Omit<Rehearsal, 'id'>>): Promise<Rehearsal> {
-  const store = await readVenueStore()
-  const rehearsal = store.rehearsals.find(r => r.id === id)
-  if (!rehearsal) throw new Error('Rehearsal not found')
-  const updated = { ...rehearsal, ...patch }
-  const rehearsals = store.rehearsals.map(r => r.id === id ? updated : r)
-  useKV ? await writeKV({ rehearsals }) : writeLocal({ rehearsals })
-  return updated
+  return withLock('venue:rehearsals', async () => {
+    const store = await readVenueStore()
+    const rehearsal = store.rehearsals.find(r => r.id === id)
+    if (!rehearsal) throw new Error('Rehearsal not found')
+    const updated = { ...rehearsal, ...patch }
+    const rehearsals = store.rehearsals.map(r => r.id === id ? updated : r)
+    useKV ? await writeKV({ rehearsals }) : writeLocal({ rehearsals })
+    return updated
+  })
 }
 
 export async function deleteRehearsal(id: string): Promise<void> {
-  const store = await readVenueStore()
-  const rehearsals = store.rehearsals.filter(r => r.id !== id)
-  useKV ? await writeKV({ rehearsals }) : writeLocal({ rehearsals })
+  return withLock('venue:rehearsals', async () => {
+    const store = await readVenueStore()
+    const rehearsals = store.rehearsals.filter(r => r.id !== id)
+    useKV ? await writeKV({ rehearsals }) : writeLocal({ rehearsals })
+  })
 }
 
 // ── Daily Goals ───────────────────────────────────────────────────────────────
@@ -767,15 +822,22 @@ export async function getRehearsalByToken(token: string): Promise<Rehearsal | nu
   return store.rehearsals.find(r => r.token === token) ?? null
 }
 
+// Shape safe to hand to anyone holding the invite link: no member emails.
+export function publicRehearsal(r: Rehearsal): Rehearsal {
+  return { ...r, confirmations: (r.confirmations ?? []).map(c => ({ ...c, email: undefined })) }
+}
+
 export async function addRehearsalConfirmation(id: string, confirmation: RehearsalConfirmation): Promise<Rehearsal> {
-  const store = await readVenueStore()
-  const rehearsal = store.rehearsals.find(r => r.id === id)
-  if (!rehearsal) throw new Error('Rehearsal not found')
-  const confirmations = [...(rehearsal.confirmations ?? []).filter(c => c.email !== confirmation.email && c.name !== confirmation.name), confirmation]
-  const updated = { ...rehearsal, confirmations }
-  const rehearsals = store.rehearsals.map(r => r.id === id ? updated : r)
-  useKV ? await writeKV({ rehearsals }) : writeLocal({ rehearsals })
-  return updated
+  return withLock('venue:rehearsals', async () => {
+    const store = await readVenueStore()
+    const rehearsal = store.rehearsals.find(r => r.id === id)
+    if (!rehearsal) throw new Error('Rehearsal not found')
+    const confirmations = [...(rehearsal.confirmations ?? []).filter(c => c.name !== confirmation.name && !(confirmation.email && c.email === confirmation.email)), confirmation]
+    const updated = { ...rehearsal, confirmations }
+    const rehearsals = store.rehearsals.map(r => r.id === id ? updated : r)
+    useKV ? await writeKV({ rehearsals }) : writeLocal({ rehearsals })
+    return updated
+  })
 }
 
 // ── Show Set Lists ────────────────────────────────────────────────────────────

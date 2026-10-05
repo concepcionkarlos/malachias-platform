@@ -1,11 +1,15 @@
 // API route: newsletter blast to all subscribers.
 // POST (admin-auth required, force-dynamic) sends a branded HTML email — built
 // per-recipient with an unsubscribe link — to every stored subscriber via
-// Resend, logging each send to the CRM. Returns sent/total counts and per-email results.
+// Resend, logging the whole run to the CRM in one write (text body only — the
+// per-recipient HTML differs only by the unsubscribe link). Returns sent/total counts
+// and per-email results.
 import { NextRequest, NextResponse } from 'next/server'
 import { isAuthenticated } from '@/lib/auth'
 import { readContent } from '@/lib/store'
-import { addSentEmail } from '@/lib/venueStore'
+import { addSentEmails } from '@/lib/venueStore'
+import { unsubscribeUrl } from '@/lib/unsubscribe'
+import type { SentEmail } from '@/lib/data'
 
 export const dynamic = 'force-dynamic'
 
@@ -22,7 +26,7 @@ function buildBlastHtml(subject: string, body: string, recipientEmail: string): 
       : '<br>'
   ).join('')
 
-  const unsubUrl = `${SITE_URL}/api/newsletter/unsubscribe?email=${encodeURIComponent(recipientEmail)}`
+  const unsubUrl = unsubscribeUrl(recipientEmail)
 
   return `<!DOCTYPE html>
 <html>
@@ -75,34 +79,25 @@ export async function POST(req: NextRequest) {
   const resend = new Resend(apiKey)
 
   const results: { email: string; ok: boolean }[] = []
+  const logs: Omit<SentEmail, 'id'>[] = []
   const sentAt = new Date().toISOString()
 
-  for (const email of subscribers) {
-    const html = buildBlastHtml(subject, body, email)
-    try {
-      const { data } = await resend.emails.send({ from, to: email, subject, html })
-      results.push({ email, ok: true })
-      // Log to CRM sent emails
-      await addSentEmail({
-        toEmail: email,
-        subject,
-        bodyHtml: html,
-        bodyText: body,
-        sentAt,
-        resendEmailId: data?.id,
-        status: 'sent',
-      }).catch(() => {})
-    } catch {
-      results.push({ email, ok: false })
-      await addSentEmail({
-        toEmail: email,
-        subject,
-        bodyHtml: html,
-        bodyText: body,
-        sentAt,
-        status: 'failed',
-      }).catch(() => {})
+  try {
+    for (const email of subscribers) {
+      const html = buildBlastHtml(subject, body, email)
+      try {
+        const { data, error } = await resend.emails.send({ from, to: email, subject, html })
+        if (error) throw error
+        results.push({ email, ok: true })
+        logs.push({ toEmail: email, subject, bodyHtml: '', bodyText: body, sentAt, resendEmailId: data?.id, status: 'sent' })
+      } catch {
+        results.push({ email, ok: false })
+        logs.push({ toEmail: email, subject, bodyHtml: '', bodyText: body, sentAt, status: 'failed' })
+      }
     }
+  } finally {
+    // Log to CRM sent emails — once for the whole batch
+    await addSentEmails(logs).catch(() => {})
   }
 
   const sent = results.filter(r => r.ok).length

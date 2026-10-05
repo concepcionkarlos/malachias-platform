@@ -4,7 +4,7 @@
 // gibberish, etc.) and returns flagged candidates sorted by score. DELETE
 // (admin-auth required) bulk-removes stories by an {ids} array.
 import { NextRequest, NextResponse } from 'next/server'
-import { readContent, writeContent } from '@/lib/store'
+import { readContent, updateContent } from '@/lib/store'
 import { isAuthenticatedFromRequest } from '@/lib/auth'
 import type { FanStory } from '@/lib/data'
 
@@ -230,10 +230,13 @@ export async function DELETE(req: NextRequest) {
   }
 
   const idSet = new Set(body.ids)
-  const store = await readContent()
-  const all: FanStory[] = (store as unknown as { fanStories?: FanStory[] }).fanStories ?? []
-  const remaining = all.filter(s => !idSet.has(s.id))
-  await writeContent({ fanStories: remaining } as Parameters<typeof writeContent>[0])
+  let all: FanStory[] = []
+  let remaining: FanStory[] = []
+  await updateContent(store => {
+    all = store.fanStories ?? []
+    remaining = all.filter(s => !idSet.has(s.id))
+    return { fanStories: remaining }
+  })
 
   return NextResponse.json({ ok: true, removed: all.length - remaining.length, remaining: remaining.length })
 }

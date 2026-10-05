@@ -2,18 +2,19 @@
 //
 // The browser can no longer make up its own challenge: it must GET one from
 // /api/booking/captcha, which returns the two numbers plus an opaque token.
-// The token is an HMAC over (answer, expiry, nonce) so a bot can't forge a
+// The token is `<expiry>.<nonce>.<hmac(answer, expiry, nonce)>` — the answer
+// itself is never in the token, so a bot can't read it back out, can't forge a
 // valid token for an arbitrary answer without the server secret, can't reuse
 // an expired one, and (via consumeChallengeNonce) can't replay the same token
 // across many submissions.
 
 import crypto from 'crypto'
+import { getServerSecret } from './secret'
 
-const SECRET = process.env.SESSION_SECRET ?? 'malachias-secret'
 const TTL_MS = 10 * 60 * 1000 // 10 minutes to fill out the form
 
 function sign(payload: string): string {
-  return crypto.createHmac('sha256', SECRET).update(payload).digest('base64url')
+  return crypto.createHmac('sha256', getServerSecret()).update(`captcha:${payload}`).digest('base64url')
 }
 
 export interface Challenge {
@@ -27,8 +28,7 @@ export function issueChallenge(): Challenge {
   const b = crypto.randomInt(1, 10) // 1..9
   const exp = Date.now() + TTL_MS
   const nonce = crypto.randomBytes(9).toString('base64url')
-  const payload = `${a + b}.${exp}.${nonce}`
-  return { a, b, token: `${payload}.${sign(payload)}` }
+  return { a, b, token: `${exp}.${nonce}.${sign(`${a + b}.${exp}.${nonce}`)}` }
 }
 
 export interface VerifyResult {
@@ -39,23 +39,23 @@ export interface VerifyResult {
 export function verifyChallenge(token: unknown, answer: unknown): VerifyResult {
   if (typeof token !== 'string') return { ok: false }
   const parts = token.split('.')
-  if (parts.length !== 4) return { ok: false }
-  const [sumStr, expStr, nonce, sig] = parts
+  if (parts.length !== 3) return { ok: false }
+  const [expStr, nonce, sig] = parts
 
-  // Verify signature in constant time.
-  const expected = sign(`${sumStr}.${expStr}.${nonce}`)
+  const exp = parseInt(expStr, 10)
+  if (!Number.isFinite(exp) || Date.now() > exp) return { ok: false }
+
+  const ans = parseInt(String(answer), 10)
+  if (!Number.isFinite(ans)) return { ok: false }
+
+  // The signature only matches if the submitted answer is the right one.
+  // Compare in constant time.
+  const expected = sign(`${ans}.${expStr}.${nonce}`)
   const sigBuf = Buffer.from(sig)
   const expBuf = Buffer.from(expected)
   if (sigBuf.length !== expBuf.length || !crypto.timingSafeEqual(sigBuf, expBuf)) {
     return { ok: false }
   }
-
-  const exp = parseInt(expStr, 10)
-  if (!Number.isFinite(exp) || Date.now() > exp) return { ok: false }
-
-  const sum = parseInt(sumStr, 10)
-  const ans = parseInt(String(answer), 10)
-  if (!Number.isFinite(ans) || ans !== sum) return { ok: false }
 
   return { ok: true, nonce }
 }
