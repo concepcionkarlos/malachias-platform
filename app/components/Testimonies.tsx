@@ -131,7 +131,7 @@ export default function Testimonies({ stories }: TestimoniesProps) {
         </div>
 
         <motion.div {...fade(0.3)} style={{ marginTop: '4rem' }}>
-          <a href="#fanstory" className="btn btn-ghost" style={{ fontSize: '0.62rem', letterSpacing: '0.20em' }}>
+          <a href="/stories#fanstory" className="btn btn-ghost" style={{ fontSize: '0.62rem', letterSpacing: '0.20em' }}>
             Share what a song did for you
           </a>
         </motion.div>

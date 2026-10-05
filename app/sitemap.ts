@@ -1,5 +1,5 @@
 // sitemap.ts — generates /sitemap.xml: lists the home, merch, support, and EPK
-// routes plus dynamic entries for each Fourthwall product and journal post.
+// routes (and the rest of the static pages) plus dynamic entries for each Fourthwall product and journal post.
 import type { MetadataRoute } from 'next'
 import { fetchFWProducts } from '@/lib/fourthwall'
 import { JOURNAL_ENTRIES } from '@/lib/journalEntries'
@@ -77,6 +77,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.75,
+    },
+    {
+      url: `${SITE_URL}/stories`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.7,
     },
     {
       url: `${SITE_URL}/gallery`,

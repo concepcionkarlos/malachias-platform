@@ -32,7 +32,7 @@ export default async function JournalEntryPage({ params }: Props) {
       {/* Top nav */}
       <div style={{ padding: '1.1rem 2rem', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, background: 'rgba(5,5,5,0.96)', backdropFilter: 'blur(12px)', zIndex: 10 }}>
         <Link href="/" style={{ fontFamily: 'var(--font-display)', letterSpacing: '0.26em', color: '#e8ddd0', textDecoration: 'none', fontSize: '0.85rem' }}>MALACHIAS</Link>
-        <Link href="/#journal" style={{ fontSize: '0.60rem', letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(201,168,76,0.55)', textDecoration: 'none' }}>← Field Notes</Link>
+        <Link href="/stories#journal" style={{ fontSize: '0.60rem', letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(201,168,76,0.55)', textDecoration: 'none' }}>← Field Notes</Link>
       </div>
 
       <article style={{ maxWidth: '680px', margin: '0 auto', padding: '4rem 2rem 6rem' }}>

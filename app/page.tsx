@@ -1,10 +1,12 @@
-// Page — / (home): the main single-page site. Assembles the full marketing
-// narrative in order (hero, mission, about, music, testimonies, band, shows, etc.).
+// Page — / (home): the front door. Kept to the essentials in order (hero, mission,
+// campaign, about, music, band, shows, testimonies, merch, press, booking); the
+// deep-dive sections (song stories, setlist, War Room, journal, fan-story form)
+// live on /stories, with a short teaser block here.
 //
 // All data is read ONCE here on the server and handed down as props — CMS content,
-// approved fan stories, the performance-ready setlist (lyrics/chords stripped),
-// live sessions, Fourthwall products and the live discography. Sections used to
-// each fetch /api/public/content (or admin-only endpoints that 401'd) on mount.
+// approved fan stories, live sessions, Fourthwall products and the live
+// discography. Sections used to each fetch /api/public/content (or admin-only
+// endpoints that 401'd) on mount.
 import type { Metadata } from 'next';
 import { readContent } from '@/lib/store';
 import { fetchFWProducts, fwCardProduct } from '@/lib/fourthwall';
@@ -20,7 +22,6 @@ import About        from './components/About';
 import Band         from './components/Band';
 import Music        from './components/Music';
 import Shows        from './components/Shows';
-import Journal      from './components/Journal';
 import Merch        from './components/Merch';
 import Mission      from './components/Mission';
 import Testimonies  from './components/Testimonies';
@@ -32,13 +33,10 @@ import SectionDivider from './components/SectionDivider';
 import BandTogether   from './components/BandTogether';
 import LessonsTeaser  from './components/LessonsTeaser';
 import PressFeature   from './components/PressFeature';
-import SongStories    from './components/SongStories';
-import WarRoom        from './components/WarRoom';
-import Setlist, { type PublicSong } from './components/Setlist';
+import StoriesTeaser  from './components/StoriesTeaser';
 import BookingPopup   from './components/BookingPopup';
 import SupportPopup  from './components/SupportPopup';
 import NextShowBanner     from './components/NextShowBanner';
-import FanStoryForm       from './components/FanStoryForm';
 import LiveSessionBanner, { type PublicLiveSession }  from './components/LiveSessionBanner';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://malachiasmusic.com'
@@ -77,22 +75,15 @@ export default async function Home() {
   const shows = content.shows
     .filter(s => s.visible !== false && (!s.date || s.date >= today))
     .sort((a, b) => a.date.localeCompare(b.date));
-  const songStories = (content.songStories ?? [])
-    .filter(s => s.visible !== false)
-    .sort((a, b) => a.order - b.order);
-  const reflections = (content.dailyReflections ?? [])
-    .slice()
-    .sort((a, b) => b.date.localeCompare(a.date));
+  // The deep-dive sections live on /stories; the teaser only needs to know
+  // which of them have something to show.
+  const hasSongStories = (content.songStories ?? []).some(s => s.visible !== false);
+  const hasReflections = (content.dailyReflections ?? []).length > 0;
+  const hasSetlist = songs.some(s => s.status === 'ready');
   const fanStories = (content.fanStories ?? [])
     .filter(s => s.status === 'approved')
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
   const mediaItems = content.mediaItems.filter(m => m.visible !== false);
-
-  // Only what the public section needs — never lyrics, chords, or notes.
-  const publicSongs: PublicSong[] = songs
-    .filter(s => s.status === 'ready')
-    .sort((a, b) => a.order - b.order)
-    .map(({ id, title, type, originalArtist }) => ({ id, title, type, originalArtist }));
 
   const publicSessions: PublicLiveSession[] = liveSessions
     .filter(s => s.status === 'live' || s.status === 'planned')
@@ -129,7 +120,7 @@ export default async function Home() {
       <LiveSessionBanner sessions={publicSessions} />
       <Navbar />
 
-      {/* ── 1. HOOK — visceral first impression + the newest release ── */}
+      {/* ── 1. HOOK — the band on stage + the newest release ──────── */}
       <Hero release={featured} />
       <SectionDivider accent="gold" />
 
@@ -145,39 +136,29 @@ export default async function Home() {
       {/* ── 4. THE SOUND — featured single, discography, videos ────── */}
       <Music releases={releases} mediaItems={mediaItems} />
 
-      {/* ── 5. PROOF — real, approved fan stories (hidden until some exist) */}
-      <Testimonies stories={fanStories} />
-
-      {/* ── 6. THE PEOPLE — humanize the band ────────────────────── */}
+      {/* ── 5. THE PEOPLE — humanize the band ────────────────────── */}
       <Band />
       <BandTogether />
 
-      {/* ── 6b. LEARN FROM HIM — voice lessons ───────────────────── */}
-      <LessonsTeaser />
-
-      {/* ── 7. DEEP DIVE — story chapters for the invested visitor ─── */}
-      <SongStories stories={songStories} />
-
-      {/* ── 8. LIVE — see them in person ─────────────────────────── */}
+      {/* ── 6. LIVE — see them in person ─────────────────────────── */}
       <Shows shows={shows} />
 
-      {/* ── 9. THE SONGS — what they actually play ───────────────── */}
-      <Setlist songs={publicSongs} />
+      {/* ── 7. PROOF — real, approved fan stories (hidden until some exist) */}
+      <Testimonies stories={fanStories} />
 
-      {/* ── 10. SPIRIT — a word for the devoted reader ───────────── */}
-      <WarRoom reflections={reflections} />
+      {/* ── 8. DEEP DIVE — doorway to /stories ───────────────────── */}
+      <StoriesTeaser hasSongStories={hasSongStories} hasSetlist={hasSetlist} hasReflections={hasReflections} />
 
-      {/* ── 11. CONTENT + COMMERCE ───────────────────────────────── */}
-      <Journal />
+      {/* ── 9. COMMERCE ──────────────────────────────────────────── */}
       <Merch fourthwallProducts={fwProducts.map(fwCardProduct)} />
 
-      {/* ── 12. CREDIBILITY + CONVERSION ─────────────────────────── */}
+      {/* ── 10. CREDIBILITY + CONVERSION ─────────────────────────── */}
       <SectionDivider accent="crimson" />
       <PressFeature background="#040404" />
       <Press />
+      <LessonsTeaser />
       <SectionDivider accent="gold" label="BROTHERHOOD" />
       <Booking />
-      <FanStoryForm />
       <Newsletter />
       <Footer />
       <BookingPopup />

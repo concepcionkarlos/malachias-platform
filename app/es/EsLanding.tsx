@@ -148,7 +148,7 @@ export default function EsLanding({ config, math, featured }: Props) {
                 </div>
               )}
               <p className="mt-5 text-[0.9rem] leading-relaxed" style={{ color: 'var(--text-2)' }}>
-                Toda la música, las historias detrás de cada canción y el setlist están en el sitio en inglés: <Link href="/#music" style={{ color: '#c9a84c', textDecoration: 'underline', textUnderlineOffset: 3 }}>The Sound</Link> · <Link href="/#stories" style={{ color: '#c9a84c', textDecoration: 'underline', textUnderlineOffset: 3 }}>Behind the Song</Link>.
+                Toda la música, las historias detrás de cada canción y el setlist están en el sitio en inglés: <Link href="/#music" style={{ color: '#c9a84c', textDecoration: 'underline', textUnderlineOffset: 3 }}>The Sound</Link> · <Link href="/stories#stories" style={{ color: '#c9a84c', textDecoration: 'underline', textUnderlineOffset: 3 }}>Behind the Song</Link>.
               </p>
             </div>
           </div>

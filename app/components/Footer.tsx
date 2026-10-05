@@ -14,7 +14,8 @@ interface FooterLink { label: string; href: string; gold?: boolean }
 const NAV_LINKS: FooterLink[] = [
   { label: 'The Story',    href: '/#about'      },
   { label: 'The Sound',    href: '/#music'      },
-  { label: 'The Field',    href: '/#journal'    },
+  { label: 'Stories',      href: '/stories'     },
+  { label: 'Field Notes',  href: '/stories#journal' },
   { label: 'The Store',    href: '/merch'       },
   { label: 'The Mission',  href: '/#mission'    },
   { label: 'Voice Lessons', href: '/voice-lessons' },

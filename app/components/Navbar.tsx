@@ -10,20 +10,22 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 
 
-interface NavItem { label: string; href: string; gold?: boolean }
+interface NavItem { label: string; href: string; gold?: boolean; drawerOnly?: boolean }
 
 // Section anchors are written as "/#id" (not "#id") so they work from ANY page,
 // not just the homepage — on /merch, /support, etc. a bare "#about" points at a
 // section that doesn't exist on that page and the tap goes nowhere.
+// The desktop bar stays short; drawerOnly items show in the mobile drawer (and
+// the footer) — Support also has its own CTA button on desktop.
 const NAV: NavItem[] = [
   { label: 'The Story',   href: '/#about'   },
   { label: 'The Band',    href: '/#band'    },
   { label: 'The Sound',   href: '/#music'   },
-  { label: 'The Field',   href: '/#journal' },
-  { label: 'The Store',   href: '/merch'    },
-  { label: 'The Mission', href: '/#mission' },
-  { label: 'Lessons',     href: '/voice-lessons' },
-  { label: 'Support',     href: '/support' },
+  { label: 'Stories',     href: '/stories'  },
+  { label: 'Store',       href: '/merch'    },
+  { label: 'The Mission', href: '/#mission', drawerOnly: true },
+  { label: 'Lessons',     href: '/voice-lessons', drawerOnly: true },
+  { label: 'Support',     href: '/support', drawerOnly: true },
   { label: 'San Antonio', href: '/road-to-san-antonio', gold: true },
   { label: 'ES',          href: '/es' },
 ];
@@ -111,7 +113,7 @@ export default function Navbar() {
 
         {/* CENTER — Navigation links (desktop only) */}
         <div className="hidden lg:flex items-center justify-center gap-8">
-          {NAV.map(link => (
+          {NAV.filter(link => !link.drawerOnly).map(link => (
             <Link
               key={link.href}
               href={link.href}
