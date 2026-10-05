@@ -5,6 +5,7 @@
 // drawer on mobile. Anchors use "/#id" so they resolve from any page.
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 
@@ -101,17 +102,17 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-6 lg:px-10 h-[62px] grid grid-cols-[auto_1fr_auto] items-center gap-4">
 
         {/* LEFT — Wordmark only */}
-        <a href="/#hero" className="group shrink-0" aria-label="Malachias home">
+        <Link href="/#hero" className="group shrink-0" aria-label="Malachias home">
           <span className="font-display text-[1.12rem] tracking-[0.26em] transition-colors duration-300 group-hover:text-[#c9a84c]"
             style={{ color: '#e8ddd0' }}>
             MALACHIAS
           </span>
-        </a>
+        </Link>
 
         {/* CENTER — Navigation links (desktop only) */}
         <div className="hidden lg:flex items-center justify-center gap-8">
           {NAV.map(link => (
-            <a
+            <Link
               key={link.href}
               href={link.href}
               className="relative text-[0.65rem] font-semibold tracking-[0.22em] uppercase hover:text-white transition-colors duration-300 group py-1"
@@ -119,7 +120,7 @@ export default function Navbar() {
             >
               {link.label}
               <span className="absolute bottom-0 left-0 h-px w-0 group-hover:w-full transition-all duration-300 bg-[#c9a84c]" />
-            </a>
+            </Link>
           ))}
         </div>
 
@@ -138,7 +139,7 @@ export default function Navbar() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={s.label}
-                className="w-7 h-7 flex items-center justify-center text-[#4a4030] hover:text-[#c9a84c] transition-colors duration-300"
+                className="w-7 h-7 flex items-center justify-center text-[#8a7a5e] hover:text-[#c9a84c] transition-colors duration-300"
               >
                 {s.svg}
               </a>
@@ -146,21 +147,21 @@ export default function Navbar() {
           </div>
 
           {/* Support CTA — desktop */}
-          <a
+          <Link
             href="/support"
-            className="hidden lg:inline-flex items-center gap-1.5 !py-2 !px-4 !text-[0.60rem] !tracking-[0.18em] uppercase font-bold transition-opacity duration-200 hover:opacity-85"
-            style={{ background: '#c9a84c', color: '#030201', fontSize: '0.60rem', letterSpacing: '0.18em', textDecoration: 'none', fontFamily: 'var(--font-body)' }}
+            className="hidden lg:inline-flex items-center gap-1.5 !py-2 !px-4 !text-[0.66rem] !tracking-[0.18em] uppercase font-bold transition-opacity duration-200 hover:opacity-85"
+            style={{ background: '#c9a84c', color: '#030201', fontSize: '0.66rem', letterSpacing: '0.18em', textDecoration: 'none', fontFamily: 'var(--font-body)' }}
           >
             ♥ Support
-          </a>
+          </Link>
 
           {/* Book Us CTA — desktop */}
-          <a
+          <Link
             href="/#booking"
-            className="hidden lg:inline-flex btn btn-ghost !py-2 !px-4 !text-[0.60rem] !tracking-[0.18em]"
+            className="hidden lg:inline-flex btn btn-ghost !py-2 !px-4 !text-[0.66rem] !tracking-[0.18em]"
           >
             Book Us
-          </a>
+          </Link>
 
           {/* Mobile hamburger */}
           <button
@@ -208,7 +209,7 @@ export default function Navbar() {
               ))}
 
               {/* Social row in drawer */}
-              <div className="flex gap-3 pt-2 border-t border-white/[0.05] sm:hidden">
+              <div className="flex gap-1 pt-2 -ml-[15px] border-t border-white/[0.05] sm:hidden">
                 {SOCIAL_ICONS.map(s => (
                   <a
                     key={s.label}
@@ -216,20 +217,20 @@ export default function Navbar() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={s.label}
-                    className="text-[#4a4030] hover:text-[#c9a84c] transition-colors"
+                    className="w-11 h-11 flex items-center justify-center text-[#8a7a5e] hover:text-[#c9a84c] transition-colors"
                   >
                     {s.svg}
                   </a>
                 ))}
               </div>
 
-              <a
+              <Link
                 href="/#booking"
                 onClick={() => setOpen(false)}
                 className="btn btn-primary justify-center mt-1"
               >
                 Book Us
-              </a>
+              </Link>
             </div>
           </motion.div>
         )}

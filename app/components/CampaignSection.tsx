@@ -61,7 +61,7 @@ export default function CampaignSection({ config, math }: Props) {
             <span>{math.percent >= 15 ? `${math.percent}% funded` : 'Every dollar moves us'}</span>
             {math.daysToEvent > 0 && <span>{math.daysToEvent} days to go</span>}
           </div>
-          <Link href={config.path} className="mt-5 inline-block" style={{ fontSize: '0.68rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#c9a84c' }}>
+          <Link href={config.path} className="tap-link mt-5" style={{ fontSize: '0.68rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#c9a84c' }}>
             The full story →
           </Link>
         </motion.div>

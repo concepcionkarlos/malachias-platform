@@ -210,7 +210,7 @@ export default function WarRoom({ reflections }: { reflections: DailyReflection[
             <a
               href="#newsletter"
               className="btn btn-ghost"
-              style={{ fontSize: '0.60rem', letterSpacing: '0.20em', padding: '0.65rem 1.6rem' }}
+              style={{ fontSize: '0.66rem', letterSpacing: '0.20em', padding: '0.65rem 1.6rem' }}
             >
               Subscribe · Get the next one first
             </a>

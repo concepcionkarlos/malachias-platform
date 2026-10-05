@@ -35,14 +35,29 @@ export default function EsLanding({ config, math, featured }: Props) {
   const live = math.effectiveStatus === 'active' || math.effectiveStatus === 'funded'
   return (
     <main lang="es" style={{ background: '#030201', minHeight: '100vh', color: '#e8ddd0' }}>
-      <Navbar />
+      {/* Nav and footer are in English — mark them so screen readers switch voice */}
+      <div lang="en">
+        <Navbar />
+      </div>
 
       {/* ── Qué es Malachias ── */}
       <section className="relative overflow-hidden" style={{ paddingTop: 'clamp(7rem, 14vw, 10rem)', paddingBottom: 'clamp(3rem, 6vw, 5rem)' }}>
         <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 60% 50% at 75% 30%, rgba(120,60,10,0.18) 0%, transparent 70%)', pointerEvents: 'none' }} />
         <div className="max-w-6xl mx-auto px-6 grid lg:grid-cols-[3fr_2fr] gap-10 items-center relative">
           <div>
-            <motion.p {...fade()} className="label-xs" style={{ color: '#c9a84c', letterSpacing: '0.40em' }}>Rock cristiano · Coral Springs, Florida</motion.p>
+            <div className="flex items-center justify-between gap-4 flex-wrap">
+              <motion.p {...fade()} className="label-xs" style={{ color: '#c9a84c', letterSpacing: '0.40em' }}>Rock cristiano · Coral Springs, Florida</motion.p>
+              <Link
+                href="/"
+                lang="en"
+                hrefLang="en"
+                aria-label="English version of the site"
+                className="inline-flex items-center justify-center"
+                style={{ minWidth: 44, minHeight: 44, padding: '0 0.75rem', border: '1px solid rgba(201,168,76,0.45)', fontSize: '0.72rem', letterSpacing: '0.22em', color: '#c9a84c', textDecoration: 'none', fontWeight: 600 }}
+              >
+                EN
+              </Link>
+            </div>
             <motion.h1 {...fade(0.05)} className="font-display mt-4 text-white" style={{ fontSize: 'clamp(2.9rem, 8vw, 5.6rem)', lineHeight: 0.9, letterSpacing: '0.04em' }}>
               TOCAMOS PARA<br /><span style={{ color: '#c9a84c' }}>LOS QUE MÁS</span><br />LO NECESITAN.
             </motion.h1>
@@ -91,7 +106,7 @@ export default function EsLanding({ config, math, featured }: Props) {
               <div className="mt-3 flex justify-between" style={{ fontSize: '0.66rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--text-2)' }}>
                 <span>{math.percent}% recaudado</span>{math.daysToEvent > 0 && <span>faltan {math.daysToEvent} días</span>}
               </div>
-              <Link href={config.path} className="mt-5 inline-block" style={{ fontSize: '0.68rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#c9a84c' }}>La campaña completa (EN) →</Link>
+              <Link href={config.path} className="tap-link mt-5" style={{ fontSize: '0.68rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#c9a84c' }}>La campaña completa (EN) →</Link>
             </motion.div>
           </div>
         </section>
@@ -173,7 +188,9 @@ export default function EsLanding({ config, math, featured }: Props) {
         </div>
       </section>
 
-      <Footer />
+      <div lang="en">
+        <Footer />
+      </div>
     </main>
   )
 }

@@ -54,11 +54,11 @@ export default function Journal() {
               onMouseLeave={ev => ((ev.currentTarget as HTMLElement).style.background = '#080808')}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <span style={{ fontSize: '0.60rem', letterSpacing: '0.22em', color: TAG_COLORS[e.tag], textTransform: 'uppercase' }}>
+                <span style={{ fontSize: '0.66rem', letterSpacing: '0.22em', color: TAG_COLORS[e.tag], textTransform: 'uppercase' }}>
                   {e.tag}
                 </span>
-                <span style={{ fontSize: '0.60rem', color: 'var(--text-3)' }}>·</span>
-                <span style={{ fontSize: '0.60rem', letterSpacing: '0.10em', color: 'var(--text-3)' }}>
+                <span aria-hidden="true" style={{ fontSize: '0.66rem', color: 'var(--text-3)' }}>·</span>
+                <span style={{ fontSize: '0.66rem', letterSpacing: '0.10em', color: 'var(--text-3)' }}>
                   {e.kicker}
                 </span>
               </div>
@@ -73,11 +73,12 @@ export default function Journal() {
 
               <Link
                 href={`/journal/${e.slug}`}
+                className="tap-link"
                 style={{
-                  fontSize: '0.60rem',
+                  fontSize: '0.66rem',
                   letterSpacing: '0.20em',
                   textTransform: 'uppercase',
-                  color: 'rgba(201,168,76,0.70)',
+                  color: 'rgba(201,168,76,0.80)',
                   textDecoration: 'none',
                   alignSelf: 'flex-start',
                   borderBottom: '1px solid rgba(201,168,76,0.25)',

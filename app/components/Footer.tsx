@@ -4,6 +4,7 @@
 // emails (booking/press/general), a Support CTA, scripture line, and bottom copyright
 // strip. Includes animated smoke blobs and a faint cross watermark.
 
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 
 
@@ -113,12 +114,12 @@ export default function Footer() {
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
           >
-            <a href="/#hero" className="group mb-5 inline-block">
+            <Link href="/#hero" className="group mb-5 inline-block">
               <span className="font-display text-xl tracking-[0.22em] transition-colors duration-300 group-hover:text-[#c9a84c]"
                 style={{ color: '#e8ddd0' }}>
                 MALACHIAS
               </span>
-            </a>
+            </Link>
 
             <p className="label-xs mb-3" style={{ color: 'var(--text-3)' }}>
               Christian Rock · Veteran Spirit · Faith on Fire
@@ -148,7 +149,7 @@ export default function Footer() {
             </div>
 
             {/* Support CTA */}
-            <a
+            <Link
               href="/support"
               className="inline-flex items-center gap-2 transition-opacity duration-200 hover:opacity-85 mb-5"
               style={{
@@ -158,7 +159,7 @@ export default function Footer() {
                 padding: '0.5rem 1.1rem',
                 background: 'rgba(201,168,76,0.10)',
                 border: '1px solid rgba(201,168,76,0.25)',
-                fontSize: '0.58rem',
+                fontSize: '0.66rem',
                 letterSpacing: '0.20em',
                 textTransform: 'uppercase',
                 color: '#c9a84c',
@@ -168,7 +169,7 @@ export default function Footer() {
               }}
             >
               ♥ Support the Band
-            </a>
+            </Link>
 
             {/* Scripture */}
             <p className="text-[0.65rem] tracking-[0.12em] italic leading-relaxed" style={{ color: 'var(--text-2)' }}>
@@ -187,7 +188,7 @@ export default function Footer() {
             <ul className="space-y-3">
               {NAV_LINKS.map(l => (
                 <li key={l.href}>
-                  <a
+                  <Link
                     href={l.href}
                     className="text-[0.82rem] flex items-center gap-2 group transition-colors duration-300"
                     style={{ color: l.gold ? '#c9a84c' : 'var(--text-3)', fontWeight: l.gold ? 700 : undefined }}
@@ -196,7 +197,7 @@ export default function Footer() {
                   >
                     <span className="w-3 h-px bg-[#c9a84c]/0 group-hover:bg-[#c9a84c]/50 transition-all duration-300" />
                     {l.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -264,7 +265,7 @@ export default function Footer() {
             className="text-[0.66rem] tracking-wider transition-colors duration-300"
             style={{ color: 'var(--text-2)' }}
             onMouseEnter={e => (e.currentTarget.style.color = 'rgba(201,168,76,0.55)')}
-            onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-ghost)')}
+            onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-2)')}
           >
             hello@malachiasmusic.com
           </a>

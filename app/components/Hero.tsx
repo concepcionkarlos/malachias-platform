@@ -7,6 +7,7 @@
 import { useRef, useEffect, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
+import Link from 'next/link';
 import Embers from './Embers';
 import type { Release } from '@/lib/releases';
 
@@ -206,8 +207,8 @@ export default function Hero({ release }: { release?: Release }) {
           >
             {!mobile && <div style={{ width: '1.8rem', height: 1, background: 'linear-gradient(to right, transparent, rgba(201,168,76,0.45))' }} />}
             <span style={{
-              fontSize: '0.50rem', letterSpacing: mobile ? '0.26em' : '0.42em', whiteSpace: mobile ? 'nowrap' : 'normal',
-              color: 'rgba(201,168,76,0.42)', textTransform: 'uppercase',
+              fontSize: '0.7rem', letterSpacing: mobile ? '0.16em' : '0.32em', whiteSpace: mobile ? 'nowrap' : 'normal',
+              color: 'rgba(201,168,76,0.80)', textTransform: 'uppercase',
               fontFamily: 'var(--font-body)', lineHeight: 1.8,
             }}>
               {mobile ? 'Christian Rock · Coral Springs, FL' : 'Christian Rock · Coral Springs, FL · Faith on Fire'}
@@ -215,8 +216,8 @@ export default function Hero({ release }: { release?: Release }) {
             {!mobile && <div style={{ width: '1.8rem', height: 1, background: 'linear-gradient(to left, transparent, rgba(201,168,76,0.45))' }} />}
           </motion.div>
 
-          {/* Emotional statement */}
-          <div
+          {/* Emotional statement — the page's one h1 */}
+          <h1
             className="font-display leading-[0.90] tracking-[0.04em]"
             style={{ textShadow: '0 8px 60px rgba(0,0,0,0.99)' }}
           >
@@ -244,7 +245,7 @@ export default function Hero({ release }: { release?: Release }) {
             >
               WHO NEED IT MOST.
             </motion.span>
-          </div>
+          </h1>
 
           {/* Gold divider */}
           <motion.div
@@ -295,7 +296,7 @@ export default function Hero({ release }: { release?: Release }) {
                 )}
               </span>
               <span style={{ minWidth: 0 }}>
-                <span style={{ display: 'block', fontSize: '0.6rem', letterSpacing: '0.30em', textTransform: 'uppercase', color: '#c9a84c', fontWeight: 700, fontFamily: 'var(--font-body)' }}>
+                <span style={{ display: 'block', fontSize: '0.66rem', letterSpacing: '0.26em', textTransform: 'uppercase', color: '#c9a84c', fontWeight: 700, fontFamily: 'var(--font-body)' }}>
                   {release.type === 'album' ? 'New album' : 'New single'} · Out now
                 </span>
                 <span className="font-display" style={{ display: 'block', fontSize: '1.15rem', letterSpacing: '0.05em', color: '#ede5d8', lineHeight: 1.1, marginTop: 2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
@@ -317,7 +318,7 @@ export default function Hero({ release }: { release?: Release }) {
           >
             <motion.a
               href="#latest"
-              className="btn btn-primary"
+              className="btn btn-primary btn-solid"
               animate={{
                 boxShadow: [
                   '0 2px 24px rgba(0,0,0,0.60)',
@@ -333,13 +334,13 @@ export default function Hero({ release }: { release?: Release }) {
             <a href="#booking" className="btn btn-ghost" style={{ letterSpacing: '0.14em' }}>
               Book Us
             </a>
-            <a
+            <Link
               href="/epk"
-              className="btn btn-ghost"
-              style={{ opacity: 0.85, fontSize: '0.62rem', letterSpacing: '0.22em', padding: '0.55rem 1rem' }}
+              className="hero-text-link"
+              style={{ fontSize: '0.72rem', letterSpacing: '0.22em', textTransform: 'uppercase', fontFamily: 'var(--font-body)' }}
             >
               Press Kit
-            </a>
+            </Link>
           </motion.div>
 
           {/* Scripture anchor */}
@@ -348,10 +349,10 @@ export default function Hero({ release }: { release?: Release }) {
             animate={{ opacity: 1 }}
             transition={{ duration: 2.0, delay: 2.1 }}
             style={{
-              fontSize: '0.52rem',
-              letterSpacing: '0.46em',
+              fontSize: '0.66rem',
+              letterSpacing: '0.40em',
               textTransform: 'uppercase',
-              color: 'rgba(140,110,60,0.32)',
+              color: 'rgba(201,168,76,0.72)',
             }}
           >
             ✠ &nbsp; Malachi 3:1 &nbsp; ✠

@@ -43,8 +43,8 @@ export default function FanStoryForm() {
       <div style={{ maxWidth: '640px', margin: '0 auto' }}>
         {/* Label */}
         <p style={{
-          fontSize: '0.60rem',
-          letterSpacing: '0.40em',
+          fontSize: '0.68rem',
+          letterSpacing: '0.32em',
           textTransform: 'uppercase',
           color: 'var(--gold, #c9a84c)',
           marginBottom: '0.75rem',
@@ -66,7 +66,7 @@ export default function FanStoryForm() {
         </h2>
 
         {submitted ? (
-          <div style={{
+          <div role="status" aria-live="polite" style={{
             background: 'rgba(201,168,76,0.06)',
             border: '1px solid rgba(201,168,76,0.22)',
             padding: '2rem 1.75rem',
@@ -76,14 +76,18 @@ export default function FanStoryForm() {
             <p style={{ fontSize: '1rem', lineHeight: 1.7, marginBottom: '0.5rem' }}>
               Your story is in. Thank you for sharing it.
             </p>
-            <p style={{ fontSize: '0.80rem', color: 'rgba(232,221,208,0.55)', lineHeight: 1.6 }}>
+            <p style={{ fontSize: '0.80rem', color: 'rgba(232,221,208,0.68)', lineHeight: 1.6 }}>
               We read every submission. If you included your email, we may reach out.
             </p>
           </div>
         ) : (
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
             {/* Story textarea — required */}
+            <label htmlFor="fanstory-story" className="sr-only">Your story (required)</label>
             <textarea
+              id="fanstory-story"
+              aria-invalid={!!error || undefined}
+              aria-describedby={error ? 'fanstory-error' : undefined}
               value={story}
               onChange={e => setStory(e.target.value)}
               rows={5}
@@ -105,7 +109,9 @@ export default function FanStoryForm() {
             />
 
             {/* Song title — optional */}
+            <label htmlFor="fanstory-song" className="sr-only">Which song meant the most? (optional)</label>
             <input
+              id="fanstory-song"
               type="text"
               value={songTitle}
               onChange={e => setSongTitle(e.target.value)}
@@ -124,7 +130,9 @@ export default function FanStoryForm() {
             />
 
             {/* Name — optional */}
+            <label htmlFor="fanstory-name" className="sr-only">Your name (optional, leave blank to be anonymous)</label>
             <input
+              id="fanstory-name"
               type="text"
               value={name}
               onChange={e => setName(e.target.value)}
@@ -143,7 +151,9 @@ export default function FanStoryForm() {
             />
 
             {/* Email — optional */}
+            <label htmlFor="fanstory-email" className="sr-only">Email (optional, not published)</label>
             <input
+              id="fanstory-email"
               type="email"
               value={email}
               onChange={e => setEmail(e.target.value)}
@@ -183,16 +193,14 @@ export default function FanStoryForm() {
                 {loading ? 'Sending…' : 'Share Your Story →'}
               </button>
 
-              {error && (
-                <p style={{
-                  marginTop: '0.75rem',
-                  fontSize: '0.80rem',
-                  color: '#e05252',
-                  fontFamily: 'var(--font-body, Inter, sans-serif)',
-                }}>
-                  {error}
-                </p>
-              )}
+              <p id="fanstory-error" role="alert" style={{
+                marginTop: error ? '0.75rem' : 0,
+                fontSize: '0.80rem',
+                color: '#e0603a',
+                fontFamily: 'var(--font-body, Inter, sans-serif)',
+              }}>
+                {error}
+              </p>
             </div>
           </form>
         )}

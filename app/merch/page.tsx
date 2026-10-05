@@ -1,7 +1,7 @@
 // Page — /merch: store landing. Server-fetches the Fourthwall product catalog
 // (revalidated every 5 min) and hands it to the MerchPageClient for display.
 import type { Metadata } from 'next';
-import { fetchFWProducts } from '@/lib/fourthwall';
+import { fetchFWProducts, fwCardProduct } from '@/lib/fourthwall';
 import { getCampaign, getCampaignProducts } from '@/lib/campaignServer';
 import { campaignMath } from '@/lib/campaign';
 import MerchPageClient from './MerchPageClient';
@@ -25,7 +25,7 @@ export default async function MerchPage() {
   const stats = campaignMath(campaign.config);
   const live = stats.effectiveStatus === 'active' || stats.effectiveStatus === 'funded';
   const strip = live
-    ? { name: campaign.config.title, eyebrow: campaign.config.eyebrow, path: campaign.config.path, products: await getCampaignProducts(campaign.config) }
+    ? { name: campaign.config.title, eyebrow: campaign.config.eyebrow, path: campaign.config.path, products: (await getCampaignProducts(campaign.config)).map(fwCardProduct) }
     : undefined;
-  return <MerchPageClient products={products} campaign={strip} />;
+  return <MerchPageClient products={products.map(fwCardProduct)} campaign={strip} />;
 }

@@ -35,7 +35,7 @@
 
   --text-1:        #e8ddd0;
   --text-2:        #a89880;
-  --text-3:        #7a6e5e;
+  --text-3:        #827666; /* 4.6:1 on the page black */
   --text-ghost:    #524437;
 }
 
@@ -362,16 +362,42 @@ input:-webkit-autofill, input:-webkit-autofill:focus {
 
 .btn-ghost {
   background: transparent;
-  border: 1px solid rgba(255,255,255,0.08);
+  border: 1px solid rgba(201,168,76,0.45);
   color: var(--text-2);
   box-shadow: 0 2px 16px rgba(0,0,0,0.4);
 }
 .btn-ghost:hover {
-  border-color: rgba(255,255,255,0.22);
+  border-color: rgba(201,168,76,0.75);
   color: var(--text-1);
   background: rgba(255,255,255,0.03);
   box-shadow: 0 4px 20px rgba(0,0,0,0.5);
 }
+
+/* Solid gold — the one primary action in a group */
+.btn-solid {
+  background: linear-gradient(135deg, #c9a84c 0%, #b8902e 100%);
+  border-color: var(--gold);
+  border-top-color: #e8c55a;
+  color: #000;
+}
+.btn-solid:hover {
+  background: linear-gradient(135deg, #d6b65a 0%, #c49a36 100%);
+  color: #000;
+}
+
+/* Tertiary — plain text link with a 44px hit area */
+.hero-text-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 0.5rem;
+  color: var(--text-2);
+  text-decoration: underline;
+  text-decoration-color: rgba(201,168,76,0.45);
+  text-underline-offset: 0.35em;
+  transition: color 0.3s ease, text-decoration-color 0.3s ease;
+}
+.hero-text-link:hover { color: var(--gold); text-decoration-color: var(--gold); }
 
 /* ─────────────────────────────────────────────
    FORM INPUTS
@@ -392,7 +418,9 @@ input:-webkit-autofill, input:-webkit-autofill:focus {
   background: rgba(255,255,255,0.04);
   border-bottom-color: rgba(201,168,76,0.60);
 }
-.field::placeholder { color: var(--text-3); }
+input::placeholder, textarea::placeholder { color: #8a7f70; }
+.field::placeholder { color: #8a7f70; } /* 5.3:1 on the near-black page */
+.field[aria-invalid="true"] { border-bottom-color: #e0603a; }
 select.field { background: #0d0d0d; }
 
 /* ─────────────────────────────────────────────
@@ -421,11 +449,29 @@ select.field { background: #0d0d0d; }
 /* Small label — tactical caps */
 .label-xs {
   font-family: var(--font-body);
-  font-size: 0.60rem;
+  font-size: 0.72rem;
   font-weight: 600;
-  letter-spacing: 0.40em;
+  letter-spacing: 0.28em;
   text-transform: uppercase;
   color: var(--gold);
+}
+
+/* Inline text CTA ("Details →") — invisible 44px-tall hit area, no layout shift */
+.tap-link { position: relative; display: inline-block; }
+.tap-link::after {
+  content: '';
+  position: absolute;
+  left: -0.5rem;
+  right: -0.5rem;
+  top: 50%;
+  height: 44px;
+  transform: translateY(-50%);
+}
+
+/* Booking modal body — tighter on small phones */
+.booking-popup-body { padding: 40px 44px 44px; }
+@media (max-width: 479px) {
+  .booking-popup-body { padding: 24px 20px 28px; }
 }
 
 /* Section header block — centered */

@@ -4,12 +4,15 @@
 // visitor gets to listen first. It opens once when the visitor has shown intent —
 // scrolled 60% of the page, or moved the cursor out the top of the window (exit
 // intent) — and never if they already reached the booking form on their own.
-// Suppressed for 7 days via localStorage. Escape / backdrop / clear close button.
+// Suppressed for 7 days via localStorage, and never if another popup already showed
+// this session. Escape / backdrop / clear close button; focus moves into the dialog
+// and returns to where it was on close.
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import { X } from 'lucide-react'
+import { markPopupShown, popupShownThisSession, storageGet, storageSet } from './popupGate'
 
 const LS_KEY        = 'malachias_popup_ts'
 const TTL_MS        = 7 * 24 * 60 * 60 * 1000
@@ -18,9 +21,12 @@ const MIN_DWELL_MS   = 15000  // never before 15 s on the page, whatever the scr
 
 export default function BookingPopup() {
   const [visible, setVisible] = useState(false)
+  const closeRef = useRef<HTMLButtonElement>(null)
+  const returnFocusRef = useRef<HTMLElement | null>(null)
 
   useEffect(() => {
-    const raw = localStorage.getItem(LS_KEY)
+    if (popupShownThisSession()) return
+    const raw = storageGet('local', LS_KEY)
     if (raw) {
       const seen = parseInt(raw, 10)
       if (!isNaN(seen) && Date.now() - seen < TTL_MS) return
@@ -32,6 +38,9 @@ export default function BookingPopup() {
       if (fired) return
       fired = true
       cleanup()
+      if (popupShownThisSession()) return
+      markPopupShown()
+      returnFocusRef.current = document.activeElement as HTMLElement | null
       setVisible(true)
     }
 
@@ -67,16 +76,17 @@ export default function BookingPopup() {
     document.body.style.overflow = 'hidden'
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') dismiss() }
     document.addEventListener('keydown', onKey)
+    closeRef.current?.focus()
     return () => {
       document.body.style.overflow = prev
       document.removeEventListener('keydown', onKey)
+      returnFocusRef.current?.focus?.({ preventScroll: true })
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visible])
 
   function dismiss() {
     setVisible(false)
-    localStorage.setItem(LS_KEY, String(Date.now()))
+    storageSet('local', LS_KEY, String(Date.now()))
   }
 
   function goBook() {
@@ -127,7 +137,7 @@ export default function BookingPopup() {
             }}
             role="dialog"
             aria-modal="true"
-            aria-label="Book Malachias"
+            aria-labelledby="booking-popup-title"
           >
             {/* Emblem watermark */}
             <div aria-hidden="true" style={{ position: 'absolute', inset: 0, zIndex: 0, overflow: 'hidden', pointerEvents: 'none' }}>
@@ -149,10 +159,11 @@ export default function BookingPopup() {
 
             <div style={{ position: 'relative', zIndex: 1, height: 3, background: 'linear-gradient(to right, #c9a84c 0%, rgba(201,168,76,0.40) 60%, transparent 100%)' }} />
 
-            <div style={{ position: 'relative', zIndex: 1, padding: '40px 44px 44px' }}>
+            <div className="booking-popup-body" style={{ position: 'relative', zIndex: 1 }}>
 
               {/* Close — clearly visible, 44px hit area */}
               <button
+                ref={closeRef}
                 onClick={dismiss}
                 aria-label="Close"
                 style={{
@@ -187,7 +198,9 @@ export default function BookingPopup() {
                 MALACHIAS — SOUTH FLORIDA
               </div>
 
-              <div style={{
+              <h2 id="booking-popup-title" style={{
+                margin: 0,
+                fontWeight: 'inherit',
                 fontFamily: 'var(--font-display)',
                 fontSize: 'clamp(2.8rem, 8vw, 4rem)',
                 lineHeight: 0.92,
@@ -198,7 +211,7 @@ export default function BookingPopup() {
                 <span style={{ display: 'block' }}>BRING US</span>
                 <span style={{ display: 'block', color: '#c9a84c' }}>TO YOUR</span>
                 <span style={{ display: 'block' }}>COMMUNITY.</span>
-              </div>
+              </h2>
 
               <div style={{ height: 1, background: 'linear-gradient(to right, rgba(201,168,76,0.45) 0%, rgba(201,168,76,0.08) 70%, transparent 100%)', marginBottom: 24 }} />
 
@@ -217,7 +230,7 @@ export default function BookingPopup() {
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 32 }}>
                 {['Bars & Clubs', 'Rock Festivals', 'Metal Events', 'Churches', 'VFW Halls', 'Private Events'].map(tag => (
                   <span key={tag} style={{
-                    fontSize: '0.62rem',
+                    fontSize: '0.66rem',
                     padding: '4px 12px',
                     border: '1px solid rgba(201,168,76,0.22)',
                     color: '#8a7f70',

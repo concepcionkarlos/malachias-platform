@@ -41,7 +41,7 @@ export default function PressFeature({ variant = 'band', background = '#050403',
           </span>
         )}
         <span style={{ minWidth: 0 }}>
-          <span className="block" style={{ fontSize: '0.6rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: '#c9a84c', fontWeight: 700 }}>{heading}</span>
+          <span className="block" style={{ fontSize: '0.66rem', letterSpacing: '0.26em', textTransform: 'uppercase', color: '#c9a84c', fontWeight: 700 }}>{heading}</span>
           <span className="font-display block" style={{ fontSize: '1.2rem', letterSpacing: '0.05em', color: '#ede5d8', lineHeight: 1.1 }}>{feature.outlet}</span>
           <span className="block" style={{ fontSize: '0.72rem', color: 'var(--text-2)' }}>{feature.title} · {feature.date}</span>
         </span>

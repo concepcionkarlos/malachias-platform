@@ -68,7 +68,7 @@ function ProductCard({ product, index }: { product: FWProduct; index: number }) 
                 display: 'inline-block', padding: '0.45rem 1rem',
                 background: available ? '#c9a84c' : 'rgba(201,168,76,0.15)',
                 color: available ? '#030202' : '#c9a84c',
-                fontSize: '0.55rem', letterSpacing: '0.16em', textTransform: 'uppercase',
+                fontSize: '0.65rem', letterSpacing: '0.14em', textTransform: 'uppercase',
                 fontWeight: 700, fontFamily: 'var(--font-body)', whiteSpace: 'nowrap',
               }}>
                 {available ? 'Buy Now' : 'Coming Soon'}
@@ -156,11 +156,11 @@ export default function Merch({ fourthwallProducts = [] }: MerchProps) {
             Store Live
           </span>
           <span style={{ fontSize: '0.60rem', color: 'var(--text-3)', letterSpacing: '0.12em' }}>·</span>
-          <span style={{ fontSize: '0.62rem', color: 'var(--text-3)', letterSpacing: '0.14em' }}>
+          <span style={{ fontSize: '0.68rem', color: 'var(--text-3)', letterSpacing: '0.14em' }}>
             {count} {count === 1 ? 'item' : 'items'} · Starting at {startingAt}
           </span>
           <span style={{ fontSize: '0.60rem', color: 'var(--text-3)', letterSpacing: '0.12em' }}>·</span>
-          <span style={{ fontSize: '0.62rem', color: 'var(--text-3)', letterSpacing: '0.14em' }}>
+          <span style={{ fontSize: '0.68rem', color: 'var(--text-3)', letterSpacing: '0.14em' }}>
             Fulfilled by Fourthwall
           </span>
         </motion.div>

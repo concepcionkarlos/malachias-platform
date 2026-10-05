@@ -2,6 +2,8 @@
 // interactive photo grid + lightbox to the GalleryClient component.
 import type { Metadata } from 'next';
 import GalleryClient from './GalleryClient';
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 
 export const metadata: Metadata = {
   title: 'Gallery — MALACHIAS',
@@ -11,12 +13,14 @@ export const metadata: Metadata = {
 export default function GalleryPage() {
   return (
     <main style={{ background: '#060606', minHeight: '100vh' }}>
+      <Navbar />
+
       {/* Header */}
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '7rem 1.5rem 3rem' }}>
         <p
           style={{
-            fontSize: '0.58rem',
-            letterSpacing: '0.40em',
+            fontSize: '0.68rem',
+            letterSpacing: '0.32em',
             textTransform: 'uppercase',
             color: '#c9a84c',
             marginBottom: '0.75rem',
@@ -48,6 +52,8 @@ export default function GalleryPage() {
         {/* Gallery grid + lightbox (client) */}
         <GalleryClient />
       </div>
+
+      <Footer />
     </main>
   );
 }

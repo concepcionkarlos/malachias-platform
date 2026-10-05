@@ -4,6 +4,7 @@
 // quick facts a booker checks first (set length, setup, stage, power, base), and CTAs
 // to the booking form and the full /epk page. Files are sent on request by email.
 
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 
 const fade = (delay = 0) => ({
@@ -96,9 +97,9 @@ export default function Press() {
               <a href="#booking" className="btn btn-primary">
                 Submit a Booking Request
               </a>
-              <a href="/epk" className="btn btn-ghost" target="_blank" rel="noopener noreferrer">
+              <Link href="/epk" className="btn btn-ghost" target="_blank" rel="noopener noreferrer">
                 View Full EPK
-              </a>
+              </Link>
             </motion.div>
           </div>
 

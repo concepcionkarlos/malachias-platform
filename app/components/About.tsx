@@ -68,7 +68,7 @@ export default function About({ aboutText }: { aboutText?: string[] }) {
 
           {/* Left — narrative */}
           <div className="space-y-5">
-            <motion.p {...fade(0.06)} className="tac-label" style={{ color: 'var(--gold-dim)', letterSpacing: '0.34em', fontSize: '0.58rem' }}>
+            <motion.p {...fade(0.06)} className="tac-label" style={{ color: 'rgba(201,168,76,0.75)', letterSpacing: '0.30em', fontSize: '0.68rem' }}>
               Malachi&nbsp;3:1
             </motion.p>
 
@@ -139,7 +139,7 @@ export default function About({ aboutText }: { aboutText?: string[] }) {
               <p className="text-[0.78rem] leading-relaxed mt-2" style={{ color: 'var(--text-3)' }}>
                 {BOOK.subtitle}. Written by the founder about the road home — music, a garden, and faith.
               </p>
-              <p className="text-[0.62rem] tracking-[0.20em] uppercase mt-3" style={{ color: 'rgba(201,168,76,0.70)' }}>
+              <p className="text-[0.68rem] tracking-[0.20em] uppercase mt-3" style={{ color: 'rgba(201,168,76,0.80)' }}>
                 Read it on Amazon →
               </p>
             </a>

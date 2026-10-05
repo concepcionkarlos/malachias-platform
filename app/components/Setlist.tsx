@@ -39,7 +39,7 @@ export default function Setlist({ songs }: { songs: PublicSong[] }) {
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginTop: '1rem', flexWrap: 'wrap' }}>
             <div style={{ width: '3rem', height: '1px', background: 'linear-gradient(to right, rgba(201,168,76,0.60), transparent)' }} />
             {(
-              <span style={{ fontSize: '0.75rem', color: '#5c5044', letterSpacing: '0.18em', textTransform: 'uppercase' }}>
+              <span style={{ fontSize: '0.75rem', color: '#8a7f70', letterSpacing: '0.18em', textTransform: 'uppercase' }}>
                 {songs.length} songs performance ready
               </span>
             )}
@@ -51,10 +51,10 @@ export default function Setlist({ songs }: { songs: PublicSong[] }) {
           {/* Originals */}
           <motion.div {...fade(0.08)}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
-              <span style={{ fontSize: '0.6rem', letterSpacing: '0.30em', textTransform: 'uppercase', color: '#c9a84c', padding: '3px 8px', border: '1px solid rgba(201,168,76,0.30)', borderRadius: 3 }}>
+              <span style={{ fontSize: '0.66rem', letterSpacing: '0.30em', textTransform: 'uppercase', color: '#c9a84c', padding: '3px 8px', border: '1px solid rgba(201,168,76,0.30)', borderRadius: 3 }}>
                 Originals
               </span>
-              <span style={{ fontSize: '0.7rem', color: '#3a2e26' }}>{originals.length} songs</span>
+              <span style={{ fontSize: '0.7rem', color: '#8a7f70' }}>{originals.length} songs</span>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', background: 'rgba(255,255,255,0.03)' }}>
               {songs === null
@@ -70,7 +70,7 @@ export default function Setlist({ songs }: { songs: PublicSong[] }) {
                         borderLeft: '2px solid rgba(201,168,76,0.15)',
                       }}
                     >
-                      <span style={{ fontSize: '0.65rem', color: '#2a2215', fontFamily: 'var(--font-display)', minWidth: 20 }}>
+                      <span aria-hidden="true" style={{ fontSize: '0.65rem', color: '#5c5044', fontFamily: 'var(--font-display)', minWidth: 20 }}>
                         {String(i + 1).padStart(2, '0')}
                       </span>
                       <span style={{ fontSize: '0.9rem', color: '#e8ddd0', letterSpacing: '0.02em', fontFamily: 'var(--font-body)' }}>
@@ -85,10 +85,10 @@ export default function Setlist({ songs }: { songs: PublicSong[] }) {
           {/* Covers */}
           <motion.div {...fade(0.14)}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
-              <span style={{ fontSize: '0.6rem', letterSpacing: '0.30em', textTransform: 'uppercase', color: '#8a7f70', padding: '3px 8px', border: '1px solid rgba(138,127,112,0.25)', borderRadius: 3 }}>
+              <span style={{ fontSize: '0.66rem', letterSpacing: '0.30em', textTransform: 'uppercase', color: '#8a7f70', padding: '3px 8px', border: '1px solid rgba(138,127,112,0.25)', borderRadius: 3 }}>
                 Covers
               </span>
-              <span style={{ fontSize: '0.7rem', color: '#3a2e26' }}>{covers.length} songs</span>
+              <span style={{ fontSize: '0.7rem', color: '#8a7f70' }}>{covers.length} songs</span>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', background: 'rgba(255,255,255,0.03)' }}>
               {songs === null
@@ -104,7 +104,7 @@ export default function Setlist({ songs }: { songs: PublicSong[] }) {
                         borderLeft: '2px solid rgba(255,255,255,0.05)',
                       }}
                     >
-                      <span style={{ fontSize: '0.65rem', color: '#2a2215', fontFamily: 'var(--font-display)', minWidth: 20 }}>
+                      <span aria-hidden="true" style={{ fontSize: '0.65rem', color: '#5c5044', fontFamily: 'var(--font-display)', minWidth: 20 }}>
                         {String(i + 1).padStart(2, '0')}
                       </span>
                       <div style={{ flex: 1, minWidth: 0 }}>
@@ -112,7 +112,7 @@ export default function Setlist({ songs }: { songs: PublicSong[] }) {
                           {song.title}
                         </div>
                         {song.originalArtist && (
-                          <div style={{ fontSize: '0.7rem', color: '#3a2e26', marginTop: 2 }}>
+                          <div style={{ fontSize: '0.7rem', color: '#8a7f70', marginTop: 2 }}>
                             {song.originalArtist}
                           </div>
                         )}
@@ -124,7 +124,7 @@ export default function Setlist({ songs }: { songs: PublicSong[] }) {
           </motion.div>
         </div>
 
-        <motion.p {...fade(0.22)} style={{ marginTop: '2rem', fontSize: '0.75rem', color: '#2a2215', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+        <motion.p {...fade(0.22)} style={{ marginTop: '2rem', fontSize: '0.75rem', color: '#8a7f70', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
           Set expanding — more originals in progress
         </motion.p>
       </div>

@@ -342,7 +342,7 @@ export default function Band() {
           }}
         >
           {/* Cross mark */}
-          <p style={{ fontSize: '0.72rem', color: 'rgba(140,110,60,0.30)', letterSpacing: '0.5em', marginBottom: '2rem' }}>
+          <p aria-hidden="true" style={{ fontSize: '0.72rem', color: 'rgba(140,110,60,0.30)', letterSpacing: '0.5em', marginBottom: '2rem' }}>
             ✠
           </p>
 
@@ -353,16 +353,16 @@ export default function Band() {
               fontSize: 'clamp(1.6rem, 4.5vw, 3rem)',
               lineHeight: 1.1,
               letterSpacing: '0.06em',
-              color: 'rgba(237,229,216,0.12)',
+              color: 'rgba(237,229,216,0.42)',
             }}
           >
             Five stories.
             <br />
-            <span style={{ color: 'rgba(201,168,76,0.30)' }}>One God.</span>
+            <span style={{ color: 'rgba(201,168,76,0.62)' }}>One God.</span>
             <br />
             One flag.
             <br />
-            <span style={{ color: 'rgba(192,64,32,0.28)' }}>One mission.</span>
+            <span style={{ color: '#c04020' }}>One mission.</span>
           </p>
 
           {/* Descriptor row */}
@@ -376,13 +376,13 @@ export default function Band() {
           }}>
             {['Fort Wayne', 'Havana', 'Puerto Rico', 'Sebring', 'Tampa', 'Iraq', 'South Florida'].map((place, i) => (
               <span key={place} style={{
-                fontSize: '0.52rem',
-                letterSpacing: '0.38em',
+                fontSize: '0.68rem',
+                letterSpacing: '0.30em',
                 textTransform: 'uppercase',
-                color: 'rgba(120,100,70,0.35)',
+                color: '#8a7a5e',
                 fontFamily: 'var(--font-body)',
               }}>
-                {place}{i < 5 ? <>&ensp;·&ensp;</> : null}
+                {place}{i < 6 ? <>&ensp;·&ensp;</> : null}
               </span>
             ))}
           </div>
@@ -390,10 +390,10 @@ export default function Band() {
           {/* Faith & flag line */}
           <p style={{
             marginTop: '1.5rem',
-            fontSize: '0.54rem',
-            letterSpacing: '0.34em',
+            fontSize: '0.68rem',
+            letterSpacing: '0.28em',
             textTransform: 'uppercase',
-            color: 'rgba(140,110,60,0.22)',
+            color: '#8a7a5e',
             fontFamily: 'var(--font-body)',
             fontStyle: 'italic',
           }}>

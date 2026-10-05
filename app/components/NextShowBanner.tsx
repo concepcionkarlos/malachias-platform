@@ -97,8 +97,8 @@ export default function NextShowBanner({ shows }: { shows: Show[] }) {
           {/* NEXT SHOW label */}
           <span
             style={{
-              fontSize: '0.52rem',
-              letterSpacing: '0.36em',
+              fontSize: '0.65rem',
+              letterSpacing: '0.28em',
               textTransform: 'uppercase',
               color: '#c9a84c',
               fontWeight: 600,
@@ -107,7 +107,7 @@ export default function NextShowBanner({ shows }: { shows: Show[] }) {
             Next Show
           </span>
 
-          <span style={{ color: 'rgba(201,168,76,0.40)', fontSize: '0.7rem' }}>·</span>
+          <span aria-hidden="true" style={{ color: 'rgba(201,168,76,0.40)', fontSize: '0.7rem' }}>·</span>
 
           {/* Date */}
           <span style={{ fontSize: '0.68rem', letterSpacing: '0.12em', color: '#e8ddd0' }}>
@@ -127,8 +127,9 @@ export default function NextShowBanner({ shows }: { shows: Show[] }) {
               href={show.ticketUrl}
               target="_blank"
               rel="noopener noreferrer"
+              className="tap-link"
               style={{
-                fontSize: '0.58rem',
+                fontSize: '0.66rem',
                 letterSpacing: '0.14em',
                 color: '#c9a84c',
                 textDecoration: 'none',

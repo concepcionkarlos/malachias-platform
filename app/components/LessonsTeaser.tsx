@@ -33,7 +33,7 @@ export default function LessonsTeaser() {
             From {usdLessons(LESSONS.price)} <span style={{ fontSize: '1rem', color: 'var(--text-2)', letterSpacing: '0.1em' }}>/ {LESSONS.lengthMinutes} min</span>
           </p>
           <Link href={`${LESSONS.path}#sign-up`} className="btn btn-primary" style={{ letterSpacing: '0.18em' }}>Sign up today</Link>
-          <Link href={LESSONS.path} style={{ fontSize: '0.68rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#c9a84c' }}>Details →</Link>
+          <Link href={LESSONS.path} className="tap-link" style={{ fontSize: '0.68rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#c9a84c' }}>Details →</Link>
         </motion.div>
       </div>
     </section>

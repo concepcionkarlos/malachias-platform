@@ -53,7 +53,7 @@ export default function SectionDivider({ accent = 'gold', label }: SectionDivide
         {/* Optional label */}
         {label && (
           <span
-            className="relative text-[0.55rem] tracking-[0.5em] uppercase"
+            className="relative text-[0.66rem] tracking-[0.4em] uppercase"
             style={{ color: a.hex, opacity: 0.7 }}
           >
             {label}

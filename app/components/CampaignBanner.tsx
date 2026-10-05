@@ -52,14 +52,14 @@ export default function CampaignBanner({ path, label, percent, daysToEvent }: Pr
           onClick={() => trackCampaign('campaign_banner_click')}
           style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', textDecoration: 'none', minWidth: 0 }}
         >
-          <span style={{ fontSize: '0.6rem', letterSpacing: '0.30em', textTransform: 'uppercase', color: '#c9a84c', fontWeight: 700, whiteSpace: 'nowrap' }}>{label}</span>
+          <span style={{ fontSize: '0.65rem', letterSpacing: '0.26em', textTransform: 'uppercase', color: '#c9a84c', fontWeight: 700, whiteSpace: 'nowrap' }}>{label}</span>
           <span aria-hidden="true" style={{ color: 'rgba(201,168,76,0.4)' }}>·</span>
           <span style={{ fontSize: '0.7rem', color: '#e8ddd0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
             Help us reach Veterans Day 2026{percent >= SHOW_PERCENT_FROM
               ? ` · ${percent}% funded`
               : daysToEvent > 0 ? ` · ${daysToEvent} days to go` : ''}
           </span>
-          <span style={{ fontSize: '0.6rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: '#c9a84c', borderBottom: '1px solid rgba(201,168,76,0.4)', whiteSpace: 'nowrap' }}>Support →</span>
+          <span style={{ fontSize: '0.65rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: '#c9a84c', borderBottom: '1px solid rgba(201,168,76,0.4)', whiteSpace: 'nowrap' }}>Support →</span>
         </Link>
         <button
           type="button"

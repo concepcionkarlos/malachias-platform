@@ -131,6 +131,22 @@ export function fwCategory(product: FWProduct): string {
   return 'Merch'
 }
 
+// Card-sized copy of a product for client props: same shape, but only what grid
+// cards read (first image, prices, stock state, plain-text description for
+// fwCategory). The raw objects carry every variant's SKU/images and add ~270KB.
+export function fwCardProduct(p: FWProduct): FWProduct {
+  const img = fwFirstImage(p)
+  return {
+    id: p.id, name: p.name, slug: p.slug, url: p.url, state: p.state,
+    description: p.description.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim(),
+    images: img ? [{ id: 'card', url: img }] : [],
+    variants: p.variants.map(v => ({
+      id: v.id, name: v.name, unitPrice: v.unitPrice, compareAtPrice: null,
+      attributes: { description: '' }, stock: { type: v.stock.type }, images: [],
+    })),
+  }
+}
+
 // Unique color options across all variants
 export function fwColors(product: FWProduct): FWVariantColor[] {
   const seen = new Set<string>()

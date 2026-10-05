@@ -87,6 +87,7 @@ export default function Booking() {
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [errorField, setErrorField] = useState<'fullName' | 'phone' | 'message' | 'captcha' | null>(null);
   const [moreOpen, setMoreOpen] = useState(false);
 
   // The challenge is issued and signed by the server — the browser no longer
@@ -119,20 +120,22 @@ export default function Booking() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError('');
+    setErrorField(null);
 
     // Client-side field validation
     const nErr = nameError(form.fullName)
-    if (nErr) { setError(nErr); return; }
+    if (nErr) { setError(nErr); setErrorField('fullName'); return; }
 
     const pErr = phoneError(form.phone)
-    if (pErr) { setError(pErr); return; }
+    if (pErr) { setError(pErr); setErrorField('phone'); return; }
 
     const mErr = messageError(form.message)
-    if (mErr) { setError(mErr); return; }
+    if (mErr) { setError(mErr); setErrorField('message'); return; }
 
     // Math captcha
     if (!captcha || captcha.answer.trim() === '' || parseInt(captcha.answer) !== captcha.a + captcha.b) {
       setError(`Please answer the verification question: ${captcha?.a ?? '?'} + ${captcha?.b ?? '?'} = ?`);
+      setErrorField('captcha');
       return;
     }
 
@@ -181,7 +184,7 @@ export default function Booking() {
                   transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
                   style={{ display: 'block', width: 7, height: 7, borderRadius: '50%', background: '#c9a84c', flexShrink: 0 }}
                 />
-                <span style={{ fontSize: '0.58rem', letterSpacing: '0.28em', color: 'rgba(201,168,76,0.65)', textTransform: 'uppercase', fontFamily: 'var(--font-body)' }}>
+                <span style={{ fontSize: '0.66rem', letterSpacing: '0.28em', color: 'rgba(201,168,76,0.8)', textTransform: 'uppercase', fontFamily: 'var(--font-body)' }}>
                   Available to book
                 </span>
               </motion.div>
@@ -213,7 +216,7 @@ export default function Booking() {
             <motion.div {...fade(0.10)} className="space-y-2 mb-8">
               {VENUES.map((v) => (
                 <div key={v} className="flex items-center gap-3">
-                  <span style={{ color: 'var(--gold)', fontSize: '0.55rem', opacity: 0.6 }}>▸</span>
+                  <span aria-hidden="true" style={{ color: 'var(--gold)', fontSize: '0.55rem', opacity: 0.6 }}>▸</span>
                   <span className="text-[0.80rem] tracking-wide" style={{ color: 'var(--text-3)' }}>{v}</span>
                 </div>
               ))}
@@ -238,7 +241,7 @@ export default function Booking() {
           {/* Right — form */}
           <motion.div {...fade(0.08)}>
             {sent ? (
-              <div className="tac-box py-14 px-8 text-center">
+              <div className="tac-box py-14 px-8 text-center" role="status" aria-live="polite">
                 <p className="font-display text-2xl tracking[0.16em] mb-3" style={{ color: 'var(--gold)' }}>
                   Message received.
                 </p>
@@ -261,16 +264,22 @@ export default function Booking() {
                 />
 
                 <div className="grid grid-cols-2 gap-4">
+                  <label htmlFor="booking-name" className="sr-only">Your name (required)</label>
                   <input
+                    id="booking-name"
                     className="field"
                     type="text"
                     placeholder="Your name *"
+                    aria-invalid={errorField === 'fullName' || undefined}
+                    aria-describedby={errorField === 'fullName' ? 'booking-error' : undefined}
                     required
                     autoComplete="name"
                     value={form.fullName}
                     onChange={set('fullName')}
                   />
+                  <label htmlFor="booking-email" className="sr-only">Your email (required)</label>
                   <input
+                    id="booking-email"
                     className="field"
                     type="email"
                     placeholder="Your email *"
@@ -281,14 +290,16 @@ export default function Booking() {
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
-                  <select className="field" aria-label="Event type" value={form.eventType} onChange={set('eventType')}>
+                  <label htmlFor="booking-event-type" className="sr-only">Event type</label>
+                  <select id="booking-event-type" className="field" value={form.eventType} onChange={set('eventType')}>
                     <option value="">Event type…</option>
                     {EVENT_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
                   </select>
+                  <label htmlFor="booking-event-date" className="sr-only">Event date</label>
                   <input
+                    id="booking-event-date"
                     className="field"
                     type="date"
-                    aria-label="Event date"
                     value={form.eventDate}
                     onChange={set('eventDate')}
                   />
@@ -310,14 +321,18 @@ export default function Booking() {
                 {moreOpen && (
                   <div className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
+                      <label htmlFor="booking-venue" className="sr-only">Venue or organization</label>
                       <input
+                        id="booking-venue"
                         className="field"
                         type="text"
                         placeholder="Venue or organization"
                         value={form.venueOrOrg}
                         onChange={set('venueOrOrg')}
                       />
+                      <label htmlFor="booking-city" className="sr-only">City / Location</label>
                       <input
+                        id="booking-city"
                         className="field"
                         type="text"
                         placeholder="City / Location"
@@ -326,15 +341,21 @@ export default function Booking() {
                       />
                     </div>
                     <div className="grid grid-cols-2 gap-4">
+                      <label htmlFor="booking-phone" className="sr-only">Phone (optional)</label>
                       <input
+                        id="booking-phone"
                         className="field"
                         type="tel"
                         placeholder="Phone (optional)"
+                        aria-invalid={errorField === 'phone' || undefined}
+                        aria-describedby={errorField === 'phone' ? 'booking-error' : undefined}
                         autoComplete="tel"
                         value={form.phone}
                         onChange={set('phone')}
                       />
+                      <label htmlFor="booking-guests" className="sr-only">Guest count (approx)</label>
                       <input
+                        id="booking-guests"
                         className="field"
                         type="text"
                         placeholder="Guest count (approx)"
@@ -342,7 +363,9 @@ export default function Booking() {
                         onChange={set('guestCount')}
                       />
                     </div>
+                    <label htmlFor="booking-budget" className="sr-only">Budget range (optional)</label>
                     <input
+                      id="booking-budget"
                       className="field"
                       type="text"
                       placeholder="Budget range (optional)"
@@ -351,9 +374,13 @@ export default function Booking() {
                     />
                   </div>
                 )}
+                <label htmlFor="booking-message" className="sr-only">Tell us about the event (required)</label>
                 <textarea
+                  id="booking-message"
                   className="field resize-none"
                   rows={5}
+                  aria-invalid={errorField === 'message' || undefined}
+                  aria-describedby={errorField === 'message' ? 'booking-error' : undefined}
                   placeholder="Tell us about the event — what you're looking for, any special needs."
                   required
                   value={form.message}
@@ -369,14 +396,18 @@ export default function Booking() {
                     border: '1px solid rgba(201,168,76,0.15)',
                     borderRadius: 6,
                   }}>
-                    <span style={{ fontSize: '0.72rem', letterSpacing: '0.12em', color: 'rgba(201,168,76,0.6)', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
+                    <span aria-hidden="true" style={{ fontSize: '0.72rem', letterSpacing: '0.12em', color: 'rgba(201,168,76,0.8)', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
                       Human check
                     </span>
-                    <span style={{ fontSize: '0.90rem', color: 'var(--text-2)', whiteSpace: 'nowrap' }}>
-                      {captcha.a} + {captcha.b} =
-                    </span>
+                    <label htmlFor="booking-captcha" style={{ fontSize: '0.90rem', color: 'var(--text-2)', whiteSpace: 'nowrap' }}>
+                      <span className="sr-only">Human check: what is </span>
+                      {captcha.a} + {captcha.b} <span aria-hidden="true">=</span><span className="sr-only">?</span>
+                    </label>
                     <input
+                      id="booking-captcha"
                       type="number"
+                      aria-invalid={errorField === 'captcha' || undefined}
+                      aria-describedby={errorField === 'captcha' ? 'booking-error' : undefined}
                       inputMode="numeric"
                       required
                       value={captcha.answer}
@@ -390,7 +421,7 @@ export default function Booking() {
 
                 {/* Verification failed to load — give a clear way out instead of a dead button */}
                 {!captcha && captchaError && (
-                  <div style={{
+                  <div role="alert" style={{
                     display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.75rem',
                     padding: '0.75rem 1rem',
                     background: 'rgba(192,64,32,0.06)',
@@ -414,9 +445,9 @@ export default function Booking() {
                   </div>
                 )}
 
-                {error && (
-                  <p style={{ color: '#c04020', fontSize: '0.82rem', lineHeight: 1.5 }}>{error}</p>
-                )}
+                <p id="booking-error" role="alert" style={{ color: '#e0603a', fontSize: '0.82rem', lineHeight: 1.5, margin: error ? undefined : 0 }}>
+                  {error}
+                </p>
                 <motion.button
                   type="submit"
                   disabled={loading || !captcha}

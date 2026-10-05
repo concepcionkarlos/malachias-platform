@@ -3,7 +3,6 @@
 // page in the <html>/<body> shell with the global film-grain overlay.
 import type { Metadata } from 'next';
 import { Bebas_Neue, Inter } from 'next/font/google';
-import Script from 'next/script';
 import { Analytics } from '@vercel/analytics/next';
 import MotionPrefs from './components/MotionPrefs';
 import './globals.css';
@@ -96,12 +95,12 @@ const jsonLd = {
     'https://www.instagram.com/malachiasmusic',
     'https://www.facebook.com/share/17s554A9qA/?mibextid=wwXIfr',
   ],
-  image: `${SITE_URL}/Malachias.PNG`,
+  image: `${SITE_URL}/og-malachias.jpg`,
   contactPoint: {
     '@type': 'ContactPoint',
     contactType: 'Booking',
     email: 'booking@malachiasmusic.com',
-    availableLanguage: 'English',
+    availableLanguage: ['English', 'Spanish'],
   },
 }
 
@@ -115,10 +114,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <link rel="dns-prefetch" href="https://www.instagram.com" />
         <link rel="dns-prefetch" href="https://www.facebook.com" />
         {/* JSON-LD structured data */}
-        <Script
-          id="json-ld-musicgroup"
+        <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
         />
       </head>
       <body className="bg-black text-[#e8ddd0] antialiased font-body">

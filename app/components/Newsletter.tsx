@@ -100,7 +100,7 @@ export default function Newsletter() {
               transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
               style={{ width: 6, height: 6, borderRadius: '50%', background: '#c9a84c' }}
             />
-            <span style={{ fontSize: '0.60rem', letterSpacing: '0.30em', color: '#c9a84c', textTransform: 'uppercase', fontFamily: 'var(--font-body)' }}>
+            <span style={{ fontSize: '0.66rem', letterSpacing: '0.30em', color: '#c9a84c', textTransform: 'uppercase', fontFamily: 'var(--font-body)' }}>
               The Brotherhood
             </span>
           </motion.div>
@@ -123,7 +123,7 @@ export default function Newsletter() {
               <span style={{ color: '#c9a84c' }}>BROTHERHOOD</span>
             </h2>
 
-            <p style={{ color: 'rgba(232,221,208,0.5)', fontSize: '0.88rem', lineHeight: 1.75, marginBottom: '1.75rem', maxWidth: '28rem' }}>
+            <p style={{ color: 'rgba(232,221,208,0.62)', fontSize: '0.88rem', lineHeight: 1.75, marginBottom: '1.75rem', maxWidth: '28rem' }}>
               This isn&apos;t a newsletter. It&apos;s a dispatch — for the people who believe something real is happening here.
             </p>
 
@@ -154,6 +154,7 @@ export default function Newsletter() {
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
           >
+            <div aria-live="polite">
             <AnimatePresence mode="wait">
 
               {/* Form */}
@@ -161,10 +162,14 @@ export default function Newsletter() {
                 <motion.div key="form" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, y: -8 }}>
                   <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                     <div style={{ position: 'relative' }}>
-                      <Mail size={14} style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: 'rgba(201,168,76,0.35)', pointerEvents: 'none' }} />
+                      <Mail size={14} aria-hidden="true" style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: 'rgba(201,168,76,0.35)', pointerEvents: 'none' }} />
+                      <label htmlFor="newsletter-email" className="sr-only">Email address</label>
                       <input
+                        id="newsletter-email"
                         className="field"
                         type="email"
+                        aria-invalid={!!error || undefined}
+                        aria-describedby={error ? 'newsletter-error' : undefined}
                         placeholder="your@email.com"
                         required
                         autoComplete="email"
@@ -200,10 +205,10 @@ export default function Newsletter() {
                     </motion.button>
 
                     {error && (
-                      <p style={{ fontSize: '0.75rem', color: '#c04020', lineHeight: 1.5 }}>{error}</p>
+                      <p id="newsletter-error" role="alert" style={{ fontSize: '0.75rem', color: '#e0603a', lineHeight: 1.5 }}>{error}</p>
                     )}
 
-                    <p style={{ fontSize: '0.60rem', letterSpacing: '0.10em', color: 'var(--text-3)', lineHeight: 1.6 }}>
+                    <p style={{ fontSize: '0.68rem', letterSpacing: '0.10em', color: '#8a7f70', lineHeight: 1.6 }}>
                       Private. Honest. No spam. Unsubscribe any time.
                     </p>
                   </form>
@@ -241,7 +246,7 @@ export default function Newsletter() {
                     <strong style={{ color: '#e8ddd0' }}>{email}</strong>.<br />
                     Click it to confirm your spot and unlock your 15% off code.
                   </p>
-                  <p style={{ fontSize: '0.65rem', color: 'rgba(232,221,208,0.25)', marginTop: '0.8rem' }}>
+                  <p style={{ fontSize: '0.65rem', color: 'rgba(232,221,208,0.55)', marginTop: '0.8rem' }}>
                     Check your spam folder if you don&apos;t see it within a minute.
                   </p>
                 </motion.div>
@@ -263,12 +268,12 @@ export default function Newsletter() {
                   }}
                 >
                   <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
-                    <CheckCircle size={20} style={{ color: '#34d399', flexShrink: 0, marginTop: 2 }} />
+                    <CheckCircle size={20} aria-hidden="true" style={{ color: '#34d399', flexShrink: 0, marginTop: 2 }} />
                     <div>
                       <p className="font-display" style={{ fontSize: '1.05rem', letterSpacing: '0.12em', color: '#c9a84c', marginBottom: '0.4rem' }}>
                         YOU&apos;RE ALREADY IN.
                       </p>
-                      <p style={{ fontSize: '0.82rem', color: 'rgba(232,221,208,0.5)', lineHeight: 1.65 }}>
+                      <p style={{ fontSize: '0.82rem', color: 'rgba(232,221,208,0.62)', lineHeight: 1.65 }}>
                         {email} is already on the brotherhood list. We&apos;ll be in touch when there&apos;s something real to say.
                       </p>
                     </div>
@@ -277,6 +282,7 @@ export default function Newsletter() {
               )}
 
             </AnimatePresence>
+            </div>
           </motion.div>
         </div>
 

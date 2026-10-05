@@ -75,10 +75,10 @@ export default function Shows({ shows }: { shows: Show[] }) {
                     <div style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', color: '#e8ddd0', lineHeight: 1, letterSpacing: '0.04em' }}>
                       {d.day}
                     </div>
-                    <div style={{ fontSize: '0.56rem', letterSpacing: '0.22em', color: '#c9a84c', textTransform: 'uppercase', marginTop: '0.15rem' }}>
+                    <div style={{ fontSize: '0.66rem', letterSpacing: '0.18em', color: '#c9a84c', textTransform: 'uppercase', marginTop: '0.15rem' }}>
                       {d.month}
                     </div>
-                    <div style={{ fontSize: '0.52rem', letterSpacing: '0.14em', color: '#5c5044', marginTop: '0.1rem' }}>
+                    <div style={{ fontSize: '0.65rem', letterSpacing: '0.10em', color: '#8a7f70', marginTop: '0.1rem' }}>
                       {d.year}
                     </div>
                   </div>
@@ -95,7 +95,7 @@ export default function Shows({ shows }: { shows: Show[] }) {
 
                   {/* Right side — status + ticket */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', flexShrink: 0 }}>
-                    <span style={{ fontSize: '0.58rem', letterSpacing: '0.18em', color: statusColor, textTransform: 'uppercase' }}>
+                    <span style={{ fontSize: '0.66rem', letterSpacing: '0.16em', color: statusColor, textTransform: 'uppercase' }}>
                       {show.showStatus ?? 'Confirmed'}
                     </span>
                     {show.ticketUrl && (

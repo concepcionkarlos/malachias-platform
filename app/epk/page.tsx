@@ -38,10 +38,10 @@ const RULE: React.CSSProperties = {
 }
 
 const SECTION_LABEL: React.CSSProperties = {
-  fontSize: '0.55rem',
-  letterSpacing: '0.42em',
+  fontSize: '0.68rem',
+  letterSpacing: '0.32em',
   textTransform: 'uppercase' as const,
-  color: 'rgba(201,168,76,0.55)',
+  color: 'rgba(201,168,76,0.80)',
   display: 'block',
   marginBottom: '1.25rem',
   fontFamily: 'var(--font-body)',
@@ -111,10 +111,10 @@ export default async function EpkPage() {
         </Link>
         <span
           style={{
-            fontSize: '0.55rem',
-            letterSpacing: '0.38em',
+            fontSize: '0.66rem',
+            letterSpacing: '0.30em',
             textTransform: 'uppercase',
-            color: 'rgba(201,168,76,0.45)',
+            color: 'rgba(201,168,76,0.75)',
           }}
         >
           Press Kit
@@ -211,7 +211,7 @@ export default async function EpkPage() {
                 &ldquo;I came home from Iraq and I didn&apos;t know who I was anymore.
                 Music cracked me open again. Faith came through the crack.&rdquo;
               </p>
-              <p style={{ fontSize: '0.60rem', letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(201,168,76,0.30)', marginTop: '0.6rem' }}>
+              <p style={{ fontSize: '0.66rem', letterSpacing: '0.20em', textTransform: 'uppercase', color: 'rgba(201,168,76,0.72)', marginTop: '0.6rem' }}>
                 — {founder.name} · {founder.origin}
               </p>
             </div>
@@ -230,12 +230,12 @@ export default async function EpkPage() {
                   <span style={{ fontFamily: 'var(--font-display)', fontSize: '1.05rem', letterSpacing: '0.06em', color: '#ede5d8' }}>
                     {m.name}
                   </span>
-                  <span style={{ fontSize: '0.60rem', letterSpacing: '0.20em', textTransform: 'uppercase', color: m.tagColor }}>
+                  <span style={{ fontSize: '0.66rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: m.tagColor }}>
                     {m.role}
                   </span>
                 </div>
                 {m.origin && (
-                  <p style={{ fontSize: '0.56rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(201,168,76,0.40)', fontStyle: 'italic', marginBottom: '0.5rem' }}>
+                  <p style={{ fontSize: '0.66rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(201,168,76,0.72)', fontStyle: 'italic', marginBottom: '0.5rem' }}>
                     {m.origin}
                   </p>
                 )}
@@ -479,10 +479,10 @@ export default async function EpkPage() {
               <div key={c.role}>
                 <p
                   style={{
-                    fontSize: '0.55rem',
-                    letterSpacing: '0.32em',
+                    fontSize: '0.66rem',
+                    letterSpacing: '0.28em',
                     textTransform: 'uppercase',
-                    color: 'rgba(201,168,76,0.42)',
+                    color: 'rgba(201,168,76,0.75)',
                     marginBottom: '0.4rem',
                   }}
                 >
@@ -500,7 +500,7 @@ export default async function EpkPage() {
           </div>
 
           <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' as const, marginTop: '0.5rem' }}>
-            <a
+            <Link
               href="/#booking"
               style={{
                 display: 'inline-block',
@@ -516,7 +516,7 @@ export default async function EpkPage() {
               }}
             >
               Submit Booking Request
-            </a>
+            </Link>
             <Link
               href="/"
               style={{
@@ -540,10 +540,10 @@ export default async function EpkPage() {
         <div style={{ marginTop: '5rem', paddingTop: '2rem', borderTop: '1px solid rgba(255,255,255,0.04)' }}>
           <p
             style={{
-              fontSize: '0.60rem',
-              letterSpacing: '0.22em',
+              fontSize: '0.66rem',
+              letterSpacing: '0.20em',
               textTransform: 'uppercase',
-              color: 'rgba(80,68,52,0.55)',
+              color: '#8a7f70',
               textAlign: 'center' as const,
             }}
           >

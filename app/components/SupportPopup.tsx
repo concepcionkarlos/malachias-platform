@@ -5,11 +5,13 @@
 // first-time visitor is left alone to listen. Re-shown every 3 days; suppressed on
 // /merch and /support pages. Links to the /support page
 // to drive direct, no-middleman support of shows, music, and veteran outreach.
+// Never shown if the booking modal already appeared this session (one popup per visit).
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import Link from 'next/link'
 import { X, Heart, ShoppingBag } from 'lucide-react'
+import { markPopupShown, popupShownThisSession, storageGet, storageSet } from './popupGate'
 
 const LS_KEY     = 'malachias_support_popup_ts'
 const VISITS_KEY = 'malachias_visits'
@@ -18,9 +20,11 @@ const SCROLL_TRIGGER = 0.50
 
 export default function SupportPopup() {
   const [visible, setVisible] = useState(false)
+  const closeRef = useRef<HTMLButtonElement>(null)
+  const returnFocusRef = useRef<HTMLElement | null>(null)
 
   useEffect(() => {
-    const raw = localStorage.getItem(LS_KEY)
+    const raw = storageGet('local', LS_KEY)
     if (raw) {
       const seen = parseInt(raw, 10)
       if (!isNaN(seen) && Date.now() - seen < TTL_MS) return
@@ -29,18 +33,22 @@ export default function SupportPopup() {
     if (window.location.pathname.startsWith('/merch') || window.location.pathname.startsWith('/support')) return
 
     // Count this visit (once per session) and leave first-timers alone
-    let visits = parseInt(localStorage.getItem(VISITS_KEY) ?? '0', 10) || 0
-    if (!sessionStorage.getItem(VISITS_KEY)) {
+    let visits = parseInt(storageGet('local', VISITS_KEY) ?? '0', 10) || 0
+    if (!storageGet('session', VISITS_KEY)) {
       visits += 1
-      localStorage.setItem(VISITS_KEY, String(visits))
-      sessionStorage.setItem(VISITS_KEY, '1')
+      storageSet('local', VISITS_KEY, String(visits))
+      storageSet('session', VISITS_KEY, '1')
     }
     if (visits < 2) return
+    if (popupShownThisSession()) return
 
     const onScroll = () => {
       const max = document.documentElement.scrollHeight - window.innerHeight
       if (max > 0 && window.scrollY / max >= SCROLL_TRIGGER) {
         window.removeEventListener('scroll', onScroll)
+        if (popupShownThisSession()) return
+        markPopupShown()
+        returnFocusRef.current = document.activeElement as HTMLElement | null
         setVisible(true)
       }
     }
@@ -48,8 +56,20 @@ export default function SupportPopup() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  // Focus the close button on open, Escape closes, focus returns on close
+  useEffect(() => {
+    if (!visible) return
+    closeRef.current?.focus({ preventScroll: true })
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') dismiss() }
+    document.addEventListener('keydown', onKey)
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      returnFocusRef.current?.focus?.({ preventScroll: true })
+    }
+  }, [visible])
+
   function dismiss() {
-    localStorage.setItem(LS_KEY, String(Date.now()))
+    storageSet('local', LS_KEY, String(Date.now()))
     setVisible(false)
   }
 
@@ -73,16 +93,18 @@ export default function SupportPopup() {
             overflow: 'hidden',
           }}
           role="dialog"
-          aria-label="Support Malachias"
+          aria-modal="false"
+          aria-labelledby="support-popup-title"
         >
           {/* Gold accent top bar */}
           <div style={{ height: 3, background: 'linear-gradient(to right, #c9a84c, rgba(201,168,76,0.3))' }} />
 
           {/* Close */}
           <button
+            ref={closeRef}
             onClick={dismiss}
             aria-label="Close"
-            style={{ position: 'absolute', top: '0.6rem', right: '0.6rem', background: 'none', border: 'none', cursor: 'pointer', color: '#a89880', padding: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'color 0.2s' }}
+            style={{ position: 'absolute', top: '0.35rem', right: '0.35rem', width: 44, height: 44, background: 'none', border: 'none', cursor: 'pointer', color: '#a89880', padding: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'color 0.2s' }}
             onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = '#e8ddd0')}
             onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = '#a89880')}
           >
@@ -93,18 +115,18 @@ export default function SupportPopup() {
             {/* Icon + label */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.85rem' }}>
               <Heart size={13} style={{ color: '#c9a84c' }} />
-              <span style={{ fontSize: '0.62rem', letterSpacing: '0.30em', color: '#c9a84c', textTransform: 'uppercase' }}>
+              <span style={{ fontSize: '0.66rem', letterSpacing: '0.30em', color: '#c9a84c', textTransform: 'uppercase' }}>
                 Support the Band
               </span>
             </div>
 
             {/* Headline */}
-            <p style={{ margin: '0 0 0.55rem', fontSize: '1.05rem', color: '#e8ddd0', fontFamily: 'var(--font-display)', letterSpacing: '0.04em', lineHeight: 1.2 }}>
+            <p id="support-popup-title" style={{ margin: '0 0 0.55rem', fontSize: '1.05rem', color: '#e8ddd0', fontFamily: 'var(--font-display)', letterSpacing: '0.04em', lineHeight: 1.2 }}>
               No label. Just the mission.
             </p>
 
             {/* Body */}
-            <p style={{ margin: '0 0 1.2rem', fontSize: '0.78rem', color: '#5c5044', lineHeight: 1.7 }}>
+            <p style={{ margin: '0 0 1.2rem', fontSize: '0.78rem', color: '#a89880', lineHeight: 1.7 }}>
               Every piece of gear you grab funds the next show, the next song, and veteran outreach. Direct support — no middleman.
             </p>
 
@@ -112,7 +134,7 @@ export default function SupportPopup() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem', marginBottom: '1.3rem' }}>
               {['Live shows & touring', 'Original music', 'Veteran mission'].map(s => (
                 <span key={s} style={{ fontSize: '0.72rem', color: '#8a7f70', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                  <span style={{ color: '#c9a84c', fontSize: '0.58rem' }}>✓</span> {s}
+                  <span aria-hidden="true" style={{ color: '#c9a84c', fontSize: '0.58rem' }}>✓</span> {s}
                 </span>
               ))}
             </div>
@@ -122,7 +144,7 @@ export default function SupportPopup() {
               <Link
                 href="/support"
                 onClick={dismiss}
-                style={{ flex: 1, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem', padding: '0.65rem 1rem', background: '#c9a84c', color: '#030202', fontSize: '0.62rem', letterSpacing: '0.16em', textTransform: 'uppercase', textDecoration: 'none', fontWeight: 700, fontFamily: 'var(--font-body)', transition: 'opacity 0.2s' }}
+                style={{ flex: 1, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem', padding: '0.65rem 1rem', minHeight: 44, background: '#c9a84c', color: '#030202', fontSize: '0.66rem', letterSpacing: '0.16em', textTransform: 'uppercase', textDecoration: 'none', fontWeight: 700, fontFamily: 'var(--font-body)', transition: 'opacity 0.2s' }}
                 onMouseEnter={e => ((e.currentTarget as HTMLElement).style.opacity = '0.88')}
                 onMouseLeave={e => ((e.currentTarget as HTMLElement).style.opacity = '1')}
               >
@@ -130,7 +152,7 @@ export default function SupportPopup() {
               </Link>
               <button
                 onClick={dismiss}
-                style={{ fontSize: '0.64rem', letterSpacing: '0.12em', color: '#8a7f70', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'var(--font-body)', whiteSpace: 'nowrap', padding: '0.5rem 0' }}
+                style={{ fontSize: '0.64rem', letterSpacing: '0.12em', color: '#8a7f70', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'var(--font-body)', whiteSpace: 'nowrap', padding: '0.5rem 0', minHeight: 44 }}
               >
                 Maybe later
               </button>

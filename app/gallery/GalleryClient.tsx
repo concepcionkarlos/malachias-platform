@@ -2,7 +2,7 @@
 
 // Client component for /gallery: renders the photo grid and a keyboard-navigable
 // lightbox (arrow keys + Escape) with prev/next controls and body-scroll locking.
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 
@@ -25,6 +25,9 @@ const PHOTOS: GalleryPhoto[] = [
 
 export default function GalleryClient() {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
+  const returnFocusRef = useRef<HTMLElement | null>(null);
+  const isOpen = lightboxIndex !== null;
 
   const closeLightbox = useCallback(() => setLightboxIndex(null), []);
 
@@ -46,6 +49,14 @@ export default function GalleryClient() {
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [lightboxIndex, closeLightbox, goPrev, goNext]);
+
+  // Focus the close button on open; return focus to the tile on close
+  useEffect(() => {
+    if (!isOpen) return;
+    returnFocusRef.current = document.activeElement as HTMLElement | null;
+    closeRef.current?.focus();
+    return () => { returnFocusRef.current?.focus?.({ preventScroll: true }); };
+  }, [isOpen]);
 
   useEffect(() => {
     document.body.style.overflow = lightboxIndex !== null ? 'hidden' : '';
@@ -91,7 +102,7 @@ export default function GalleryClient() {
               alt={photo.caption}
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-              style={{ objectFit: 'cover', transition: 'transform 0.4s ease' }}
+              style={{ objectFit: 'cover', objectPosition: 'center 20%', transition: 'transform 0.4s ease' }}
             />
             {/* Caption overlay on hover */}
             <div
@@ -124,6 +135,9 @@ export default function GalleryClient() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
             onClick={closeLightbox}
+            role="dialog"
+            aria-modal="true"
+            aria-label={`Photo ${lightboxIndex + 1} of ${PHOTOS.length}: ${PHOTOS[lightboxIndex].caption}`}
             style={{
               position: 'fixed',
               inset: 0,
@@ -174,7 +188,7 @@ export default function GalleryClient() {
               <p style={{ fontSize: '0.68rem', letterSpacing: '0.30em', color: 'rgba(201,168,76,0.8)', textTransform: 'uppercase' }}>
                 {PHOTOS[lightboxIndex].caption}
               </p>
-              <p style={{ fontSize: '0.58rem', letterSpacing: '0.18em', color: 'rgba(255,255,255,0.30)', marginTop: '0.25rem' }}>
+              <p style={{ fontSize: '0.66rem', letterSpacing: '0.18em', color: 'rgba(255,255,255,0.60)', marginTop: '0.25rem' }}>
                 {lightboxIndex + 1} / {PHOTOS.length}
               </p>
             </div>
@@ -251,6 +265,7 @@ export default function GalleryClient() {
 
             {/* Close button */}
             <button
+              ref={closeRef}
               onClick={e => { e.stopPropagation(); closeLightbox(); }}
               aria-label="Close lightbox"
               style={{
@@ -261,8 +276,8 @@ export default function GalleryClient() {
                 border: '1px solid rgba(201,168,76,0.30)',
                 borderRadius: '2px',
                 color: '#c9a84c',
-                width: 36,
-                height: 36,
+                width: 44,
+                height: 44,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',

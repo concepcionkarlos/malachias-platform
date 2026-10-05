@@ -7,7 +7,7 @@
 // each fetch /api/public/content (or admin-only endpoints that 401'd) on mount.
 import type { Metadata } from 'next';
 import { readContent } from '@/lib/store';
-import { fetchFWProducts } from '@/lib/fourthwall';
+import { fetchFWProducts, fwCardProduct } from '@/lib/fourthwall';
 import { getSongs, getLiveSessions } from '@/lib/venueStore';
 import { fetchReleases, featuredRelease, youtubeWatchUrl } from '@/lib/releases';
 import { getCampaign } from '@/lib/campaignServer';
@@ -118,7 +118,7 @@ export default async function Home() {
       {releaseJsonLd && (
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(releaseJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(releaseJsonLd).replace(/</g, '\\u003c') }}
         />
       )}
 
@@ -169,7 +169,7 @@ export default async function Home() {
 
       {/* ── 11. CONTENT + COMMERCE ───────────────────────────────── */}
       <Journal />
-      <Merch fourthwallProducts={fwProducts} />
+      <Merch fourthwallProducts={fwProducts.map(fwCardProduct)} />
 
       {/* ── 12. CREDIBILITY + CONVERSION ─────────────────────────── */}
       <SectionDivider accent="crimson" />
