@@ -65,4 +65,16 @@ export const BAND_ROSTER: BandRosterMember[] = [
     pull: 'The service.\nThe craft.\nThe groove.',
     flip: false,
   },
+  {
+    num: '05',
+    name: 'NAYSHA “WAR” RAMOS',
+    role: 'Drums',
+    tag: 'DRUMMER · VETERAN',
+    tagColor: '#a8483a',
+    photos: ['/War Drums.jpeg', '/war2.jpeg'],
+    origin: 'Tampa, FL  →  South Florida',
+    bio: 'Naysha “War” Ramos brings a lifetime of discipline and resilience behind the kit. A U.S. Army veteran and former law enforcement officer, she found in drumming a place to turn intensity into purpose. Her playing is powerful, deliberate, and rooted in faith — serving the song while giving everything she has. Through every challenge, War believes God has used music to give her strength, direction, and a new way to tell her story. For her, drumming is more than music — it\'s purpose, perseverance, and release.',
+    pull: 'Drums.\nIntensity.\nPrecision.',
+    flip: true,
+  },
 ]

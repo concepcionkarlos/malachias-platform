@@ -28,7 +28,7 @@ interface Props {
 }
 
 const ROLES_ES: Record<string, string> = {
-  'Director · Vocals · Guitar': 'Director · Voz · Guitarra', 'Lead Guitar': 'Guitarra líder', 'Rhythm Guitar · Riffs': 'Guitarra rítmica · Riffs', 'Bass': 'Bajo',
+  'Director · Vocals · Guitar': 'Director · Voz · Guitarra', 'Lead Guitar': 'Guitarra líder', 'Rhythm Guitar · Riffs': 'Guitarra rítmica · Riffs', 'Bass': 'Bajo', 'Drums': 'Batería',
 }
 
 export default function EsLanding({ config, math, featured }: Props) {
@@ -101,12 +101,12 @@ export default function EsLanding({ config, math, featured }: Props) {
       <section className="section-pad" style={{ background: '#030201' }}>
         <div className="max-w-6xl mx-auto px-6">
           <motion.p {...fade()} className="label-xs mb-3" style={{ color: 'var(--gold)', letterSpacing: '0.40em' }}>La banda</motion.p>
-          <motion.h2 {...fade(0.05)} className="font-display leading-[0.92] tracking-[0.06em] text-white" style={{ fontSize: 'clamp(2.4rem, 6vw, 4.2rem)' }}>CUATRO HISTORIAS. UNA MISIÓN.</motion.h2>
-          <div className="mt-8 grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <motion.h2 {...fade(0.05)} className="font-display leading-[0.92] tracking-[0.06em] text-white" style={{ fontSize: 'clamp(2.4rem, 6vw, 4.2rem)' }}>CINCO HISTORIAS. UNA MISIÓN.</motion.h2>
+          <div className="mt-8 grid sm:grid-cols-2 lg:grid-cols-5 gap-3">
             {BAND_ROSTER.map((m, i) => (
               <motion.div key={m.name} {...fade(0.05 + i * 0.04)} className="tac-box overflow-hidden">
                 <div style={{ position: 'relative', aspectRatio: '4/5', background: '#0a0806' }}>
-                  <Image src={m.photos[0]} alt={m.name} fill sizes="(max-width: 640px) 100vw, 25vw" className="object-cover object-top" style={{ filter: 'contrast(1.06) saturate(0.75) brightness(0.9)' }} />
+                  <Image src={m.photos[0]} alt={m.name} fill sizes="(max-width: 640px) 100vw, 20vw" className="object-cover object-top" style={{ filter: 'contrast(1.06) saturate(0.75) brightness(0.9)' }} />
                 </div>
                 <div style={{ padding: '0.9rem 1rem' }}>
                   <p className="font-display" style={{ fontSize: '1.3rem', letterSpacing: '0.05em', color: '#ede5d8', lineHeight: 1 }}>{m.name}</p>
