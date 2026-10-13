@@ -28,7 +28,7 @@ interface Props {
 }
 
 const ROLES_ES: Record<string, string> = {
-  'Director · Vocals · Guitar': 'Director · Voz · Guitarra', 'Lead Guitar': 'Guitarra líder', 'Rhythm Guitar · Riffs': 'Guitarra rítmica · Riffs', 'Bass': 'Bajo', 'Drums': 'Batería',
+  'Director · Vocals · Guitar': 'Director · Voz · Guitarra', 'Bass': 'Bajo', 'Drums': 'Batería',
 }
 
 export default function EsLanding({ config, math, featured }: Props) {
@@ -116,8 +116,8 @@ export default function EsLanding({ config, math, featured }: Props) {
       <section className="section-pad" style={{ background: '#030201' }}>
         <div className="max-w-6xl mx-auto px-6">
           <motion.p {...fade()} className="label-xs mb-3" style={{ color: 'var(--gold)', letterSpacing: '0.40em' }}>La banda</motion.p>
-          <motion.h2 {...fade(0.05)} className="font-display leading-[0.92] tracking-[0.06em] text-white" style={{ fontSize: 'clamp(2.4rem, 6vw, 4.2rem)' }}>CINCO HISTORIAS. UNA MISIÓN.</motion.h2>
-          <div className="mt-8 grid sm:grid-cols-2 lg:grid-cols-5 gap-3">
+          <motion.h2 {...fade(0.05)} className="font-display leading-[0.92] tracking-[0.06em] text-white" style={{ fontSize: 'clamp(2.4rem, 6vw, 4.2rem)' }}>TRES HISTORIAS. UNA MISIÓN.</motion.h2>
+          <div className="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {BAND_ROSTER.map((m, i) => (
               <motion.div key={m.name} {...fade(0.05 + i * 0.04)} className="tac-box overflow-hidden">
                 <div style={{ position: 'relative', aspectRatio: '4/5', background: '#0a0806' }}>
@@ -133,7 +133,7 @@ export default function EsLanding({ config, math, featured }: Props) {
           </div>
           <div className="mt-8 grid lg:grid-cols-[1fr_1fr] gap-8 items-center">
             <div className="tac-box overflow-hidden" style={{ position: 'relative', aspectRatio: '4/3' }}>
-              <Image src="/band-2026.jpg" alt="Malachias — la banda completa, 2026" fill sizes="(max-width: 1024px) 100vw, 560px" className="object-cover object-top" style={{ filter: 'contrast(1.05) saturate(0.8)' }} />
+              <Image src="/Malachias 1.jpeg" alt="Malachias" fill sizes="(max-width: 1024px) 100vw, 560px" className="object-cover object-top" style={{ filter: 'contrast(1.05) saturate(0.8)' }} />
             </div>
             <div>
               {featured && (

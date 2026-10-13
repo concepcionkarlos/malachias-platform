@@ -12,15 +12,12 @@ interface GalleryPhoto {
 }
 
 const PHOTOS: GalleryPhoto[] = [
-  { src: '/band-2026.jpg',         caption: 'Malachias — 2026'          },
   { src: '/Malachias 1.jpeg',     caption: 'Malachias — Press Photo'     },
   { src: '/malachias 2.jpeg',     caption: 'Malachias — Press Photo II'  },
-  { src: '/Efrain Rhytms.PNG',    caption: 'Efrain'                      },
-  { src: '/Efrain Rhytms 2.PNG',  caption: 'Efrain'                      },
   { src: '/Gabe Bass.PNG',        caption: 'Gabe'                        },
   { src: '/Gabe Bass 2.PNG',      caption: 'Gabe'                        },
-  { src: '/JC Concepcion.PNG',    caption: 'JC Concepcion'               },
-  { src: '/JC Concepcion 2.PNG',  caption: 'JC Concepcion'               },
+  { src: '/War Drums.jpeg',       caption: 'War'                         },
+  { src: '/war2.jpeg',            caption: 'War'                         },
 ];
 
 export default function GalleryClient() {

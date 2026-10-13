@@ -70,7 +70,7 @@ export default function PressPage() {
               ROAD TO SAN ANTONIO — VETERANS DAY 2026
             </p>
             <p className="mt-3 text-[0.88rem] leading-relaxed" style={{ color: 'var(--text-2)' }}>
-              Malachias has been invited to perform at a Veterans Day event in San Antonio, Texas on November 12, 2026. The band is raising the cost of bringing all five musicians.
+              Malachias has been invited to perform at a Veterans Day event in San Antonio, Texas on November 12, 2026. The band is raising the cost of bringing the band there.
             </p>
             <Link href="/road-to-san-antonio" className="mt-4 inline-block" style={{ fontSize: '0.68rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#c9a84c' }}>The campaign →</Link>
           </div>

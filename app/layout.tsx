@@ -81,8 +81,6 @@ const jsonLd = {
   },
   member: [
     { '@type': 'Person', name: 'Malachias', roleName: 'Vocals, Guitar, Founder' },
-    { '@type': 'Person', name: 'JC Concepcion', roleName: 'Lead Guitar' },
-    { '@type': 'Person', name: 'Efrain Sierra', roleName: 'Rhythm Guitar' },
     { '@type': 'Person', name: 'Gabe Grantham', roleName: 'Bass' },
     { '@type': 'Person', name: 'Naysha "War" Ramos', roleName: 'Drums' },
   ],

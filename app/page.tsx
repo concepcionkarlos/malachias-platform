@@ -30,7 +30,6 @@ import Booking      from './components/Booking';
 import Newsletter   from './components/Newsletter';
 import Footer       from './components/Footer';
 import SectionDivider from './components/SectionDivider';
-import BandTogether   from './components/BandTogether';
 import LessonsTeaser  from './components/LessonsTeaser';
 import PressFeature   from './components/PressFeature';
 import StoriesTeaser  from './components/StoriesTeaser';
@@ -138,7 +137,6 @@ export default async function Home() {
 
       {/* ── 5. THE PEOPLE — humanize the band ────────────────────── */}
       <Band />
-      <BandTogether />
 
       {/* ── 6. LIVE — see them in person ─────────────────────────── */}
       <Shows shows={shows} />

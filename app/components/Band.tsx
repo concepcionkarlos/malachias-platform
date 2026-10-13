@@ -356,7 +356,7 @@ export default function Band() {
               color: 'rgba(237,229,216,0.42)',
             }}
           >
-            Five stories.
+            Three stories.
             <br />
             <span style={{ color: 'rgba(201,168,76,0.62)' }}>One God.</span>
             <br />
@@ -374,7 +374,7 @@ export default function Band() {
             gap: '1.2rem',
             flexWrap: 'wrap',
           }}>
-            {['Fort Wayne', 'Havana', 'Puerto Rico', 'Sebring', 'Tampa', 'Iraq', 'South Florida'].map((place, i) => (
+            {['Fort Wayne', 'Sebring', 'Tampa', 'Iraq', 'South Florida'].map((place, i) => (
               <span key={place} style={{
                 fontSize: '0.68rem',
                 letterSpacing: '0.30em',
